@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<context-elements>     
+	<context-element ontology-class-name="Server" ontology-individual-name="Server_1">
+		<data-property data-name="has-position-X" data-value="51 m"/>
+		<data-property data-name="has-position-Y" data-value="24 m"/>
+	</context-element> 
+
+</context-elements>

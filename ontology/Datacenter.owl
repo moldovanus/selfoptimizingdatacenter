@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.owl-ontologies.com/Datacenter.owl#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:sqwrl="http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
+  xml:base="http://www.owl-ontologies.com/Datacenter.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://swrl.stanford.edu/ontologies/3.3/swrla.owl"/>
+    <owl:imports rdf:resource="http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Memory">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Task">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="name"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="associatedInfo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#associatedInfo"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Received"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#associatedInfo"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Requested"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ContextElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Core">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="TaskInfo">
+    <rdfs:subClassOf rdf:resource="#ContextElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Policy">
+    <rdfs:subClassOf rdf:resource="#ContextElement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="respected"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Requested">
+    <rdfs:subClassOf rdf:resource="#TaskInfo"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Action">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Actor"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Storage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Resource">
+    <rdfs:subClassOf rdf:resource="#ContextElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="QoSPolicy">
+    <rdfs:subClassOf rdf:resource="#Policy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="references"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="#Task"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="CPU">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="used"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="total"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Component"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="associatedCore"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Received">
+    <rdfs:subClassOf rdf:resource="#TaskInfo"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EnergyPolicy">
+    <rdfs:subClassOf rdf:resource="#Policy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Server"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#references"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Server">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="#name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Resource"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="webService"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Component">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="#used"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="#total"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Resource"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="optimum"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Actor">
+    <rdfs:subClassOf rdf:resource="#ContextElement"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#associatedInfo">
+    <rdfs:domain rdf:resource="#Task"/>
+    <rdfs:range rdf:resource="#TaskInfo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#references">
+    <rdfs:domain rdf:resource="#Policy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#associatedCore">
+    <rdfs:domain rdf:resource="#CPU"/>
+    <rdfs:range rdf:resource="#Core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="associatedComponent">
+    <rdfs:domain rdf:resource="#Server"/>
+    <rdfs:range rdf:resource="#Component"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="memory">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:ID="taskProperty"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#name">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#optimum">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Component"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#taskProperty">
+    <rdfs:domain rdf:resource="#Task"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cores">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:subPropertyOf rdf:resource="#taskProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="storage">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:subPropertyOf rdf:resource="#taskProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#used">
+    <rdfs:domain rdf:resource="#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#respected">
+    <rdfs:domain rdf:resource="#Policy"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#total">
+    <rdfs:domain rdf:resource="#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#webService">
+    <rdfs:domain rdf:resource="#Server"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cpu">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:subPropertyOf rdf:resource="#taskProperty"/>
+  </owl:DatatypeProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Resource">
+      <rdf:first>
+        <Server rdf:ID="Server_1">
+          <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+          >www.tempuri.com/Server_1</webService>
+          <associatedComponent>
+            <CPU rdf:ID="CPU_22">
+              <associatedCore>
+                <Core rdf:ID="Core_1">
+                  <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                  >0</used>
+                  <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                  >3000</total>
+                </Core>
+              </associatedCore>
+              <associatedCore>
+                <Core rdf:ID="Core_2">
+                  <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                  >0</used>
+                  <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                  >3000</total>
+                </Core>
+              </associatedCore>
+            </CPU>
+          </associatedComponent>
+          <associatedComponent>
+            <Memory rdf:ID="Memory_1">
+              <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+              >256</used>
+              <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+              >512</total>
+            </Memory>
+          </associatedComponent>
+          <associatedComponent>
+            <Storage rdf:ID="Storage_1">
+              <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+              >100</total>
+              <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+              >1</used>
+            </Storage>
+          </associatedComponent>
+        </Server>
+      </rdf:first>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <Core rdf:about="#Core_1"/>
+      <Core rdf:about="#Core_2"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <Task rdf:ID="Task_1">
+    <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1</cores>
+    <associatedInfo>
+      <Requested rdf:ID="Requested_1"/>
+    </associatedInfo>
+    <associatedInfo>
+      <Received rdf:ID="Received_1"/>
+    </associatedInfo>
+    <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >512</memory>
+    <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1</storage>
+    <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3000</cpu>
+    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Task_1</name>
+  </Task>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4.2, Build 562)  http://protege.stanford.edu -->
