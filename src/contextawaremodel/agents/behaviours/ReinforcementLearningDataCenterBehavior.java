@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
@@ -19,11 +18,17 @@ import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import greenContextOntology.EnergyPolicy;
+import greenContextOntology.Policy;
 import greenContextOntology.ProtegeFactory;
+import greenContextOntology.QoSPolicy;
+import greenContextOntology.Task;
+import greenContextOntology.impl.DefaultQoSPolicy;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -31,7 +36,8 @@ import java.util.Queue;
  * @author Administrator
  */
 public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
-      private OWLModel contextAwareModel;
+
+    private OWLModel contextAwareModel;
     private OntModel policyConversionModel;
     private JenaOWLModel owlModel;
     private double smallestEntropy = 10000;
@@ -41,6 +47,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ReinforcementLearningAgent agent;
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
+
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, Memory memory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
@@ -50,7 +57,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame();
         this.memory = memory;
-             evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
+        evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
@@ -59,46 +66,65 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
         });
     }
-    private Pair<Double, Individual> computeEntropy(){
-            Individual brokenPolicy = null;
+
+    private Pair<Double, Policy> computeEntropy() {
+        Policy brokenPolicy = null ;
         double entropy = 0.0;
-        Collection<RDFResource> resources = owlModel.getRDFResources();
-
-        for (RDFResource resource : resources) {
-
-            if (resource.getProtegeType().getNamedSuperclasses(true).contains(owlModel.getRDFSNamedClass("policy"))) {
-                Individual policy = policyConversionModel.getIndividual(GlobalVars.base + "#" + resource.getProtegeType().getName() + "I").asIndividual();
-                if (!getEvaluateProp(policy)) {
+        Collection<QoSPolicy> qosPolicies = protegeFactory.getAllQoSPolicyInstances();
+        for (QoSPolicy policy : qosPolicies) {
+                if (!policy.getRespected()) {
                     if (brokenPolicy == null) {
                         brokenPolicy = policy;
                     }
-                    //System.err.println("Broken " + policy);
+                    entropy++;            
+                }
+        }
+        Collection<EnergyPolicy> policies = protegeFactory.getAllEnergyPolicyInstances();
+        for (EnergyPolicy policy : policies) {
+                if (!policy.getRespected()) {
+                    if (brokenPolicy == null) {
+                        brokenPolicy = policy;
+                    }
                     entropy++;
                 }
-            }
         }
-         return new Pair<Double, Individual>(entropy, brokenPolicy);
+        return new Pair<Double, Policy>(entropy, brokenPolicy);
     }
-        public boolean getEvaluateProp(Individual policy) {
-        //System.out.println(base + "#EvaluatePolicyP");
-        Statement property = policy.getProperty(evaluatePolicyProperty);
 
-        if (property == null) {
-            return false;
+    private double computeRewardFunction(ContextSnapshot previous, ContextSnapshot current, Command c) {
+        double function = 0.0d;
+        if (previous != null) {
+            function += previous.getRewardFunction();
+            function += ContextSnapshot.gamma*(previous.getContextEntropy() - current.getContextEntropy()+c.getCost());
+
+        } else {
+            function -= current.getContextEntropy();
         }
 
-        return property.getBoolean();
+        return function;
     }
 
     @Override
     protected void onTick() {
-        Queue<ContextSnapshot> queue = new LinkedList<ContextSnapshot>();
-        ContextSnapshot initialContext = new ContextSnapshot( new LinkedList<Command>());
+     
+        Queue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
+        ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
+        Pair <Double, Policy> entropyAndPolicy = computeEntropy();
+        initialContext.setContextEntropy(entropyAndPolicy.getFirst());
+        initialContext.setRewardFunction(computeRewardFunction(null,initialContext,null));
         queue.add(initialContext);
         resultsFrame.setActionsList(null);
-        smallestEntropy = 10000;
-        ContextSnapshot contextSnapshot;
+      
+        if (entropyAndPolicy.getSecond()!=null){
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA"+entropyAndPolicy.getSecond());
+        Policy policy =entropyAndPolicy.getSecond();
+        if (policy.getClass().equals(DefaultQoSPolicy.class))
+        {
+            Collection c = policy.getReferences();
+           Task t= (Task) policy.getReferences(0);
+        }
+        }
         
-    }
 
+    }
 }

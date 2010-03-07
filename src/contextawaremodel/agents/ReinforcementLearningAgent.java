@@ -10,7 +10,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.RLPlotterBehaviour;
 import contextawaremodel.agents.behaviours.ReceiveMessageRLBehaviour;
-import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
+import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterBehavior;
 
 import contextawaremodel.agents.behaviours.StoreMemoryBehaviour;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
@@ -121,7 +121,7 @@ public class ReinforcementLearningAgent extends Agent {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
                 }
-
+                /*
 
                 Map<String, Map<String, String>> valueMapping = GlobalVars.getValueMapping();
 
@@ -150,9 +150,9 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("1.00", "STUDENT");
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
+                */
 
-
-                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
                 addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
