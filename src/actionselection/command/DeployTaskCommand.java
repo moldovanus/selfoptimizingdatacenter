@@ -16,7 +16,6 @@ public class DeployTaskCommand extends Command {
 
     private String serverName;
     private String taskName;
-    private String oldServerName;
 
     public DeployTaskCommand(ProtegeFactory protegeFactory, String serverName, String taskName) {
         super(protegeFactory);
@@ -31,7 +30,6 @@ public class DeployTaskCommand extends Command {
     public void execute() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        oldServerName = task.getAssociatedServer().getName();
         task.setAssociatedServer(server);
         server.addRunningTasks(task);
     }
@@ -41,9 +39,8 @@ public class DeployTaskCommand extends Command {
      */
     @Override
     public void rewind() {
-        Server server = protegeFactory.getServer(oldServerName);
+        Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        task.setAssociatedServer(server);
         server.removeRunningTasks(task);
     }
 

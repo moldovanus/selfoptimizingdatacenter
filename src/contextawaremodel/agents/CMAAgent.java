@@ -129,7 +129,6 @@ public class CMAAgent extends Agent implements CMAAExternal {
             addBehaviour(new BasicCMAABehaviour(this, this.owlModel));
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
