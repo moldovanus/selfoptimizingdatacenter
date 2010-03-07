@@ -1,6 +1,5 @@
 package greenContextOntology;
 
-
 import greenContextOntology.impl.*;
 
 import edu.stanford.smi.protegex.owl.model.*;
@@ -15,10 +14,10 @@ import java.util.*;
 public class ProtegeFactory {
 
     private OWLModel owlModel;
-public ProtegeFactory(OWLModel owlModel) {
+
+    public ProtegeFactory(OWLModel owlModel) {
         this.owlModel = owlModel;
     }
-
 
     public RDFSNamedClass getEntityClass() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#Entity";
@@ -31,12 +30,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultEntity(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultEntity(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Entity getEntity(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Entity) {
             return (Entity) res;
         } else if (res.hasProtegeType(getEntityClass())) {
@@ -53,13 +54,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Entity> result = new ArrayList<Entity>();
         final RDFSNamedClass cls = getEntityClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultEntity(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getRuleGroupClass() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#RuleGroup";
@@ -72,12 +72,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultRuleGroup(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultRuleGroup(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public RuleGroup getRuleGroup(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof RuleGroup) {
             return (RuleGroup) res;
         } else if (res.hasProtegeType(getRuleGroupClass())) {
@@ -94,13 +96,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<RuleGroup> result = new ArrayList<RuleGroup>();
         final RDFSNamedClass cls = getRuleGroupClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultRuleGroup(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getTaskClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Task";
@@ -113,12 +114,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultTask(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultTask(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Task getTask(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Task) {
             return (Task) res;
         } else if (res.hasProtegeType(getTaskClass())) {
@@ -135,13 +138,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Task> result = new ArrayList<Task>();
         final RDFSNamedClass cls = getTaskClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultTask(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getActorClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Actor";
@@ -154,12 +156,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultActor(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultActor(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Actor getActor(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Actor) {
             return (Actor) res;
         } else if (res.hasProtegeType(getActorClass())) {
@@ -176,95 +180,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Actor> result = new ArrayList<Actor>();
         final RDFSNamedClass cls = getActorClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultActor(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
-
-    public RDFSNamedClass getReceivedClass() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Received";
-        final String name = owlModel.getResourceNameForURI(uri);
-        return owlModel.getRDFSNamedClass(name);
-    }
-
-    public Received createReceived(String name) {
-        final RDFSNamedClass cls = getReceivedClass();
-        if (name == null) {
-            name = owlModel.getNextAnonymousResourceName();
-        }
-        return  new DefaultReceived(owlModel, cls.createInstance(name).getFrameID());
-    }
-
-    public Received getReceived(String name) {
-        RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
-        if (res instanceof Received) {
-            return (Received) res;
-        } else if (res.hasProtegeType(getReceivedClass())) {
-            return new DefaultReceived(owlModel, res.getFrameID());
-        }
-        return null;
-    }
-
-    public Collection<Received> getAllReceivedInstances() {
-        return getAllReceivedInstances(false);
-    }
-
-    public Collection<Received> getAllReceivedInstances(boolean transitive) {
-        Collection<Received> result = new ArrayList<Received>();
-        final RDFSNamedClass cls = getReceivedClass();
-        RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
-            owlIndividual = (RDFResource) it.next();
-            result.add(new DefaultReceived(owlModel, owlIndividual.getFrameID()));
-        }
-        return result;
-    }
-
-
-    public RDFSNamedClass getRequestedClass() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Requested";
-        final String name = owlModel.getResourceNameForURI(uri);
-        return owlModel.getRDFSNamedClass(name);
-    }
-
-    public Requested createRequested(String name) {
-        final RDFSNamedClass cls = getRequestedClass();
-        if (name == null) {
-            name = owlModel.getNextAnonymousResourceName();
-        }
-        return  new DefaultRequested(owlModel, cls.createInstance(name).getFrameID());
-    }
-
-    public Requested getRequested(String name) {
-        RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
-        if (res instanceof Requested) {
-            return (Requested) res;
-        } else if (res.hasProtegeType(getRequestedClass())) {
-            return new DefaultRequested(owlModel, res.getFrameID());
-        }
-        return null;
-    }
-
-    public Collection<Requested> getAllRequestedInstances() {
-        return getAllRequestedInstances(false);
-    }
-
-    public Collection<Requested> getAllRequestedInstances(boolean transitive) {
-        Collection<Requested> result = new ArrayList<Requested>();
-        final RDFSNamedClass cls = getRequestedClass();
-        RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
-            owlIndividual = (RDFResource) it.next();
-            result.add(new DefaultRequested(owlModel, owlIndividual.getFrameID()));
-        }
-        return result;
-    }
-
 
     public RDFSNamedClass getMemoryClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Memory";
@@ -277,12 +198,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultMemory(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultMemory(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Memory getMemory(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Memory) {
             return (Memory) res;
         } else if (res.hasProtegeType(getMemoryClass())) {
@@ -299,13 +222,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Memory> result = new ArrayList<Memory>();
         final RDFSNamedClass cls = getMemoryClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultMemory(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getComponentClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Component";
@@ -318,12 +240,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultComponent(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultComponent(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Component getComponent(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Component) {
             return (Component) res;
         } else if (res.hasProtegeType(getComponentClass())) {
@@ -340,13 +264,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Component> result = new ArrayList<Component>();
         final RDFSNamedClass cls = getComponentClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultComponent(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getCoreClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Core";
@@ -359,12 +282,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultCore(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultCore(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Core getCore(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Core) {
             return (Core) res;
         } else if (res.hasProtegeType(getCoreClass())) {
@@ -381,13 +306,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Core> result = new ArrayList<Core>();
         final RDFSNamedClass cls = getCoreClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultCore(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getTaskInfoClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#TaskInfo";
@@ -400,12 +324,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultTaskInfo(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultTaskInfo(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public TaskInfo getTaskInfo(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof TaskInfo) {
             return (TaskInfo) res;
         } else if (res.hasProtegeType(getTaskInfoClass())) {
@@ -422,13 +348,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<TaskInfo> result = new ArrayList<TaskInfo>();
         final RDFSNamedClass cls = getTaskInfoClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultTaskInfo(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getContextElementClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#ContextElement";
@@ -441,12 +366,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultContextElement(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultContextElement(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public ContextElement getContextElement(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof ContextElement) {
             return (ContextElement) res;
         } else if (res.hasProtegeType(getContextElementClass())) {
@@ -463,13 +390,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<ContextElement> result = new ArrayList<ContextElement>();
         final RDFSNamedClass cls = getContextElementClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultContextElement(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getPolicyClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Policy";
@@ -482,12 +408,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultPolicy(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultPolicy(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Policy getPolicy(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Policy) {
             return (Policy) res;
         } else if (res.hasProtegeType(getPolicyClass())) {
@@ -504,13 +432,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Policy> result = new ArrayList<Policy>();
         final RDFSNamedClass cls = getPolicyClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultPolicy(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getStorageClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Storage";
@@ -523,12 +450,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultStorage(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultStorage(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Storage getStorage(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Storage) {
             return (Storage) res;
         } else if (res.hasProtegeType(getStorageClass())) {
@@ -545,13 +474,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Storage> result = new ArrayList<Storage>();
         final RDFSNamedClass cls = getStorageClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultStorage(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getResourceClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Resource";
@@ -564,12 +492,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultResource(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultResource(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Resource getResource(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Resource) {
             return (Resource) res;
         } else if (res.hasProtegeType(getResourceClass())) {
@@ -586,13 +516,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Resource> result = new ArrayList<Resource>();
         final RDFSNamedClass cls = getResourceClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultResource(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getQoSPolicyClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#QoSPolicy";
@@ -605,12 +534,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultQoSPolicy(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultQoSPolicy(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public QoSPolicy getQoSPolicy(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof QoSPolicy) {
             return (QoSPolicy) res;
         } else if (res.hasProtegeType(getQoSPolicyClass())) {
@@ -627,13 +558,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<QoSPolicy> result = new ArrayList<QoSPolicy>();
         final RDFSNamedClass cls = getQoSPolicyClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultQoSPolicy(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getCPUClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#CPU";
@@ -646,12 +576,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultCPU(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultCPU(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public CPU getCPU(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof CPU) {
             return (CPU) res;
         } else if (res.hasProtegeType(getCPUClass())) {
@@ -668,13 +600,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<CPU> result = new ArrayList<CPU>();
         final RDFSNamedClass cls = getCPUClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultCPU(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getEnergyPolicyClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#EnergyPolicy";
@@ -687,12 +618,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultEnergyPolicy(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultEnergyPolicy(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public EnergyPolicy getEnergyPolicy(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof EnergyPolicy) {
             return (EnergyPolicy) res;
         } else if (res.hasProtegeType(getEnergyPolicyClass())) {
@@ -709,13 +642,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<EnergyPolicy> result = new ArrayList<EnergyPolicy>();
         final RDFSNamedClass cls = getEnergyPolicyClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultEnergyPolicy(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getServerClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Server";
@@ -728,12 +660,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultServer(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultServer(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Server getServer(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Server) {
             return (Server) res;
         } else if (res.hasProtegeType(getServerClass())) {
@@ -750,13 +684,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Server> result = new ArrayList<Server>();
         final RDFSNamedClass cls = getServerClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultServer(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFSNamedClass getActionClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Action";
@@ -769,12 +702,14 @@ public ProtegeFactory(OWLModel owlModel) {
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return  new DefaultAction(owlModel, cls.createInstance(name).getFrameID());
+        return new DefaultAction(owlModel, cls.createInstance(name).getFrameID());
     }
 
     public Action getAction(String name) {
         RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {return null;}
+        if (res == null) {
+            return null;
+        }
         if (res instanceof Action) {
             return (Action) res;
         } else if (res.hasProtegeType(getActionClass())) {
@@ -791,13 +726,12 @@ public ProtegeFactory(OWLModel owlModel) {
         Collection<Action> result = new ArrayList<Action>();
         final RDFSNamedClass cls = getActionClass();
         RDFResource owlIndividual;
-        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+        for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
             result.add(new DefaultAction(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
-
 
     public RDFProperty getHasRuleCategoryProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleCategory";
@@ -805,13 +739,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getHasBuiltInPhraseProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasBuiltInPhrase";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getIsRuleEnabledProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled";
@@ -819,13 +751,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getIsRuleGroupEnabledProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleGroupEnabled";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getHasClassPhraseProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasClassPhrase";
@@ -833,13 +763,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getHasPropertyPhraseProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasPropertyPhrase";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getNameProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#name";
@@ -847,13 +775,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getRespectedProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#respected";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getUsedProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#used";
@@ -861,13 +787,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getTotalProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#total";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getWebServiceProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#webService";
@@ -875,13 +799,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getMemoryProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#memory";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getTaskPropertyProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#taskProperty";
@@ -889,13 +811,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getCoresProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#cores";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getStorageProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#storage";
@@ -903,13 +823,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getCpuProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#cpu";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getOptimumProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#optimum";
@@ -917,13 +835,11 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getHasRuleGroupProperty() {
         final String uri = "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getAssociatedInfoProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedInfo";
@@ -931,20 +847,17 @@ public ProtegeFactory(OWLModel owlModel) {
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getReferencesProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#references";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
 
-
     public RDFProperty getAssociatedCoreProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedCore";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFProperty(name);
     }
-
 
     public RDFProperty getAssociatedComponentProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedComponent";

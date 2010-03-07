@@ -145,20 +145,10 @@ public class DefaultServer extends DefaultResource
      */
     public void addRunningTasks(Task newRunningTasks) {
 
-        Collection taskInfo = newRunningTasks.getAssociatedInfo();
-        Iterator iterator = taskInfo.iterator();
-        Requested requestedSLA = null;
-        Received receivedSLA = null;
 
-        //in case Requested and Received are added in another order 
-        while (iterator.hasNext()) {
-            Object info = iterator.next();
-            if (requestedSLA == null && info instanceof Requested) {
-                requestedSLA = (Requested) info;
-            } else {
-                receivedSLA = (Received) info;
-            }
-        }
+
+        TaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
+        TaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
 
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
@@ -194,20 +184,9 @@ public class DefaultServer extends DefaultResource
 
     public void removeRunningTasks(Task oldRunningTasks) {
 
-        Collection taskInfo = oldRunningTasks.getAssociatedInfo();
-        Iterator iterator = taskInfo.iterator();
-        Requested requestedSLA = null;
-        Received receivedSLA = null;
 
-        //in case Requested and Received are added in another order
-        while (iterator.hasNext()) {
-            Object info = iterator.next();
-            if (requestedSLA == null && info instanceof Requested) {
-                requestedSLA = (Requested) info;
-            } else {
-                receivedSLA = (Received) info;
-            }
-        }
+        TaskInfo receivedSLA = oldRunningTasks.getReceivedInfo();
+
 
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
@@ -242,21 +221,9 @@ public class DefaultServer extends DefaultResource
      */
     public boolean hasResourcesFor(Task task) {
 
-        Collection taskInfo = task.getAssociatedInfo();
-        Iterator iterator = taskInfo.iterator();
-        Requested requestedSLA = null;
-        Received receivedSLA = null;
 
-        //in case Requested and Received are added in another order
-        while (iterator.hasNext()) {
-            Object info = iterator.next();
-            if (requestedSLA == null && info instanceof Requested) {
-                requestedSLA = (Requested) info;
-            } else {
-                receivedSLA = (Received) info;
-            }
-        }
-
+        TaskInfo receivedSLA = task.getReceivedInfo();
+        
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();

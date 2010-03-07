@@ -115,15 +115,16 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private void reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
         ContextSnapshot newContext = queue.poll();
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
-        Task task = null;
-        Server server = null;
+        DefaultTask task = null;
+        DefaultServer server = null;
         if (entropyAndPolicy.getFirst() > 0) {
             if (entropyAndPolicy.getSecond() != null) {
                 Policy policy = entropyAndPolicy.getSecond();
-                if (policy instanceof DefaultQoSPolicy ) {
-                    task = (Task) policy.listReferences().next();
+                if (policy.getClass().equals(DefaultQoSPolicy.class)) {
+                    task = (DefaultTask) policy.listReferences().next();
+
                 } else {
-                    server = (Server) policy.listReferences().next();
+                    server = (DefaultServer) policy.listReferences().next();
                 }
             }
             Collection<Server> servers = protegeFactory.getAllServerInstances();
@@ -219,7 +220,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         if (entropyAndPolicy.getSecond() != null) {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA" + entropyAndPolicy.getSecond());
             reinforcementLearning(queue);
-            System.out.println("size" + queue.poll().getActions().size());
+            System.out.println("size " + queue.poll().getActions().size());
         }
 
 

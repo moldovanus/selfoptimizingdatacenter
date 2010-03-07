@@ -22,37 +22,6 @@ public class DefaultTask extends DefaultContextElement
     public DefaultTask() {
     }
 
-// Property http://www.owl-ontologies.com/Datacenter.owl#associatedInfo
-    public Collection getAssociatedInfo() {
-        return getPropertyValuesAs(getAssociatedInfoProperty(), TaskInfo.class);
-    }
-
-    public RDFProperty getAssociatedInfoProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedInfo";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-    public boolean hasAssociatedInfo() {
-        return getPropertyValueCount(getAssociatedInfoProperty()) > 0;
-    }
-
-    public Iterator listAssociatedInfo() {
-        return listPropertyValuesAs(getAssociatedInfoProperty(), TaskInfo.class);
-    }
-
-    public void addAssociatedInfo(TaskInfo newAssociatedInfo) {
-        addPropertyValue(getAssociatedInfoProperty(), newAssociatedInfo);
-    }
-
-    public void removeAssociatedInfo(TaskInfo oldAssociatedInfo) {
-        removePropertyValue(getAssociatedInfoProperty(), oldAssociatedInfo);
-    }
-
-    public void setAssociatedInfo(Collection newAssociatedInfo) {
-        setPropertyValues(getAssociatedInfoProperty(), newAssociatedInfo);
-    }
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedServer
     public Server getAssociatedServer() {
         return (Server) getPropertyValueAs(getAssociatedServerProperty(), Server.class);
@@ -70,5 +39,43 @@ public class DefaultTask extends DefaultContextElement
 
     public void setAssociatedServer(Server newAssociatedServer) {
         setPropertyValue(getAssociatedServerProperty(), newAssociatedServer);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
+    public TaskInfo getReceivedInfo() {
+        return (TaskInfo) getPropertyValueAs(getReceivedInfoProperty(), TaskInfo.class);
+    }
+
+    public RDFProperty getReceivedInfoProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#receivedInfo";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+    public boolean hasReceivedInfo() {
+        return getPropertyValueCount(getReceivedInfoProperty()) > 0;
+    }
+
+    public void setReceivedInfo(TaskInfo newReceivedInfo) {
+        setPropertyValue(getReceivedInfoProperty(), newReceivedInfo);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#requestedInfo
+    public TaskInfo getRequestedInfo() {
+        return (TaskInfo) getPropertyValueAs(getRequestedInfoProperty(), TaskInfo.class);
+    }
+
+    public RDFProperty getRequestedInfoProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#requestedInfo";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+    public boolean hasRequestedInfo() {
+        return getPropertyValueCount(getRequestedInfoProperty()) > 0;
+    }
+
+    public void setRequestedInfo(TaskInfo newRequestedInfo) {
+        setPropertyValue(getRequestedInfoProperty(), newRequestedInfo);
     }
 }

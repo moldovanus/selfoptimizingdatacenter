@@ -11,25 +11,7 @@ import java.util.*;
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
 public interface Task extends ContextElement {
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedInfo
-
-    Collection getAssociatedInfo();
-
-    RDFProperty getAssociatedInfoProperty();
-
-    boolean hasAssociatedInfo();
-
-    Iterator listAssociatedInfo();
-
-    void addAssociatedInfo(TaskInfo newAssociatedInfo);
-
-    void removeAssociatedInfo(TaskInfo oldAssociatedInfo);
-
-    void setAssociatedInfo(Collection newAssociatedInfo);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedServer
+ // Property http://www.owl-ontologies.com/Datacenter.owl#associatedServer
 
     Server getAssociatedServer();
 
@@ -38,4 +20,26 @@ public interface Task extends ContextElement {
     boolean hasAssociatedServer();
 
     void setAssociatedServer(Server newAssociatedServer);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
+
+    TaskInfo getReceivedInfo();
+
+    RDFProperty getReceivedInfoProperty();
+
+    boolean hasReceivedInfo();
+
+    void setReceivedInfo(TaskInfo newReceivedInfo);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#requestedInfo
+
+    TaskInfo getRequestedInfo();
+
+    RDFProperty getRequestedInfoProperty();
+
+    boolean hasRequestedInfo();
+
+    void setRequestedInfo(TaskInfo newRequestedInfo);
 }
