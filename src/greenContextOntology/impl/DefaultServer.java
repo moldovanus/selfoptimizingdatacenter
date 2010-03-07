@@ -13,24 +13,19 @@ import greenContextOntology.*;
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
 public class DefaultServer extends DefaultResource
-         implements Server {
+        implements Server {
 
     public DefaultServer(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
     }
 
-
     public DefaultServer() {
     }
 
-
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedComponent
-
     public Collection getAssociatedComponent() {
         return getPropertyValuesAs(getAssociatedComponentProperty(), Component.class);
     }
-
 
     public RDFProperty getAssociatedComponentProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedComponent";
@@ -38,39 +33,50 @@ public class DefaultServer extends DefaultResource
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasAssociatedComponent() {
         return getPropertyValueCount(getAssociatedComponentProperty()) > 0;
     }
-
 
     public Iterator listAssociatedComponent() {
         return listPropertyValuesAs(getAssociatedComponentProperty(), Component.class);
     }
 
-
     public void addAssociatedComponent(Component newAssociatedComponent) {
         addPropertyValue(getAssociatedComponentProperty(), newAssociatedComponent);
     }
-
 
     public void removeAssociatedComponent(Component oldAssociatedComponent) {
         removePropertyValue(getAssociatedComponentProperty(), oldAssociatedComponent);
     }
 
-
     public void setAssociatedComponent(Collection newAssociatedComponent) {
         setPropertyValues(getAssociatedComponentProperty(), newAssociatedComponent);
     }
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
+    public boolean getLowPowerState() {
+        return getPropertyValueLiteral(getLowPowerStateProperty()).getBoolean();
+    }
 
+    public RDFProperty getLowPowerStateProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#lowPowerState";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+    public boolean hasLowPowerState() {
+        return getPropertyValueCount(getLowPowerStateProperty()) > 0;
+    }
+
+    public void setLowPowerState(boolean newLowPowerState) {
+        setPropertyValue(getLowPowerStateProperty(), new java.lang.Boolean(newLowPowerState));
+    }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#name
-
+    @Override
     public String getName() {
         return (String) getPropertyValue(getNameProperty());
     }
-
 
     public RDFProperty getNameProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#name";
@@ -78,24 +84,19 @@ public class DefaultServer extends DefaultResource
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasName() {
         return getPropertyValueCount(getNameProperty()) > 0;
     }
 
-
+    @Override
     public void setName(String newName) {
         setPropertyValue(getNameProperty(), newName);
     }
 
-
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#webService
-
     public String getWebService() {
         return (String) getPropertyValue(getWebServiceProperty());
     }
-
 
     public RDFProperty getWebServiceProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#webService";
@@ -103,11 +104,9 @@ public class DefaultServer extends DefaultResource
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasWebService() {
         return getPropertyValueCount(getWebServiceProperty()) > 0;
     }
-
 
     public void setWebService(String newWebService) {
         setPropertyValue(getWebServiceProperty(), newWebService);
