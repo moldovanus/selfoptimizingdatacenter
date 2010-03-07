@@ -14,60 +14,38 @@ import java.util.Queue;
  * @author Administrator
  */
 public class ContextSnapshot {
-
-    private com.hp.hpl.jena.ontology.OntModel policyConversionModel;
     private Queue<Command> actions;
-    private JenaOWLModel jenaOwlModel;
-    //private SensorValues currentValues ;
-    private double contextEntropy = 0;
-
-    public ContextSnapshot(final OntModel policyConversionModel, final Queue<Command> actions, final JenaOWLModel owlModel) {
-        this.policyConversionModel = policyConversionModel;
+    private double contextEntropy = 0 ;
+    private double rewardFunction = 0 ;
+    public ContextSnapshot(final Queue<Command> actions) {
         this.actions = actions;
-        this.jenaOwlModel = owlModel;
     }
-
     public double getContextEntropy() {
         return contextEntropy;
     }
-
     public void setContextEntropy(double contextEntropy) {
         this.contextEntropy = contextEntropy;
     }
-
-
     public void addActions(Queue<Command> commands){
         for(Command command:commands){
             actions.add(command);
         }
     }
- 
     public void executeActions() {
         for (Command command : actions) {
             command.execute();
         }
     }
-
      public void executeActionsOnOWL() {
         for (Command command : actions) {
             command.executeOnWebService();
         }
     }
-
     public void rewind() {
         for (Command command : actions) {
             command.rewind();
         }
     }
-
-    public JenaOWLModel getJenaOwlModel() {
-        return jenaOwlModel;
-    }
-
-    public void setJenaOwlModel(JenaOWLModel jenaOwlModel) {
-        this.jenaOwlModel = jenaOwlModel;
-    }
-
     public Queue<Command> getActions() {
         return actions;
     }
@@ -76,20 +54,18 @@ public class ContextSnapshot {
         this.actions = actions;
     }
 
-    public OntModel getPolicyConversionModel() {
-        return policyConversionModel;
+    /**
+     * @return the rewardFunction
+     */
+    public double getRewardFunction() {
+        return rewardFunction;
     }
 
-    public void setPolicyConversionModel(OntModel policyConversionModel) {
-        this.policyConversionModel = policyConversionModel;
+    /**
+     * @param rewardFunction the rewardFunction to set
+     */
+    public void setRewardFunction(double rewardFunction) {
+        this.rewardFunction = rewardFunction;
     }
-
-    //public SensorValues getCurrentValues() {
-   //     return currentValues;
-    //}
-
-   // public void setCurrentValues(SensorValues currentValues) {
-       // this.currentValues = currentValues;
-   // }
    
 }

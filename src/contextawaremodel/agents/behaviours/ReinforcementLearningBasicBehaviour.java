@@ -101,7 +101,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
     private Pair<Double, Individual> computeEntropy(ContextSnapshot contextSnapshot) {
         Individual brokenPolicy = null;
         double entropy = 0.0;
-        Collection<RDFResource> resources = contextSnapshot.getJenaOwlModel().getRDFResources();
+        Collection<RDFResource> resources = owlModel.getRDFResources();
 
         for (RDFResource resource : resources) {
 
@@ -232,7 +232,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                                     incrementCommand.execute();
                                     incrementQueue.add(incrementCommand);
 
-                                    ContextSnapshot afterIncrement = new ContextSnapshot(policyConversionModel, incrementQueue, context.getJenaOwlModel());
+                                    ContextSnapshot afterIncrement = new ContextSnapshot( incrementQueue);
                                     queue.add(afterIncrement);
                                     incrementCommand.rewind();
 
@@ -248,7 +248,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                                     DecrementCommand decrementCommand = new DecrementCommand(sensor.toString(), sensorValueProperty.toString(), hasWebServiceProperty.toString(), policyConversionModel, value);
                                     decrementCommand.execute();
                                     decrementQueue.add(decrementCommand);
-                                    ContextSnapshot afterDecrement = new ContextSnapshot(policyConversionModel, decrementQueue, context.getJenaOwlModel());
+                                    ContextSnapshot afterDecrement = new ContextSnapshot(decrementQueue);
                                     queue.add(afterDecrement);
                                     decrementCommand.rewind();
 
@@ -269,7 +269,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                                     if (after != before) {
                                         Queue<Command> setCommandQueue = new LinkedList(context.getActions());
                                         setCommandQueue.add(setCommand);
-                                        ContextSnapshot afterSet = new ContextSnapshot(policyConversionModel, setCommandQueue, context.getJenaOwlModel());
+                                        ContextSnapshot afterSet = new ContextSnapshot( setCommandQueue);
                                         queue.add(afterSet);
                                     }
                                     setCommand.rewind();
@@ -324,7 +324,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         //set for printing
         ArrayList<String> brokenPoliciesNames = new ArrayList<String>();
 
-        Collection<RDFResource> resources = contextSnapshot.getJenaOwlModel().getRDFResources();
+        Collection<RDFResource> resources = owlModel.getRDFResources();
 
         for (RDFResource resource : resources) {
 
@@ -364,7 +364,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
     protected void onTick() {
 
         Queue<ContextSnapshot> queue = new LinkedList<ContextSnapshot>();
-        ContextSnapshot initialContext = new ContextSnapshot(policyConversionModel, new LinkedList<Command>(), owlModel);
+        ContextSnapshot initialContext = new ContextSnapshot( new LinkedList<Command>());
         SensorValues currentValues = new SensorValues(policyConversionModel, owlModel, GlobalVars.base);
         queue.add(initialContext);
 
