@@ -4,12 +4,11 @@
  */
 package contextawaremodel.agents;
 
-import actionselection.command.DecrementCommand;
-import actionselection.command.IncrementCommand;
-import actionselection.command.SetCommand;
+//import actionselection.command.DecrementCommand;
+//import actionselection.command.IncrementCommand;
+//import actionselection.command.SetCommand;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
-import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -23,13 +22,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import org.web3d.x3d.sai.BrowserFactory;
 import org.web3d.x3d.sai.ExternalBrowser;
-import org.web3d.x3d.sai.MFString;
-import org.web3d.x3d.sai.SFBool;
 import org.web3d.x3d.sai.SFColor;
 import org.web3d.x3d.sai.SFTime;
 import org.web3d.x3d.sai.X3DComponent;
-import org.web3d.x3d.sai.X3DFieldEvent;
-import org.web3d.x3d.sai.X3DFieldEventListener;
 import org.web3d.x3d.sai.X3DNode;
 import org.web3d.x3d.sai.X3DScene;
 
@@ -37,6 +32,7 @@ import org.web3d.x3d.sai.X3DScene;
  *
  * @author Administrator
  */
+
 public class X3DAgent extends Agent {
 
     private JFrame frame;
@@ -172,7 +168,7 @@ public class X3DAgent extends Agent {
         //SFColor color = (SFColor) sphere.getField("diffuseColor");
         //color.setValue(f);
 
-        videoTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
+       /* videoTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
 
             public void readableFieldChanged(X3DFieldEvent xdfe) {
                 X3DNode videoStateString = mainScene.getNamedNode("faceRecognitionResult_STRING");
@@ -360,7 +356,7 @@ public class X3DAgent extends Agent {
         //color.getValue(f);
         //System.out.println("" + f[0] + "   " + f[1] + "   " + f[2]);
 
-        addBehaviour(new BasicX3DBehaviour(this));
+        addBehaviour(new BasicX3DBehaviour(this));*/
     }
 
     public X3DScene getMainScene() {
