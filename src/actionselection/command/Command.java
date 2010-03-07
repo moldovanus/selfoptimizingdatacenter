@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public abstract class Command implements Serializable {
     protected transient ProtegeFactory protegeFactory;
-    private int cost;
+    protected int cost;
     
     public Command(  ProtegeFactory protegeFactory) {
         this.protegeFactory = protegeFactory;
