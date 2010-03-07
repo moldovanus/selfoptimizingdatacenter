@@ -53,4 +53,22 @@ public interface Server extends Resource {
     boolean hasWebService();
 
     void setWebService(String newWebService);
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
+
+    Collection getRunningTasks();
+
+    RDFProperty getRunningTasksProperty();
+
+    boolean hasRunningTasks();
+
+    Iterator listRunningTasks();
+
+    void addRunningTasks(greenContextOntology.Task newRunningTasks);
+
+    void removeRunningTasks(greenContextOntology.Task oldRunningTasks);
+
+    void setRunningTasks(Collection newRunningTasks);
+
 }
+
