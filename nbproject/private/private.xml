@@ -2,4 +2,20 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/profiler/1" version="0.9.1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/contextawaremodel/agents/behaviours/ReinforcementLearningBasicBehaviour.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/contextawaremodel/ontology/MyFactory.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/greenContextOntology/ProtegeFactory.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/contextawaremodel/agents/behaviours/ReinforcementLearningDataCenterBehavior.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/greenContextOntology/impl/DefaultAction.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/contextawaremodel/agents/CMAAgent.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/command/Command.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/contextawaremodel/agents/X3DAgent.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/command/DeployTaskCommand.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/command/SendServerToLowPowerStateCommand.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/command/WakeUpServerCommand.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/greenContextOntology/impl/DefaultServer.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/command/DecrementCommand.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrator/Desktop/licenta/src/actionselection/context/ContextSnapshot.java</file>
+    </open-files>
 </project-private>

@@ -132,32 +132,38 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             if (task != null) {
                 // deploy actions
                 for (Server serverInstance : servers) {
-                    Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
-                    ContextSnapshot cs = newContext;
-                    cs.getActions().add(newAction);
-                    cs.executeActions();
-                    cs.setContextEntropy(computeEntropy().getFirst());
-                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                    cs.rewind();
-                    queue.add(cs);
+                    if (!serverInstance.getLowPowerState()) {
+                        Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
+                        ContextSnapshot cs = newContext;
+                        cs.getActions().add(newAction);
+                        cs.executeActions();
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        cs.rewind();
+                        queue.add(cs);
+                    }
                 }
 
                 // move actions
                 Collection<Server> servers1 = protegeFactory.getAllServerInstances();
                 for (Server serverInstance : servers) {
-                    Iterator it = serverInstance.listRunningTasks();
-                    while (it.hasNext()) {
-                        Task myTask = (DefaultTask) it.next();
-                        for (Server serverInstance1 : servers1) {
-                            Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), serverInstance1.getName(), myTask.getName());
-                            ///de vazut daca a fost posibila
-                            ContextSnapshot cs = newContext;
-                            cs.getActions().add(newAction);
-                            cs.executeActions();
-                            cs.setContextEntropy(computeEntropy().getFirst());
-                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                            cs.rewind();
-                            queue.add(cs);
+                    if (!serverInstance.getLowPowerState()) {
+                        Iterator it = serverInstance.listRunningTasks();
+                        while (it.hasNext()) {
+                            Task myTask = (DefaultTask) it.next();
+                            for (Server serverInstance1 : servers1) {
+                                if (!serverInstance1.getLowPowerState()) {
+                                    Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), serverInstance1.getName(), myTask.getName());
+                                    ///de vazut daca a fost posibila
+                                    ContextSnapshot cs = newContext;
+                                    cs.getActions().add(newAction);
+                                    cs.executeActions();
+                                    cs.setContextEntropy(computeEntropy().getFirst());
+                                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                                    cs.rewind();
+                                    queue.add(cs);
+                                }
+                            }
                         }
                     }
                 }
@@ -168,15 +174,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 while (it.hasNext()) {
                     Task myTask = (DefaultTask) it.next();
                     for (Server serverInstance1 : servers) {
-                        Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance1.getName(), myTask.getName());
-                        ///de vazut daca a fost posibila
-                        ContextSnapshot cs = newContext;
-                        cs.getActions().add(newAction);
-                        cs.executeActions();
-                        cs.setContextEntropy(computeEntropy().getFirst());
-                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                        cs.rewind();
-                        queue.add(cs);
+                        if (!serverInstance1.getLowPowerState()) {
+                            Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance1.getName(), myTask.getName());
+                            ///de vazut daca a fost posibila
+                            ContextSnapshot cs = newContext;
+                            cs.getActions().add(newAction);
+                            cs.executeActions();
+                            cs.setContextEntropy(computeEntropy().getFirst());
+                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                            cs.rewind();
+                            queue.add(cs);
+                        }
                     }
                 }
             }
@@ -194,15 +202,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
             // sleep
             for (Server serverInstance : servers) {
-                Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
-                ///de vazut daca a fost posibila
-                ContextSnapshot cs = newContext;
-                cs.getActions().add(newAction);
-                cs.executeActions();
-                cs.setContextEntropy(computeEntropy().getFirst());
-                cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                cs.rewind();
-                queue.add(cs);
+                if (!serverInstance.getLowPowerState()) {
+                    Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
+                    ///de vazut daca a fost posibila
+                    ContextSnapshot cs = newContext;
+                    cs.getActions().add(newAction);
+                    cs.executeActions();
+                    cs.setContextEntropy(computeEntropy().getFirst());
+                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                    cs.rewind();
+                    queue.add(cs);
+                }
             }
             reinforcementLearning(queue);
         }

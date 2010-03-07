@@ -17,7 +17,7 @@ public class ContextSnapshot implements Comparable {
     private Queue<Command> actions;
     private double contextEntropy = 0;
     private double rewardFunction = 0;
-    public final static double gamma = 0.2;
+    public final static double gamma = 0.6d;
     public ContextSnapshot(final Queue<Command> actions) {
         this.actions = actions;
     }
