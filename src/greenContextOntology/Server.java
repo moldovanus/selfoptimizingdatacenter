@@ -12,20 +12,32 @@ import java.util.*;
  */
 public interface Server extends Resource {
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedComponent
-    Collection getAssociatedComponent();
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
+    CPU getAssociatedCPU();
 
-    RDFProperty getAssociatedComponentProperty();
+    RDFProperty getAssociatedCPUProperty();
 
-    boolean hasAssociatedComponent();
+    boolean hasAssociatedCPU();
 
-    Iterator listAssociatedComponent();
+    void setAssociatedCPU(CPU newAssociatedCPU);
 
-    void addAssociatedComponent(Component newAssociatedComponent);
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedMemory
+    Memory getAssociatedMemory();
 
-    void removeAssociatedComponent(Component oldAssociatedComponent);
+    RDFProperty getAssociatedMemoryProperty();
 
-    void setAssociatedComponent(Collection newAssociatedComponent);
+    boolean hasAssociatedMemory();
+
+    void setAssociatedMemory(Memory newAssociatedMemory);
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedStorage
+    Storage getAssociatedStorage();
+
+    RDFProperty getAssociatedStorageProperty();
+
+    boolean hasAssociatedStorage();
+
+    void setAssociatedStorage(Storage newAssociatedStorage);
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
     boolean getLowPowerState();
@@ -45,17 +57,7 @@ public interface Server extends Resource {
 
     void setName(String newName);
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#webService
-    String getWebService();
-
-    RDFProperty getWebServiceProperty();
-
-    boolean hasWebService();
-
-    void setWebService(String newWebService);
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
-
     Collection getRunningTasks();
 
     RDFProperty getRunningTasksProperty();
@@ -64,11 +66,19 @@ public interface Server extends Resource {
 
     Iterator listRunningTasks();
 
-    void addRunningTasks(greenContextOntology.Task newRunningTasks);
+    void addRunningTasks(Task newRunningTasks);
 
-    void removeRunningTasks(greenContextOntology.Task oldRunningTasks);
+    void removeRunningTasks(Task oldRunningTasks);
 
     void setRunningTasks(Collection newRunningTasks);
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#webService
+    String getWebService();
+
+    RDFProperty getWebServiceProperty();
+
+    boolean hasWebService();
+
+    void setWebService(String newWebService);
 }
 

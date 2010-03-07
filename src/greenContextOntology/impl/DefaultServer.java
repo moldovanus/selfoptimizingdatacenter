@@ -23,35 +23,61 @@ public class DefaultServer extends DefaultResource
     public DefaultServer() {
     }
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedComponent
-    public Collection getAssociatedComponent() {
-        return getPropertyValuesAs(getAssociatedComponentProperty(), Component.class);
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
+    public CPU getAssociatedCPU() {
+        return (CPU) getPropertyValueAs(getAssociatedCPUProperty(), CPU.class);
     }
 
-    public RDFProperty getAssociatedComponentProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedComponent";
+    public RDFProperty getAssociatedCPUProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedCPU";
         final String name = getOWLModel().getResourceNameForURI(uri);
         return getOWLModel().getRDFProperty(name);
     }
 
-    public boolean hasAssociatedComponent() {
-        return getPropertyValueCount(getAssociatedComponentProperty()) > 0;
+    public boolean hasAssociatedCPU() {
+        return getPropertyValueCount(getAssociatedCPUProperty()) > 0;
     }
 
-    public Iterator listAssociatedComponent() {
-        return listPropertyValuesAs(getAssociatedComponentProperty(), Component.class);
+    public void setAssociatedCPU(CPU newAssociatedCPU) {
+        setPropertyValue(getAssociatedCPUProperty(), newAssociatedCPU);
     }
 
-    public void addAssociatedComponent(Component newAssociatedComponent) {
-        addPropertyValue(getAssociatedComponentProperty(), newAssociatedComponent);
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedMemory
+    public Memory getAssociatedMemory() {
+        return (Memory) getPropertyValueAs(getAssociatedMemoryProperty(), Memory.class);
     }
 
-    public void removeAssociatedComponent(Component oldAssociatedComponent) {
-        removePropertyValue(getAssociatedComponentProperty(), oldAssociatedComponent);
+    public RDFProperty getAssociatedMemoryProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedMemory";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
     }
 
-    public void setAssociatedComponent(Collection newAssociatedComponent) {
-        setPropertyValues(getAssociatedComponentProperty(), newAssociatedComponent);
+    public boolean hasAssociatedMemory() {
+        return getPropertyValueCount(getAssociatedMemoryProperty()) > 0;
+    }
+
+    public void setAssociatedMemory(Memory newAssociatedMemory) {
+        setPropertyValue(getAssociatedMemoryProperty(), newAssociatedMemory);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedStorage
+    public Storage getAssociatedStorage() {
+        return (Storage) getPropertyValueAs(getAssociatedStorageProperty(), Storage.class);
+    }
+
+    public RDFProperty getAssociatedStorageProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedStorage";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+    public boolean hasAssociatedStorage() {
+        return getPropertyValueCount(getAssociatedStorageProperty()) > 0;
+    }
+
+    public void setAssociatedStorage(Storage newAssociatedStorage) {
+        setPropertyValue(getAssociatedStorageProperty(), newAssociatedStorage);
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
@@ -74,7 +100,6 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#name
-    @Override
     public String getName() {
         return (String) getPropertyValue(getNameProperty());
     }
@@ -92,25 +117,6 @@ public class DefaultServer extends DefaultResource
     @Override
     public void setName(String newName) {
         setPropertyValue(getNameProperty(), newName);
-    }
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#webService
-    public String getWebService() {
-        return (String) getPropertyValue(getWebServiceProperty());
-    }
-
-    public RDFProperty getWebServiceProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#webService";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-    public boolean hasWebService() {
-        return getPropertyValueCount(getWebServiceProperty()) > 0;
-    }
-
-    public void setWebService(String newWebService) {
-        setPropertyValue(getWebServiceProperty(), newWebService);
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
@@ -142,5 +148,24 @@ public class DefaultServer extends DefaultResource
 
     public void setRunningTasks(Collection newRunningTasks) {
         setPropertyValues(getRunningTasksProperty(), newRunningTasks);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#webService
+    public String getWebService() {
+        return (String) getPropertyValue(getWebServiceProperty());
+    }
+
+    public RDFProperty getWebServiceProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#webService";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+    public boolean hasWebService() {
+        return getPropertyValueCount(getWebServiceProperty()) > 0;
+    }
+
+    public void setWebService(String newWebService) {
+        setPropertyValue(getWebServiceProperty(), newWebService);
     }
 }
