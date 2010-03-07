@@ -68,7 +68,10 @@ public class DefaultPolicy extends DefaultContextElement
     // Property http://www.owl-ontologies.com/Datacenter.owl#respected
 
     public boolean getRespected() {
-        return getPropertyValueLiteral(getRespectedProperty()).getBoolean();
+        RDFSLiteral respected = getPropertyValueLiteral(getRespectedProperty());
+        if ( respected == null){
+            return false;
+        }else return respected.getBoolean();
     }
 
 
