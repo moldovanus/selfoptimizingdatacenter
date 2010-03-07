@@ -13,7 +13,6 @@ import java.util.*;
 public interface Server extends Resource {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedComponent
-
     Collection getAssociatedComponent();
 
     RDFProperty getAssociatedComponentProperty();
@@ -28,9 +27,16 @@ public interface Server extends Resource {
 
     void setAssociatedComponent(Collection newAssociatedComponent);
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
+    boolean getLowPowerState();
+
+    RDFProperty getLowPowerStateProperty();
+
+    boolean hasLowPowerState();
+
+    void setLowPowerState(boolean newLowPowerState);
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#name
-
     String getName();
 
     RDFProperty getNameProperty();
@@ -39,9 +45,7 @@ public interface Server extends Resource {
 
     void setName(String newName);
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#webService
-
     String getWebService();
 
     RDFProperty getWebServiceProperty();
