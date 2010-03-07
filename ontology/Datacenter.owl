@@ -2850,14 +2850,6 @@
   <swrl:Imp rdf:ID="QoS_Policy_3_swrl_rule">
     <swrl:body>
       <swrl:AtomList>
-        <rdf:first>
-          <swrl:ClassAtom>
-            <swrl:classPredicate rdf:resource="#Task"/>
-            <swrl:argument1>
-              <swrl:Variable rdf:ID="TaskRef"/>
-            </swrl:argument1>
-          </swrl:ClassAtom>
-        </rdf:first>
         <rdf:rest>
           <swrl:AtomList>
             <rdf:rest>
@@ -2866,36 +2858,18 @@
                   <swrl:AtomList>
                     <rdf:rest>
                       <swrl:AtomList>
-                        <rdf:first>
-                          <swrl:DatavaluedPropertyAtom>
-                            <swrl:propertyPredicate rdf:resource="#cores"/>
-                            <swrl:argument2>
-                              <swrl:Variable rdf:ID="ReceivedInfoCores"/>
-                            </swrl:argument2>
-                            <swrl:argument1>
-                              <swrl:Variable rdf:ID="ReceivedInfo"/>
-                            </swrl:argument1>
-                          </swrl:DatavaluedPropertyAtom>
-                        </rdf:first>
                         <rdf:rest>
                           <swrl:AtomList>
                             <rdf:first>
-                              <swrl:BuiltinAtom>
-                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                <swrl:arguments>
-                                  <rdf:List>
-                                    <rdf:first rdf:resource="#ReceivedInfoCores"/>
-                                    <rdf:rest>
-                                      <rdf:List>
-                                        <rdf:first rdf:datatype=
-                                        "http://www.w3.org/2001/XMLSchema#int"
-                                        >2</rdf:first>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                      </rdf:List>
-                                    </rdf:rest>
-                                  </rdf:List>
-                                </swrl:arguments>
-                              </swrl:BuiltinAtom>
+                              <swrl:DatavaluedPropertyAtom>
+                                <swrl:argument2>
+                                  <swrl:Variable rdf:ID="ReceivedInfoCPU"/>
+                                </swrl:argument2>
+                                <swrl:argument1>
+                                  <swrl:Variable rdf:ID="ReceivedInfo"/>
+                                </swrl:argument1>
+                                <swrl:propertyPredicate rdf:resource="#cpu"/>
+                              </swrl:DatavaluedPropertyAtom>
                             </rdf:first>
                             <rdf:rest>
                               <swrl:AtomList>
@@ -2903,144 +2877,162 @@
                                   <swrl:AtomList>
                                     <rdf:rest>
                                       <swrl:AtomList>
+                                        <rdf:first>
+                                          <swrl:BuiltinAtom>
+                                            <swrl:arguments>
+                                              <rdf:List>
+                                                <rdf:first>
+                                                  <swrl:Variable rdf:ID="ReceivedInfoMemory"/>
+                                                </rdf:first>
+                                                <rdf:rest>
+                                                  <rdf:List>
+                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                    <rdf:first
+                                                     rdf:datatype=
+                                                    "http://www.w3.org/2001/XMLSchema#int"
+                                                    >1024</rdf:first>
+                                                  </rdf:List>
+                                                </rdf:rest>
+                                              </rdf:List>
+                                            </swrl:arguments>
+                                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                          </swrl:BuiltinAtom>
+                                        </rdf:first>
                                         <rdf:rest>
                                           <swrl:AtomList>
                                             <rdf:first>
-                                              <swrl:BuiltinAtom>
-                                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                                <swrl:arguments>
-                                                  <rdf:List>
-                                                    <rdf:first>
-                                                      <swrl:Variable rdf:ID="ReceivedInfoMemory"/>
-                                                    </rdf:first>
-                                                    <rdf:rest>
-                                                      <rdf:List>
-                                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                        <rdf:first
-                                                         rdf:datatype=
-                                                        "http://www.w3.org/2001/XMLSchema#int"
-                                                        >1024</rdf:first>
-                                                      </rdf:List>
-                                                    </rdf:rest>
-                                                  </rdf:List>
-                                                </swrl:arguments>
-                                              </swrl:BuiltinAtom>
+                                              <swrl:DatavaluedPropertyAtom>
+                                                <swrl:propertyPredicate rdf:resource="#storage"/>
+                                                <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                                <swrl:argument2>
+                                                  <swrl:Variable rdf:ID="ReceivedInfoStorage"/>
+                                                </swrl:argument2>
+                                              </swrl:DatavaluedPropertyAtom>
                                             </rdf:first>
                                             <rdf:rest>
                                               <swrl:AtomList>
-                                                <rdf:rest>
-                                                  <swrl:AtomList>
-                                                    <rdf:first>
-                                                      <swrl:BuiltinAtom>
-                                                        <swrl:arguments>
-                                                          <rdf:List>
-                                                            <rdf:first>
-                                                              <swrl:Variable rdf:ID="ReceivedInfoStorage"/>
-                                                            </rdf:first>
-                                                            <rdf:rest>
-                                                              <rdf:List>
-    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >256</rdf:first>
-    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                              </rdf:List>
-                                                            </rdf:rest>
-                                                          </rdf:List>
-                                                        </swrl:arguments>
-                                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                                      </swrl:BuiltinAtom>
-                                                    </rdf:first>
-                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                  </swrl:AtomList>
-                                                </rdf:rest>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                                 <rdf:first>
-                                                  <swrl:DatavaluedPropertyAtom>
-                                                    <swrl:propertyPredicate rdf:resource="#storage"/>
-                                                    <swrl:argument2 rdf:resource="#ReceivedInfoStorage"/>
-                                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                                  </swrl:DatavaluedPropertyAtom>
+                                                  <swrl:BuiltinAtom>
+                                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                                    <swrl:arguments>
+                                                      <rdf:List>
+                                                        <rdf:rest>
+                                                          <rdf:List>
+                                                            <rdf:first
+                                                             rdf:datatype=
+                                                            "http://www.w3.org/2001/XMLSchema#int"
+                                                            >256</rdf:first>
+                                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                          </rdf:List>
+                                                        </rdf:rest>
+                                                        <rdf:first rdf:resource="#ReceivedInfoStorage"/>
+                                                      </rdf:List>
+                                                    </swrl:arguments>
+                                                  </swrl:BuiltinAtom>
                                                 </rdf:first>
                                               </swrl:AtomList>
                                             </rdf:rest>
                                           </swrl:AtomList>
                                         </rdf:rest>
-                                        <rdf:first>
-                                          <swrl:DatavaluedPropertyAtom>
-                                            <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                            <swrl:propertyPredicate rdf:resource="#memory"/>
-                                            <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
-                                          </swrl:DatavaluedPropertyAtom>
-                                        </rdf:first>
                                       </swrl:AtomList>
                                     </rdf:rest>
                                     <rdf:first>
-                                      <swrl:BuiltinAtom>
-                                        <swrl:arguments>
-                                          <rdf:List>
-                                            <rdf:first>
-                                              <swrl:Variable rdf:ID="ReceivedInfoCPU"/>
-                                            </rdf:first>
-                                            <rdf:rest>
-                                              <rdf:List>
-                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                <rdf:first rdf:datatype=
-                                                "http://www.w3.org/2001/XMLSchema#int"
-                                                >2000</rdf:first>
-                                              </rdf:List>
-                                            </rdf:rest>
-                                          </rdf:List>
-                                        </swrl:arguments>
-                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                      </swrl:BuiltinAtom>
+                                      <swrl:DatavaluedPropertyAtom>
+                                        <swrl:propertyPredicate rdf:resource="#memory"/>
+                                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                        <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
+                                      </swrl:DatavaluedPropertyAtom>
                                     </rdf:first>
                                   </swrl:AtomList>
                                 </rdf:rest>
                                 <rdf:first>
-                                  <swrl:DatavaluedPropertyAtom>
-                                    <swrl:argument2 rdf:resource="#ReceivedInfoCPU"/>
-                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                    <swrl:propertyPredicate rdf:resource="#cpu"/>
-                                  </swrl:DatavaluedPropertyAtom>
+                                  <swrl:BuiltinAtom>
+                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                    <swrl:arguments>
+                                      <rdf:List>
+                                        <rdf:first rdf:resource="#ReceivedInfoCPU"/>
+                                        <rdf:rest>
+                                          <rdf:List>
+                                            <rdf:first rdf:datatype=
+                                            "http://www.w3.org/2001/XMLSchema#int"
+                                            >2000</rdf:first>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                          </rdf:List>
+                                        </rdf:rest>
+                                      </rdf:List>
+                                    </swrl:arguments>
+                                  </swrl:BuiltinAtom>
                                 </rdf:first>
                               </swrl:AtomList>
                             </rdf:rest>
                           </swrl:AtomList>
                         </rdf:rest>
+                        <rdf:first>
+                          <swrl:BuiltinAtom>
+                            <swrl:arguments>
+                              <rdf:List>
+                                <rdf:first>
+                                  <swrl:Variable rdf:ID="ReceivedInfoCores"/>
+                                </rdf:first>
+                                <rdf:rest>
+                                  <rdf:List>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                                    >2</rdf:first>
+                                  </rdf:List>
+                                </rdf:rest>
+                              </rdf:List>
+                            </swrl:arguments>
+                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                          </swrl:BuiltinAtom>
+                        </rdf:first>
                       </swrl:AtomList>
                     </rdf:rest>
                     <rdf:first>
-                      <swrl:ClassAtom>
+                      <swrl:DatavaluedPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="#cores"/>
                         <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                      </swrl:ClassAtom>
+                        <swrl:argument2 rdf:resource="#ReceivedInfoCores"/>
+                      </swrl:DatavaluedPropertyAtom>
                     </rdf:first>
                   </swrl:AtomList>
                 </rdf:rest>
                 <rdf:first>
                   <swrl:IndividualPropertyAtom>
-                    <swrl:argument1 rdf:resource="#TaskRef"/>
                     <swrl:argument2 rdf:resource="#ReceivedInfo"/>
-                    <swrl:propertyPredicate rdf:resource="#requestedInfo"/>
+                    <swrl:propertyPredicate rdf:resource="#receivedInfo"/>
+                    <swrl:argument1>
+                      <swrl:Variable rdf:ID="TaskRef"/>
+                    </swrl:argument1>
                   </swrl:IndividualPropertyAtom>
                 </rdf:first>
               </swrl:AtomList>
             </rdf:rest>
             <rdf:first>
               <swrl:DatavaluedPropertyAtom>
-                <swrl:propertyPredicate rdf:resource="#name"/>
                 <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >Task_3</swrl:argument2>
                 <swrl:argument1 rdf:resource="#TaskRef"/>
+                <swrl:propertyPredicate rdf:resource="#name"/>
               </swrl:DatavaluedPropertyAtom>
             </rdf:first>
           </swrl:AtomList>
         </rdf:rest>
+        <rdf:first>
+          <swrl:ClassAtom>
+            <swrl:classPredicate rdf:resource="#Task"/>
+            <swrl:argument1 rdf:resource="#TaskRef"/>
+          </swrl:ClassAtom>
+        </rdf:first>
       </swrl:AtomList>
     </swrl:body>
     <swrl:head>
       <swrl:AtomList>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
         <rdf:first>
           <swrl:DatavaluedPropertyAtom>
-            <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swrl:argument2>
+            <swrl:propertyPredicate rdf:resource="#respected"/>
             <swrl:argument1>
               <QoSPolicy rdf:ID="QoSPolicy_3">
                 <references>
@@ -3085,10 +3077,10 @@
                 >false</respected>
               </QoSPolicy>
             </swrl:argument1>
-            <swrl:propertyPredicate rdf:resource="#respected"/>
+            <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swrl:argument2>
           </swrl:DatavaluedPropertyAtom>
         </rdf:first>
-        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
       </swrl:AtomList>
     </swrl:head>
   </swrl:Imp>
@@ -3539,161 +3531,147 @@
   <swrl:Imp rdf:ID="Qos_Policy_1_swrl_rule">
     <swrl:body>
       <swrl:AtomList>
-        <rdf:first>
-          <swrl:ClassAtom>
-            <swrl:classPredicate rdf:resource="#Task"/>
-            <swrl:argument1 rdf:resource="#TaskRef"/>
-          </swrl:ClassAtom>
-        </rdf:first>
         <rdf:rest>
           <swrl:AtomList>
             <rdf:rest>
               <swrl:AtomList>
                 <rdf:rest>
                   <swrl:AtomList>
-                    <rdf:first>
-                      <swrl:ClassAtom>
-                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                      </swrl:ClassAtom>
-                    </rdf:first>
                     <rdf:rest>
                       <swrl:AtomList>
-                        <rdf:first>
-                          <swrl:DatavaluedPropertyAtom>
-                            <swrl:argument2 rdf:resource="#ReceivedInfoCores"/>
-                            <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                            <swrl:propertyPredicate rdf:resource="#cores"/>
-                          </swrl:DatavaluedPropertyAtom>
-                        </rdf:first>
                         <rdf:rest>
                           <swrl:AtomList>
                             <rdf:first>
-                              <swrl:BuiltinAtom>
-                                <swrl:arguments>
-                                  <rdf:List>
-                                    <rdf:rest>
-                                      <rdf:List>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                        <rdf:first rdf:datatype=
-                                        "http://www.w3.org/2001/XMLSchema#int"
-                                        >1</rdf:first>
-                                      </rdf:List>
-                                    </rdf:rest>
-                                    <rdf:first rdf:resource="#ReceivedInfoCores"/>
-                                  </rdf:List>
-                                </swrl:arguments>
-                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                              </swrl:BuiltinAtom>
+                              <swrl:DatavaluedPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="#cpu"/>
+                                <swrl:argument2 rdf:resource="#ReceivedInfoCPU"/>
+                                <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                              </swrl:DatavaluedPropertyAtom>
                             </rdf:first>
                             <rdf:rest>
                               <swrl:AtomList>
+                                <rdf:first>
+                                  <swrl:BuiltinAtom>
+                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                    <swrl:arguments>
+                                      <rdf:List>
+                                        <rdf:first rdf:resource="#ReceivedInfoCPU"/>
+                                        <rdf:rest>
+                                          <rdf:List>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            <rdf:first rdf:datatype=
+                                            "http://www.w3.org/2001/XMLSchema#int"
+                                            >2900</rdf:first>
+                                          </rdf:List>
+                                        </rdf:rest>
+                                      </rdf:List>
+                                    </swrl:arguments>
+                                  </swrl:BuiltinAtom>
+                                </rdf:first>
                                 <rdf:rest>
                                   <swrl:AtomList>
-                                    <rdf:first>
-                                      <swrl:BuiltinAtom>
-                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                        <swrl:arguments>
-                                          <rdf:List>
-                                            <rdf:rest>
-                                              <rdf:List>
-                                                <rdf:first rdf:datatype=
-                                                "http://www.w3.org/2001/XMLSchema#int"
-                                                >2900</rdf:first>
-                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                              </rdf:List>
-                                            </rdf:rest>
-                                            <rdf:first rdf:resource="#ReceivedInfoCPU"/>
-                                          </rdf:List>
-                                        </swrl:arguments>
-                                      </swrl:BuiltinAtom>
-                                    </rdf:first>
                                     <rdf:rest>
                                       <swrl:AtomList>
-                                        <rdf:first>
-                                          <swrl:DatavaluedPropertyAtom>
-                                            <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
-                                            <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                            <swrl:propertyPredicate rdf:resource="#memory"/>
-                                          </swrl:DatavaluedPropertyAtom>
-                                        </rdf:first>
                                         <rdf:rest>
                                           <swrl:AtomList>
+                                            <rdf:first>
+                                              <swrl:DatavaluedPropertyAtom>
+                                                <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                                <swrl:argument2 rdf:resource="#ReceivedInfoStorage"/>
+                                                <swrl:propertyPredicate rdf:resource="#storage"/>
+                                              </swrl:DatavaluedPropertyAtom>
+                                            </rdf:first>
                                             <rdf:rest>
                                               <swrl:AtomList>
                                                 <rdf:first>
-                                                  <swrl:DatavaluedPropertyAtom>
-                                                    <swrl:propertyPredicate rdf:resource="#storage"/>
-                                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                                    <swrl:argument2 rdf:resource="#ReceivedInfoStorage"/>
-                                                  </swrl:DatavaluedPropertyAtom>
-                                                </rdf:first>
-                                                <rdf:rest>
-                                                  <swrl:AtomList>
-                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                    <rdf:first>
-                                                      <swrl:BuiltinAtom>
-                                                        <swrl:arguments>
+                                                  <swrl:BuiltinAtom>
+                                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                                    <swrl:arguments>
+                                                      <rdf:List>
+                                                        <rdf:first rdf:resource="#ReceivedInfoStorage"/>
+                                                        <rdf:rest>
                                                           <rdf:List>
-                                                            <rdf:rest>
-                                                              <rdf:List>
-    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >100</rdf:first>
-    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                              </rdf:List>
-                                                            </rdf:rest>
-                                                            <rdf:first rdf:resource="#ReceivedInfoStorage"/>
+                                                            <rdf:first
+                                                             rdf:datatype=
+                                                            "http://www.w3.org/2001/XMLSchema#int"
+                                                            >100</rdf:first>
+                                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                                           </rdf:List>
-                                                        </swrl:arguments>
-                                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                                      </swrl:BuiltinAtom>
-                                                    </rdf:first>
-                                                  </swrl:AtomList>
-                                                </rdf:rest>
+                                                        </rdf:rest>
+                                                      </rdf:List>
+                                                    </swrl:arguments>
+                                                  </swrl:BuiltinAtom>
+                                                </rdf:first>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                               </swrl:AtomList>
                                             </rdf:rest>
-                                            <rdf:first>
-                                              <swrl:BuiltinAtom>
-                                                <swrl:arguments>
-                                                  <rdf:List>
-                                                    <rdf:rest>
-                                                      <rdf:List>
-                                                        <rdf:first
-                                                         rdf:datatype=
-                                                        "http://www.w3.org/2001/XMLSchema#int"
-                                                        >2048</rdf:first>
-                                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                      </rdf:List>
-                                                    </rdf:rest>
-                                                    <rdf:first rdf:resource="#ReceivedInfoMemory"/>
-                                                  </rdf:List>
-                                                </swrl:arguments>
-                                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                              </swrl:BuiltinAtom>
-                                            </rdf:first>
                                           </swrl:AtomList>
                                         </rdf:rest>
+                                        <rdf:first>
+                                          <swrl:BuiltinAtom>
+                                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                            <swrl:arguments>
+                                              <rdf:List>
+                                                <rdf:rest>
+                                                  <rdf:List>
+                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                    <rdf:first
+                                                     rdf:datatype=
+                                                    "http://www.w3.org/2001/XMLSchema#int"
+                                                    >2048</rdf:first>
+                                                  </rdf:List>
+                                                </rdf:rest>
+                                                <rdf:first rdf:resource="#ReceivedInfoMemory"/>
+                                              </rdf:List>
+                                            </swrl:arguments>
+                                          </swrl:BuiltinAtom>
+                                        </rdf:first>
                                       </swrl:AtomList>
                                     </rdf:rest>
+                                    <rdf:first>
+                                      <swrl:DatavaluedPropertyAtom>
+                                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                        <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
+                                        <swrl:propertyPredicate rdf:resource="#memory"/>
+                                      </swrl:DatavaluedPropertyAtom>
+                                    </rdf:first>
                                   </swrl:AtomList>
                                 </rdf:rest>
-                                <rdf:first>
-                                  <swrl:DatavaluedPropertyAtom>
-                                    <swrl:argument2 rdf:resource="#ReceivedInfoCPU"/>
-                                    <swrl:propertyPredicate rdf:resource="#cpu"/>
-                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                  </swrl:DatavaluedPropertyAtom>
-                                </rdf:first>
                               </swrl:AtomList>
                             </rdf:rest>
                           </swrl:AtomList>
                         </rdf:rest>
+                        <rdf:first>
+                          <swrl:BuiltinAtom>
+                            <swrl:arguments>
+                              <rdf:List>
+                                <rdf:first rdf:resource="#ReceivedInfoCores"/>
+                                <rdf:rest>
+                                  <rdf:List>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                                    >1</rdf:first>
+                                  </rdf:List>
+                                </rdf:rest>
+                              </rdf:List>
+                            </swrl:arguments>
+                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                          </swrl:BuiltinAtom>
+                        </rdf:first>
                       </swrl:AtomList>
                     </rdf:rest>
+                    <rdf:first>
+                      <swrl:DatavaluedPropertyAtom>
+                        <swrl:argument2 rdf:resource="#ReceivedInfoCores"/>
+                        <swrl:propertyPredicate rdf:resource="#cores"/>
+                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                      </swrl:DatavaluedPropertyAtom>
+                    </rdf:first>
                   </swrl:AtomList>
                 </rdf:rest>
                 <rdf:first>
                   <swrl:IndividualPropertyAtom>
-                    <swrl:propertyPredicate rdf:resource="#requestedInfo"/>
+                    <swrl:propertyPredicate rdf:resource="#receivedInfo"/>
                     <swrl:argument2 rdf:resource="#ReceivedInfo"/>
                     <swrl:argument1 rdf:resource="#TaskRef"/>
                   </swrl:IndividualPropertyAtom>
@@ -3702,23 +3680,27 @@
             </rdf:rest>
             <rdf:first>
               <swrl:DatavaluedPropertyAtom>
-                <swrl:propertyPredicate rdf:resource="#name"/>
                 <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >Task_1</swrl:argument2>
                 <swrl:argument1 rdf:resource="#TaskRef"/>
+                <swrl:propertyPredicate rdf:resource="#name"/>
               </swrl:DatavaluedPropertyAtom>
             </rdf:first>
           </swrl:AtomList>
         </rdf:rest>
+        <rdf:first>
+          <swrl:ClassAtom>
+            <swrl:classPredicate rdf:resource="#Task"/>
+            <swrl:argument1 rdf:resource="#TaskRef"/>
+          </swrl:ClassAtom>
+        </rdf:first>
       </swrl:AtomList>
     </swrl:body>
     <swrl:head>
       <swrl:AtomList>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
         <rdf:first>
           <swrl:DatavaluedPropertyAtom>
-            <swrl:propertyPredicate rdf:resource="#respected"/>
-            <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swrl:argument2>
             <swrl:argument1>
               <QoSPolicy rdf:ID="QoSPolicy_1">
                 <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -3763,9 +3745,11 @@
                 </references>
               </QoSPolicy>
             </swrl:argument1>
+            <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swrl:argument2>
+            <swrl:propertyPredicate rdf:resource="#respected"/>
           </swrl:DatavaluedPropertyAtom>
         </rdf:first>
-        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
       </swrl:AtomList>
     </swrl:head>
   </swrl:Imp>
@@ -3784,136 +3768,105 @@
             </rdf:first>
             <rdf:rest>
               <swrl:AtomList>
-                <rdf:first>
-                  <swrl:IndividualPropertyAtom>
-                    <swrl:propertyPredicate rdf:resource="#requestedInfo"/>
-                    <swrl:argument2 rdf:resource="#ReceivedInfo"/>
-                    <swrl:argument1 rdf:resource="#TaskRef"/>
-                  </swrl:IndividualPropertyAtom>
-                </rdf:first>
                 <rdf:rest>
                   <swrl:AtomList>
-                    <rdf:first>
-                      <swrl:ClassAtom>
-                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                      </swrl:ClassAtom>
-                    </rdf:first>
                     <rdf:rest>
                       <swrl:AtomList>
                         <rdf:rest>
                           <swrl:AtomList>
                             <rdf:first>
-                              <swrl:BuiltinAtom>
-                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                <swrl:arguments>
-                                  <rdf:List>
-                                    <rdf:first rdf:resource="#ReceivedInfoCores"/>
-                                    <rdf:rest>
-                                      <rdf:List>
-                                        <rdf:first rdf:datatype=
-                                        "http://www.w3.org/2001/XMLSchema#int"
-                                        >1</rdf:first>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                      </rdf:List>
-                                    </rdf:rest>
-                                  </rdf:List>
-                                </swrl:arguments>
-                              </swrl:BuiltinAtom>
+                              <swrl:DatavaluedPropertyAtom>
+                                <swrl:argument2 rdf:resource="#ReceivedInfoCPU"/>
+                                <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                <swrl:propertyPredicate rdf:resource="#cpu"/>
+                              </swrl:DatavaluedPropertyAtom>
                             </rdf:first>
                             <rdf:rest>
                               <swrl:AtomList>
                                 <rdf:first>
-                                  <swrl:DatavaluedPropertyAtom>
-                                    <swrl:argument2 rdf:resource="#ReceivedInfoCPU"/>
-                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                    <swrl:propertyPredicate rdf:resource="#cpu"/>
-                                  </swrl:DatavaluedPropertyAtom>
+                                  <swrl:BuiltinAtom>
+                                    <swrl:arguments>
+                                      <rdf:List>
+                                        <rdf:first rdf:resource="#ReceivedInfoCPU"/>
+                                        <rdf:rest>
+                                          <rdf:List>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            <rdf:first rdf:datatype=
+                                            "http://www.w3.org/2001/XMLSchema#int"
+                                            >1500</rdf:first>
+                                          </rdf:List>
+                                        </rdf:rest>
+                                      </rdf:List>
+                                    </swrl:arguments>
+                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                  </swrl:BuiltinAtom>
                                 </rdf:first>
                                 <rdf:rest>
                                   <swrl:AtomList>
                                     <rdf:rest>
                                       <swrl:AtomList>
+                                        <rdf:first>
+                                          <swrl:BuiltinAtom>
+                                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                            <swrl:arguments>
+                                              <rdf:List>
+                                                <rdf:first rdf:resource="#ReceivedInfoMemory"/>
+                                                <rdf:rest>
+                                                  <rdf:List>
+                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                    <rdf:first
+                                                     rdf:datatype=
+                                                    "http://www.w3.org/2001/XMLSchema#int"
+                                                    >512</rdf:first>
+                                                  </rdf:List>
+                                                </rdf:rest>
+                                              </rdf:List>
+                                            </swrl:arguments>
+                                          </swrl:BuiltinAtom>
+                                        </rdf:first>
                                         <rdf:rest>
                                           <swrl:AtomList>
                                             <rdf:first>
-                                              <swrl:BuiltinAtom>
-                                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                                <swrl:arguments>
-                                                  <rdf:List>
-                                                    <rdf:first rdf:resource="#ReceivedInfoMemory"/>
-                                                    <rdf:rest>
-                                                      <rdf:List>
-                                                        <rdf:first
-                                                         rdf:datatype=
-                                                        "http://www.w3.org/2001/XMLSchema#int"
-                                                        >512</rdf:first>
-                                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                      </rdf:List>
-                                                    </rdf:rest>
-                                                  </rdf:List>
-                                                </swrl:arguments>
-                                              </swrl:BuiltinAtom>
+                                              <swrl:DatavaluedPropertyAtom>
+                                                <swrl:propertyPredicate rdf:resource="#storage"/>
+                                                <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                                <swrl:argument2 rdf:resource="#ReceivedInfoStorage"/>
+                                              </swrl:DatavaluedPropertyAtom>
                                             </rdf:first>
                                             <rdf:rest>
                                               <swrl:AtomList>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                                 <rdf:first>
-                                                  <swrl:DatavaluedPropertyAtom>
-                                                    <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                                    <swrl:argument2 rdf:resource="#ReceivedInfoStorage"/>
-                                                    <swrl:propertyPredicate rdf:resource="#storage"/>
-                                                  </swrl:DatavaluedPropertyAtom>
-                                                </rdf:first>
-                                                <rdf:rest>
-                                                  <swrl:AtomList>
-                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                    <rdf:first>
-                                                      <swrl:BuiltinAtom>
-                                                        <swrl:arguments>
+                                                  <swrl:BuiltinAtom>
+                                                    <swrl:arguments>
+                                                      <rdf:List>
+                                                        <rdf:first rdf:resource="#ReceivedInfoStorage"/>
+                                                        <rdf:rest>
                                                           <rdf:List>
-                                                            <rdf:rest>
-                                                              <rdf:List>
-    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >10240</rdf:first>                                        </rdf:List>
-                                                            </rdf:rest>
-                                                            <rdf:first rdf:resource="#ReceivedInfoStorage"/>
+                                                            <rdf:first
+                                                             rdf:datatype=
+                                                            "http://www.w3.org/2001/XMLSchema#int"
+                                                            >10240</rdf:first>
+                                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                                           </rdf:List>
-                                                        </swrl:arguments>
-                                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                                      </swrl:BuiltinAtom>
-                                                    </rdf:first>
-                                                  </swrl:AtomList>
-                                                </rdf:rest>
+                                                        </rdf:rest>
+                                                      </rdf:List>
+                                                    </swrl:arguments>
+                                                    <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                                  </swrl:BuiltinAtom>
+                                                </rdf:first>
                                               </swrl:AtomList>
                                             </rdf:rest>
                                           </swrl:AtomList>
                                         </rdf:rest>
-                                        <rdf:first>
-                                          <swrl:DatavaluedPropertyAtom>
-                                            <swrl:propertyPredicate rdf:resource="#memory"/>
-                                            <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
-                                            <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                                          </swrl:DatavaluedPropertyAtom>
-                                        </rdf:first>
                                       </swrl:AtomList>
                                     </rdf:rest>
                                     <rdf:first>
-                                      <swrl:BuiltinAtom>
-                                        <swrl:arguments>
-                                          <rdf:List>
-                                            <rdf:rest>
-                                              <rdf:List>
-                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                <rdf:first rdf:datatype=
-                                                "http://www.w3.org/2001/XMLSchema#int"
-                                                >1500</rdf:first>
-                                              </rdf:List>
-                                            </rdf:rest>
-                                            <rdf:first rdf:resource="#ReceivedInfoCPU"/>
-                                          </rdf:List>
-                                        </swrl:arguments>
-                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
-                                      </swrl:BuiltinAtom>
+                                      <swrl:DatavaluedPropertyAtom>
+                                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                                        <swrl:argument2 rdf:resource="#ReceivedInfoMemory"/>
+                                        <swrl:propertyPredicate rdf:resource="#memory"/>
+                                      </swrl:DatavaluedPropertyAtom>
                                     </rdf:first>
                                   </swrl:AtomList>
                                 </rdf:rest>
@@ -3922,16 +3875,40 @@
                           </swrl:AtomList>
                         </rdf:rest>
                         <rdf:first>
-                          <swrl:DatavaluedPropertyAtom>
-                            <swrl:propertyPredicate rdf:resource="#cores"/>
-                            <swrl:argument2 rdf:resource="#ReceivedInfoCores"/>
-                            <swrl:argument1 rdf:resource="#ReceivedInfo"/>
-                          </swrl:DatavaluedPropertyAtom>
+                          <swrl:BuiltinAtom>
+                            <swrl:arguments>
+                              <rdf:List>
+                                <rdf:first rdf:resource="#ReceivedInfoCores"/>
+                                <rdf:rest>
+                                  <rdf:List>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                                    >1</rdf:first>
+                                  </rdf:List>
+                                </rdf:rest>
+                              </rdf:List>
+                            </swrl:arguments>
+                            <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                          </swrl:BuiltinAtom>
                         </rdf:first>
                       </swrl:AtomList>
                     </rdf:rest>
+                    <rdf:first>
+                      <swrl:DatavaluedPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="#cores"/>
+                        <swrl:argument2 rdf:resource="#ReceivedInfoCores"/>
+                        <swrl:argument1 rdf:resource="#ReceivedInfo"/>
+                      </swrl:DatavaluedPropertyAtom>
+                    </rdf:first>
                   </swrl:AtomList>
                 </rdf:rest>
+                <rdf:first>
+                  <swrl:IndividualPropertyAtom>
+                    <swrl:argument2 rdf:resource="#ReceivedInfo"/>
+                    <swrl:propertyPredicate rdf:resource="#receivedInfo"/>
+                    <swrl:argument1 rdf:resource="#TaskRef"/>
+                  </swrl:IndividualPropertyAtom>
+                </rdf:first>
               </swrl:AtomList>
             </rdf:rest>
           </swrl:AtomList>
