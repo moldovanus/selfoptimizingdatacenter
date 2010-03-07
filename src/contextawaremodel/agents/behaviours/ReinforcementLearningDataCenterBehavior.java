@@ -115,96 +115,94 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private void reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
         ContextSnapshot newContext = queue.poll();
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
-        Task task = null;
-        Server server = null;
-        if (entropyAndPolicy.getFirst()>0)
-        {
-        if (entropyAndPolicy.getSecond() != null) {
-            Policy policy = entropyAndPolicy.getSecond();
-            if (policy.getClass().equals(DefaultQoSPolicy.class)) {
-                task = (Task) policy.getReferences(0);
+        DefaultTask task = null;
+        DefaultServer server = null;
+        if (entropyAndPolicy.getFirst() > 0) {
+            if (entropyAndPolicy.getSecond() != null) {
+                Policy policy = entropyAndPolicy.getSecond();
+                if (policy.getClass().equals(DefaultQoSPolicy.class)) {
+                    task = (DefaultTask) policy.listReferences().next();
 
-            } else {
-                server = (Server) policy.getReferences(0);
+                } else {
+                    server = (DefaultServer) policy.listReferences().next();
+                }
             }
-        }
-         Collection<Server> servers = protegeFactory.getAllServerInstances();
-        if (task!=null)
-        {
-        // deploy actions
-        for (Server serverInstance : servers) {
-            Command newAction = new DeployTaskCommand(protegeFactory,  serverInstance.getName(), task.getName());
-            ContextSnapshot cs = newContext;
-            cs.getActions().add(newAction);
-            cs.executeActions();
-            cs.setContextEntropy(computeEntropy().getFirst());
-            cs.setRewardFunction(computeRewardFunction(newContext,cs,newAction));
-            cs.rewind();
-            queue.add(cs);
-        }
+            Collection<Server> servers = protegeFactory.getAllServerInstances();
+            if (task != null) {
+                // deploy actions
+                for (Server serverInstance : servers) {
+                    Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
+                    ContextSnapshot cs = newContext;
+                    cs.getActions().add(newAction);
+                    cs.executeActions();
+                    cs.setContextEntropy(computeEntropy().getFirst());
+                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                    cs.rewind();
+                    queue.add(cs);
+                }
 
-        // move actions
-        Collection<Server> servers1 = protegeFactory.getAllServerInstances();
-        for (Server serverInstance : servers) {
-            Iterator it = serverInstance.listRunningTasks();
-            while (it.hasNext()){
-            Task myTask=(DefaultTask)it.next();
-            for (Server serverInstance1 : servers1){
-            Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(),serverInstance1.getName(), myTask.getName());
-            ///de vazut daca a fost posibila
-            ContextSnapshot cs = newContext;
-            cs.getActions().add(newAction);
-            cs.executeActions();
-            cs.setContextEntropy(computeEntropy().getFirst());
-            cs.setRewardFunction(computeRewardFunction(newContext,cs,newAction));
-            cs.rewind();
-            queue.add(cs);
+                // move actions
+                Collection<Server> servers1 = protegeFactory.getAllServerInstances();
+                for (Server serverInstance : servers) {
+                    Iterator it = serverInstance.listRunningTasks();
+                    while (it.hasNext()) {
+                        Task myTask = (DefaultTask) it.next();
+                        for (Server serverInstance1 : servers1) {
+                            Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), serverInstance1.getName(), myTask.getName());
+                            ///de vazut daca a fost posibila
+                            ContextSnapshot cs = newContext;
+                            cs.getActions().add(newAction);
+                            cs.executeActions();
+                            cs.setContextEntropy(computeEntropy().getFirst());
+                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                            cs.rewind();
+                            queue.add(cs);
+                        }
+                    }
+                }
             }
+            if (server != null) {
+                Iterator it = server.listRunningTasks();
+                // move tasks from server
+                while (it.hasNext()) {
+                    Task myTask = (DefaultTask) it.next();
+                    for (Server serverInstance1 : servers) {
+                        Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance1.getName(), myTask.getName());
+                        ///de vazut daca a fost posibila
+                        ContextSnapshot cs = newContext;
+                        cs.getActions().add(newAction);
+                        cs.executeActions();
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        cs.rewind();
+                        queue.add(cs);
+                    }
+                }
             }
-        }
-        }
-         if (server!=null)
-         {
-              Iterator it = server.listRunningTasks();
-            while (it.hasNext()){
-            Task myTask=(DefaultTask)it.next();
-            for (Server serverInstance1 : servers){
-            Command newAction = new MoveTaskCommand(protegeFactory, server.getName(),serverInstance1.getName(), myTask.getName());
-            ///de vazut daca a fost posibila
-            ContextSnapshot cs = newContext;
-            cs.getActions().add(newAction);
-            cs.executeActions();
-            cs.setContextEntropy(computeEntropy().getFirst());
-            cs.setRewardFunction(computeRewardFunction(newContext,cs,newAction));
-            cs.rewind();
-            queue.add(cs);
+            // wake up
+            for (Server serverInstance : servers) {
+                Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
+                ///de vazut daca a fost posibila
+                ContextSnapshot cs = newContext;
+                cs.getActions().add(newAction);
+                cs.executeActions();
+                cs.setContextEntropy(computeEntropy().getFirst());
+                cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                cs.rewind();
+                queue.add(cs);
             }
+            // sleep
+            for (Server serverInstance : servers) {
+                Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
+                ///de vazut daca a fost posibila
+                ContextSnapshot cs = newContext;
+                cs.getActions().add(newAction);
+                cs.executeActions();
+                cs.setContextEntropy(computeEntropy().getFirst());
+                cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                cs.rewind();
+                queue.add(cs);
             }
-         }
-        // wake up
-         for (Server serverInstance : servers) {
-            Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
-            ///de vazut daca a fost posibila
-            ContextSnapshot cs = newContext;
-            cs.getActions().add(newAction);
-            cs.executeActions();
-            cs.setContextEntropy(computeEntropy().getFirst());
-            cs.setRewardFunction(computeRewardFunction(newContext,cs,newAction));
-            cs.rewind();
-            queue.add(cs);
-         }
-        // sleep
-          for (Server serverInstance : servers) {
-            Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
-            ///de vazut daca a fost posibila
-            ContextSnapshot cs = newContext;
-            cs.getActions().add(newAction);
-            cs.executeActions();
-            cs.setContextEntropy(computeEntropy().getFirst());
-            cs.setRewardFunction(computeRewardFunction(newContext,cs,newAction));
-            cs.rewind();
-            queue.add(cs);
-         }
         }
     }
 
@@ -222,7 +220,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         if (entropyAndPolicy.getSecond() != null) {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA" + entropyAndPolicy.getSecond());
             reinforcementLearning(queue);
-            System.out.println("size"+queue.poll().getActions().size());
+            System.out.println("size" + queue.poll().getActions().size());
         }
 
 
