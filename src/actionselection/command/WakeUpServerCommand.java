@@ -39,7 +39,7 @@ public class WakeUpServerCommand extends Command {
     @Override
     public String toString() {
         String description;
-        description = "Send server \"" + serverName + "\" to low power state ";
+        description = "Wake up server \"" + serverName + "\"";
         return description;
     }
 
