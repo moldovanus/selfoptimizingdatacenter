@@ -149,6 +149,8 @@ public class DefaultServer extends DefaultResource
         TaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
         TaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
 
+        //System.out.println("-----------\n before" + newRunningTasks.toString() + "\n");
+
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();
@@ -180,7 +182,8 @@ public class DefaultServer extends DefaultResource
 
         //add task to ontology
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
-        String s = this.toString();
+
+        //System.out.println("-----------\n after" + newRunningTasks.toString() + "\n");
 
     }
 

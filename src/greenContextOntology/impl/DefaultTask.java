@@ -78,4 +78,21 @@ public class DefaultTask extends DefaultContextElement
     public void setRequestedInfo(TaskInfo newRequestedInfo) {
         setPropertyValue(getRequestedInfoProperty(), newRequestedInfo);
     }
+
+    @Override
+    public String toString() {
+        String description = "";
+        description += this.getName();
+        TaskInfo received = this.getReceivedInfo();
+        TaskInfo requested = this.getRequestedInfo();
+
+        description += "\n Received CPU = " + received.getCpu();
+        description += "\n Received Memory = " + received.getMemory();
+        description += "\n Received Storage = " + received.getStorage();
+        description += "\n Requested CPU = " + requested.getCpu();
+        description += "\n Requested Memory = " + requested.getMemory();
+        description += "\n Requested Storage = " + requested.getStorage();
+
+        return description;
+    }
 }
