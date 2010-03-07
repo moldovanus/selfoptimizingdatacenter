@@ -13,8 +13,6 @@
     xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
   xml:base="http://www.owl-ontologies.com/Datacenter.owl">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl"/>
-    <owl:imports rdf:resource="http://swrl.stanford.edu/ontologies/3.3/swrla.owl"/>
   </owl:Ontology>
   <owl:Class rdf:ID="Task">
     <rdfs:subClassOf>
@@ -452,9 +450,78 @@
   </owl:AllDifferent>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
-      <QoSPolicy rdf:ID="QoSPolicy_1"/>
-      <QoSPolicy rdf:ID="QoSPolicy_2"/>
-      <QoSPolicy rdf:ID="QoSPolicy_3"/>
+      <QoSPolicy rdf:ID="QoSPolicy_1">
+        <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</respected>
+        <references>
+          <Task rdf:ID="Task_1">
+            <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1</cores>
+            <associatedInfo>
+              <Received rdf:ID="Received_1"/>
+            </associatedInfo>
+            <associatedInfo>
+              <Requested rdf:ID="Requested_1"/>
+            </associatedInfo>
+            <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2024</memory>
+            <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</storage>
+            <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2900</cpu>
+            <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Task_1</name>
+          </Task>
+        </references>
+      </QoSPolicy>
+      <QoSPolicy rdf:ID="QoSPolicy_2">
+        <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</respected>
+        <references>
+          <Task rdf:ID="Task_2">
+            <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Task_2</name>
+            <associatedInfo>
+              <Received rdf:ID="Received_2"/>
+            </associatedInfo>
+            <associatedInfo>
+              <Requested rdf:ID="Requested_2"/>
+            </associatedInfo>
+            <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >10240</storage>
+            <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >512</memory>
+            <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1500</cpu>
+            <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1</cores>
+          </Task>
+        </references>
+      </QoSPolicy>
+      <QoSPolicy rdf:ID="QoSPolicy_3">
+        <references>
+          <Task rdf:ID="Task_3">
+            <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2000</cpu>
+            <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1024</memory>
+            <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >256</storage>
+            <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Task_3</name>
+            <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</cores>
+            <associatedInfo>
+              <Received rdf:ID="Received_3"/>
+            </associatedInfo>
+            <associatedInfo>
+              <Requested rdf:ID="Requested_3"/>
+            </associatedInfo>
+          </Task>
+        </references>
+        <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</respected>
+      </QoSPolicy>
     </owl:distinctMembers>
   </owl:AllDifferent>
   <swrl:Imp rdf:ID="Server_3_swrl_rule">
@@ -465,7 +532,77 @@
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
             <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_3"/>
+              <EnergyPolicy rdf:ID="EnergyPolicy_3">
+                <references>
+                  <Server rdf:ID="Server_3">
+                    <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >www.tempuri.com/Server_3</webService>
+                    <associatedStorage rdf:resource="#Storage_3"/>
+                    <associatedCPU>
+                      <CPU rdf:ID="CPU_3">
+                        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >4</numberOfCores>
+                        <associatedCore>
+                          <Core rdf:ID="Core_31">
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_35">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_34">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_32">
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                          </Core>
+                        </associatedCore>
+                      </CPU>
+                    </associatedCPU>
+                    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >Server_3</name>
+                    <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</lowPowerState>
+                    <associatedMemory>
+                      <Memory rdf:ID="Memory_3">
+                        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >4096</total>
+                        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >4000</optimum>
+                        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >0</used>
+                      </Memory>
+                    </associatedMemory>
+                  </Server>
+                </references>
+                <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</respected>
+              </EnergyPolicy>
             </swrl:argument1>
             <swrl:propertyPredicate rdf:resource="#respected"/>
           </swrl:DatavaluedPropertyAtom>
@@ -1295,10 +1432,34 @@
               <EnergyPolicy rdf:ID="EnergyPolicy_1">
                 <references>
                   <Server rdf:ID="Server_1">
+                    <associatedMemory>
+                      <Memory rdf:ID="Memory_1">
+                        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >0</used>
+                        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >2048</total>
+                        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >2048</optimum>
+                      </Memory>
+                    </associatedMemory>
+                    <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</lowPowerState>
                     <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                     >www.tempuri.com/Server_1</webService>
+                    <associatedCPU>
+                      <CPU rdf:ID="CPU_1">
+                        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >1</numberOfCores>
+                        <associatedCore rdf:resource="#Core_11"/>
+                      </CPU>
+                    </associatedCPU>
+                    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >Server_1</name>
+                    <associatedStorage rdf:resource="#Storage_1"/>
                   </Server>
                 </references>
+                <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</respected>
               </EnergyPolicy>
             </swrl:argument1>
           </swrl:DatavaluedPropertyAtom>
@@ -1315,7 +1476,77 @@
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
             <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_4"/>
+              <EnergyPolicy rdf:ID="EnergyPolicy_4">
+                <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</respected>
+                <references>
+                  <Server rdf:ID="Server_4">
+                    <associatedCPU>
+                      <CPU rdf:ID="CPU_4">
+                        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >4</numberOfCores>
+                        <associatedCore>
+                          <Core rdf:ID="Core_43">
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2260</total>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_44">
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2260</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_41">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2260</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</optimum>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="Core_42">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2260</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</optimum>
+                          </Core>
+                        </associatedCore>
+                      </CPU>
+                    </associatedCPU>
+                    <associatedStorage rdf:resource="#Storage_4"/>
+                    <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</lowPowerState>
+                    <associatedMemory>
+                      <Memory rdf:ID="Memory_4">
+                        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >6000</optimum>
+                        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >0</used>
+                        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >6144</total>
+                      </Memory>
+                    </associatedMemory>
+                    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >Server_4</name>
+                    <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >www.tempuri.com/Server_4</webService>
+                  </Server>
+                </references>
+              </EnergyPolicy>
             </swrl:argument1>
             <swrl:propertyPredicate rdf:resource="#respected"/>
           </swrl:DatavaluedPropertyAtom>
@@ -2571,7 +2802,117 @@
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
             <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_5"/>
+              <EnergyPolicy rdf:ID="EnergyPolicy_5">
+                <references>
+                  <Server rdf:ID="Server_5">
+                    <associatedCPU>
+                      <CPU rdf:ID="CPU_5">
+                        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >8</numberOfCores>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_55">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_53">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >18001800</optimum>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_57">
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_51">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_54">
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_58">
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_52">
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                          </Core>
+                        </associatedCore>
+                        <associatedCore>
+                          <Core rdf:ID="CPU_56">
+                            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >0</used>
+                            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >2000</total>
+                            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                            >1800</optimum>
+                          </Core>
+                        </associatedCore>
+                      </CPU>
+                    </associatedCPU>
+                    <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</lowPowerState>
+                    <associatedMemory>
+                      <Memory rdf:ID="Memory_5">
+                        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >0</used>
+                        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >8192</total>
+                        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                        >8000</optimum>
+                      </Memory>
+                    </associatedMemory>
+                    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >Server_5</name>
+                    <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >www.tempuri.com/Server_5</webService>
+                    <associatedStorage rdf:resource="#Storage_5"/>
+                  </Server>
+                </references>
+                <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</respected>
+              </EnergyPolicy>
             </swrl:argument1>
             <swrl:propertyPredicate rdf:resource="#respected"/>
           </swrl:DatavaluedPropertyAtom>
@@ -2579,57 +2920,50 @@
       </swrl:AtomList>
     </swrl:head>
   </swrl:Imp>
-  <Task rdf:ID="Task_2">
-    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Task_2</name>
-    <associatedInfo>
-      <Received rdf:ID="Received_2"/>
-    </associatedInfo>
-    <associatedInfo>
-      <Requested rdf:ID="Requested_2"/>
-    </associatedInfo>
-    <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >10240</storage>
-    <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >512</memory>
-    <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1500</cpu>
-    <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1</cores>
-  </Task>
-  <Task rdf:ID="Task_3">
-    <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</cpu>
-    <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1024</memory>
-    <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >256</storage>
-    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Task_3</name>
-    <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >2</cores>
-    <associatedInfo>
-      <Received rdf:ID="Received_3"/>
-    </associatedInfo>
-    <associatedInfo>
-      <Requested rdf:ID="Requested_3"/>
-    </associatedInfo>
-  </Task>
-  <Task rdf:ID="Task_1">
-    <cores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1</cores>
-    <associatedInfo>
-      <Received rdf:ID="Received_1"/>
-    </associatedInfo>
-    <associatedInfo>
-      <Requested rdf:ID="Requested_1"/>
-    </associatedInfo>
-    <memory rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >2024</memory>
-    <storage rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >100</storage>
-    <cpu rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2900</cpu>
-    <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Task_1</name>
-  </Task>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <Server rdf:about="#Server_1"/>
+      <Server rdf:ID="Server_2">
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Server_2</name>
+        <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >www.tempuri.com/Server_2</webService>
+        <associatedMemory>
+          <Memory rdf:ID="Memory_2">
+            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2048</total>
+            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2048</optimum>
+            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >0</used>
+          </Memory>
+        </associatedMemory>
+        <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</lowPowerState>
+        <associatedCPU>
+          <CPU rdf:ID="CPU_2">
+            <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</numberOfCores>
+            <associatedCore>
+              <Core rdf:ID="Core_22">
+                <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >0</used>
+                <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >2900</optimum>
+                <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >3000</total>
+              </Core>
+            </associatedCore>
+            <associatedCore rdf:resource="#Core_21"/>
+          </CPU>
+        </associatedCPU>
+        <associatedStorage rdf:resource="#Storage_2"/>
+      </Server>
+      <Server rdf:about="#Server_3"/>
+      <Server rdf:about="#Server_4"/>
+      <Server rdf:about="#Server_5"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
   <swrl:Imp rdf:ID="QoS_Policy_3_swrl_rule">
     <swrl:body>
       <swrl:AtomList>
@@ -2839,7 +3173,11 @@
         <rdf:first>
           <swrl:DatavaluedPropertyAtom>
             <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_2"/>
+              <EnergyPolicy rdf:ID="EnergyPolicy_2">
+                <references rdf:resource="#Server_2"/>
+                <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</respected>
+              </EnergyPolicy>
             </swrl:argument1>
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
@@ -3208,198 +3546,11 @@
   </swrl:Imp>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
-      <CPU rdf:ID="CPU_1">
-        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</numberOfCores>
-        <associatedCore rdf:resource="#Core_11"/>
-      </CPU>
-      <CPU rdf:ID="CPU_2">
-        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2</numberOfCores>
-        <associatedCore>
-          <Core rdf:ID="Core_22">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2900</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >3000</total>
-          </Core>
-        </associatedCore>
-        <associatedCore rdf:resource="#Core_21"/>
-      </CPU>
-      <CPU rdf:ID="CPU_3">
-        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >4</numberOfCores>
-        <associatedCore>
-          <Core rdf:ID="Core_31">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_35">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_34">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_32">
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-          </Core>
-        </associatedCore>
-      </CPU>
-      <CPU rdf:ID="CPU_4">
-        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >4</numberOfCores>
-        <associatedCore>
-          <Core rdf:ID="Core_43">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2260</total>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_44">
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2260</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_41">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2260</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</optimum>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="Core_42">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2260</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</optimum>
-          </Core>
-        </associatedCore>
-      </CPU>
-      <CPU rdf:ID="CPU_5">
-        <numberOfCores rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >8</numberOfCores>
-        <associatedCore>
-          <Core rdf:ID="CPU_55">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_53">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >18001800</optimum>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_57">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_51">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_54">
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_58">
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_52">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-          </Core>
-        </associatedCore>
-        <associatedCore>
-          <Core rdf:ID="CPU_56">
-            <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >0</used>
-            <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2000</total>
-            <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1800</optimum>
-          </Core>
-        </associatedCore>
-      </CPU>
+      <CPU rdf:about="#CPU_1"/>
+      <CPU rdf:about="#CPU_2"/>
+      <CPU rdf:about="#CPU_3"/>
+      <CPU rdf:about="#CPU_4"/>
+      <CPU rdf:about="#CPU_5"/>
     </owl:distinctMembers>
   </owl:AllDifferent>
   <owl:AllDifferent>
@@ -3816,46 +3967,11 @@
   </owl:AllDifferent>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
-      <Memory rdf:ID="Memory_1">
-        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >0</used>
-        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2048</total>
-        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2048</optimum>
-      </Memory>
-      <Memory rdf:ID="Memory_2">
-        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2048</total>
-        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2048</optimum>
-        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >0</used>
-      </Memory>
-      <Memory rdf:ID="Memory_3">
-        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >4096</total>
-        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >4000</optimum>
-        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >0</used>
-      </Memory>
-      <Memory rdf:ID="Memory_4">
-        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >6000</optimum>
-        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >0</used>
-        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >6144</total>
-      </Memory>
-      <Memory rdf:ID="Memory_5">
-        <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >0</used>
-        <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >8192</total>
-        <optimum rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >8000</optimum>
-      </Memory>
+      <Memory rdf:about="#Memory_1"/>
+      <Memory rdf:about="#Memory_2"/>
+      <Memory rdf:about="#Memory_3"/>
+      <Memory rdf:about="#Memory_4"/>
+      <Memory rdf:about="#Memory_5"/>
     </owl:distinctMembers>
   </owl:AllDifferent>
   <swrl:AtomList>

@@ -1,4 +1,4 @@
-; Sun Mar 07 14:44:03 EET 2010
+; Sun Mar 07 14:55:44 EET 2010
 ; 
 ;+ (version "3.4.2")
 ;+ (build "Build 562")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class111]
-		[Datacenter_ProjectKB_Class112]
-		[Datacenter_ProjectKB_Class113]
-		[Datacenter_ProjectKB_Class114]
-		[Datacenter_ProjectKB_Class115]))
+		[Datacenter_ProjectKB_Class282]
+		[Datacenter_ProjectKB_Class283]
+		[Datacenter_ProjectKB_Class284]
+		[Datacenter_ProjectKB_Class285]
+		[Datacenter_ProjectKB_Class286]))
 
 ([CLSES_TAB] of  Widget
 
@@ -74,31 +74,6 @@
 	(name "JavaCodePackage")
 	(string_value "greenContextOntology"))
 
-([Datacenter_ProjectKB_Class111] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Datacenter_ProjectKB_Class112] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class113] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Datacenter_ProjectKB_Class114] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class115] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
 ([Datacenter_ProjectKB_Class12] of  Property_List
 )
 
@@ -160,6 +135,31 @@
 
 ([Datacenter_ProjectKB_Class28] of  Property_List
 )
+
+([Datacenter_ProjectKB_Class282] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Datacenter_ProjectKB_Class283] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class284] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Datacenter_ProjectKB_Class285] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class286] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class29] of  Widget
 
