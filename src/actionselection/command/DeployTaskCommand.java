@@ -21,6 +21,7 @@ public class DeployTaskCommand extends Command {
         super(protegeFactory);
         this.serverName = serverName;
         this.taskName = taskName;
+        cost = 1;
     }
 
     /**

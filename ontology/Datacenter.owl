@@ -433,7 +433,7 @@
                   </Memory>
                 </associatedMemory>
                 <lowPowerState rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</lowPowerState>
+                >false</lowPowerState>
                 <webService rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >www.tempuri.com/Server_1</webService>
                 <associatedCPU>

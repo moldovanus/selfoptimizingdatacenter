@@ -12,9 +12,9 @@ import java.io.Serializable;
  * @author Administrator
  */
 public abstract class Command implements Serializable {
-    private int Cost;
+    
     protected transient ProtegeFactory protegeFactory;
-    private int cost;
+    protected int cost;
 
     
     public Command(  ProtegeFactory protegeFactory) {
@@ -32,9 +32,6 @@ public abstract class Command implements Serializable {
     public final void setCost(int cost) {
         this.cost = cost;
     }
-
-
-
 
     public abstract void execute();
 
