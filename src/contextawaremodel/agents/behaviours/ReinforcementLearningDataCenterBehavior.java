@@ -96,6 +96,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 entropy++;
             }
         }
+        System.out.println(" " + entropy);
         return new Pair<Double, Policy>(entropy, brokenPolicy);
     }
 
@@ -203,6 +204,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 cs.rewind();
                 queue.add(cs);
             }
+            reinforcementLearning(queue);
         }
     }
 

@@ -80,5 +80,7 @@ public interface Server extends Resource {
     boolean hasWebService();
 
     void setWebService(String newWebService);
+
+    String toString();
 }
 

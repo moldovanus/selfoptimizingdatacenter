@@ -145,8 +145,6 @@ public class DefaultServer extends DefaultResource
      */
     public void addRunningTasks(Task newRunningTasks) {
 
-
-
         TaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
         TaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
 
@@ -212,7 +210,6 @@ public class DefaultServer extends DefaultResource
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
     }
 
-
     /**
      *
      * @param task task to be accomodated on the server
@@ -223,7 +220,7 @@ public class DefaultServer extends DefaultResource
 
 
         TaskInfo receivedSLA = task.getReceivedInfo();
-        
+
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();
@@ -236,13 +233,13 @@ public class DefaultServer extends DefaultResource
         }
 
         Memory memory = this.getAssociatedMemory();
-        if (memory.getUsed() + receivedSLA.getMemory() > memory.getTotal()){
+        if (memory.getUsed() + receivedSLA.getMemory() > memory.getTotal()) {
             return false;
         }
 
         Storage storage = this.getAssociatedStorage();
 
-        if (storage.getUsed() + receivedSLA.getStorage() > storage.getTotal()){
+        if (storage.getUsed() + receivedSLA.getStorage() > storage.getTotal()) {
             return false;
         }
 
@@ -274,5 +271,16 @@ public class DefaultServer extends DefaultResource
 
     public void setWebService(String newWebService) {
         setPropertyValue(getWebServiceProperty(), newWebService);
+    }
+
+    public String toString() {
+
+        String description;
+        description = "Server " + this.getName() + "\n";
+        description += "CPU used " + this.getAssociatedCPU().getUsed() + " total " + this.getAssociatedCPU().getTotal() + "\n";
+        description += "Memory used " + this.getAssociatedMemory().getUsed() + " total " + this.getAssociatedMemory().getTotal() + "\n";
+        description += "Storage used " + this.getAssociatedStorage().getUsed() + " total " + this.getAssociatedStorage().getTotal() + "\n";
+
+        return description;
     }
 }
