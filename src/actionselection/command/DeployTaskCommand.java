@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package actionselection.command;
 
 import greenContextOntology.ProtegeFactory;
@@ -13,7 +12,7 @@ import greenContextOntology.Task;
  *
  * @author Me
  */
-public class DeployTaskCommand extends Command{
+public class DeployTaskCommand extends Command {
 
     private String serverName;
     private String taskName;
@@ -34,6 +33,7 @@ public class DeployTaskCommand extends Command{
         Task task = protegeFactory.getTask(taskName);
         oldServerName = task.getAssociatedServer().getName();
         task.setAssociatedServer(server);
+        server.addRunningTasks(task);
     }
 
     /**
@@ -44,6 +44,7 @@ public class DeployTaskCommand extends Command{
         Server server = protegeFactory.getServer(oldServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
+        server.removeRunningTasks(task);
     }
 
     @Override
@@ -62,5 +63,4 @@ public class DeployTaskCommand extends Command{
     public String[] toStringArray() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
