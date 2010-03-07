@@ -69,8 +69,6 @@ public class DefaultPolicy extends DefaultContextElement
 
     public boolean getRespected() {
         return getPropertyValueLiteral(getRespectedProperty()).getBoolean();
-
-        return getPropertyValueLiteral(getRespectedProperty())!=null ;
     }
 
 

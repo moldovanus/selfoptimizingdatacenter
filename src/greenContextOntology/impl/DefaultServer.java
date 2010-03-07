@@ -138,16 +138,156 @@ public class DefaultServer extends DefaultResource
         return listPropertyValuesAs(getRunningTasksProperty(), Task.class);
     }
 
+    /**
+     * It gives to the new task the maximum between the requested and available
+     * resources and updates the server's <code>used</code> resources
+     * @param newRunningTasks the task to be deployed on the server
+     */
     public void addRunningTasks(Task newRunningTasks) {
+
+        Collection taskInfo = newRunningTasks.getAssociatedInfo();
+        Iterator iterator = taskInfo.iterator();
+        Requested requestedSLA = null;
+        Received receivedSLA = null;
+
+        //in case Requested and Received are added in another order 
+        while (iterator.hasNext()) {
+            Object info = iterator.next();
+            if (requestedSLA == null && info instanceof Requested) {
+                requestedSLA = (Requested) info;
+            } else {
+                receivedSLA = (Received) info;
+            }
+        }
+
+        CPU cpu = this.getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        Iterator<Core> coresIterator = cores.iterator();
+        while (coresIterator.hasNext()) {
+            Core core = coresIterator.next();
+            //TODO : to be modified for more core flexibility
+            int availableCore = core.getTotal() - core.getUsed();
+            int requestedCPU = requestedSLA.getCpu();
+            int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
+            receivedSLA.setCpu(receivedCPU);
+            core.setUsed(core.getUsed() + receivedCPU);
+        }
+
+        Memory memory = this.getAssociatedMemory();
+        int availableMemory = memory.getTotal() - memory.getUsed();
+        int requestedMemory = requestedSLA.getMemory();
+        int receivedMemory = (requestedMemory < availableMemory) ? requestedMemory : availableMemory;
+        receivedSLA.setMemory(receivedMemory);
+        memory.setUsed(memory.getUsed() + receivedMemory);
+
+        Storage storage = this.getAssociatedStorage();
+        int availableStorage = storage.getTotal() - storage.getUsed();
+        int requestedStorage = requestedSLA.getStorage();
+        int receivedStorage = (requestedStorage < availableStorage) ? requestedStorage : availableStorage;
+        receivedSLA.setStorage(receivedStorage);
+        storage.setUsed(storage.getUsed() + receivedStorage);
+
+        //add task to ontology
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
+
     }
 
     public void removeRunningTasks(Task oldRunningTasks) {
+
+        Collection taskInfo = oldRunningTasks.getAssociatedInfo();
+        Iterator iterator = taskInfo.iterator();
+        Requested requestedSLA = null;
+        Received receivedSLA = null;
+
+        //in case Requested and Received are added in another order
+        while (iterator.hasNext()) {
+            Object info = iterator.next();
+            if (requestedSLA == null && info instanceof Requested) {
+                requestedSLA = (Requested) info;
+            } else {
+                receivedSLA = (Received) info;
+            }
+        }
+
+        CPU cpu = this.getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        Iterator<Core> coresIterator = cores.iterator();
+        while (coresIterator.hasNext()) {
+            Core core = coresIterator.next();
+            //TODO : to be modified for more core flexibility
+            core.setUsed(core.getUsed() - receivedSLA.getCpu());
+
+        }
+        receivedSLA.setCpu(0);
+
+        Memory memory = this.getAssociatedMemory();
+        memory.setUsed(memory.getUsed() - receivedSLA.getMemory());
+        receivedSLA.setMemory(0);
+
+        Storage storage = this.getAssociatedStorage();
+
+        storage.setUsed(storage.getUsed() - receivedSLA.getStorage());
+        receivedSLA.setStorage(0);
+
+        //remove task from ontology
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
+    }
+
+
+    /**
+     *
+     * @param task task to be accomodated on the server
+     * @return true if there are enough resoruces to satify the task's
+     * requirements and false otherwise
+     */
+    public boolean hasResourcesFor(Task task) {
+
+        Collection taskInfo = task.getAssociatedInfo();
+        Iterator iterator = taskInfo.iterator();
+        Requested requestedSLA = null;
+        Received receivedSLA = null;
+
+        //in case Requested and Received are added in another order
+        while (iterator.hasNext()) {
+            Object info = iterator.next();
+            if (requestedSLA == null && info instanceof Requested) {
+                requestedSLA = (Requested) info;
+            } else {
+                receivedSLA = (Received) info;
+            }
+        }
+
+        CPU cpu = this.getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        Iterator<Core> coresIterator = cores.iterator();
+        while (coresIterator.hasNext()) {
+            Core core = coresIterator.next();
+            if (core.getUsed() + receivedSLA.getCpu() > core.getTotal()) {
+                return false;
+            }
+
+        }
+
+        Memory memory = this.getAssociatedMemory();
+        if (memory.getUsed() + receivedSLA.getMemory() > memory.getTotal()){
+            return false;
+        }
+
+        Storage storage = this.getAssociatedStorage();
+
+        if (storage.getUsed() + receivedSLA.getStorage() > storage.getTotal()){
+            return false;
+        }
+
+        return true;
     }
 
     public void setRunningTasks(Collection newRunningTasks) {
         setPropertyValues(getRunningTasksProperty(), newRunningTasks);
+        Iterator iterator = newRunningTasks.iterator();
+        while (iterator.hasNext()) {
+            addRunningTasks((greenContextOntology.Task) iterator.next());
+        }
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#webService

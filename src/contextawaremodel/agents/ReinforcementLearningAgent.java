@@ -108,7 +108,7 @@ public class ReinforcementLearningAgent extends Agent {
                 try {
                     FileInputStream fileInputStream = new FileInputStream(memoryFile);
                     ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-                    memory = (Memory) inputStream.readObject();
+                    //memory = (Memory) inputStream.readObject();
                     //memory.restoreOwlModel(policyConversionModel);
                     memory = new Memory();
                 } catch (FileNotFoundException ex) {
@@ -117,10 +117,10 @@ public class ReinforcementLearningAgent extends Agent {
                 } catch (IOException ex) {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
-                } catch (ClassNotFoundException ex) {
-                    System.err.println(ex.getMessage());
-                    memory = new Memory();
-                }
+                }// catch (ClassNotFoundException ex) {
+                  //  System.err.println(ex.getMessage());
+                   // memory = new Memory();
+               // }
                 /*
 
                 Map<String, Map<String, String>> valueMapping = GlobalVars.getValueMapping();
@@ -155,8 +155,8 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
-                addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
-                addBehaviour(new RLPlotterBehaviour(this, 1000));
+                //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
+                //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
 
                /* Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",

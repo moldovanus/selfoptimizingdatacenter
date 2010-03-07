@@ -27,7 +27,7 @@ public class DefaultCPU extends DefaultComponent
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCore
 
-    public Collection getAssociatedCore() {
+    public Collection<Core> getAssociatedCore() {
         return getPropertyValuesAs(getAssociatedCoreProperty(), Core.class);
     }
 

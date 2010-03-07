@@ -11,7 +11,7 @@ import greenContextOntology.*;
  *
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
-public class DefaultEntity extends DefaultRDFIndividual
+public class DefaultEntity extends DefaultOWLIndividual
          implements Entity {
 
     public DefaultEntity(OWLModel owlModel, FrameID id) {

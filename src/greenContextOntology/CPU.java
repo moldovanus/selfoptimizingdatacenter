@@ -13,7 +13,6 @@ import java.util.*;
 public interface CPU extends Component {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCore
-
     Collection getAssociatedCore();
 
     RDFProperty getAssociatedCoreProperty();
@@ -28,9 +27,7 @@ public interface CPU extends Component {
 
     void setAssociatedCore(Collection newAssociatedCore);
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#numberOfCores
-
     int getNumberOfCores();
 
     RDFProperty getNumberOfCoresProperty();
@@ -38,10 +35,8 @@ public interface CPU extends Component {
     boolean hasNumberOfCores();
 
     void setNumberOfCores(int newNumberOfCores);
-
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#optimum
-
+/*
     int getOptimum();
 
     RDFProperty getOptimumProperty();
@@ -70,5 +65,5 @@ public interface CPU extends Component {
 
     boolean hasUsed();
 
-    void setUsed(int newUsed);
+    void setUsed(int newUsed);*/
 }

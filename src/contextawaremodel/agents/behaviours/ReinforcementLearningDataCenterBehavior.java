@@ -9,19 +9,19 @@ import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
-import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
 import greenContextOntology.EnergyPolicy;
 import greenContextOntology.Policy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.QoSPolicy;
+import greenContextOntology.Received;
+import greenContextOntology.Requested;
+import greenContextOntology.Server;
 import greenContextOntology.Task;
 import greenContextOntology.impl.DefaultQoSPolicy;
 import jade.core.Agent;
@@ -54,6 +54,21 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
         protegeFactory = new ProtegeFactory(owlModel);
+
+        Server server = protegeFactory.getServer("Server_1");
+        Task task = protegeFactory.createTask("ddd");
+        Requested r = protegeFactory.createRequested("RequestedInstance");
+        r.setCpu(1000);
+        r.setCores(1);
+        r.setMemory(256);
+        r.setStorage(35);
+        Received re = protegeFactory.createReceived("ReceivedInstance");
+        task.addAssociatedInfo(r);
+        task.addAssociatedInfo(re);
+        server.addRunningTasks(task);
+        
+
+
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame();
         this.memory = memory;
