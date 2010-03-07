@@ -23,6 +23,7 @@ import java.util.logging.Logger;
  *
  * @author Me
  */
+/*
 public class SetCommand extends Command {
 
     private int newValue = 1;
@@ -156,3 +157,4 @@ public class SetCommand extends Command {
         return array;
     }
 }
+*/

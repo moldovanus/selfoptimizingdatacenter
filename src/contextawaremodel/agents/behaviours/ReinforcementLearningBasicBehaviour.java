@@ -5,9 +5,9 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
-import actionselection.command.DecrementCommand;
-import actionselection.command.IncrementCommand;
-import actionselection.command.SetCommand;
+//import actionselection.command.DecrementCommand;
+//import actionselection.command.IncrementCommand;
+//import actionselection.command.SetCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;
@@ -131,7 +131,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         }
     }
 
-    public ContextSnapshot reinforcementLearning(Queue<ContextSnapshot> queue, HashMap<SensorValues, SensorValues> contexts) throws Exception {
+    /*public ContextSnapshot reinforcementLearning(Queue<ContextSnapshot> queue, HashMap<SensorValues, SensorValues> contexts) throws Exception {
 
         ContextSnapshot context = queue.remove();
 
@@ -358,7 +358,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
         resultsFrame.setBrokenPoliciesList(brokenPoliciesNames);
 
-    }
+    }*/
 
     @Override
     protected void onTick() {
@@ -371,7 +371,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         resultsFrame.setActionsList(null);
         resultsFrame.setBrokenStatesList(currentValues.toArrayList());
 
-        setBrokenResources(initialContext);
+       // setBrokenResources(initialContext);
 
         smallestEntropy = 10000;
         ContextSnapshot contextSnapshot;
@@ -419,7 +419,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
                 agent.send(msg);
                 agent.setContextDirty(false);
-                contextSnapshot = reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>());
+               // contextSnapshot = reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>());
 
                 msg.setContent("OK");
                 msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
@@ -442,9 +442,9 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             if (agent.isContextDirty()) {
                 return;
             }
-            setBrokenResources(contextSnapshot);
+           // setBrokenResources(contextSnapshot);
 
-            Queue<Command> bestActionsList = contextSnapshot.getActions();
+/*            Queue<Command> bestActionsList = contextSnapshot.getActions();
 
             ArrayList<String[]> actions = new ArrayList<String[]>(bestActionsList.size());
 
@@ -475,9 +475,9 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             contextSnapshot.executeActions();
             contextSnapshot.executeActionsOnOWL();
 
-            setBrokenResources(initialContext);
+            //setBrokenResources(initialContext);
 
-            System.out.println("");
+            System.out.println("");*/
         } else {
            if ( contextBroken){
                contextBroken = false;

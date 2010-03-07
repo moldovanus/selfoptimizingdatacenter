@@ -5,6 +5,7 @@
 package actionselection.command;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import greenContextOntology.ProtegeFactory;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
@@ -17,21 +18,23 @@ public abstract class Command implements Serializable {
     protected String targetIndividualName;
     protected String targetPropertyName;
     protected String hasWebServicePropertyName;
-    protected transient com.hp.hpl.jena.ontology.OntModel policyConversionModel;
+    protected transient ProtegeFactory protegeFactory;
     protected NumberFormat integerNumberFormat = NumberFormat.getIntegerInstance();
 
 
     
-    public Command(String targetIndividual, String targetProperty, String hasWebService, OntModel policyConversionModel) {
+    public Command(String targetIndividual, String targetProperty, String hasWebService,  ProtegeFactory protegeFactory) {
         this.targetIndividualName = targetIndividual;
         this.targetPropertyName = targetProperty;
         this.hasWebServicePropertyName = hasWebService;
-        this.policyConversionModel = policyConversionModel;
+        this.protegeFactory = protegeFactory;
     }
 
-    public final void setPolicyConversionModel(OntModel policyConversionModel) {
-        this.policyConversionModel = policyConversionModel;
+    public void setProtegeFactory(ProtegeFactory protegeFactory) {
+        this.protegeFactory = protegeFactory;
     }
+
+     
 
     public abstract void execute();
 

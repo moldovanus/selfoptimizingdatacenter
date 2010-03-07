@@ -5,7 +5,6 @@
 package contextawaremodel.agents;
 
 import actionselection.command.Command;
-import actionselection.command.SetCommand;
 import actionselection.context.Memory;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
@@ -110,7 +109,7 @@ public class ReinforcementLearningAgent extends Agent {
                     FileInputStream fileInputStream = new FileInputStream(memoryFile);
                     ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
                     memory = (Memory) inputStream.readObject();
-                    memory.restoreOwlModel(policyConversionModel);
+                    //memory.restoreOwlModel(policyConversionModel);
                     memory = new Memory();
                 } catch (FileNotFoundException ex) {
                     System.err.println(ex.getMessage());
@@ -160,7 +159,7 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
 
-                Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
+               /* Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 0);
                 c.execute();
@@ -202,7 +201,7 @@ public class ReinforcementLearningAgent extends Agent {
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 1);
                 c.execute();
-                c.executeOnWebService();
+                c.executeOnWebService();*/
             } catch (Exception e) {
                 e.printStackTrace();
             }

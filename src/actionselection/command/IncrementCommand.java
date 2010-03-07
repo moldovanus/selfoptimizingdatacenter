@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
+/*
 public class IncrementCommand extends Command {
 
     private int incrementValue = 1;
@@ -162,3 +163,4 @@ public class IncrementCommand extends Command {
         return array;
     }
 }
+*/

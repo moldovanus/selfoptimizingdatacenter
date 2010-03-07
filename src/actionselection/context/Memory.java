@@ -5,7 +5,7 @@
 package actionselection.context;
 
 import actionselection.command.Command;
-import com.hp.hpl.jena.ontology.OntModel;
+import greenContextOntology.ProtegeFactory;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +35,10 @@ public class Memory implements Serializable {
         map.clear();
     }
 
-    public void restoreOwlModel(OntModel model){
+    public void restoreProtegeFactory(ProtegeFactory protegeFactory){
         for(Queue<Command> queue : map.values()){
             for(Command command : queue){
-                command.setPolicyConversionModel(model);
+                command.setProtegeFactory(protegeFactory);
             }
         }
     }

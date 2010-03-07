@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class DecrementCommand extends Command {
+/*public class DecrementCommand extends Command {
 
     private int decrementValue = 1;
 
@@ -161,3 +161,4 @@ public class DecrementCommand extends Command {
         return array;
     }
 }
+*/
