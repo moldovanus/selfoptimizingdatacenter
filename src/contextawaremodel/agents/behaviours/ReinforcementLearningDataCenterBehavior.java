@@ -123,7 +123,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 Policy policy = entropyAndPolicy.getSecond();
                 if (policy.getClass().equals(DefaultQoSPolicy.class)) {
                     task = (DefaultTask) policy.listReferences().next();
-
                 } else {
                     server = (DefaultServer) policy.listReferences().next();
                 }

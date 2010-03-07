@@ -100,6 +100,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#name
+    @Override
     public String getName() {
         return (String) getPropertyValue(getNameProperty());
     }
@@ -157,8 +158,10 @@ public class DefaultServer extends DefaultResource
             int availableCore = core.getTotal() - core.getUsed();
             int requestedCPU = requestedSLA.getCpu();
             int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
+
             receivedSLA.setCpu(receivedCPU);
             core.setUsed(core.getUsed() + receivedCPU);
+
         }
 
         Memory memory = this.getAssociatedMemory();
@@ -177,6 +180,7 @@ public class DefaultServer extends DefaultResource
 
         //add task to ontology
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
+        String s = this.toString();
 
     }
 
@@ -278,7 +282,12 @@ public class DefaultServer extends DefaultResource
 
         String description;
         description = "Server " + this.getName() + "\n";
-        description += "CPU used " + this.getAssociatedCPU().getUsed() + " total " + this.getAssociatedCPU().getTotal() + "\n";
+        Collection cores = this.getAssociatedCPU().getAssociatedCore();
+        Iterator iterator = cores.iterator();
+        while (iterator.hasNext()) {
+            Core core = (Core) iterator.next();
+            description += "CPU used " + core.getUsed() + " total " + core.getTotal() + "\n";
+        }
         description += "Memory used " + this.getAssociatedMemory().getUsed() + " total " + this.getAssociatedMemory().getTotal() + "\n";
         description += "Storage used " + this.getAssociatedStorage().getUsed() + " total " + this.getAssociatedStorage().getTotal() + "\n";
 
