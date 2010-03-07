@@ -273,6 +273,7 @@ public class DefaultServer extends DefaultResource
         setPropertyValue(getWebServiceProperty(), newWebService);
     }
 
+    @Override
     public String toString() {
 
         String description;
