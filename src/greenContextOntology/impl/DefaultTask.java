@@ -13,24 +13,19 @@ import greenContextOntology.*;
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
 public class DefaultTask extends DefaultContextElement
-         implements greenContextOntology.Task {
+        implements greenContextOntology.Task {
 
     public DefaultTask(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
     }
 
-
     public DefaultTask() {
     }
 
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#associatedInfo
-
+// Property http://www.owl-ontologies.com/Datacenter.owl#associatedInfo
     public Collection getAssociatedInfo() {
         return getPropertyValuesAs(getAssociatedInfoProperty(), TaskInfo.class);
     }
-
 
     public RDFProperty getAssociatedInfoProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedInfo";
@@ -38,39 +33,30 @@ public class DefaultTask extends DefaultContextElement
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasAssociatedInfo() {
         return getPropertyValueCount(getAssociatedInfoProperty()) > 0;
     }
-
 
     public Iterator listAssociatedInfo() {
         return listPropertyValuesAs(getAssociatedInfoProperty(), TaskInfo.class);
     }
 
-
     public void addAssociatedInfo(TaskInfo newAssociatedInfo) {
         addPropertyValue(getAssociatedInfoProperty(), newAssociatedInfo);
     }
-
 
     public void removeAssociatedInfo(TaskInfo oldAssociatedInfo) {
         removePropertyValue(getAssociatedInfoProperty(), oldAssociatedInfo);
     }
 
-
     public void setAssociatedInfo(Collection newAssociatedInfo) {
         setPropertyValues(getAssociatedInfoProperty(), newAssociatedInfo);
     }
 
-
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedServer
-
     public Server getAssociatedServer() {
         return (Server) getPropertyValueAs(getAssociatedServerProperty(), Server.class);
     }
-
 
     public RDFProperty getAssociatedServerProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#associatedServer";
@@ -78,178 +64,11 @@ public class DefaultTask extends DefaultContextElement
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasAssociatedServer() {
         return getPropertyValueCount(getAssociatedServerProperty()) > 0;
     }
 
-
     public void setAssociatedServer(Server newAssociatedServer) {
         setPropertyValue(getAssociatedServerProperty(), newAssociatedServer);
-    }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#cores
-
-    public int getCores() {
-        return getPropertyValueLiteral(getCoresProperty()).getInt();
-    }
-
-
-    public RDFProperty getCoresProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#cores";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasCores() {
-        return getPropertyValueCount(getCoresProperty()) > 0;
-    }
-
-
-    public void setCores(int newCores) {
-        setPropertyValue(getCoresProperty(), new java.lang.Integer(newCores));
-    }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#cpu
-
-    public int getCpu() {
-        return getPropertyValueLiteral(getCpuProperty()).getInt();
-    }
-
-
-    public RDFProperty getCpuProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#cpu";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasCpu() {
-        return getPropertyValueCount(getCpuProperty()) > 0;
-    }
-
-
-    public void setCpu(int newCpu) {
-        setPropertyValue(getCpuProperty(), new java.lang.Integer(newCpu));
-    }
-
-
- 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#memory
-
-    public int getMemory() {
-        return getPropertyValueLiteral(getMemoryProperty()).getInt();
-    }
-
-
-    public RDFProperty getMemoryProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#memory";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasMemory() {
-        return getPropertyValueCount(getMemoryProperty()) > 0;
-    }
-
-
-    public void setMemory(int newMemory) {
-        setPropertyValue(getMemoryProperty(), new java.lang.Integer(newMemory));
-    }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#name
-
-    public String getName() {
-        return (String) getPropertyValue(getNameProperty());
-    }
-
-
-    public RDFProperty getNameProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#name";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasName() {
-        return getPropertyValueCount(getNameProperty()) > 0;
-    }
-
-
-    public void setName(String newName) {
-        setPropertyValue(getNameProperty(), newName);
-    }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#storage
-
-    public int getStorage() {
-        return getPropertyValueLiteral(getStorageProperty()).getInt();
-    }
-
-
-    public RDFProperty getStorageProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#storage";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasStorage() {
-        return getPropertyValueCount(getStorageProperty()) > 0;
-    }
-
-
-    public void setStorage(int newStorage) {
-        setPropertyValue(getStorageProperty(), new java.lang.Integer(newStorage));
-    }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#taskProperty
-
-    public Collection getTaskProperty() {
-        return getPropertyValues(getTaskPropertyProperty());
-    }
-
-
-    public RDFProperty getTaskPropertyProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#taskProperty";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasTaskProperty() {
-        return getPropertyValueCount(getTaskPropertyProperty()) > 0;
-    }
-
-
-    public Iterator listTaskProperty() {
-        return listPropertyValues(getTaskPropertyProperty());
-    }
-
-
-    public void addTaskProperty(Object newTaskProperty) {
-        addPropertyValue(getTaskPropertyProperty(), newTaskProperty);
-    }
-
-
-    public void removeTaskProperty(Object oldTaskProperty) {
-        removePropertyValue(getTaskPropertyProperty(), oldTaskProperty);
-    }
-
-
-    public void setTaskProperty(Collection newTaskProperty) {
-        setPropertyValues(getTaskPropertyProperty(), newTaskProperty);
     }
 }
