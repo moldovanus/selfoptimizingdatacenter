@@ -1,4 +1,4 @@
-; Mon Mar 08 19:25:26 EET 2010
+; Mon Mar 08 19:36:29 EET 2010
 ; 
 ;+ (version "3.4.3")
 ;+ (build "Build 572")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class1124]
-		[Datacenter_ProjectKB_Class1125]
-		[Datacenter_ProjectKB_Class1126]
-		[Datacenter_ProjectKB_Class1127]
-		[Datacenter_ProjectKB_Class1128]))
+		[Datacenter_ProjectKB_Class1135]
+		[Datacenter_ProjectKB_Class1136]
+		[Datacenter_ProjectKB_Class1137]
+		[Datacenter_ProjectKB_Class1138]
+		[Datacenter_ProjectKB_Class1139]))
 
 ([CLSES_TAB] of  Widget
 
@@ -453,27 +453,57 @@
 	(name "owl_build")
 	(string_value "572"))
 
-([Datacenter_ProjectKB_Class1124] of  String
+([Datacenter_ProjectKB_Class1129] of  String
+
+	(name "JavaCodeFileName")
+	(string_value "C:\\Documents and Settings\\Moldovanus\\Desktop\\green ontology"))
+
+([Datacenter_ProjectKB_Class1130] of  Boolean
+
+	(boolean_value FALSE)
+	(name "JavaCodeAbstract"))
+
+([Datacenter_ProjectKB_Class1131] of  Boolean
+
+	(boolean_value FALSE)
+	(name "JavaCodeSet"))
+
+([Datacenter_ProjectKB_Class1132] of  Boolean
+
+	(boolean_value FALSE)
+	(name "JavaCodeUsePrefix"))
+
+([Datacenter_ProjectKB_Class1133] of  String
+
+	(name "JavaCodeFactoryClassName")
+	(string_value "MyFactory"))
+
+([Datacenter_ProjectKB_Class1134] of  String
+
+	(name "JavaCodePackage")
+	(string_value "greenContextOntology"))
+
+([Datacenter_ProjectKB_Class1135] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([Datacenter_ProjectKB_Class1125] of  String
+([Datacenter_ProjectKB_Class1136] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "%3ANAME"))
 
-([Datacenter_ProjectKB_Class1126] of  String
+([Datacenter_ProjectKB_Class1137] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([Datacenter_ProjectKB_Class1127] of  String
+([Datacenter_ProjectKB_Class1138] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([Datacenter_ProjectKB_Class1128] of  String
+([Datacenter_ProjectKB_Class1139] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "%3ANAME"))
@@ -8131,7 +8161,13 @@
 		[KB_325529_Class4]
 		[empty.owl_ProjectKB_Class5]
 		[empty.owl_ProjectKB_Class6]
-		[Datacenter_ProjectKB_Class1123]))
+		[Datacenter_ProjectKB_Class1123]
+		[Datacenter_ProjectKB_Class1129]
+		[Datacenter_ProjectKB_Class1130]
+		[Datacenter_ProjectKB_Class1131]
+		[Datacenter_ProjectKB_Class1132]
+		[Datacenter_ProjectKB_Class1133]
+		[Datacenter_ProjectKB_Class1134]))
 
 ([STANDARD_CLASS_FORM_WIDGET] of  Widget
 
