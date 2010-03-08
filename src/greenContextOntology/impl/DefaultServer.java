@@ -168,11 +168,15 @@ public class DefaultServer extends DefaultResource
             //TODO : to be modified for more core flexibility
             int availableCore = core.getTotal() - core.getUsed();
             int requestedCPU = requestedSLA.getCpu();
-            int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
+            //TODO : remove size checks if performance needed
+            if (requestedCPU < availableCore) {
+                continue;
+            }
+            //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
 
-            receivedSLA.setCpu(receivedCPU);
-            core.setUsed(core.getUsed() + receivedCPU);
-
+            receivedSLA.setCpu(requestedCPU);
+            core.setUsed(core.getUsed() + requestedCPU);
+            receivedSLA.addReceivedCoreIndex(i);
         }
 
         Memory memory = this.getAssociatedMemory();
@@ -207,14 +211,17 @@ public class DefaultServer extends DefaultResource
         Iterator<Core> coresIterator = cores.iterator();
 
 
-        int coreCount = receivedSLA.getCores();
+        Collection receivedCoresIndexes = receivedSLA.getReceivedCoreIndex();
         receivedSLA.setCores(0);
-
+        int coreCount = cores.size();
         for (int i = 0; i < coreCount; i++) {
             Core core = coresIterator.next();
-            //TODO : to be modified for more core flexibility
-            int receivedCPU = receivedSLA.getCpu();
-            core.setUsed(core.getUsed() - receivedCPU);
+            //TODO : to check the multicore modification if it's ok
+            if (receivedCoresIndexes.contains(i)) {
+                int receivedCPU = receivedSLA.getCpu();
+                core.setUsed(core.getUsed() - receivedCPU);
+                receivedCoresIndexes.remove(i);
+            }
 
         }
 
@@ -250,12 +257,19 @@ public class DefaultServer extends DefaultResource
             return false;
         }
 
+
         for (Core coreInst : cores) {
             Core core = coreInst;
             if (core.getUsed() + requestedSLA.getCpu() > core.getTotal()) {
-                return false;
+                continue;
+            }else{
+                requestedCores --;
             }
+        }
 
+        //TODO: Trace is correct 
+        if ( requestedCores > 0 ){
+              return false;
         }
 
         Memory memory = this.getAssociatedMemory();

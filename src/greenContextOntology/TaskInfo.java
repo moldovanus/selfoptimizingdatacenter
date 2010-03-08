@@ -62,4 +62,20 @@ public interface TaskInfo extends ContextElement {
     void removeTaskProperty(Object oldTaskProperty);
 
     void setTaskProperty(Collection newTaskProperty);
+
+     // Property http://www.owl-ontologies.com/Datacenter.owl#receivedCoreIndex
+
+    Collection getReceivedCoreIndex();
+
+    RDFProperty getReceivedCoreIndexProperty();
+
+    boolean hasReceivedCoreIndex();
+
+    Iterator listReceivedCoreIndex();
+
+    void addReceivedCoreIndex(int newReceivedCoreIndex);
+
+    void removeReceivedCoreIndex(int oldReceivedCoreIndex);
+
+    void setReceivedCoreIndex(Collection newReceivedCoreIndex);
 }

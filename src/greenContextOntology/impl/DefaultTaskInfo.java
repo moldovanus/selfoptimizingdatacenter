@@ -3,6 +3,7 @@ package greenContextOntology.impl;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
 import greenContextOntology.*;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -13,7 +14,7 @@ import java.util.Iterator;
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
 public class DefaultTaskInfo extends DefaultContextElement
-         implements TaskInfo {
+        implements TaskInfo {
 
     public DefaultTaskInfo(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
@@ -22,7 +23,6 @@ public class DefaultTaskInfo extends DefaultContextElement
 
     public DefaultTaskInfo() {
     }
-
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cores
@@ -49,7 +49,6 @@ public class DefaultTaskInfo extends DefaultContextElement
     }
 
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#cpu
 
     public int getCpu() {
@@ -72,7 +71,7 @@ public class DefaultTaskInfo extends DefaultContextElement
     public void setCpu(int newCpu) {
         setPropertyValue(getCpuProperty(), new java.lang.Integer(newCpu));
     }
- 
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#memory
 
     public int getMemory() {
@@ -97,7 +96,6 @@ public class DefaultTaskInfo extends DefaultContextElement
     }
 
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#storage
 
     public int getStorage() {
@@ -120,7 +118,6 @@ public class DefaultTaskInfo extends DefaultContextElement
     public void setStorage(int newStorage) {
         setPropertyValue(getStorageProperty(), new java.lang.Integer(newStorage));
     }
-
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#taskProperty
@@ -159,6 +156,44 @@ public class DefaultTaskInfo extends DefaultContextElement
 
     public void setTaskProperty(Collection newTaskProperty) {
         setPropertyValues(getTaskPropertyProperty(), newTaskProperty);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#receivedCoreIndex
+
+    public Collection getReceivedCoreIndex() {
+        return getPropertyValues(getReceivedCoreIndexProperty());
+    }
+
+
+    public RDFProperty getReceivedCoreIndexProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#receivedCoreIndex";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasReceivedCoreIndex() {
+        return getPropertyValueCount(getReceivedCoreIndexProperty()) > 0;
+    }
+
+
+    public Iterator listReceivedCoreIndex() {
+        return listPropertyValues(getReceivedCoreIndexProperty());
+    }
+
+
+    public void addReceivedCoreIndex(int newReceivedCoreIndex) {
+        addPropertyValue(getReceivedCoreIndexProperty(), newReceivedCoreIndex);
+    }
+
+
+    public void removeReceivedCoreIndex(int oldReceivedCoreIndex) {
+        removePropertyValue(getReceivedCoreIndexProperty(), oldReceivedCoreIndex);
+    }
+
+
+    public void setReceivedCoreIndex(Collection newReceivedCoreIndex) {
+        setPropertyValues(getReceivedCoreIndexProperty(), newReceivedCoreIndex);
     }
 
 }
