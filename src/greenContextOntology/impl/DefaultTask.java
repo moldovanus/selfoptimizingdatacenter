@@ -2,6 +2,7 @@ package greenContextOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
+
 import java.util.*;
 
 import greenContextOntology.*;
@@ -79,6 +80,25 @@ public class DefaultTask extends DefaultContextElement
         setPropertyValue(getRequestedInfoProperty(), newRequestedInfo);
     }
 
+    public boolean requestsSatisfied() {
+        TaskInfo requestedSLA = this.getRequestedInfo();
+        TaskInfo receivedSLA = this.getReceivedInfo();
+        if ( requestedSLA.getCores() != receivedSLA.getCores()){
+            return false;
+        }
+        if ( requestedSLA.getCpu() != receivedSLA.getCpu()){
+            return false;
+        }
+        if ( requestedSLA.getMemory() != receivedSLA.getMemory()){
+            return false;
+        }
+        if ( requestedSLA.getStorage() != receivedSLA.getStorage()){
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public String toString() {
         String description = "";
@@ -86,9 +106,11 @@ public class DefaultTask extends DefaultContextElement
         TaskInfo received = this.getReceivedInfo();
         TaskInfo requested = this.getRequestedInfo();
 
+        description += "\n Received Cores = " + received.getCores();
         description += "\n Received CPU = " + received.getCpu();
         description += "\n Received Memory = " + received.getMemory();
         description += "\n Received Storage = " + received.getStorage();
+        description += "\n Requested Cores = " + requested.getCores();
         description += "\n Requested CPU = " + requested.getCpu();
         description += "\n Requested Memory = " + requested.getMemory();
         description += "\n Requested Storage = " + requested.getStorage();

@@ -2,6 +2,7 @@ package greenContextOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
+
 import java.util.*;
 
 import greenContextOntology.*;
@@ -142,6 +143,7 @@ public class DefaultServer extends DefaultResource
     /**
      * It gives to the new task the maximum between the requested and available
      * resources and updates the server's <code>used</code> resources
+     *
      * @param newRunningTasks the task to be deployed on the server
      */
     public void addRunningTasks(Task newRunningTasks) {
@@ -154,7 +156,14 @@ public class DefaultServer extends DefaultResource
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();
-        while (coresIterator.hasNext()) {
+        int coreCount = requestedSLA.getCores();
+        int availableCores = cores.size();
+
+        coreCount = (coreCount > availableCores) ? availableCores : coreCount;
+
+        receivedSLA.setCores(coreCount);
+
+        for (int i = 0; i < coreCount; i++) {
             Core core = coresIterator.next();
             //TODO : to be modified for more core flexibility
             int availableCore = core.getTotal() - core.getUsed();
@@ -196,12 +205,19 @@ public class DefaultServer extends DefaultResource
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();
-        while (coresIterator.hasNext()) {
+
+
+        int coreCount = receivedSLA.getCores();
+        receivedSLA.setCores(0);
+
+        for (int i = 0; i < coreCount; i++) {
             Core core = coresIterator.next();
             //TODO : to be modified for more core flexibility
-            core.setUsed(core.getUsed() - receivedSLA.getCpu());
+            int receivedCPU = receivedSLA.getCpu();
+            core.setUsed(core.getUsed() - receivedCPU);
 
         }
+
         receivedSLA.setCpu(0);
 
         Memory memory = this.getAssociatedMemory();
@@ -218,35 +234,40 @@ public class DefaultServer extends DefaultResource
     }
 
     /**
-     *
      * @param task task to be accomodated on the server
      * @return true if there are enough resoruces to satify the task's
-     * requirements and false otherwise
+     *         requirements and false otherwise
      */
     public boolean hasResourcesFor(Task task) {
 
 
-        TaskInfo receivedSLA = task.getReceivedInfo();
+        TaskInfo requestedSLA = task.getRequestedInfo();
 
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
+        int requestedCores = requestedSLA.getCores();
+        if ( cores.size() < requestedCores){
+            return false;
+        }
+
         Iterator<Core> coresIterator = cores.iterator();
+
         while (coresIterator.hasNext()) {
             Core core = coresIterator.next();
-            if (core.getUsed() + receivedSLA.getCpu() > core.getTotal()) {
+            if (core.getUsed() + requestedSLA.getCpu() > core.getTotal()) {
                 return false;
             }
 
         }
 
         Memory memory = this.getAssociatedMemory();
-        if (memory.getUsed() + receivedSLA.getMemory() > memory.getTotal()) {
+        if (memory.getUsed() + requestedSLA.getMemory() > memory.getTotal()) {
             return false;
         }
 
         Storage storage = this.getAssociatedStorage();
 
-        if (storage.getUsed() + receivedSLA.getStorage() > storage.getTotal()) {
+        if (storage.getUsed() + requestedSLA.getStorage() > storage.getTotal()) {
             return false;
         }
 
@@ -285,12 +306,17 @@ public class DefaultServer extends DefaultResource
 
         String description;
         description = "Server " + this.getName() + "\n";
+        description += "Inactive = " + this.getLowPowerState() + "\n";
         Collection cores = this.getAssociatedCPU().getAssociatedCore();
         Iterator iterator = cores.iterator();
+
+        description += "Cores " +cores.size() + "\n";
+
         while (iterator.hasNext()) {
             Core core = (Core) iterator.next();
             description += "CPU used " + core.getUsed() + " total " + core.getTotal() + "\n";
         }
+
         description += "Memory used " + this.getAssociatedMemory().getUsed() + " total " + this.getAssociatedMemory().getTotal() + "\n";
         description += "Storage used " + this.getAssociatedStorage().getUsed() + " total " + this.getAssociatedStorage().getTotal() + "\n";
 
