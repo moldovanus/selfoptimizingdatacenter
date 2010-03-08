@@ -120,7 +120,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         return function;
     }
 
-    private void reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
+    private ContextSnapshot reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
         ContextSnapshot newContext = queue.poll();
 
         System.out.println("---A");
@@ -247,8 +247,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
             newContext.rewind();
-            reinforcementLearning(queue);
+            newContext = reinforcementLearning(queue);
         }
+         return newContext;
     }
 
     @Override
@@ -264,8 +265,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         if (entropyAndPolicy.getSecond() != null) {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA" + entropyAndPolicy.getSecond());
-            reinforcementLearning(queue);
-            System.out.println("Gasit rezult size " + queue.poll().getActions().size());
+            ContextSnapshot result = reinforcementLearning(queue);
+            System.out.println("Gasit rezultat ");
+            Collection resultQueue = result.getActions();
+            for ( Object o : resultQueue){
+                System.out.println(o.toString());
+            }
         }
 
 

@@ -246,14 +246,12 @@ public class DefaultServer extends DefaultResource
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         int requestedCores = requestedSLA.getCores();
-        if ( cores.size() < requestedCores){
+        if (cores.size() < requestedCores) {
             return false;
         }
 
-        Iterator<Core> coresIterator = cores.iterator();
-
-        while (coresIterator.hasNext()) {
-            Core core = coresIterator.next();
+        for (Core coreInst : cores) {
+            Core core = coreInst;
             if (core.getUsed() + requestedSLA.getCpu() > core.getTotal()) {
                 return false;
             }
@@ -276,9 +274,8 @@ public class DefaultServer extends DefaultResource
 
     public void setRunningTasks(Collection newRunningTasks) {
         setPropertyValues(getRunningTasksProperty(), newRunningTasks);
-        Iterator iterator = newRunningTasks.iterator();
-        while (iterator.hasNext()) {
-            addRunningTasks((greenContextOntology.Task) iterator.next());
+        for (Object task : newRunningTasks) {
+            addRunningTasks((greenContextOntology.Task) task);
         }
     }
 
@@ -310,7 +307,7 @@ public class DefaultServer extends DefaultResource
         Collection cores = this.getAssociatedCPU().getAssociatedCore();
         Iterator iterator = cores.iterator();
 
-        description += "Cores " +cores.size() + "\n";
+        description += "Cores " + cores.size() + "\n";
 
         while (iterator.hasNext()) {
             Core core = (Core) iterator.next();
