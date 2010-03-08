@@ -6,14 +6,18 @@ package actionselection.command;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
+import greenContextOntology.Task;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
- *
  * @author Me
  */
 public class SendServerToLowPowerStateCommand extends Command {
 
     private String serverName;
+    private Collection oldTasks;
 
     public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
@@ -27,13 +31,23 @@ public class SendServerToLowPowerStateCommand extends Command {
     @Override
     public void execute() {
         Server server = protegeFactory.getServer(serverName);
+        oldTasks = server.getRunningTasks();
+        Iterator iterator = oldTasks.iterator();
+        while (iterator.hasNext()) {
+            server.removeRunningTasks((Task) iterator.next());
+        }
         server.setLowPowerState(true);
+
     }
 
 
     @Override
     public void rewind() {
         Server server = protegeFactory.getServer(serverName);
+        Iterator iterator = oldTasks.iterator();
+        while (iterator.hasNext()) {
+            server.addRunningTasks((Task) iterator.next());
+        }
         server.setLowPowerState(false);
     }
 
@@ -44,7 +58,7 @@ public class SendServerToLowPowerStateCommand extends Command {
         return description;
     }
 
-    
+
     @Override
     public void executeOnWebService() {
         throw new UnsupportedOperationException("Not supported yet.");
