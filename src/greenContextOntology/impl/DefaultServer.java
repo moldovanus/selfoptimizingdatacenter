@@ -169,7 +169,7 @@ public class DefaultServer extends DefaultResource
             int availableCore = core.getTotal() - core.getUsed();
             int requestedCPU = requestedSLA.getCpu();
             //TODO : remove size checks if performance needed
-            if (requestedCPU < availableCore) {
+            if (requestedCPU > availableCore) {
                 continue;
             }
             //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
@@ -220,7 +220,7 @@ public class DefaultServer extends DefaultResource
             if (receivedCoresIndexes.contains(i)) {
                 int receivedCPU = receivedSLA.getCpu();
                 core.setUsed(core.getUsed() - receivedCPU);
-                receivedCoresIndexes.remove(i);
+                receivedSLA.removeReceivedCoreIndex(i);
             }
 
         }
