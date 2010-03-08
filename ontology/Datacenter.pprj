@@ -1,16 +1,16 @@
-; Sun Mar 07 21:49:51 EET 2010
+; Mon Mar 08 18:00:07 EET 2010
 ; 
-;+ (version "3.4.2")
-;+ (build "Build 562")
+;+ (version "3.4.3")
+;+ (build "Build 572")
 
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class11205]
-		[Datacenter_ProjectKB_Class11206]
-		[Datacenter_ProjectKB_Class11207]
-		[Datacenter_ProjectKB_Class11208]
-		[Datacenter_ProjectKB_Class11209]))
+		[Datacenter_ProjectKB_Class20127]
+		[Datacenter_ProjectKB_Class20128]
+		[Datacenter_ProjectKB_Class20129]
+		[Datacenter_ProjectKB_Class20130]
+		[Datacenter_ProjectKB_Class20131]))
 
 ([CLSES_TAB] of  Widget
 
@@ -125,7 +125,7 @@
 
 	(is_hidden TRUE)
 	(property_list [Datacenter_ProjectKB_Class10025])
-	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
+	(widget_class_name "org.protege.owl.mm.ssm.ui.MappingMasterTab"))
 
 ([Datacenter_ProjectKB_Class10025] of  Property_List
 )
@@ -134,7 +134,7 @@
 
 	(is_hidden TRUE)
 	(property_list [Datacenter_ProjectKB_Class10027])
-	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
+	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
 
 ([Datacenter_ProjectKB_Class10027] of  Property_List
 )
@@ -143,7 +143,7 @@
 
 	(is_hidden TRUE)
 	(property_list [Datacenter_ProjectKB_Class10029])
-	(widget_class_name "org.protege.owl.mm.ssm.ui.SpreadSheetMasterTab"))
+	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
 
 ([Datacenter_ProjectKB_Class10029] of  Property_List
 )
@@ -313,431 +313,25 @@
 ([Datacenter_ProjectKB_Class10065] of  Widget
 
 	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#Received")
-	(property_list [Datacenter_ProjectKB_Class10068])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
-
-([Datacenter_ProjectKB_Class10068] of  Property_List
-
-	(properties
-		[Datacenter_ProjectKB_Class10069]
-		[Datacenter_ProjectKB_Class10072]
-		[Datacenter_ProjectKB_Class10075]
-		[Datacenter_ProjectKB_Class10078]
-		[Datacenter_ProjectKB_Class10080]
-		[Datacenter_ProjectKB_Class10082]
-		[Datacenter_ProjectKB_Class10084]
-		[Datacenter_ProjectKB_Class10086]
-		[Datacenter_ProjectKB_Class10088]
-		[Datacenter_ProjectKB_Class10090]
-		[Datacenter_ProjectKB_Class10092]
-		[Datacenter_ProjectKB_Class10094]
-		[Datacenter_ProjectKB_Class10096]))
-
-([Datacenter_ProjectKB_Class10069] of  Widget
-
-	(height 0)
-	(is_hidden FALSE)
-	(label "Name")
-	(name ":NAME")
-	(property_list [Datacenter_ProjectKB_Class10070])
-	(width 0)
-	(x 0)
-	(y 0))
-
-([Datacenter_ProjectKB_Class10070] of  Property_List
-
-	(properties [Datacenter_ProjectKB_Class10071]))
-
-([Datacenter_ProjectKB_Class10071] of  Boolean
-
-	(boolean_value TRUE)
-	(name "DisabledByUser"))
-
-([Datacenter_ProjectKB_Class10072] of  Property_List
-
-	(name "layout properties")
-	(properties
-		[Datacenter_ProjectKB_Class10073]
-		[Datacenter_ProjectKB_Class10074]))
-
-([Datacenter_ProjectKB_Class10073] of  String
-
-	(name "horizontal_stretcher")
-	(string_value "<<all>>"))
-
-([Datacenter_ProjectKB_Class10074] of  String
-
-	(name "vertical_stretcher")
-	(string_value "<<none>>"))
-
-([Datacenter_ProjectKB_Class10075] of  Widget
-
-	(height 180)
-	(is_hidden FALSE)
-	(name "http://protege.stanford.edu/plugins/owl/protege#inferredType")
-	(property_list [Datacenter_ProjectKB_Class10076])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.HeaderWidget")
-	(width 550)
-	(x 0)
-	(y 0))
-
-([Datacenter_ProjectKB_Class10076] of  Property_List
-
-	(properties [Datacenter_ProjectKB_Class10077]))
-
-([Datacenter_ProjectKB_Class10077] of  Boolean
-
-	(boolean_value FALSE)
-	(name "DisabledByUser"))
-
-([Datacenter_ProjectKB_Class10078] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2002/07/owl#versionInfo")
-	(property_list [Datacenter_ProjectKB_Class10079]))
-
-([Datacenter_ProjectKB_Class10079] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10080] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#isDefinedBy")
-	(property_list [Datacenter_ProjectKB_Class10081]))
-
-([Datacenter_ProjectKB_Class10081] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10082] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#comment")
-	(property_list [Datacenter_ProjectKB_Class10083]))
-
-([Datacenter_ProjectKB_Class10083] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10084] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#seeAlso")
-	(property_list [Datacenter_ProjectKB_Class10085]))
-
-([Datacenter_ProjectKB_Class10085] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10086] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#label")
-	(property_list [Datacenter_ProjectKB_Class10087]))
-
-([Datacenter_ProjectKB_Class10087] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10088] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#memory")
-	(property_list [Datacenter_ProjectKB_Class10089])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 300))
-
-([Datacenter_ProjectKB_Class10089] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10090] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#cores")
-	(property_list [Datacenter_ProjectKB_Class10091])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 180))
-
-([Datacenter_ProjectKB_Class10091] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10092] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#cpu")
-	(property_list [Datacenter_ProjectKB_Class10093])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 240))
-
-([Datacenter_ProjectKB_Class10093] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10094] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#storage")
-	(property_list [Datacenter_ProjectKB_Class10095])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 200)
-	(y 180))
-
-([Datacenter_ProjectKB_Class10095] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10096] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#taskProperty")
-	(property_list [Datacenter_ProjectKB_Class10097])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.MultiLiteralWidget")
-	(width 200)
-	(x 200)
-	(y 240))
-
-([Datacenter_ProjectKB_Class10097] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10108] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#Requested")
-	(property_list [Datacenter_ProjectKB_Class10111])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
-
-([Datacenter_ProjectKB_Class10111] of  Property_List
-
-	(properties
-		[Datacenter_ProjectKB_Class10112]
-		[Datacenter_ProjectKB_Class10115]
-		[Datacenter_ProjectKB_Class10118]
-		[Datacenter_ProjectKB_Class10121]
-		[Datacenter_ProjectKB_Class10123]
-		[Datacenter_ProjectKB_Class10125]
-		[Datacenter_ProjectKB_Class10127]
-		[Datacenter_ProjectKB_Class10129]
-		[Datacenter_ProjectKB_Class10131]
-		[Datacenter_ProjectKB_Class10133]
-		[Datacenter_ProjectKB_Class10135]
-		[Datacenter_ProjectKB_Class10137]
-		[Datacenter_ProjectKB_Class10139]))
-
-([Datacenter_ProjectKB_Class10112] of  Widget
-
-	(height 0)
-	(is_hidden FALSE)
-	(label "Name")
-	(name ":NAME")
-	(property_list [Datacenter_ProjectKB_Class10113])
-	(width 0)
-	(x 0)
-	(y 0))
-
-([Datacenter_ProjectKB_Class10113] of  Property_List
-
-	(properties [Datacenter_ProjectKB_Class10114]))
-
-([Datacenter_ProjectKB_Class10114] of  Boolean
-
-	(boolean_value TRUE)
-	(name "DisabledByUser"))
-
-([Datacenter_ProjectKB_Class10115] of  Property_List
-
-	(name "layout properties")
-	(properties
-		[Datacenter_ProjectKB_Class10116]
-		[Datacenter_ProjectKB_Class10117]))
-
-([Datacenter_ProjectKB_Class10116] of  String
-
-	(name "horizontal_stretcher")
-	(string_value "<<all>>"))
-
-([Datacenter_ProjectKB_Class10117] of  String
-
-	(name "vertical_stretcher")
-	(string_value "<<none>>"))
-
-([Datacenter_ProjectKB_Class10118] of  Widget
-
-	(height 180)
-	(is_hidden FALSE)
-	(name "http://protege.stanford.edu/plugins/owl/protege#inferredType")
-	(property_list [Datacenter_ProjectKB_Class10119])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.HeaderWidget")
-	(width 550)
-	(x 0)
-	(y 0))
-
-([Datacenter_ProjectKB_Class10119] of  Property_List
-
-	(properties [Datacenter_ProjectKB_Class10120]))
-
-([Datacenter_ProjectKB_Class10120] of  Boolean
-
-	(boolean_value FALSE)
-	(name "DisabledByUser"))
-
-([Datacenter_ProjectKB_Class10121] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2002/07/owl#versionInfo")
-	(property_list [Datacenter_ProjectKB_Class10122]))
-
-([Datacenter_ProjectKB_Class10122] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10123] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#isDefinedBy")
-	(property_list [Datacenter_ProjectKB_Class10124]))
-
-([Datacenter_ProjectKB_Class10124] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10125] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#comment")
-	(property_list [Datacenter_ProjectKB_Class10126]))
-
-([Datacenter_ProjectKB_Class10126] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10127] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#seeAlso")
-	(property_list [Datacenter_ProjectKB_Class10128]))
-
-([Datacenter_ProjectKB_Class10128] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10129] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://www.w3.org/2000/01/rdf-schema#label")
-	(property_list [Datacenter_ProjectKB_Class10130]))
-
-([Datacenter_ProjectKB_Class10130] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10131] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#memory")
-	(property_list [Datacenter_ProjectKB_Class10132])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 300))
-
-([Datacenter_ProjectKB_Class10132] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10133] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#cores")
-	(property_list [Datacenter_ProjectKB_Class10134])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 180))
-
-([Datacenter_ProjectKB_Class10134] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10135] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#cpu")
-	(property_list [Datacenter_ProjectKB_Class10136])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 0)
-	(y 240))
-
-([Datacenter_ProjectKB_Class10136] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10137] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#storage")
-	(property_list [Datacenter_ProjectKB_Class10138])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.SingleLiteralWidget")
-	(width 200)
-	(x 200)
-	(y 180))
-
-([Datacenter_ProjectKB_Class10138] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10139] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#taskProperty")
-	(property_list [Datacenter_ProjectKB_Class10140])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.MultiLiteralWidget")
-	(width 200)
-	(x 200)
-	(y 240))
-
-([Datacenter_ProjectKB_Class10140] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class10141] of  Widget
-
-	(is_hidden FALSE)
 	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled")
-	(property_list [Datacenter_ProjectKB_Class10142]))
+	(property_list [Datacenter_ProjectKB_Class10066]))
 
-([Datacenter_ProjectKB_Class10142] of  Property_List
+([Datacenter_ProjectKB_Class10066] of  Property_List
 )
 
-([Datacenter_ProjectKB_Class10143] of  Widget
+([Datacenter_ProjectKB_Class10067] of  Widget
 
 	(is_hidden FALSE)
 	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
-	(property_list [Datacenter_ProjectKB_Class10144]))
+	(property_list [Datacenter_ProjectKB_Class10068]))
 
-([Datacenter_ProjectKB_Class10144] of  Property_List
+([Datacenter_ProjectKB_Class10068] of  Property_List
 )
 
 ([Datacenter_ProjectKB_Class105] of  String
 
 	(name "JavaCodeFileName")
 	(string_value "C:\\Documents and Settings\\Me\\Desktop\\green data center ontology code"))
-
-([Datacenter_ProjectKB_Class10554] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#requestedInfo")
-	(property_list [Datacenter_ProjectKB_Class10555])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.MultiResourceWidget")
-	(width 200)
-	(x 0)
-	(y 360))
-
-([Datacenter_ProjectKB_Class10555] of  Property_List
-)
 
 ([Datacenter_ProjectKB_Class106] of  Boolean
 
@@ -748,20 +342,6 @@
 
 	(boolean_value FALSE)
 	(name "JavaCodeSet"))
-
-([Datacenter_ProjectKB_Class10762] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "http://www.owl-ontologies.com/Datacenter.owl#receivedInfo")
-	(property_list [Datacenter_ProjectKB_Class10763])
-	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.MultiResourceWidget")
-	(width 200)
-	(x 0)
-	(y 240))
-
-([Datacenter_ProjectKB_Class10763] of  Property_List
-)
 
 ([Datacenter_ProjectKB_Class108] of  Boolean
 
@@ -787,31 +367,6 @@
 
 	(name "JavaCodePackage")
 	(string_value "greenContextOntology"))
-
-([Datacenter_ProjectKB_Class11205] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class11206] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Datacenter_ProjectKB_Class11207] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class11208] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Datacenter_ProjectKB_Class11209] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class12] of  Property_List
 )
@@ -848,6 +403,31 @@
 	(is_hidden FALSE)
 	(name "http://www.w3.org/2000/01/rdf-schema#seeAlso")
 	(property_list [Datacenter_ProjectKB_Class21]))
+
+([Datacenter_ProjectKB_Class20127] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class20128] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Datacenter_ProjectKB_Class20129] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class20130] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Datacenter_ProjectKB_Class20131] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class21] of  Property_List
 )
@@ -886,9 +466,7 @@
 		[Datacenter_ProjectKB_Class18]
 		[Datacenter_ProjectKB_Class20]
 		[Datacenter_ProjectKB_Class22]
-		[Datacenter_ProjectKB_Class27]
-		[Datacenter_ProjectKB_Class10141]
-		[Datacenter_ProjectKB_Class10143]))
+		[Datacenter_ProjectKB_Class27]))
 
 ([Datacenter_ProjectKB_Class5] of  Widget
 
@@ -920,33 +498,15 @@
 	(name "horizontal_stretcher")
 	(string_value "<<all>>"))
 
-([Datacenter_ProjectKB_Class90] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled")
-	(property_list [Datacenter_ProjectKB_Class91]))
-
-([Datacenter_ProjectKB_Class91] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class92] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
-	(property_list [Datacenter_ProjectKB_Class93]))
-
-([Datacenter_ProjectKB_Class93] of  Property_List
-)
-
 ([Datacenter_ProjectKB_Class94] of  String
 
 	(name "owl_build")
-	(string_value "562"))
+	(string_value "572"))
 
 ([empty.owl_ProjectKB_Class5] of  String
 
 	(name "owl_major_build")
-	(string_value "3.4.2"))
+	(string_value "3.4.3"))
 
 ([empty.owl_ProjectKB_Class6] of  Boolean
 
@@ -1564,9 +1124,6 @@
 ([KB_221055_Instance_71] of  Property_List
 )
 
-([KB_257387_Class0] of  Map
-)
-
 ([KB_301165_Instance_1013] of  Widget
 
 	(is_hidden FALSE)
@@ -1678,6 +1235,9 @@
 
 	(name "owl_file_name")
 	(string_value "Datacenter.owl"))
+
+([KB_396584_Class0] of  Map
+)
 
 ([KB_444675_Instance_0] of  String
 
@@ -6332,9 +5892,9 @@
 		":SLOT-CONSTRAINTS"
 		"http://www.w3.org/2003/11/swrl#BuiltinAtom"
 		"http://www.w3.org/2003/11/swrlb#unaryMinus"
+		"http://www.w3.org/2002/07/owl#Ontology"
 		":PAL-RANGE"
 		":OWL-ONTOLOGY-POINTER-CLASS"
-		"http://www.w3.org/2002/07/owl#Ontology"
 		"http://www.w3.org/2003/11/swrlb#stringEqualIgnoreCase"
 		"http://www.w3.org/2001/XMLSchema#dateTime"
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#object"
@@ -6422,8 +5982,8 @@
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
 		"http://www.w3.org/2001/XMLSchema#nonPositiveInteger"
 		"http://www.w3.org/2003/11/swrlb#time"
-		"http://www.w3.org/2002/07/owl#someValuesFrom"
 		"http://protege.stanford.edu/plugins/owl/protege#classificationStatus"
+		"http://www.w3.org/2002/07/owl#someValuesFrom"
 		"http://protege.stanford.edu/plugins/owl/protege#inferredSuperclassOf"
 		"http://www.w3.org/2003/11/swrlb#notEqual"
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#List"
