@@ -7,10 +7,10 @@ package actionselection.context;
 import actionselection.command.Command;
 import com.hp.hpl.jena.ontology.OntModel;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
+
 import java.util.Queue;
 
 /**
- *
  * @author Administrator
  */
 public class ContextSnapshot implements Comparable {
@@ -18,36 +18,44 @@ public class ContextSnapshot implements Comparable {
     private double contextEntropy = 0;
     private double rewardFunction = 0;
     public final static double gamma = 0.6d;
+
     public ContextSnapshot(final Queue<Command> actions) {
         this.actions = actions;
     }
+
     public double getContextEntropy() {
         return contextEntropy;
     }
+
     public void setContextEntropy(double contextEntropy) {
         this.contextEntropy = contextEntropy;
     }
-    public void addActions(Queue<Command> commands){
-        for(Command command:commands){
+
+    public void addActions(Queue<Command> commands) {
+        for (Command command : commands) {
             actions.add(command);
         }
     }
+
     public void executeActions() {
         for (Command command : actions) {
             command.execute();
             System.out.println("Executing " + command.toString());
         }
     }
-     public void executeActionsOnOWL() {
+
+    public void executeActionsOnOWL() {
         for (Command command : actions) {
             command.executeOnWebService();
         }
     }
+
     public void rewind() {
         for (Command command : actions) {
             command.rewind();
         }
     }
+
     public Queue<Command> getActions() {
         return actions;
     }
@@ -71,15 +79,26 @@ public class ContextSnapshot implements Comparable {
     }
 
     public int compareTo(Object o) {
-       if (o.getClass()!=this.getClass())
-           return 0;
-       if (((ContextSnapshot) o).getRewardFunction()< rewardFunction)
-           return 1;
-       else
-           if (((ContextSnapshot) o).getRewardFunction()== rewardFunction)return 0;
-           else return -1;
+
+        if (o.getClass() != this.getClass())
+            return 0;
+        ContextSnapshot cs = (ContextSnapshot) o;
+        if (cs.contextEntropy < contextEntropy)
+            return 1;
+        else if (cs.contextEntropy == contextEntropy) {
+            if (cs.rewardFunction < rewardFunction) {
+                return 1;
+            } else if (cs.rewardFunction == rewardFunction) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else return -1;
     }
 
-  
-   
+    public String toString() {
+        String description;
+        description = "Entropy: " + this.contextEntropy + " Reward: " + this.rewardFunction;
+        return description;
+    }
 }
