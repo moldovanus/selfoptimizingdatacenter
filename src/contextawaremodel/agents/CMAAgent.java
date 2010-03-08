@@ -65,8 +65,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
 
 
             // politici
-            PoliciesHandler policiesHandler = new PoliciesHandler();
-            policiesHandler.loadPolicies(GlobalVars.POLICIES_FILE);
+            //PoliciesHandler policiesHandler = new PoliciesHandler();
+            //policiesHandler.loadPolicies(GlobalVars.POLICIES_FILE);
             //List<String> swrlCode = policiesHandler.getPoliciesConverter().convertAllPolicies();
 
             // adaugare reguli in ontologie
@@ -134,7 +134,7 @@ public class CMAAgent extends Agent implements CMAAExternal {
 
     }
 
-    @Override
+
     public void addNewBehaviour(Behaviour newB) {
         this.addBehaviour(newB);
     }
