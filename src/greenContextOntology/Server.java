@@ -81,6 +81,8 @@ public interface Server extends Resource {
 
     void setWebService(String newWebService);
 
+    public boolean hasResourcesFor(Task task);
+
     @Override
     String toString();
 }

@@ -44,4 +44,6 @@ public interface Task extends ContextElement {
 
     @Override
     String toString();
+
+    boolean requestsSatisfied();
 }
