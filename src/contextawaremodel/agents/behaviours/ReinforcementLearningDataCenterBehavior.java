@@ -113,7 +113,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             //TODO: solve -1 la infinit :P
             //modificat temp-u 
             double temp = previous.getContextEntropy() - current.getContextEntropy() +1.0/(double)c.getCost();
-            function += ContextSnapshot.gamma * (temp);
+            function +=  temp;
         } else {
             function -= current.getContextEntropy();
         }
@@ -134,7 +134,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             for (int i = 0; i < 5; i++)
                 System.err.println("\n ------------------------------------------------------------------------------");
         }*/
-        System.out.println("\n" + entropyAndPolicy.getFirst() + "\n");
+        System.out.println("\n" + entropyAndPolicy.getFirst() + "  " + newContext.getRewardFunction()+ "\n");
         System.out.println("---B");
         DefaultTask task = null;
         DefaultServer server = null;
