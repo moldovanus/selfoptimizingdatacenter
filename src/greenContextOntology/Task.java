@@ -46,4 +46,6 @@ public interface Task extends ContextElement {
     String toString();
 
     boolean requestsSatisfied();
+
+    boolean isRunning();
 }

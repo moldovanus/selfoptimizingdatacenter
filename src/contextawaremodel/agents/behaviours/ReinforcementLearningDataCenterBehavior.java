@@ -120,6 +120,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         return function;
     }
 
+
+
     private ContextSnapshot reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
         ContextSnapshot newContext = queue.poll();
 
@@ -152,7 +154,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
                 // deploy actions
                 for (Server serverInstance : servers) {
-                    if (!serverInstance.getLowPowerState() && serverInstance.hasResourcesFor(task)) {
+                    if (!serverInstance.getLowPowerState() && serverInstance.hasResourcesFor(task)
+                            && !serverInstance.getRunningTasks().contains(task) && !task.isRunning()) {
                         Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
 
@@ -180,7 +183,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         while (it.hasNext()) {
                             Task myTask = (DefaultTask) it.next();
                             for (Server serverInstance1 : servers1) {
-                                if (!serverInstance1.getLowPowerState() && serverInstance.hasResourcesFor(task) && !serverInstance.getRunningTasks().contains(task)) {
+                                if (!serverInstance1.getLowPowerState() && serverInstance.hasResourcesFor(task)
+                                        && !serverInstance.getRunningTasks().contains(task)) {
                                     Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), serverInstance1.getName(), myTask.getName());
                                     ///de vazut daca a fost posibila
                                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));

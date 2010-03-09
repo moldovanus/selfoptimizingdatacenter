@@ -87,16 +87,16 @@ public class DefaultTask extends DefaultContextElement
     public boolean requestsSatisfied() {
         TaskInfo requestedSLA = this.getRequestedInfo();
         TaskInfo receivedSLA = this.getReceivedInfo();
-        if ( requestedSLA.getCores() != receivedSLA.getCores()){
+        if (requestedSLA.getCores() != receivedSLA.getCores()) {
             return false;
         }
-        if ( requestedSLA.getCpu() != receivedSLA.getCpu()){
+        if (requestedSLA.getCpu() != receivedSLA.getCpu()) {
             return false;
         }
-        if ( requestedSLA.getMemory() != receivedSLA.getMemory()){
+        if (requestedSLA.getMemory() != receivedSLA.getMemory()) {
             return false;
         }
-        if ( requestedSLA.getStorage() != receivedSLA.getStorage()){
+        if (requestedSLA.getStorage() != receivedSLA.getStorage()) {
             return false;
         }
 
@@ -122,4 +122,12 @@ public class DefaultTask extends DefaultContextElement
         return description;
     }
 
+    public boolean isRunning() {
+        TaskInfo received = this.getReceivedInfo();
+        if (received.getCpu() > 0 || received.getMemory() > 0 || received.getStorage() > 0) {
+            return true;
+        } else {
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
 }

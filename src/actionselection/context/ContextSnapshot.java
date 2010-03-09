@@ -40,7 +40,7 @@ public class ContextSnapshot implements Comparable {
     public void executeActions() {
         for (Command command : actions) {
             command.execute();
-            //System.out.println("Executing " + command.toString());
+            System.out.println("Executing " + command.toString());
         }
     }
 
