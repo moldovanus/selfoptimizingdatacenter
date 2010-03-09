@@ -18,7 +18,7 @@ public class WakeUpServerCommand extends Command {
     public WakeUpServerCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 3;
+        cost = 7;
     }
 
     /**
