@@ -57,10 +57,10 @@ public class ContextSnapshot implements Comparable {
 
         Object[] commands = actions.toArray();
 
-        for (int i = commands.length-1; i >=0 ; i--) {
+        for (int i = commands.length - 1; i >= 0; i--) {
             Command command = (Command) commands[i];
             command.rewind();
-           // System.out.println("Rewinding  " + command.toString());
+            //System.out.println("Rewinding  " + command.toString());
         }
     }
 
@@ -108,11 +108,11 @@ public class ContextSnapshot implements Comparable {
         if (o.getClass() != this.getClass())
             return 0;
         ContextSnapshot cs = (ContextSnapshot) o;
-        if ( cs.rewardFunction < rewardFunction){
+        if (cs.rewardFunction < rewardFunction) {
             return -1;
-        }else if ( cs.rewardFunction == rewardFunction){
+        } else if (cs.rewardFunction == rewardFunction) {
             return 0;
-        }else{
+        } else {
             return 1;
         }
     }

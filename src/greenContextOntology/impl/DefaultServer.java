@@ -160,24 +160,27 @@ public class DefaultServer extends DefaultResource
         int availableCores = cores.size();
 
         coreCount = (coreCount > availableCores) ? availableCores : coreCount;
-
-        receivedSLA.setCores(coreCount);
-
-        for (int i = 0; i < coreCount; i++) {
+        int index = 0;
+        while ( coresIterator.hasNext() && coreCount > 0) {
             Core core = coresIterator.next();
             //TODO : to be modified for more core flexibility
             int availableCore = core.getTotal() - core.getUsed();
             int requestedCPU = requestedSLA.getCpu();
             //TODO : remove size checks if performance needed
             if (requestedCPU > availableCore) {
+            //    i--;
+                index ++;
                 continue;
             }
             //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
-
+            coreCount --;
             receivedSLA.setCpu(requestedCPU);
             core.setUsed(core.getUsed() + requestedCPU);
-            receivedSLA.addReceivedCoreIndex(i);
+            receivedSLA.addReceivedCoreIndex(index);
+            index ++;
         }
+
+        receivedSLA.setCores(receivedSLA.getReceivedCoreIndex().size());
 
         Memory memory = this.getAssociatedMemory();
         int availableMemory = memory.getTotal() - memory.getUsed();
@@ -209,7 +212,6 @@ public class DefaultServer extends DefaultResource
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
         Iterator<Core> coresIterator = cores.iterator();
-
 
         Collection receivedCoresIndexes = receivedSLA.getReceivedCoreIndex();
         receivedSLA.setCores(0);
@@ -247,7 +249,6 @@ public class DefaultServer extends DefaultResource
      */
     public boolean hasResourcesFor(Task task) {
 
-
         TaskInfo requestedSLA = task.getRequestedInfo();
 
         CPU cpu = this.getAssociatedCPU();
@@ -262,14 +263,14 @@ public class DefaultServer extends DefaultResource
             Core core = coreInst;
             if (core.getUsed() + requestedSLA.getCpu() > core.getTotal()) {
                 continue;
-            }else{
-                requestedCores --;
+            } else {
+                requestedCores--;
             }
         }
 
         //TODO: Trace is correct 
-        if ( requestedCores > 0 ){
-              return false;
+        if (requestedCores > 0) {
+            return false;
         }
 
         Memory memory = this.getAssociatedMemory();
@@ -336,17 +337,18 @@ public class DefaultServer extends DefaultResource
 
     /**
      * To check if a task is already present and such avoid adding it twice
+     *
      * @param task
      * @return
      */
     public boolean containsTask(Task task) {
         Collection tasks = this.getRunningTasks();
-        for ( Object o : tasks){
+        for (Object o : tasks) {
             Task t = (Task) o;
-            if ( t.getName().equals(task.getName())){
+            if (t.getName().equals(task.getName())) {
                 return true;
             }
         }
-        return false;  
+        return false;
     }
 }

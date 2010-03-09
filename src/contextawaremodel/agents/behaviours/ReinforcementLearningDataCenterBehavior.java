@@ -124,6 +124,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
     private ContextSnapshot reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
+
         ContextSnapshot newContext = queue.poll();
 
         System.out.println("---A");

@@ -9,7 +9,6 @@ import greenContextOntology.Server;
 import greenContextOntology.Task;
 
 /**
- *
  * @author Me
  */
 public class MoveTaskCommand extends Command {
@@ -45,14 +44,15 @@ public class MoveTaskCommand extends Command {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(oldServer);
-        oldServer.addRunningTasks(task);
         newServer.removeRunningTasks(task);
+        oldServer.addRunningTasks(task);
+
     }
 
     @Override
     public String toString() {
         String description;
-        description = "Move task\"" + taskName + "\" from server \"" + oldServerName
+        description = "Move task \"" + taskName + "\" from server \"" + oldServerName
                 + "\" to server \"" + newServerName;
         return description;
     }
