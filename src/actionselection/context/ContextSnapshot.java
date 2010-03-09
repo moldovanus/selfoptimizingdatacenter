@@ -40,7 +40,7 @@ public class ContextSnapshot implements Comparable {
     public void executeActions() {
         for (Command command : actions) {
             command.execute();
-            System.out.println("Executing " + command.toString());
+            //System.out.println("Executing " + command.toString());
         }
     }
 
@@ -50,9 +50,17 @@ public class ContextSnapshot implements Comparable {
         }
     }
 
+    /**
+     * Rewinds in the inverse order
+     */
     public void rewind() {
-        for (Command command : actions) {
+
+        Object[] commands = actions.toArray();
+
+        for (int i = commands.length-1; i >=0 ; i--) {
+            Command command = (Command) commands[i];
             command.rewind();
+           // System.out.println("Rewinding  " + command.toString());
         }
     }
 
@@ -78,22 +86,35 @@ public class ContextSnapshot implements Comparable {
         this.rewardFunction = rewardFunction;
     }
 
-    public int compareTo(Object o) {
+    /* public int compareTo(Object o) {
 
+  if (o.getClass() != this.getClass())
+      return 0;
+  ContextSnapshot cs = (ContextSnapshot) o;
+  if (cs.contextEntropy < contextEntropy)
+      return 1;
+  else if (cs.contextEntropy == contextEntropy) {
+      if (cs.rewardFunction < rewardFunction) {
+          return 1;
+      } else if (cs.rewardFunction == rewardFunction) {
+          return 0;
+      } else {
+          return -1;
+      }
+  } else return -1;
+}      */
+
+    public int compareTo(Object o) {
         if (o.getClass() != this.getClass())
             return 0;
         ContextSnapshot cs = (ContextSnapshot) o;
-        if (cs.contextEntropy < contextEntropy)
+        if ( cs.rewardFunction < rewardFunction){
+            return -1;
+        }else if ( cs.rewardFunction == rewardFunction){
+            return 0;
+        }else{
             return 1;
-        else if (cs.contextEntropy == contextEntropy) {
-            if (cs.rewardFunction < rewardFunction) {
-                return 1;
-            } else if (cs.rewardFunction == rewardFunction) {
-                return 0;
-            } else {
-                return -1;
-            }
-        } else return -1;
+        }
     }
 
     public String toString() {

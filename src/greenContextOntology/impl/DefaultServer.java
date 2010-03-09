@@ -333,4 +333,20 @@ public class DefaultServer extends DefaultResource
 
         return description;
     }
+
+    /**
+     * To check if a task is already present and such avoid adding it twice
+     * @param task
+     * @return
+     */
+    public boolean containsTask(Task task) {
+        Collection tasks = this.getRunningTasks();
+        for ( Object o : tasks){
+            Task t = (Task) o;
+            if ( t.getName().equals(task.getName())){
+                return true;
+            }
+        }
+        return false;  
+    }
 }

@@ -31,9 +31,6 @@ public abstract class Command implements Serializable {
         this.cost = cost;
     }
 
-
-
-
     public abstract void execute();
 
     public abstract void rewind();
@@ -44,4 +41,10 @@ public abstract class Command implements Serializable {
     public abstract void executeOnWebService();
 
     public abstract String[] toStringArray();
+
+    //TODO: AM scris equals
+    @Override
+    public boolean equals(Object obj) {
+        return this.toString().equals(obj.toString());
+    }
 }

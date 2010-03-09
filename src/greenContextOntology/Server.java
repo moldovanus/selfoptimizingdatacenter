@@ -85,5 +85,7 @@ public interface Server extends Resource {
 
     @Override
     String toString();
+
+    public boolean containsTask(Task task);
 }
 

@@ -79,10 +79,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Policy brokenPolicy = null;
         double entropy = 0.0;
         Collection<QoSPolicy> qosPolicies = protegeFactory.getAllQoSPolicyInstances();
+
         for (QoSPolicy policy : qosPolicies) {
-
             Task task = (Task) policy.getReferences().iterator().next();
-
             //if (!policy.getRespected()) {
             if (!task.requestsSatisfied()) {
                 if (brokenPolicy == null) {
@@ -91,14 +90,16 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 entropy++;
             }
         }
+
         Collection<EnergyPolicy> policies = protegeFactory.getAllEnergyPolicyInstances();
         for (EnergyPolicy policy : policies) {
+            boolean b = policy.getRespected();
             if (!policy.getRespected()) {
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
                 //TODO : numarat si Energy Policies in Entropie
-                //entropy++;
+                entropy++;
             }
         }
         //System.out.println(" " + entropy);
@@ -112,7 +113,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             //TODO: solve -1 la infinit :P
             double temp = previous.getContextEntropy() - current.getContextEntropy() + c.getCost();
             function += ContextSnapshot.gamma * (temp);
-
         } else {
             function -= current.getContextEntropy();
         }
@@ -124,9 +124,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         ContextSnapshot newContext = queue.poll();
 
         System.out.println("---A");
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
         newContext.executeActions();
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
-       /* if (entropyAndPolicy.getFirst() < 3) {
+        /* if (entropyAndPolicy.getFirst() < 3) {
             for (int i = 0; i < 5; i++)
                 System.err.println("\n ------------------------------------------------------------------------------");
         }*/
@@ -144,25 +145,30 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     server = (DefaultServer) policy.listReferences().next();
                 }
             }
-            Collection<Server> servers = protegeFactory.getAllServerInstances();
+
             if (task != null) {
-                if ( task.getName().equals("Task_2")){
+                if (task.getName().equals("Task_2")) {
                     System.out.println("Found");
                 }
                 // deploy actions
                 for (Server serverInstance : servers) {
-                     if (!serverInstance.getLowPowerState() && serverInstance.hasResourcesFor(task) && !serverInstance.getRunningTasks().contains(task)) {
+                    if (!serverInstance.getLowPowerState() && serverInstance.hasResourcesFor(task)) {
                         Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                        cs.getActions().add(newAction);
-                        newAction.execute();
-                        //cs.executeActions();
-                        Double afterExecuteEntropy = computeEntropy().getFirst();
-                        cs.setContextEntropy(afterExecuteEntropy);
-                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                        newAction.rewind();
-                        //cs.rewind();
-                        queue.add(cs);
+
+                       //verific peste tot daca nu cumva exista actiunea
+                        if (!cs.getActions().contains(newAction)) {
+                            cs.getActions().add(newAction);
+
+                            newAction.execute();
+                            //cs.executeActions();
+                            Double afterExecuteEntropy = computeEntropy().getFirst();
+                            cs.setContextEntropy(afterExecuteEntropy);
+                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                            newAction.rewind();
+                            //cs.rewind();
+                            queue.add(cs);
+                        }
                     }
                 }
 
@@ -178,14 +184,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                                     Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), serverInstance1.getName(), myTask.getName());
                                     ///de vazut daca a fost posibila
                                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                                    cs.getActions().add(newAction);
-                                    newAction.execute();
-                                    //cs.executeActions();
-                                    cs.setContextEntropy(computeEntropy().getFirst());
-                                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                                    newAction.rewind();
-                                    // cs.rewind();
-                                    queue.add(cs);
+                                    //verific peste tot daca nu cumva exista actiunea
+                                    if (!cs.getActions().contains(newAction)) {
+                                        cs.getActions().add(newAction);
+                                        newAction.execute();
+                                        //cs.executeActions();
+                                        cs.setContextEntropy(computeEntropy().getFirst());
+                                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                                        newAction.rewind();
+                                        // cs.rewind();
+                                        queue.add(cs);
+                                    }
                                 }
                             }
                         }
@@ -202,14 +211,18 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                             Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance1.getName(), myTask.getName());
                             ///de vazut daca a fost posibila
                             ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                            cs.getActions().add(newAction);
-                            //cs.executeActions();
-                            newAction.execute();
-                            cs.setContextEntropy(computeEntropy().getFirst());
-                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                            newAction.rewind();
-                            //cs.rewind();
-                            queue.add(cs);
+
+                            //verific peste tot daca nu cumva exista actiunea
+                            if (!cs.getActions().contains(newAction)) {
+                                cs.getActions().add(newAction);
+                                //cs.executeActions();
+                                newAction.execute();
+                                cs.setContextEntropy(computeEntropy().getFirst());
+                                cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                                newAction.rewind();
+                                //cs.rewind();
+                                queue.add(cs);
+                            }
                         }
                     }
                 }
@@ -220,14 +233,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
                     ///de vazut daca a fost posibila
                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                    cs.getActions().add(newAction);
-                    // cs.executeActions();
-                    newAction.execute();
-                    cs.setContextEntropy(computeEntropy().getFirst());
-                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                    newAction.rewind();
-                    // cs.rewind();
-                    queue.add(cs);
+                    //verific peste tot daca nu cumva exista actiunea
+                    if (!cs.getActions().contains(newAction)) {
+                        cs.getActions().add(newAction);
+                        // cs.executeActions();
+                        newAction.execute();
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        newAction.rewind();
+                        // cs.rewind();
+                        queue.add(cs);
+                    }
                 }
             }
             // sleep
@@ -236,20 +252,23 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
                     ///de vazut daca a fost posibila
                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                    cs.getActions().add(newAction);
-                    //  cs.executeActions();
-                    newAction.execute();
-                    cs.setContextEntropy(computeEntropy().getFirst());
-                    cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                    // cs.rewind();
-                    newAction.rewind();
-                    queue.add(cs);
+
+                    if (!cs.getActions().contains(newAction)) {
+                        cs.getActions().add(newAction);
+                        //  cs.executeActions();
+                        newAction.execute();
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        // cs.rewind();
+                        newAction.rewind();
+                        queue.add(cs);
+                    }
                 }
             }
             newContext.rewind();
             newContext = reinforcementLearning(queue);
         }
-         return newContext;
+        return newContext;
     }
 
     @Override
@@ -268,7 +287,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             ContextSnapshot result = reinforcementLearning(queue);
             System.out.println("Gasit rezultat ");
             Collection resultQueue = result.getActions();
-            for ( Object o : resultQueue){
+            for (Object o : resultQueue) {
                 System.out.println(o.toString());
             }
         }
