@@ -22,7 +22,7 @@ public class MoveTaskCommand extends Command {
         this.oldServerName = oldServerName;
         this.newServerName = newServerName;
         this.taskName = taskName;
-        cost = 4;
+        cost = 3;
     }
 
     /**

@@ -112,9 +112,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         if (previous != null) {
             function += previous.getRewardFunction();
             //TODO: solve -1 la infinit :P
-            //modificat temp-u 
-            double temp = previous.getContextEntropy() - current.getContextEntropy() + 1.0 / (double) c.getCost();
-            function += temp;
+            double temp = previous.getContextEntropy() - current.getContextEntropy() -  c.getCost();
+            function +=ContextSnapshot.gamma* temp;
         } else {
             function -= current.getContextEntropy();
         }

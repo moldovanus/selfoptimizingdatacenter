@@ -22,7 +22,7 @@ public class SendServerToLowPowerStateCommand extends Command {
     public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 1;
+        cost =2;
     }
 
     /**

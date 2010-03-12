@@ -17,7 +17,7 @@ public class ContextSnapshot implements Comparable {
     private Queue<Command> actions;
     private double contextEntropy = 0;
     private double rewardFunction = 0;
-    public final static double gamma = 0.6d;
+    public final static double gamma = 0.5d;
 
     public ContextSnapshot(final Queue<Command> actions) {
         this.actions = actions;
@@ -40,7 +40,7 @@ public class ContextSnapshot implements Comparable {
     public void executeActions() {
         for (Command command : actions) {
             command.execute();
-            System.out.println("Executing " + command.toString());
+           System.out.println("Executing " + command.toString());
         }
     }
 
