@@ -11,7 +11,6 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
 /**
- *
  * @author Administrator
  */
 public class BasicX3DBehaviour extends CyclicBehaviour {
@@ -33,7 +32,27 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
         try {
             switch (message.getPerformative()) {
                 case ACLMessage.INFORM:
-                    X3DCommand command = (X3DCommand) message.getContentObject();
+
+                    Object[] actionInfo = (Object[]) message.getContentObject();
+                    String targetAction = (String) actionInfo[0];
+                    if (targetAction.equals("addTask")) {
+                        agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
+                        String [] data =  ((String) actionInfo[2]).split("_");
+                        agent.addLabelToPowerMeters( "" + ((Integer) actionInfo[3] * 10) ,"PowerMeterGroup_0" + (String)data[1]);
+                    } else if (targetAction.equals("removeTask")) {
+                        agent.removeTask((String) actionInfo[1]);
+                    } else if (targetAction.equals("moveTask")) {
+                        {
+                            agent.removeTask((String) actionInfo[1]);
+                            String [] data =  ((String) actionInfo[2]).split("_");
+                            agent.addLabelToPowerMeters( "" + ((Integer) actionInfo[3] * 10) ,"PowerMeterGroup_0" + (String)data[1]);
+                            agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
+                        }
+                    }else if (targetAction.equals("sendToLowPower")) {
+
+                    }
+
+                    /* X3DCommand command = (X3DCommand) message.getContentObject();
                     command.execute(agent.getMainScene());
                     if (command instanceof X3DStringCommand) {
                         X3DStringCommand x3dCommand = (X3DStringCommand) command;
@@ -41,12 +60,19 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
                             agent.flipComputerState(x3dCommand.getContent());
                         }
                     }
+                    */
                     break;
 
-                    case ACLMessage.INFORM_IF:
-                        break;
+                case ACLMessage.INFORM_IF:
+                    break;
             }
-        } catch (Exception ex) {
+        }
+
+        catch (
+                Exception ex
+                )
+
+        {
             ex.printStackTrace(System.err);
         }
     }

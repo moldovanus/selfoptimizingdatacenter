@@ -6,6 +6,7 @@ package actionselection.command;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
+import jade.core.Agent;
 
 /**
  *
@@ -51,5 +52,13 @@ public class WakeUpServerCommand extends Command {
     @Override
     public String[] toStringArray() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void executeOnX3D(Agent agent) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void rewindOnX3D(Agent agent) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -7,9 +7,16 @@ package actionselection.command;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
+import jade.lang.acl.ACLMessage;
+import jade.core.AID;
+import jade.core.Agent;
+
+import java.io.IOException;
+
+import sun.management.resources.agent;
+import contextawaremodel.GlobalVars;
 
 /**
- *
  * @author Me
  */
 public class DeployTaskCommand extends Command {
@@ -25,7 +32,7 @@ public class DeployTaskCommand extends Command {
     }
 
     /**
-     * Sets the task <code>taskName</code> associated server to <code>serverName</code> 
+     * Sets the task <code>taskName</code> associated server to <code>serverName</code>
      */
     @Override
     public void execute() {
@@ -60,5 +67,34 @@ public class DeployTaskCommand extends Command {
     @Override
     public String[] toStringArray() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void executeOnX3D(Agent agent) {
+        Server server = protegeFactory.getServer(serverName);
+
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{"addTask",taskName, serverName, server.getRunningTasks().size() + 1});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
+    }
+
+
+     public void rewindOnX3D(Agent agent) {
+
+
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{"removeTask",taskName});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
     }
 }

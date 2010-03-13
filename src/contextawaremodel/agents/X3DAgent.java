@@ -4,51 +4,44 @@
  */
 package contextawaremodel.agents;
 
-//import actionselection.command.DecrementCommand;
-//import actionselection.command.IncrementCommand;
-//import actionselection.command.SetCommand;
-import com.hp.hpl.jena.ontology.OntModel;
-import contextawaremodel.GlobalVars;
-import jade.core.AID;
 import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.io.IOException;
+import org.web3d.x3d.sai.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import org.web3d.x3d.sai.BrowserFactory;
-import org.web3d.x3d.sai.ExternalBrowser;
-import org.web3d.x3d.sai.SFColor;
-import org.web3d.x3d.sai.SFTime;
-import org.web3d.x3d.sai.X3DComponent;
-import org.web3d.x3d.sai.X3DNode;
-import org.web3d.x3d.sai.X3DScene;
+import java.util.Map;
+import java.util.Random;
+
+import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
 
 /**
- *
  * @author Administrator
  */
 
 public class X3DAgent extends Agent {
 
     private JFrame frame;
-    private com.hp.hpl.jena.ontology.OntModel policyConversionModel;
-    private X3DScene mainScene;
-    private ACLMessage message;
-    private final Agent selfReference = this;
 
-    public void flipComputerState(String value) {
-        X3DNode computerMaterial = mainScene.getNamedNode("computerScreen_MAT");
-        SFColor computerColor = (SFColor) computerMaterial.getField("diffuseColor");
-        if (value.contains("ON")) {
-            computerColor.setValue(new float[]{1f, 1.0f, 1.0f});
-        } else {
-            computerColor.setValue(new float[]{0.0f, 0.0f, 0.0f});
-        }
+    private X3DScene mainScene;
+    private final Agent selfReference = this;
+    private ArrayList<X3DNode> taskLabels;
+    private Map<String, X3DNode> tasks;
+    private Map<String, X3DNode> powerMeterLabels;
+    private ArrayList<String> wiresIndexes;
+    static int server = 1;
+    private float[] activeWireColor = new float[]{0, 0.6f, 0};
+    private Timer changeWiresBackTimer;
+
+    @Override
+    protected void takeDown() {
+        super.takeDown();    //To change body of overridden methods use File | Settings | File Templates.
+        frame.setVisible(false);
+        System.exit(1);
     }
 
     @Override
@@ -56,21 +49,12 @@ public class X3DAgent extends Agent {
 
         Object[] args = getArguments();
         if (args == null) {
-            this.policyConversionModel = null;
             System.out.println("[X3D] X3D Agent failed, owlModel arguments are null!");
-            return;
-        }
-        message = new ACLMessage(ACLMessage.SUBSCRIBE);
-        message.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
-        try {
-            message.setContentObject(new Boolean(true));
-            message.setLanguage("JavaSerialization");
-        } catch (IOException ex) {
-            Logger.getLogger(X3DAgent.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+            //return;
         }
 
-        this.policyConversionModel = (OntModel) args[0];
+
+        // this.policyConversionModel = (OntModel) args[0];
         System.out.println("[X3DAgent] : Hellooo ! ");
         frame = new JFrame("X3D vizualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,6 +69,14 @@ public class X3DAgent extends Agent {
         // Create an SAI component
         X3DComponent x3dComp = BrowserFactory.createX3DComponent(requestedParameters);
 
+        taskLabels = new ArrayList<X3DNode>();
+        powerMeterLabels = new HashMap<String, X3DNode>();
+        tasks = new HashMap<String, X3DNode>();
+        wiresIndexes = new ArrayList<String>();
+
+        frame.setSize(500, 500);
+        frame.setVisible(true);
+
         // Add the component to the UI
         JComponent x3dPanel = (JComponent) x3dComp.getImplementation();
         contentPane.add(x3dPanel, BorderLayout.CENTER);
@@ -98,11 +90,15 @@ public class X3DAgent extends Agent {
             System.out.println("Not running on Xj3D, extended functions disabled");
             useXj3D = false;
         }
-        frame.setSize(500, 500);
-        frame.setVisible(true);
+
 
         // Create an X3D scene by loading a file
-        mainScene = x3dBrowser.createX3DFromURL(new String[]{"src/scene.x3d"});
+        mainScene = x3dBrowser.createX3DFromURL(new String[]{GlobalVars.X3D_SCENE_FILE});
+
+        if (mainScene == null) {
+            System.err.println("X3D file " + GlobalVars.X3D_SCENE_FILE + " not found ");
+            return;
+        }
 
         // Replace the current world with the new one
         x3dBrowser.replaceWorld(mainScene);
@@ -110,256 +106,399 @@ public class X3DAgent extends Agent {
         if (!useXj3D) {
             return;
         }
+        ActionListener actionListener = new ActionListener() {
 
-        /**
-         * <ROUTE fromNode="Timer" fromField="fraction_changed" toNode="YellowCI" toField="set_fraction"/>
-         * <ROUTE fromNode="YellowCI" fromField="value_changed" toNode="YellowLight" toField="diffuseColor"/>
-         */
-        X3DNode lightSensor = mainScene.getNamedNode("LightTouchSensor");
-        X3DNode computerSensor = mainScene.getNamedNode("ComputerStateSensor");
-        X3DNode pressureSensor = mainScene.getNamedNode("PressureSensor");
-        X3DNode airConditioningSensor = mainScene.getNamedNode("AirConditioningSensor");
-        X3DNode heaterSensor = mainScene.getNamedNode("HeaterSensor");
-        X3DNode alarmSensor = mainScene.getNamedNode("AlarmSensor");
-        X3DNode videoCameraSensor = mainScene.getNamedNode("VideoCameraSensor");
+            public void actionPerformed(ActionEvent e) {
+                X3DNode tube = mainScene.getNamedNode("Server_0_tube_XFORM");
+                X3DNode upperTubeOne = mainScene.getNamedNode("Server_0_tube_01_XFORM");
+                X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
 
-        if (lightSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: TOUCH_SENSOR");
-            return;
-        }
-        if (pressureSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: PressureSensor");
-            return;
-        }
+                SFRotation rotation = (SFRotation) tube.getField("rotation");
+                SFRotation rotation_1 = (SFRotation) upperTubeOne.getField("rotation");
+                SFRotation rotation_2 = (SFRotation) upperTubeTwo.getField("rotation");
+                float[] values = new float[4];
+                rotation.getValue(values);
+                values[3] += 0.1;
 
-        if (computerSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: ComputerStateSensor");
-            return;
-        }
-
-        if (airConditioningSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: AirConditioningSensor");
-            return;
-        }
-
-        if (heaterSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: HeaterSensor");
-            return;
-        }
-        if (alarmSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: Alarm Sensor");
-            return;
-        }
-        if (videoCameraSensor == null) {
-            System.out.println("Couldn't find TouchSensor named: Video Camera Sensor");
-            return;
-        }
-
-
-        //final float[] f = new float[]{1, 1, 1};
-        SFTime lightTouchTimeField = (SFTime) lightSensor.getField("touchTime");
-        SFTime pressureTouchTimeField = (SFTime) pressureSensor.getField("touchTime");
-        SFTime computerTouchTimeField = (SFTime) computerSensor.getField("touchTime");
-        SFTime airConditioningTouchTimeField = (SFTime) airConditioningSensor.getField("touchTime");
-        SFTime heaterTouchTimeField = (SFTime) heaterSensor.getField("touchTime");
-        SFTime alarmTouchTimeField = (SFTime) alarmSensor.getField("touchTime");
-        SFTime videoTouchTimeField = (SFTime) videoCameraSensor.getField("touchTime");
-        //X3DNode sphere = mainScene.getNamedNode("boxColor");
-        //SFColor color = (SFColor) sphere.getField("diffuseColor");
-        //color.setValue(f);
-
-       /* videoTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
-
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
-                X3DNode videoStateString = mainScene.getNamedNode("faceRecognitionResult_STRING");
-                MFString videoStateSensorValue = (MFString) videoStateString.getField("string");
-
-                int videoState = 0;
-                String value = videoStateSensorValue.get1Value(0); 
-                if (value.equals("Face recognition: PROFESSOR")) {
-                    //computerStateSensorValue.set1Value(0,"Computer state: ON");
-                    videoState = 1;
-
-                } else if (value.equals("Face recognition: STUDENT")) {
-                    //computerStateSensorValue.set1Value(0,"Computer state: ON");
-                    videoState = 2;
-                } else if(value.equals("Face recognition: UNKNOWN")){
-                    videoState = 0;
-                }
-               
-                SetCommand command = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#FaceRecognitionSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, videoState);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-               
-              
+                float[] newValues = new float[]{1, 0, 0, 0};
+                rotation_1.getValue(newValues);
+                newValues[3] += 0.1;
+                rotation.setValue(values);
+                rotation_1.setValue(newValues);
+                newValues[3] *= -1;
+                rotation_2.setValue(newValues);
             }
-        });
+        };
+
+        Timer timer = new Timer(50, actionListener);
+        timer.start();
+
+        for (int i = 1; i <= 5; i++) {
+            addLabelToPowerMeters("" + 1 * 10, "PowerMeterGroup_0" + i);
+        }
 
 
-        alarmTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
+        ActionListener simulationListener = new ActionListener() {
 
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
+            public void actionPerformed(ActionEvent e) {
+                for (X3DNode entry : taskLabels) {
+                    mainScene.removeRootNode(entry);
+                }
 
-                X3DNode alarmStateString = mainScene.getNamedNode("alarmState_STRING");
-                MFString alarmStateSensorValue = (MFString) alarmStateString.getField("string");
+                for (Map.Entry<String, X3DNode> entry : powerMeterLabels.entrySet()) {
+                    mainScene.removeRootNode(entry.getValue());
+                }
 
-                int alarmState = 0;
-                if (alarmStateSensorValue.get1Value(0).equals("Alarm state: OFF")) {
-                    //computerStateSensorValue.set1Value(0,"Computer state: ON");
-                    alarmState = 1;
+                if (server == 5) {
+                    server = 1;
+                }
 
+                Random random = new Random();
+                int index_1 = random.nextInt(5) + 1;
+                int index_2 = random.nextInt(5) + 1;
+                int index_3 = random.nextInt(5) + 1;
+
+                addTask("Task_1", "Server_" + index_1, 1);
+
+                mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
+                mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_1);
+                if (index_2 == index_1) {
+                    addTask("Task_2", "Server_" + index_1, 0);
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                    addLabelToPowerMeters("20", "PowerMeterGroup_0" + index_1);
+
+                    if (index_3 == index_1) {
+                        mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
+                        mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                        addLabelToPowerMeters("30", "PowerMeterGroup_0" + index_1);
+                        addTask("Task_3", "Server_" + index_1, 2);
+                    }
                 } else {
-                    //computerStateSensorValue.set1Value(0,"Computer state: OFF");
-                    alarmState = 0;
-
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2));
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
+                    addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_2);
+                    addTask("Task_2", "Server_" + index_2, 1);
                 }
-                System.err.println("Alarm new state = " + alarmState);
 
-                SetCommand command = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, alarmState);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-
-                System.out.println("Air Conditioning unit clicked");
-            }
-        });
-
-
-        heaterTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
-
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
-
-                IncrementCommand command = new IncrementCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#TemperatureSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 5);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-
-                System.out.println("Air Conditioning unit clicked");
-            }
-        });
-
-        airConditioningTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
-
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
-
-                DecrementCommand command = new DecrementCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#TemperatureSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 5);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-                System.out.println("Air Conditioning unit clicked");
-            }
-        });
-
-        computerTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
-
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
-
-                X3DNode computerStateString = mainScene.getNamedNode("computerState_STRING");
-                MFString computerStateSensorValue = (MFString) computerStateString.getField("string");
-                System.err.println("Room state: " + computerStateSensorValue.get1Value(0));
-
-                int computerState = 0;
-                if (computerStateSensorValue.get1Value(0).equals("Computer state: OFF")) {
-                    //computerStateSensorValue.set1Value(0,"Computer state: ON");
-                    computerState = 1;
-
+                if (index_3 == index_2) {
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2));
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
+                    addLabelToPowerMeters("20", "PowerMeterGroup_0" + index_2);
+                    addTask("Task_3", "Server_" + index_2, 2);
                 } else {
-                    //computerStateSensorValue.set1Value(0,"Computer state: OFF");
-                    computerState = 0;
-
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_3));
+                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_3 + "_Inverse"));
+                    addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_3);
+                    addTask("Task_3", "Server_" + index_3, 1);
                 }
 
-                SetCommand command = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#ComputerStateSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, computerState);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-                System.out.println("Computer unit clicked");
-            }
-        });
-
-        pressureTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
-
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
-                X3DNode roomStateSensor = mainScene.getNamedNode("roomEmpty_STRING");
-                MFString roomStateSensorValue = (MFString) roomStateSensor.getField("string");
-                System.err.println("Room state: " + roomStateSensorValue.get1Value(0));
-                int roomState = 0;
-                if (roomStateSensorValue.get1Value(0).equals("Room empty: FALSE")) {
-                    // roomStateSensorValue.set1Value(0,"Room empty: TRUE");
-                    roomState = 0;
-                } else {
-                    // roomStateSensorValue.set1Value(0,"Room empty: FALSE");
-                    roomState = 1;
+                for (int i = 1; i <= 5; i++) {
+                    if (i == index_1 || i == index_2 || i == index_3) {
+                        continue;
+                    }
+                    addLabelToPowerMeters("" + 0, "PowerMeterGroup_0" + i);
                 }
 
-                SetCommand command = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#RoomStateSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, roomState);
-                command.execute();
-                command.executeOnWebService();
-                selfReference.send(message);
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-                System.out.println("Room pressure pad clicked");
+                //x3dBrowser.replaceWorld(mainScene);
+
             }
-        });
+        };
+        Timer simulationTimer = new Timer(1000, simulationListener);
 
-        lightTouchTimeField.addX3DEventListener(new X3DFieldEventListener() {
+        //simulationTimer.start();
+        //addLabelToPowerMeters();
 
-            public void readableFieldChanged(X3DFieldEvent xdfe) {
+        final float[] initialWireColor = new float[]{0.8784f, 0.5608f, 0.3412f};
 
-                X3DNode light = mainScene.getNamedNode("Light");
-                SFBool lightIntensity = (SFBool) light.getField("on");
-                //ACLMessage message= new ACLMessage(ACLMessage.INFORM);
-                int lightState = 0;
-                if (lightIntensity.getValue()) {
-                    //lightIntensity.setValue(false);
-                    lightState = 0;
-                } else {
-                    //lightIntensity.setValue(true);
-                    lightState = 1;
+        ActionListener setWiresColorBack = new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                for (String index : wiresIndexes) {
+                    setWireColor(index, initialWireColor);
                 }
-
-                SetCommand command = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#LightSensorI",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
-                        "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, lightState);
-                command.execute();
-                command.executeOnWebService();
-
-                //mainScene.addRoute(timer, "fraction_changed", PI, "set_fraction");
-                //mainScene.addRoute(PI, "value_changed", TS, "diffuseColor");
-                System.out.println("Light clicked");
-
             }
-        });
+        };
 
-        //float[] f = new float[3];
-        //color.getValue(f);
-        //System.out.println("" + f[0] + "   " + f[1] + "   " + f[2]);
+        changeWiresBackTimer = new Timer(400, setWiresColorBack);
+        changeWiresBackTimer.start();
 
-        addBehaviour(new BasicX3DBehaviour(this));*/
+        addBehaviour(new BasicX3DBehaviour(this));
+
     }
 
-    public X3DScene getMainScene() {
-        return mainScene;
+    private void setWireColor(String serverName, float[] color) {
+        String[] elements = serverName.split("_");
+        final X3DNode material = mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        diffuseColor.setValue(color);
+    }
+
+    private void addInverseLabelToPowerMeters(String power, String powerMeterName) {
+        //for ( int i = 1; i <= 5; i++){
+        X3DNode transform = mainScene.createNode("Transform");
+
+        X3DNode shape = mainScene.createNode("Shape");
+        X3DNode label = mainScene.createNode("Text");
+        X3DNode appearance = mainScene.createNode("Appearance");
+        X3DNode material = mainScene.createNode("Material");
+        X3DNode fontStyle = mainScene.createNode("FontStyle");
+
+        MFString justify = (MFString) fontStyle.getField("justify");
+        SFFloat size = (SFFloat) fontStyle.getField("size");
+
+        justify.set1Value(0, "MIDDLE");
+        justify.set1Value(1, "MIDDLE");
+        size.setValue(0.15f);
+        SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
+        fontStyleAttribute.setValue(fontStyle);
+
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+
+        diffuseColor.setValue(new float[]{0, 0, 1});
+        ambientIntensity.setValue(1);
+
+        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+        appearanceMaterial.setValue(material);
+
+        SFNode shapeAppearance = (SFNode) shape.getField("appearance");
+        shapeAppearance.setValue(appearance);
+
+        MFString string = (MFString) label.getField("string");
+        string.clear();
+        string.insertValue(0, "Watts: " + power);
+
+        SFNode shapeGeometry = (SFNode) shape.getField("geometry");
+        shapeGeometry.setValue(label);
+
+        MFNode newTransformChildren = (MFNode) transform.getField("children");
+        newTransformChildren.append(shape);
+
+        SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
+        float[] translationValues = new float[3];
+
+        X3DNode powerMeter = mainScene.getNamedNode(powerMeterName + "_XFORM");
+        SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
+        powerMeterTranslation.getValue(translationValues);
+        translationValues[1] += 0.2;
+        translationValues[0] -= 0.4;
+
+        serverTranslation.setValue(translationValues);
+
+        SFRotation serverRotation = (SFRotation) transform.getField("rotation");
+        float[] rotationValues = new float[]{0, 1, 0, 0f};
+        serverRotation.setValue(rotationValues);
+        mainScene.addRootNode(transform);
+        powerMeterLabels.put(powerMeterName + "_Inverse", transform);
+        //}
+    }
+
+    public void addLabelToPowerMeters(String power, String powerMeterName) {
+
+        removePowerMeterLabel(powerMeterName);
+
+        X3DNode transform = mainScene.createNode("Transform");
+        X3DNode shape = mainScene.createNode("Shape");
+        X3DNode label = mainScene.createNode("Text");
+        X3DNode appearance = mainScene.createNode("Appearance");
+        X3DNode material = mainScene.createNode("Material");
+        X3DNode fontStyle = mainScene.createNode("FontStyle");
+
+        MFString justify = (MFString) fontStyle.getField("justify");
+        SFFloat size = (SFFloat) fontStyle.getField("size");
+
+        justify.set1Value(0, "MIDDLE");
+        justify.set1Value(1, "MIDDLE");
+        size.setValue(0.15f);
+        SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
+        fontStyleAttribute.setValue(fontStyle);
+
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+
+        diffuseColor.setValue(new float[]{0, 0, 1});
+        ambientIntensity.setValue(1);
+
+        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+        appearanceMaterial.setValue(material);
+
+        SFNode shapeAppearance = (SFNode) shape.getField("appearance");
+        shapeAppearance.setValue(appearance);
+
+        MFString string = (MFString) label.getField("string");
+        string.clear();
+        string.insertValue(0, "Watts: " + power);
+
+        SFNode shapeGeometry = (SFNode) shape.getField("geometry");
+        shapeGeometry.setValue(label);
+
+        MFNode newTransformChildren = (MFNode) transform.getField("children");
+        newTransformChildren.append(shape);
+
+        SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
+        float[] translationValues = new float[3];
+
+        X3DNode powerMeter = mainScene.getNamedNode(powerMeterName + "_XFORM");
+        SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
+        powerMeterTranslation.getValue(translationValues);
+        translationValues[1] += 0.2;
+        serverTranslation.setValue(translationValues);
+
+        SFRotation serverRotation = (SFRotation) transform.getField("rotation");
+        float[] rotationValues = new float[]{0, 1, 0, 3f};
+        serverRotation.setValue(rotationValues);
+
+        mainScene.addRootNode(transform);
+        powerMeterLabels.put(powerMeterName, transform);
+        addInverseLabelToPowerMeters(power, powerMeterName);
+
+    }
+
+    public void removePowerMeterLabel(String powerMeterName) {
+        X3DNode label = powerMeterLabels.remove(powerMeterName);
+        if (label == null) {
+            return;
+        }
+        X3DNode inverseLabel = powerMeterLabels.remove(powerMeterName + "_Inverse");
+        mainScene.removeRootNode(label);
+        mainScene.removeRootNode(inverseLabel);
+    }
+
+    private void addLabelToTask(String taskName, X3DNode taskTransform) {
+
+        X3DNode transform = mainScene.createNode("Transform");
+        X3DNode shape = mainScene.createNode("Shape");
+        X3DNode label = mainScene.createNode("Text");
+        X3DNode appearance = mainScene.createNode("Appearance");
+        X3DNode material = mainScene.createNode("Material");
+        X3DNode fontStyle = mainScene.createNode("FontStyle");
+
+        MFString justify = (MFString) fontStyle.getField("justify");
+        SFFloat size = (SFFloat) fontStyle.getField("size");
+
+        justify.set1Value(0, "MIDDLE");
+        justify.set1Value(1, "MIDDLE");
+        size.setValue(0.15f);
+        SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
+        fontStyleAttribute.setValue(fontStyle);
+
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+
+        diffuseColor.setValue(new float[]{0, 1, 0});
+        ambientIntensity.setValue(1);
+
+        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+        appearanceMaterial.setValue(material);
+
+        SFNode shapeAppearance = (SFNode) shape.getField("appearance");
+        shapeAppearance.setValue(appearance);
+
+        MFString string = (MFString) label.getField("string");
+        string.clear();
+        string.insertValue(0, taskName);
+
+        SFNode shapeGeometry = (SFNode) shape.getField("geometry");
+        shapeGeometry.setValue(label);
+
+        MFNode newTransformChildren = (MFNode) transform.getField("children");
+        newTransformChildren.append(shape);
+
+
+        SFRotation serverRotation = (SFRotation) transform.getField("rotation");
+        float[] rotationValues = new float[]{0, 1, 0, 3};
+        serverRotation.setValue(rotationValues);
+
+        SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
+        float[] translationValues = new float[3];
+
+        //SFVec3f powerMeterTranslation = (SFVec3f) taskTransform.getField("translation");
+        //powerMeterTranslation.getValue(translationValues);
+        //translationValues[1] += 0.2;
+        translationValues[1] += 0.1;
+        translationValues[0] += 0.15;
+        translationValues[2] -= 0.15;
+        serverTranslation.setValue(translationValues);
+
+        MFNode taskTransformChildren = (MFNode) taskTransform.getField("children");
+        taskTransformChildren.append(transform);
+        mainScene.addRootNode(taskTransform);
+
+        taskLabels.add(taskTransform);
+    }
+
+    public void addTask(String taskName, String serverName, int taskNumber) {
+
+        wiresIndexes.add(serverName);
+        setWireColor(serverName, activeWireColor);
+        changeWiresBackTimer.restart();
+
+        X3DNode newShape = mainScene.createNode("Shape");
+        X3DNode newBox = mainScene.createNode("Box");
+        X3DNode newTransform = mainScene.createNode("Transform");
+        X3DNode appearance = mainScene.createNode("Appearance");
+        X3DNode material = mainScene.createNode("Material");
+
+        SFNode appearanceField = (SFNode) newShape.getField("appearance");
+        SFVec3f boxSize = (SFVec3f) newBox.getField("size");
+        boxSize.setValue(new float[]{0.2699f, 0.08436f, 0.2801f});
+
+
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+
+        diffuseColor.setValue(new float[]{0.5529f, 0.02745f, 0.2275f});
+        ambientIntensity.setValue(1);
+
+        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+        appearanceMaterial.setValue(material);
+        appearanceField.setValue(appearance);
+
+        SFNode shape_geometry = (SFNode) (newShape.getField("geometry"));
+        shape_geometry.setValue(newBox);
+        MFNode newTransformChildren = (MFNode) newTransform.getField("children");
+        newTransformChildren.append(newShape);
+
+        //SFVec3f scale = (SFVec3f) newTransform.getField("scale");
+        //scale.setValue(new float[]{1.0f, 1.0f, 1.0f});
+
+        SFVec3f translation = (SFVec3f) newTransform.getField("translation");
+
+        X3DNode serverTransform = mainScene.getNamedNode(serverName + "_XFORM");
+        SFVec3f serverTranslation = (SFVec3f) serverTransform.getField("translation");
+        float[] translationValues = new float[3];
+
+        serverTranslation.getValue(translationValues);
+        float heightIndex = -0.2f;
+        heightIndex += 0.1f * (taskNumber - 1);
+
+        translationValues[1] += heightIndex;
+        translation.setValue(translationValues);
+
+        SFRotation newTransformRotation = (SFRotation) newTransform.getField("rotation");
+        SFRotation serverRotation = (SFRotation) serverTransform.getField("rotation");
+        float[] rotationValues = new float[]{0, 1, 0, 3};
+        serverRotation.getValue(rotationValues);
+        newTransformRotation.getValue(rotationValues);
+
+        //runningTasks.put(taskName, newTransform);
+
+        addLabelToTask(taskName, newTransform);
+        tasks.put(taskName, newTransform);
+    }
+
+    public void removeTask(String taskName) {
+        X3DNode task = tasks.remove(taskName);
+        mainScene.removeRootNode(task);
+    }
+
+    public void sendServerToLowPower(String serverName) {
+            //TODO : metode de server colouwinr pe state
+    }
+
+    public void wakeUpServer(String serverName) {
+
     }
 }

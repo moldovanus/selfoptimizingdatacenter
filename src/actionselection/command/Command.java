@@ -7,6 +7,8 @@ package actionselection.command;
 import greenContextOntology.ProtegeFactory;
 import java.io.Serializable;
 
+import jade.core.Agent;
+
 /**
  *
  * @author Administrator
@@ -41,6 +43,9 @@ public abstract class Command implements Serializable {
     public abstract void executeOnWebService();
 
     public abstract String[] toStringArray();
+
+    public abstract void executeOnX3D(Agent agent);
+    public abstract void rewindOnX3D(Agent agent);
 
     //TODO: AM scris equals
     @Override

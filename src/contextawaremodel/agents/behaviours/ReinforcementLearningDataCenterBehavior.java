@@ -4,37 +4,28 @@
  */
 package contextawaremodel.agents.behaviours;
 
-import actionselection.command.Command;
-import actionselection.command.DeployTaskCommand;
-import actionselection.command.MoveTaskCommand;
-import actionselection.command.SendServerToLowPowerStateCommand;
-import actionselection.command.WakeUpServerCommand;
+import actionselection.command.*;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
-import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
-import greenContextOntology.EnergyPolicy;
-import greenContextOntology.Policy;
-import greenContextOntology.ProtegeFactory;
-import greenContextOntology.QoSPolicy;
-import greenContextOntology.Server;
-import greenContextOntology.Task;
+import greenContextOntology.*;
 import greenContextOntology.impl.DefaultQoSPolicy;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 /**
  * @author Administrator
@@ -271,6 +262,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             newContext.rewind();
             newContext = reinforcementLearning(queue);
         }
+        newContext.rewind();
         return newContext;
     }
 
@@ -289,9 +281,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA" + entropyAndPolicy.getSecond());
             ContextSnapshot result = reinforcementLearning(queue);
             System.out.println("Gasit rezultat ");
-            Collection resultQueue = result.getActions();
-            for (Object o : resultQueue) {
+            Collection<Command> resultQueue = result.getActions();
+            for (Command o : resultQueue) {
                 System.out.println(o.toString());
+                o.execute();
+                o.executeOnX3D(agent);
             }
         }
 
