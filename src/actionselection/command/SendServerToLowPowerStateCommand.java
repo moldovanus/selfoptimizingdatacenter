@@ -10,8 +10,12 @@ import greenContextOntology.Task;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.io.IOException;
 
 import jade.core.Agent;
+import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import contextawaremodel.GlobalVars;
 
 /**
  * @author Me
@@ -72,10 +76,26 @@ public class SendServerToLowPowerStateCommand extends Command {
     }
 
     public void executeOnX3D(Agent agent) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{"sendToLowPower",serverName});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
     }
 
     public void rewindOnX3D(Agent agent) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{"wakeUpServer",serverName});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
     }
 }

@@ -35,7 +35,48 @@ public class X3DAgent extends Agent {
     private ArrayList<String> wiresIndexes;
     static int server = 1;
     private float[] activeWireColor = new float[]{0, 0.6f, 0};
+    private float[] activeServerColor = new float[]{0.3451f, 0.7804f, 0.8824f};
+    private float[] inactiveServerColor = new float[]{0.5f, 0.5f, 0.5f};
     private Timer changeWiresBackTimer;
+    private Timer fanTimer;
+    private Timer sensorAnimationTimer;
+    private float fanIncrement = 0.1f;
+
+    private ActionListener fanListener = new ActionListener() {
+
+              public void actionPerformed(ActionEvent e) {
+                  X3DNode sensor_1 = mainScene.getNamedNode("SensorTube_01_XFORM");
+                  X3DNode sensor_2 = mainScene.getNamedNode("SensorTube_02_XFORM");
+                  SFRotation rotation_1 = (SFRotation) sensor_1.getField("rotation");
+                  SFRotation rotation_2 = (SFRotation) sensor_2.getField("rotation");
+                  float[] values = new float[4];
+                  rotation_1.getValue(values);
+                  values[3] += fanIncrement;
+                  rotation_1.setValue(values);
+                  values[3] *= -1;
+                  rotation_2.setValue(values);
+              }
+          };
+
+
+    private ActionListener animateSensorsListener = new ActionListener(){
+
+        public void actionPerformed(ActionEvent e) {
+            X3DNode fan = mainScene.getNamedNode("Fan_XFORM");
+            SFRotation rotation = (SFRotation) fan.getField("rotation");
+                  float[] values = new float[4];
+                  rotation.getValue(values);
+                  values[3] += 0.1;
+                  rotation.setValue(values);
+        }
+    };
+
+    public void setFanSpeed(float speed) {
+        fanIncrement = speed;
+        //fanTimer = new Timer(50,fanListener);
+        //fanTimer.start();
+    }
+
 
     @Override
     protected void takeDown() {
@@ -106,29 +147,34 @@ public class X3DAgent extends Agent {
         if (!useXj3D) {
             return;
         }
+
         ActionListener actionListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                X3DNode sigla = mainScene.getNamedNode("Sigla_UTCN_XFORM");
                 X3DNode tube = mainScene.getNamedNode("Server_0_tube_XFORM");
-                X3DNode upperTubeOne = mainScene.getNamedNode("Server_0_tube_01_XFORM");
-                X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
+                //X3DNode upperTubeOne = mainScene.getNamedNode("Server_0_tube_01_XFORM");
+               // X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
 
-                SFRotation rotation = (SFRotation) tube.getField("rotation");
-                SFRotation rotation_1 = (SFRotation) upperTubeOne.getField("rotation");
-                SFRotation rotation_2 = (SFRotation) upperTubeTwo.getField("rotation");
+                SFRotation rotation = (SFRotation) sigla.getField("rotation");
+                SFRotation rotationTube = (SFRotation) tube.getField("rotation");
+                //SFRotation rotation_1 = (SFRotation) upperTubeOne.getField("rotation");
+                //SFRotation rotation_2 = (SFRotation) upperTubeTwo.getField("rotation");
                 float[] values = new float[4];
                 rotation.getValue(values);
                 values[3] += 0.1;
 
-                float[] newValues = new float[]{1, 0, 0, 0};
-                rotation_1.getValue(newValues);
-                newValues[3] += 0.1;
+                //float[] newValues = new float[]{1, 0, 0, 0};
+                //rotation_1.getValue(newValues);
+                //newValues[3] += 0.1;
                 rotation.setValue(values);
-                rotation_1.setValue(newValues);
-                newValues[3] *= -1;
-                rotation_2.setValue(newValues);
+                rotationTube.setValue(values);
+                //rotation_1.setValue(newValues);
+               // newValues[3] *= -1;
+                //rotation_2.setValue(newValues);
             }
         };
+
 
         Timer timer = new Timer(50, actionListener);
         timer.start();
@@ -137,6 +183,12 @@ public class X3DAgent extends Agent {
             addLabelToPowerMeters("" + 1 * 10, "PowerMeterGroup_0" + i);
         }
 
+
+        fanTimer = new Timer(50, fanListener);
+        fanTimer.start();
+
+        sensorAnimationTimer = new Timer(100,animateSensorsListener);
+        sensorAnimationTimer.start();
 
         ActionListener simulationListener = new ActionListener() {
 
@@ -207,7 +259,7 @@ public class X3DAgent extends Agent {
         };
         Timer simulationTimer = new Timer(1000, simulationListener);
 
-        //simulationTimer.start();
+        simulationTimer.start();
         //addLabelToPowerMeters();
 
         final float[] initialWireColor = new float[]{0.8784f, 0.5608f, 0.3412f};
@@ -230,7 +282,7 @@ public class X3DAgent extends Agent {
 
     private void setWireColor(String serverName, float[] color) {
         String[] elements = serverName.split("_");
-        final X3DNode material = mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
+        X3DNode material = mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(color);
     }
@@ -495,10 +547,16 @@ public class X3DAgent extends Agent {
     }
 
     public void sendServerToLowPower(String serverName) {
-            //TODO : metode de server colouwinr pe state
+        String[] elements = serverName.split("_");
+        X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        diffuseColor.setValue(inactiveServerColor);
     }
 
     public void wakeUpServer(String serverName) {
-
+        String[] elements = serverName.split("_");
+        X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
+        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+        diffuseColor.setValue(activeServerColor);
     }
 }

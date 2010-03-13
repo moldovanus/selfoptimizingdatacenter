@@ -146,7 +146,7 @@ public class ReinforcementLearningAgent extends Agent {
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
 
-                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 20000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));

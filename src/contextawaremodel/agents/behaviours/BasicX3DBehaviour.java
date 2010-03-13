@@ -49,7 +49,10 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
                             agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
                         }
                     }else if (targetAction.equals("sendToLowPower")) {
+                        agent.sendServerToLowPower((String) actionInfo[1]);
 
+                    } else if (targetAction.equals("wakeUpServer")) {
+                        agent.wakeUpServer((String) actionInfo[1]);
                     }
 
                     /* X3DCommand command = (X3DCommand) message.getContentObject();
