@@ -26,9 +26,15 @@ import policyconversioncore.PoliciesHandler;
 public class CMAAgent extends Agent implements CMAAExternal {
 
     //the owl model
-    private JenaOWLModel owlModel;
+    private JenaOWLModel owlModelDataCenter;
+    private OntModel policyConversionModelDataCenter;
+    private JenaOWLModel jenaOwlModelDataCenter;
+        private JenaOWLModel owlModel;
     private OntModel policyConversionModel;
     private JenaOWLModel jenaOwlModel;
+
+    //the protege factory
+    public MyFactory datacenterFactory;
     //the protege factory
     public MyFactory factory;
     //the main window of the simulator
@@ -63,6 +69,14 @@ public class CMAAgent extends Agent implements CMAAExternal {
             File file = new File(GlobalVars.ONTOLOGY_FILE);
             jenaOwlModel = ProtegeOWL.createJenaOWLModelFromURI(file.toURI().toString());
 
+            //create owlModel from Ontology
+            File ontologyDataCenterFile = new File(GlobalVars.ONTOLOGY_DATACENTER_FILE);
+            this.owlModelDataCenter = ProtegeOWL.createJenaOWLModelFromURI(ontologyDataCenterFile.toURI().toString());
+            this.datacenterFactory = new MyFactory(owlModelDataCenter);
+
+
+            File dataCenterFile = new File(GlobalVars.ONTOLOGY_DATACENTER_FILE);
+            jenaOwlModelDataCenter = ProtegeOWL.createJenaOWLModelFromURI(dataCenterFile.toURI().toString());
 
             // politici
             //PoliciesHandler policiesHandler = new PoliciesHandler();
@@ -79,6 +93,9 @@ public class CMAAgent extends Agent implements CMAAExternal {
             policyConversionModel = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
             policyConversionModel.add(jenaOwlModel.getJenaModel());
 
+
+            policyConversionModelDataCenter = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
+            policyConversionModelDataCenter.add(jenaOwlModelDataCenter.getJenaModel());
 
             //runnable object for refreshing the GUI
             //this.addIt = new Runnable() {
@@ -101,17 +118,17 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //star the Context Interpreting Agent
             AgentContainer container = (AgentContainer) getContainerController(); // get a container controller for creating new agents
             //createNewAgent(Name, Class name, arguments to the agent)
-            cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
-            cia.start();
+             cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
+             cia.start();
 
-            gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModel});
-            gui.start();
+             gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
+             gui.start();
 
-            rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel});
-            rl.start();
+             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel,this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
+             rl.start();
 
-            x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModel});
-            x3d.start();
+             x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModelDataCenter});
+             x3d.start();
             //star the Request Processing Agent
 
             //createNewAgent(Name, Class name, arguments to the agent)

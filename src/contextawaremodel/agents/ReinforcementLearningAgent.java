@@ -9,6 +9,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.ReceiveMessageRLBehaviour;
 import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterBehavior;
+import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import jade.core.Agent;
@@ -24,11 +25,15 @@ import logger.LoggerGUI;
  * @author Administrator
  */
 public class ReinforcementLearningAgent extends Agent {
-
+        private OWLModel owlModelDataCenter;
+    private OntModel policyConversionModelDataCenter;
+    private JenaOWLModel jenaOwlModelDataCenter;
+    
     private OWLModel contextAwareModel;
     private OntModel policyConversionModel;
     private JenaOWLModel jenaOwlModel;
     private Memory memory;
+    private Memory memory1;
     private int rlTime;
     private int totalRunningTime;
     private int runCount = 0;
@@ -96,6 +101,10 @@ public class ReinforcementLearningAgent extends Agent {
             this.contextAwareModel = (OWLModel) args[0];
             this.policyConversionModel = (OntModel) args[1];
             jenaOwlModel = (JenaOWLModel) args[2];
+
+            owlModelDataCenter = (OWLModel)args[3];
+            policyConversionModelDataCenter =(OntModel) args[4];
+            jenaOwlModelDataCenter=(JenaOWLModel)args[5];
             try {
 
                 File memoryFile = new File(GlobalVars.MEMORY_FILE);
@@ -105,12 +114,15 @@ public class ReinforcementLearningAgent extends Agent {
                     //memory = (Memory) inputStream.readObject();
                     //memory.restoreOwlModel(policyConversionModel);
                     memory = new Memory();
+                      memory1 = new Memory();
                 } catch (FileNotFoundException ex) {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
+                      memory1 = new Memory();
                 } catch (IOException ex) {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
+                      memory1 = new Memory();
                 }// catch (ClassNotFoundException ex) {
                   //  System.err.println(ex.getMessage());
                    // memory = new Memory();
@@ -145,8 +157,8 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-
-                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 20000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 20000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 20000,owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter,  memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
