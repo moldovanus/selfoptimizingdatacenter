@@ -12,6 +12,17 @@ import java.util.*;
  */
 public interface QoSPolicy extends Policy {
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#priority
+
+    int getPriority();
+
+    RDFProperty getPriorityProperty();
+
+    boolean hasPriority();
+
+    void setPriority(int newPriority);
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#references
 
     Collection getReferences();

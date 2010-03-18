@@ -65,5 +65,16 @@ public interface CPU extends Component {
 
     boolean hasUsed();
 
-    void setUsed(int newUsed);*/
+    void setUsed(int newUsed);	 */
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#weight
+
+    float getWeight();
+
+    RDFProperty getWeightProperty();
+
+    boolean hasWeight();
+
+    void setWeight(float newWeight);
 }

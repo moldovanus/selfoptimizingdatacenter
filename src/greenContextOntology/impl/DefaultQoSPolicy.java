@@ -26,6 +26,31 @@ public class DefaultQoSPolicy extends DefaultPolicy
 
 
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#priority
+
+    public int getPriority() {
+        return getPropertyValueLiteral(getPriorityProperty()).getInt();
+    }
+
+
+    public RDFProperty getPriorityProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#priority";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasPriority() {
+        return getPropertyValueCount(getPriorityProperty()) > 0;
+    }
+
+
+    public void setPriority(int newPriority) {
+        setPropertyValue(getPriorityProperty(), new java.lang.Integer(newPriority));
+    }
+
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#references
 
     public Collection getReferences() {

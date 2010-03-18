@@ -21,6 +21,28 @@ public interface Task extends ContextElement {
     void setAssociatedServer(Server newAssociatedServer);
 
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#cpuWeight
+
+    float getCpuWeight();
+
+    RDFProperty getCpuWeightProperty();
+
+    boolean hasCpuWeight();
+
+    void setCpuWeight(float newCpuWeight);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#memoryWeight
+
+    float getMemoryWeight();
+
+    RDFProperty getMemoryWeightProperty();
+
+    boolean hasMemoryWeight();
+
+    void setMemoryWeight(float newMemoryWeight);
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
 
     TaskInfo getReceivedInfo();
@@ -48,4 +70,12 @@ public interface Task extends ContextElement {
     boolean requestsSatisfied();
 
     boolean isRunning();
+	
+    float getStorageWeight();
+
+    RDFProperty getStorageWeightProperty();
+
+    boolean hasStorageWeight();
+
+    void setStorageWeight(float newStorageWeight);
 }

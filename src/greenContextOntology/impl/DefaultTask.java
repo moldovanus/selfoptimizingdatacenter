@@ -46,6 +46,58 @@ public class DefaultTask extends DefaultContextElement
         setPropertyValue(getAssociatedServerProperty(), newAssociatedServer);
     }
 
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#cpuWeight
+
+    public float getCpuWeight() {
+        return getPropertyValueLiteral(getCpuWeightProperty()).getFloat();
+    }
+
+
+    public RDFProperty getCpuWeightProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#cpuWeight";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasCpuWeight() {
+        return getPropertyValueCount(getCpuWeightProperty()) > 0;
+    }
+
+
+    public void setCpuWeight(float newCpuWeight) {
+        setPropertyValue(getCpuWeightProperty(), new java.lang.Float(newCpuWeight));
+    }
+
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#memoryWeight
+
+    public float getMemoryWeight() {
+        return getPropertyValueLiteral(getMemoryWeightProperty()).getFloat();
+    }
+
+
+    public RDFProperty getMemoryWeightProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#memoryWeight";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasMemoryWeight() {
+        return getPropertyValueCount(getMemoryWeightProperty()) > 0;
+    }
+
+
+    public void setMemoryWeight(float newMemoryWeight) {
+        setPropertyValue(getMemoryWeightProperty(), new java.lang.Float(newMemoryWeight));
+    }
+
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
     public TaskInfo getReceivedInfo() {
         return (TaskInfo) getPropertyValueAs(getReceivedInfoProperty(), TaskInfo.class);
@@ -130,4 +182,24 @@ public class DefaultTask extends DefaultContextElement
             return false;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
+ public float getStorageWeight() {
+        return getPropertyValueLiteral(getStorageWeightProperty()).getFloat();
+    }
+
+
+    public RDFProperty getStorageWeightProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#storageWeight";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasStorageWeight() {
+        return getPropertyValueCount(getStorageWeightProperty()) > 0;
+    }
+
+
+    public void setStorageWeight(float newStorageWeight) {
+        setPropertyValue(getStorageWeightProperty(), new java.lang.Float(newStorageWeight));
+}
 }
