@@ -13,11 +13,12 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import contextawaremodel.GlobalVars;
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * @author Me
  */
-public class WakeUpServerCommand extends Command {
+public class WakeUpServerCommand extends SelfOptimizingCommand {
 
     private String serverName;
 
@@ -31,15 +32,15 @@ public class WakeUpServerCommand extends Command {
      * Sets the lowPowerState property of a Server to <code>true</code>
      */
     @Override
-    public void execute() {
+    public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setLowPowerState(false);
+        server.setLowPowerState(false,model);
     }
 
     @Override
-    public void rewind() {
+    public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setLowPowerState(true);
+        server.setLowPowerState(true,model);
     }
 
     @Override

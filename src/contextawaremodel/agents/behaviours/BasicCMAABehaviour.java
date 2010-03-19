@@ -10,12 +10,12 @@ import edu.stanford.smi.protegex.owl.model.RDFResource;
 import contextawaremodel.worldInterface.WorldElement;
 import contextawaremodel.worldInterface.WorldFileParser;
 import jade.core.behaviours.TickerBehaviour;
+
 import java.util.HashMap;
 
 /**
  * Behaviour of the context model administrating agent (CMAA)
  * Behaviour includes synchronizing the real world and the model
- *
  */
 public class BasicCMAABehaviour extends TickerBehaviour {
 
@@ -35,9 +35,6 @@ public class BasicCMAABehaviour extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-        //TODO : BasicCMAABehaviour stopped. No world file interface. added return to onTick
-        return;
-        /*
         if (this.wfp.wasChanged()) {
             WorldElement[] wElements = wfp.getWorld();
             existsIndv.clear();
@@ -106,26 +103,26 @@ public class BasicCMAABehaviour extends TickerBehaviour {
                 }
 
             }
-            
+
             //do not REMOVE :P
             //get all OWL Individuals from ontology
-            /*Object[] owlElements = owlModel.getOWLIndividuals().toArray();
+            //Object[] owlElements = owlModel.getOWLIndividuals().toArray();
+            /*
+           //iterate to check if one was removed
+           for (int i = 0; i < owlElements.length; i++) {
+               OWLIndividual owli = (OWLIndividual) owlElements[i];
+               if (!existsIndv.containsKey(owli.getLocalName())) {
+                   agent.informCia(owli.getLocalName(), GlobalVars.INDIVIDUAL_DELETED);
+                   System.out.println("[CMAA] Individual " + owli.getLocalName() + " was removed!");
+                   //remove instance from owlmodel
 
-            //iterate to check if one was removed
-            for (int i = 0; i < owlElements.length; i++) {
-                OWLIndividual owli = (OWLIndividual) owlElements[i];
-                if (!existsIndv.containsKey(owli.getLocalName())) {
-                    agent.informCia(owli.getLocalName(), GlobalVars.INDIVIDUAL_DELETED);
-                    System.out.println("[CMAA] Individual " + owli.getLocalName() + " was removed!");
-                    //remove instance from owlmodel
 
-                    
-                    owli.delete();
-                }
-            }
+                   owli.delete();
+               }
+           }
+            */
         }
 
 
-*/
     }
 }

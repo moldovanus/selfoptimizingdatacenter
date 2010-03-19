@@ -3,6 +3,7 @@ package greenContextOntology.impl;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
 import edu.stanford.smi.protegex.owl.model.impl.*;
+import edu.stanford.smi.protegex.owl.javacode.AbstractCodeGeneratorIndividual;
 import greenContextOntology.*;
 
 /**
@@ -11,7 +12,7 @@ import greenContextOntology.*;
  *
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
-public class DefaultEntity extends DefaultOWLIndividual
+ public class DefaultEntity extends DefaultOWLIndividual
          implements Entity {
 
     public DefaultEntity(OWLModel owlModel, FrameID id) {

@@ -13,23 +13,24 @@ import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import jade.core.Agent;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+
 import logger.LoggerGUI;
 
 /**
- *
  * @author Administrator
  */
 public class ReinforcementLearningAgent extends Agent {
-        private OWLModel owlModelDataCenter;
+    private OWLModel owlModelDataCenter;
     private OntModel policyConversionModelDataCenter;
     private JenaOWLModel jenaOwlModelDataCenter;
-    
-    private OWLModel contextAwareModel;
+
+    private JenaOWLModel contextAwareModel;
     private OntModel policyConversionModel;
     private JenaOWLModel jenaOwlModel;
     private Memory memory;
@@ -87,7 +88,6 @@ public class ReinforcementLearningAgent extends Agent {
         this.logger = logger;
     }
 
-    
 
     @Override
     protected void setup() {
@@ -98,13 +98,13 @@ public class ReinforcementLearningAgent extends Agent {
         if (args != null) {
             logger = new LoggerGUI();
             logger.setLogPath("logs\\");
-            this.contextAwareModel = (OWLModel) args[0];
+            this.contextAwareModel = (JenaOWLModel) args[0];
             this.policyConversionModel = (OntModel) args[1];
             jenaOwlModel = (JenaOWLModel) args[2];
 
-            owlModelDataCenter = (OWLModel)args[3];
-            policyConversionModelDataCenter =(OntModel) args[4];
-            jenaOwlModelDataCenter=(JenaOWLModel)args[5];
+            owlModelDataCenter = (OWLModel) args[3];
+            policyConversionModelDataCenter = (OntModel) args[4];
+            jenaOwlModelDataCenter = (JenaOWLModel) args[5];
             try {
 
                 File memoryFile = new File(GlobalVars.MEMORY_FILE);
@@ -114,19 +114,19 @@ public class ReinforcementLearningAgent extends Agent {
                     //memory = (Memory) inputStream.readObject();
                     //memory.restoreOwlModel(policyConversionModel);
                     memory = new Memory();
-                      memory1 = new Memory();
+                    memory1 = new Memory();
                 } catch (FileNotFoundException ex) {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
-                      memory1 = new Memory();
+                    memory1 = new Memory();
                 } catch (IOException ex) {
                     System.err.println(ex.getMessage());
                     memory = new Memory();
-                      memory1 = new Memory();
+                    memory1 = new Memory();
                 }// catch (ClassNotFoundException ex) {
-                  //  System.err.println(ex.getMessage());
-                   // memory = new Memory();
-               // }
+                //  System.err.println(ex.getMessage());
+                // memory = new Memory();
+                // }
                 /*
 
                 Map<String, Map<String, String>> valueMapping = GlobalVars.getValueMapping();
@@ -157,15 +157,15 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-                //addBehaviour(new ReinforcementLearningBasicBehaviour(this, 20000, contextAwareModel, policyConversionModel, jenaOwlModel, memory));
-                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 20000,owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter,  memory1));
+                //addBehaviour(new ReinforcementLearningBasicBehaviour(this, 20000, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000,owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter,  memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
 
-               /* Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
+                /* Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 0);
                 c.execute();

@@ -37,22 +37,24 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
                     String targetAction = (String) actionInfo[0];
                     if (targetAction.equals("addTask")) {
                         agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
-                        String [] data =  ((String) actionInfo[2]).split("_");
-                        agent.addLabelToPowerMeters( "" + ((Integer) actionInfo[3] * 10) ,"PowerMeterGroup_0" + (String)data[1]);
+                        String[] data = ((String) actionInfo[2]).split("_");
+                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "ServerFrame_0" + (String) data[1], agent.POWER_LABEL_COLOR, agent.POWER_METER_LABEL_TRANSLATION);
                     } else if (targetAction.equals("removeTask")) {
                         agent.removeTask((String) actionInfo[1]);
                     } else if (targetAction.equals("moveTask")) {
-                        {
-                            agent.removeTask((String) actionInfo[1]);
-                            String [] data =  ((String) actionInfo[2]).split("_");
-                            agent.addLabelToPowerMeters( "" + ((Integer) actionInfo[3] * 10) ,"PowerMeterGroup_0" + (String)data[1]);
-                            agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
-                        }
-                    }else if (targetAction.equals("sendToLowPower")) {
+                        agent.removeTask((String) actionInfo[1]);
+                        String[] data = ((String) actionInfo[2]).split("_");
+                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "ServerFrame_0" + (String) data[1], agent.POWER_LABEL_COLOR, agent.POWER_METER_LABEL_TRANSLATION);
+                        agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
+                    } else if (targetAction.equals("sendToLowPower")) {
                         agent.sendServerToLowPower((String) actionInfo[1]);
 
                     } else if (targetAction.equals("wakeUpServer")) {
                         agent.wakeUpServer((String) actionInfo[1]);
+                    } else if (targetAction.equals("setTemperature")) {
+                        agent.addObjectLabel("Temperature: " + actionInfo[1], "SensorSphere_01", agent.SENSOR_LABEL_COLOR, agent.SENSOR_LABEL_TRANSLATION);
+                    } else if (targetAction.equals("setHumidity")) {
+                        agent.addObjectLabel("Humidity: " + actionInfo[1], "SensorSphere_02", agent.SENSOR_LABEL_COLOR, agent.SENSOR_LABEL_TRANSLATION);
                     }
 
                     /* X3DCommand command = (X3DCommand) message.getContentObject();

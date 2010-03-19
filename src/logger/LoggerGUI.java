@@ -63,15 +63,15 @@ public class LoggerGUI {
         frame.add(scrollPane, "Center");
     }
 
-    public void log(Color messageColor, String header, ArrayList<String> message) {
+    public void log(Color messageColor, String header, ArrayList message) {
 
         String date = "_" +  new java.util.Date().toString();
         messages.add(new Object[]{messageColor, header, message, date});
 
 
         textArea.append("\n" + header + " \t[" + date + "]\n");
-        for (String s : message) {
-            textArea.append("\t" + s + "\n");
+        for (Object s : message) {
+            textArea.append("\t" + s.toString() + "\n");
         }
         textArea.repaint();
         textArea.setCaretPosition(textArea.getText().length());
@@ -97,8 +97,8 @@ public class LoggerGUI {
                 Paragraph p = new Paragraph("\n" + (String) o[1] + " \t [" + (String) o[3] + "]\n");
                 p.setFont(headerFont);
 
-                for (String s : (ArrayList<String>) o[2]) {
-                    Paragraph p1 = new Paragraph("\t " + s);
+                for (Object s : (ArrayList<Object>) o[2]) {
+                    Paragraph p1 = new Paragraph("\t " + s.toString());
 
                     p.add(p1);
                 }

@@ -1,6 +1,8 @@
 package greenContextOntology;
 
 import edu.stanford.smi.protegex.owl.model.*;
+ 
+import com.hp.hpl.jena.ontology.OntModel;
 
 
 /**
@@ -51,6 +53,7 @@ public interface Task extends ContextElement {
 
     boolean hasReceivedInfo();
 
+    void setReceivedInfo(TaskInfo newReceivedInfo, OntModel model);
     void setReceivedInfo(TaskInfo newReceivedInfo);
 
 
@@ -62,6 +65,7 @@ public interface Task extends ContextElement {
 
     boolean hasRequestedInfo();
 
+    void setRequestedInfo(TaskInfo newRequestedInfo, OntModel model);
     void setRequestedInfo(TaskInfo newRequestedInfo);
 
     @Override

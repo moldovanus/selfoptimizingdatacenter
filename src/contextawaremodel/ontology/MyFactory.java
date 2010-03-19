@@ -206,7 +206,7 @@ public class MyFactory {
 
 
     public RDFSNamedClass getactuatorClass() {
-        final String uri = "http://www.owl-ontologies.com/Ontology1240758175.owl#actuator";
+        final String uri = "http://www.owl-ontologies.com/Ontology1240758175.owl#Actuator";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFSNamedClass(name);
     }

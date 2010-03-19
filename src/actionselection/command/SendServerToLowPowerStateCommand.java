@@ -16,11 +16,12 @@ import jade.core.Agent;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import contextawaremodel.GlobalVars;
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * @author Me
  */
-public class SendServerToLowPowerStateCommand extends Command {
+public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     private String serverName;
     private Collection oldTasks;
@@ -35,26 +36,26 @@ public class SendServerToLowPowerStateCommand extends Command {
      * Sets the lowPowerState property of a Server to <code>true</code>
      */
     @Override
-    public void execute() {
+    public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         oldTasks = server.getRunningTasks();
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.removeRunningTasks((Task) iterator.next());
+            server.removeRunningTasks((Task) iterator.next(),model);
         }
-        server.setLowPowerState(true);
+        server.setLowPowerState(true,model);
 
     }
 
 
     @Override
-    public void rewind() {
+    public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.addRunningTasks((Task) iterator.next());
+            server.addRunningTasks((Task) iterator.next(),model);
         }
-        server.setLowPowerState(false);
+        server.setLowPowerState(false,model);
     }
 
     @Override

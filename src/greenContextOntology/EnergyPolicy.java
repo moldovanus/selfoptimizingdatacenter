@@ -12,30 +12,13 @@ import java.util.*;
  */
 public interface EnergyPolicy extends Policy {
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#priority
+    // Property http://www.owl-ontologies.com/Datacenter.owl#referenced
 
-    int getPriority();
+    Server getReferenced();
 
-    RDFProperty getPriorityProperty();
+    RDFProperty getReferencedProperty();
 
-    boolean hasPriority();
+    boolean hasReferenced();
 
-    void setPriority(int newPriority);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#references
-
-    Collection getReferences();
-
-    RDFProperty getReferencesProperty();
-
-    boolean hasReferences();
-
-    Iterator listReferences();
-
-    void addReferences(Server newReferences);
-
-    void removeReferences(Server oldReferences);
-
-    void setReferences(Collection newReferences);
+    void setReferenced(Server newReferenced);
 }

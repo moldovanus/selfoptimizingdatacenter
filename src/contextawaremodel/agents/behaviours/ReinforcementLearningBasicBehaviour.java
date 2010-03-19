@@ -5,120 +5,96 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
-//import actionselection.command.DecrementCommand;
-//import actionselection.command.IncrementCommand;
-//import actionselection.command.SetCommand;
+import actionselection.command.IncrementCommand;
+import actionselection.command.DecrementCommand;
+import actionselection.command.SetCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
-import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
+
 import java.awt.Color;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.text.ParseException;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import selfHealingOntology.*;
+
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
+
+
 /**
- *
  * @author Administrator
  */
 public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
-    private OWLModel contextAwareModel;
-    private com.hp.hpl.jena.ontology.OntModel policyConversionModel;
-    private JenaOWLModel owlModel;
     private Memory memory;
-    private Property evaluatePolicyProperty;
-    private Property hasWebServiceProperty;
-    private Property hasAcceptedValueProperty;
     private NumberFormat integerNumberFormat = NumberFormat.getIntegerInstance();
     private double smallestEntropy = 10000;
-    private ObjectProperty associatedResource;
-    private ObjectProperty associatedActuatorProperty;
-    private ObjectProperty associatedActionProperty;
-    private Property actionEffect;
-    private Property sensorValueProperty;
-    private ArrayList<Resource> associatedResources;
-    private ArrayList<Resource> actuatorsList;
-    private ArrayList<Resource> actionsList;
     private ActionsOutputFrame resultsFrame;
     private ReinforcementLearningAgent agent;
+    private SelfHealingProtegeFactory protegeFactory;
     private boolean contextBroken = false;
+    private JenaOWLModel model;
+    private Property evaluatePolicyProperty;
+    private Property hasAcceptedValueProperty;
+    private OntModel policyConversionModel;
 
-    public ReinforcementLearningBasicBehaviour(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, Memory memory) {
+    public ReinforcementLearningBasicBehaviour(Agent a, int interval, OntModel policyConversionModel, JenaOWLModel jenaOWLModel, Memory memory) {
         super(a, interval);
-        agent = (ReinforcementLearningAgent) a;
-        this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
-        this.owlModel = owlModel;
+        agent = (ReinforcementLearningAgent) a;
         this.memory = memory;
-        evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
-        hasWebServiceProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#has-web-service-URI");
-        hasAcceptedValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#AcceptableSensorValue");
-        associatedResource = policyConversionModel.getObjectProperty(GlobalVars.base + "#associated-resource");
-        associatedActuatorProperty = policyConversionModel.getObjectProperty(GlobalVars.base + "#has-actuator");
-        associatedActionProperty = policyConversionModel.getObjectProperty(GlobalVars.base + "#associated-action");
-        actionEffect = policyConversionModel.getProperty(GlobalVars.base + "#effect");
-        sensorValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#has-value-of-service");
-        associatedResources = new ArrayList<Resource>();
-        actuatorsList = new ArrayList<Resource>();
-        actionsList = new ArrayList<Resource>();
         resultsFrame = new ActionsOutputFrame();
-
-
+        evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
+        hasAcceptedValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#acceptableSensorValue");
+        model = jenaOWLModel;
+        protegeFactory = new SelfHealingProtegeFactory(jenaOWLModel);
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 resultsFrame.setVisible(true);
-
             }
         });
     }
 
-    private Pair<Double, Individual> computeEntropy(ContextSnapshot contextSnapshot) {
-        Individual brokenPolicy = null;
+    /**
+     * Rescris compute entropy sa foloseasca protege factory
+     *
+     * @param
+     * @return
+     */
+
+    private Pair<Double, Policy> computeEntropy(ContextSnapshot contextSnapshot) {
+
+
+        Policy brokenPolicy = null;
         double entropy = 0.0;
-        Collection<RDFResource> resources = owlModel.getRDFResources();
+        Collection<Policy> policies = protegeFactory.getAllPolicyInstances();
 
-        for (RDFResource resource : resources) {
-
-            if (resource.getProtegeType().getNamedSuperclasses(true).contains(owlModel.getRDFSNamedClass("policy"))) {
-                Individual policy = policyConversionModel.getIndividual(GlobalVars.base + "#" + resource.getProtegeType().getName() + "I").asIndividual();
-                if (!getEvaluateProp(policy)) {
-                    if (brokenPolicy == null) {
-                        brokenPolicy = policy;
-                    }
-                    //System.err.println("Broken " + policy);
-                    entropy++;
+        for (Policy policy : policies) {
+            if ( !policy.getEvaluatePolicyP(policyConversionModel)) {
+                if (brokenPolicy == null) {
+                    brokenPolicy = policy;
                 }
+                entropy++;
             }
         }
-        //SensorValues currentValues = new SensorValues(policyConversionModel, owlModel, GlobalVars.base);
-        // System.err.println("Entropy : " + entropy + " Broken " + brokenPolicy);
-        //System.err.println("for " + currentValues);
 
-        return new Pair<Double, Individual>(entropy, brokenPolicy);
+        return new Pair<Double, Policy>(entropy, brokenPolicy);
     }
 
     public Boolean hasCycles(HashMap<SensorValues, SensorValues> contexts, SensorValues myContext) {
@@ -129,16 +105,11 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         }
     }
 
-    /*public ContextSnapshot reinforcementLearning(Queue<ContextSnapshot> queue, HashMap<SensorValues, SensorValues> contexts) throws Exception {
+    public ContextSnapshot reinforcementLearning(Queue<ContextSnapshot> queue, HashMap<SensorValues, SensorValues> contexts) throws Exception {
 
         ContextSnapshot context = queue.remove();
 
-        //if values have been changed stop and repair what you can so far 
-        //if (agent.isContextDirty()) {
-        ///   return context;
-        // }
-
-        SensorValues values = new SensorValues(policyConversionModel, owlModel, GlobalVars.base);
+        SensorValues values = new SensorValues(protegeFactory);
         Queue<Command> actions = memory.getActions(values);
 
         //exists
@@ -148,15 +119,16 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             return context;
         }
 
-        context.executeActions();
-        //System.err.println("  Current state : " + new SensorValues(context.getPolicyConversionModel(), context.getJenaOwlModel(), GlobalVars.base));
-        Pair<Double, Individual> contextEvaluationResult = computeEntropy(context);
+        context.executeActions(policyConversionModel);
+        values = new SensorValues(protegeFactory);
+        Pair<Double, Policy> contextEvaluationResult = computeEntropy(context);
 
+        //TODO: modify ==0 ( 0 not equals 0.00001    ( Double )
         if (contextEvaluationResult.getFirst() == 0) {
-            context.rewind();
+            context.rewind(policyConversionModel);
             return context;
         }
-        SensorValues newContext = new SensorValues(policyConversionModel, owlModel, GlobalVars.base);
+        SensorValues newContext = new SensorValues(protegeFactory);
 
         if (!hasCycles(contexts, newContext)) {
 
@@ -165,116 +137,76 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
             if (contextEvaluationResult.getFirst() > 0) {
 
-                Individual brokenPolicy = contextEvaluationResult.getSecond();
-                StmtIterator iterator = brokenPolicy.listProperties(associatedResource);
+                Policy brokenPolicy = contextEvaluationResult.getSecond();
+                Collection<Sensor> associatedResources = brokenPolicy.getAssociatedResources();
 
-                associatedResources.clear();
-                while (iterator.hasNext()) {
-                    associatedResources.add(iterator.nextStatement().getResource());
-                }
-
-                for (Resource attachedResource : associatedResources) {
-
-                    //get the resource as individual from the global model such that getPropertyValue can be called on it
-                    Individual sensor = policyConversionModel.getIndividual(attachedResource.toString());
-
-                    //skip sensor if its value respects the policy
-                    if (sensorHasAcceptableValue(sensor)) {
-                        //      System.err.println(sensor + " respects policy");
+                for (Sensor sensor : associatedResources) {
+                    //skip sensor if its value respects the Policy
+                    if (sensor.getAcceptableSensorValue(policyConversionModel)) {
                         continue;
                     }
 
-                    // System.err.println("Sensor : " + sensor + " value :" + sensor.getPropertyValue(sensorValueProperty).toString().split("\\^")[0]);
+                    Collection<Actuator> associatedActuators = sensor.getAssociatedActuators();
 
-                    //get all actuators associated to the current sensor
-                    StmtIterator associatedActuators = sensor.listProperties(associatedActuatorProperty);
+                    for (Actuator actuator : associatedActuators) {
 
-                    //transfer to array list because if i iterate over and execute actions ConcurrentmodificationException is thrown by iterator
+                        Collection<Action> associatedActions = actuator.getAssociatedActions();
+                        //get all actions possible on this
 
-                    actuatorsList.clear();
-                    while (associatedActuators.hasNext()) {
-                        actuatorsList.add(associatedActuators.nextStatement().getResource());
-                    }
+                        for (Action action : associatedActions) {
 
-                    int actuatorsListLength = actuatorsList.size();
-                    for (int i = 0; i < actuatorsListLength; i++) {
-
-                        Resource attachedActuatorResource = actuatorsList.get(i);
-                        //Resource attachedActuatorResource =
-                        Individual actuator = policyConversionModel.getIndividual(attachedActuatorResource.toString());
-
-                        //System.err.println("Actuator:" + actuator);
-
-                        StmtIterator actuatorActions = actuator.listProperties(associatedActionProperty);
-
-                        //get all actions possible on this 
-
-                        actionsList.clear();
-                        while (actuatorActions.hasNext()) {
-                            actionsList.add(actuatorActions.nextStatement().getResource());
-                        }
-                        for (Resource attachedActionResource : actionsList) {
-                            //Resource attachedActionResource = actuatorActions.nextStatement().getResource();
-                            Individual action = policyConversionModel.getIndividual(attachedActionResource.toString());
-                            String effect = action.getPropertyValue(actionEffect).toString().split("\\^")[0];
-                            //System.err.println("Action:" + action + " Effect: " + effect);
-
+                            String effect = action.getEffect();
                             char firstChar = effect.trim().charAt(0);
+
                             if (firstChar == '+') {
-                                try {
-                                    String numberString = effect.substring(1, effect.length());
-                                    int value = integerNumberFormat.parse(numberString).intValue();
-                                    IncrementCommand incrementCommand = new IncrementCommand(sensor.toString(), sensorValueProperty.toString(), hasWebServiceProperty.toString(), policyConversionModel, value);
-                                    Queue<Command> incrementQueue = new LinkedList(context.getActions());
 
-                                    incrementCommand.execute();
-                                    incrementQueue.add(incrementCommand);
+                                String numberString = effect.substring(1, effect.length());
+                                int value = integerNumberFormat.parse(numberString).intValue();
+                                //TODO: constructor cu value
+                                IncrementCommand incrementCommand = new IncrementCommand(protegeFactory, sensor.getName(), value);
+                                Queue<Command> incrementQueue = new LinkedList(context.getActions());
 
-                                    ContextSnapshot afterIncrement = new ContextSnapshot( incrementQueue);
-                                    queue.add(afterIncrement);
-                                    incrementCommand.rewind();
+                                incrementCommand.execute(policyConversionModel);
+                                incrementQueue.add(incrementCommand);
 
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(ReinforcementLearningBasicBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                ContextSnapshot afterIncrement = new ContextSnapshot(incrementQueue);
+                                queue.add(afterIncrement);
+                                incrementCommand.rewind(policyConversionModel);
+
 
                             } else if (firstChar == '-') {
-                                try {
-                                    String numberString = effect.substring(1, effect.length());
-                                    int value = integerNumberFormat.parse(numberString).intValue();
-                                    Queue<Command> decrementQueue = new LinkedList(context.getActions());
-                                    DecrementCommand decrementCommand = new DecrementCommand(sensor.toString(), sensorValueProperty.toString(), hasWebServiceProperty.toString(), policyConversionModel, value);
-                                    decrementCommand.execute();
-                                    decrementQueue.add(decrementCommand);
-                                    ContextSnapshot afterDecrement = new ContextSnapshot(decrementQueue);
-                                    queue.add(afterDecrement);
-                                    decrementCommand.rewind();
 
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(ReinforcementLearningBasicBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                String numberString = effect.substring(1, effect.length());
+                                int value = integerNumberFormat.parse(numberString).intValue();
+                                Queue<Command> decrementQueue = new LinkedList(context.getActions());
+                                DecrementCommand decrementCommand = new DecrementCommand(protegeFactory, sensor.getName(), value);
+
+                                decrementCommand.execute(policyConversionModel);
+                                decrementQueue.add(decrementCommand);
+
+                                ContextSnapshot afterDecrement = new ContextSnapshot(decrementQueue);
+                                queue.add(afterDecrement);
+                                decrementCommand.rewind(policyConversionModel);
+
                             } else if (firstChar >= '0' && firstChar <= '9') {
-                                try {
-                                    String numberString = effect.substring(0, effect.length());
-                                    int value = integerNumberFormat.parse(numberString).intValue();
 
-                                    SetCommand setCommand = new SetCommand(sensor.toString(), sensorValueProperty.toString(), hasWebServiceProperty.toString(), policyConversionModel, value);
+                                String numberString = effect.substring(0, effect.length());
+                                int value = integerNumberFormat.parse(numberString).intValue();
 
-                                    int before = integerNumberFormat.parse(sensor.getPropertyValue(sensorValueProperty).toString().split("\\^")[0]).intValue();
-                                    setCommand.execute();
-                                    int after = integerNumberFormat.parse(sensor.getPropertyValue(sensorValueProperty).toString().split("\\^")[0]).intValue();
+                                SetCommand setCommand = new SetCommand(protegeFactory, sensor.getName(), value);
 
-                                    if (after != before) {
-                                        Queue<Command> setCommandQueue = new LinkedList(context.getActions());
-                                        setCommandQueue.add(setCommand);
-                                        ContextSnapshot afterSet = new ContextSnapshot( setCommandQueue);
-                                        queue.add(afterSet);
-                                    }
-                                    setCommand.rewind();
+                                int before = sensor.getValueOfService();
+                                setCommand.execute(policyConversionModel);
+                                int after = sensor.getValueOfService();
 
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(ReinforcementLearningBasicBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                                if (after != before) {
+                                    Queue<Command> setCommandQueue = new LinkedList(context.getActions());
+                                    setCommandQueue.add(setCommand);
+                                    ContextSnapshot afterSet = new ContextSnapshot(setCommandQueue);
+                                    queue.add(afterSet);
                                 }
+                                setCommand.rewind(policyConversionModel);
+
                             } else {
                                 throw new Exception("Unsupported effect exception:" + firstChar);
                             }
@@ -284,24 +216,24 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
                 if (queue.peek() == null) {
                     System.err.println("EMPTY QUEUE");
-                    context.rewind();
+                    context.rewind(policyConversionModel);
                     return context;
                 } else {
-                    context.rewind();
+                    context.rewind(policyConversionModel);
                     return reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>(myContexts));
                 }
             }
         } else {
             if (queue.peek() == null) {
                 System.err.println("EMPTY QUEUE");
-                context.rewind();
+                context.rewind(policyConversionModel);
                 return context;
             } else {
-                context.rewind();
+                context.rewind(policyConversionModel);
                 return reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>(contexts));
             }
         }
-        context.rewind();
+        context.rewind(policyConversionModel);
         return context;
     }
 
@@ -314,94 +246,83 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
     private void setBrokenResources(ContextSnapshot contextSnapshot) {
 
-        Map<String, String> brokenResources = GlobalVars.getBrokenResources();
-        Map<String, String> validResources = GlobalVars.getValidResources();
+        Map<String, String> brokenResources = GlobalVars.brokenResources;
+        //Map<String, String> validResources = GlobalVars.validResources;
         brokenResources.clear();
-        validResources.clear();
+        //validResources.clear();
 
         //set for printing
         ArrayList<String> brokenPoliciesNames = new ArrayList<String>();
+        Collection<Policy> policies = protegeFactory.getAllPolicyInstances();
 
-        Collection<RDFResource> resources = owlModel.getRDFResources();
+        for (Policy policy : policies) {
+            Collection<Sensor> sensors = policy.getAssociatedResources();
 
-        for (RDFResource resource : resources) {
+            if (  !policy.getEvaluatePolicyP(policyConversionModel)) {
 
-            if (resource.getProtegeType().getNamedSuperclasses(true).contains(owlModel.getRDFSNamedClass("policy"))) {
-                Individual policy = policyConversionModel.getIndividual(GlobalVars.base + "#" + resource.getProtegeType().getName() + "I").asIndividual();
-                StmtIterator sensorsForBrokenPolicy = policy.listProperties(associatedResource);
-                if (!getEvaluateProp(policy)) {
+                brokenPoliciesNames.add(policy.getName());
 
-                    brokenPoliciesNames.add(resource.getProtegeType().getName());
-
-                    while (sensorsForBrokenPolicy.hasNext()) {
-                        Resource res = sensorsForBrokenPolicy.nextStatement().getResource();
-                        Individual sensor = policyConversionModel.getIndividual(res.toString());
-                        //skip sensor if its value respects the policy
-                        if (!sensorHasAcceptableValue(sensor)) {
-                            brokenResources.put(sensor.getLocalName(), sensor.getLocalName());
-                        } else {
-                            validResources.put(sensor.getLocalName(), sensor.getLocalName());
-                        }
-                    }
-                } else {
-                    while (sensorsForBrokenPolicy.hasNext()) {
-                        Resource res = sensorsForBrokenPolicy.nextStatement().getResource();
-                        Individual sensor = policyConversionModel.getIndividual(res.toString());
-                        //skip sensor if its value respects the policy
-                        validResources.put(sensor.getLocalName(), sensor.getLocalName());
+                for (Sensor sensor : sensors) {
+                    if (!sensor.getAcceptableSensorValue(policyConversionModel)) {
+                        brokenResources.put(sensor.getLocalName(), sensor.getLocalName());
+                    } else {
+                        //validResources.put(sensor.getLocalName(), sensor.getLocalName());
                     }
                 }
-            }
+
+            } //else {
+            //for (Sensor sensor : sensors) {
+            //skip sensor if its value respects the Policy
+            //validResources.put(sensor.getName(), sensor.getName());
+            //}
+            // }
         }
 
         resultsFrame.setBrokenPoliciesList(brokenPoliciesNames);
 
-    }*/
+    }
 
     @Override
     protected void onTick() {
 
+        System.out.println("On tick");
+
         Queue<ContextSnapshot> queue = new LinkedList<ContextSnapshot>();
-        ContextSnapshot initialContext = new ContextSnapshot( new LinkedList<Command>());
-        SensorValues currentValues = new SensorValues(policyConversionModel, owlModel, GlobalVars.base);
+        ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
+        SensorValues currentValues = new SensorValues(protegeFactory);
         queue.add(initialContext);
 
         resultsFrame.setActionsList(null);
         resultsFrame.setBrokenStatesList(currentValues.toArrayList());
 
-       // setBrokenResources(initialContext);
+        setBrokenResources(initialContext);
 
         smallestEntropy = 10000;
         ContextSnapshot contextSnapshot;
-        Pair<Double, Individual> entropyState = computeEntropy(initialContext);
+        Pair<Double, Policy> entropyState = computeEntropy(initialContext);
         if (entropyState.getFirst() != 0) {
             contextBroken = true;
             ArrayList<String> list = new ArrayList<String>();
-            String policyName = entropyState.getSecond().toString();
-            policyName = policyName.substring(policyName.lastIndexOf("#") + 1, policyName.length());
+            String policyName = entropyState.getSecond().getName();
             list.add(policyName);
             agent.getLogger().log(Color.ORANGE, "Broken policy", list);
 
             agent.getLogger().log(Color.red, "Current state", currentValues.toMessage());
 
-            Individual brokenPolicy = entropyState.getSecond();
-            StmtIterator iterator = brokenPolicy.listProperties(associatedResource);
+            Policy brokenPolicy = entropyState.getSecond();
+            Object[] associatedResources = brokenPolicy.getAssociatedResources().toArray();
 
-            associatedResources.clear();
-            while (iterator.hasNext()) {
-                associatedResources.add(iterator.nextStatement().getResource());
-            }
-            ArrayList<String> brokenSensorsList = new ArrayList<String>();
-            for (Resource attachedResource : associatedResources) {
+            ArrayList<Sensor> brokenSensorsList = new ArrayList<Sensor>();
+            int associatedResourcesSize = associatedResources.length;
+            for (int i = 0; i < associatedResourcesSize; i++) {
+
 
                 //get the resource as individual from the global model such that getPropertyValue can be called on it
-                Individual sensor = policyConversionModel.getIndividual(attachedResource.toString());
+                Sensor sensor = (Sensor) associatedResources[i];
 
-                //skip sensor if its value respects the policy
-                if (!sensorHasAcceptableValue(sensor)) {
-                    String sensorName = sensor.toString();
-                    sensorName = sensorName.substring(sensorName.lastIndexOf("#") + 1, sensorName.length());
-                    brokenSensorsList.add(sensorName);
+                //skip sensor if its value respects the Policy
+                if (!sensor.getAcceptableSensorValue(policyConversionModel)) {
+                    brokenSensorsList.add(sensor);
                 }
             }
             agent.getLogger().log(Color.ORANGE, "Sensors that break the policies", brokenSensorsList);
@@ -417,7 +338,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
                 agent.send(msg);
                 agent.setContextDirty(false);
-               // contextSnapshot = reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>());
+                contextSnapshot = reinforcementLearning(queue, new HashMap<SensorValues, SensorValues>());
 
                 msg.setContent("OK");
                 msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
@@ -436,13 +357,13 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 return;
             }
 
-            //do nothing if 
+            //do nothing if
             if (agent.isContextDirty()) {
                 return;
             }
-           // setBrokenResources(contextSnapshot);
+            setBrokenResources(contextSnapshot);
 
-/*            Queue<Command> bestActionsList = contextSnapshot.getActions();
+            Queue<Command> bestActionsList = contextSnapshot.getActions();
 
             ArrayList<String[]> actions = new ArrayList<String[]>(bestActionsList.size());
 
@@ -470,19 +391,16 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             resultsFrame.setActionsList(actions);
 
             memory.memorize(currentValues, bestActionsList);
-            contextSnapshot.executeActions();
+            contextSnapshot.executeActions(policyConversionModel);
             contextSnapshot.executeActionsOnOWL();
 
-            //setBrokenResources(initialContext);
-
-            System.out.println("");*/
+            System.out.println("");
         } else {
-           if ( contextBroken){
-               contextBroken = false;
-               agent.getLogger().log(Color.green, "Current state", currentValues.toMessage());
-           }
+            if (contextBroken) {
+                contextBroken = false;
+                agent.getLogger().log(Color.green, "Current state", currentValues.toMessage());
+            }
         }
-
 
     }
 
@@ -497,13 +415,5 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         return property.getBoolean();
     }
 
-    public boolean sensorHasAcceptableValue(Individual sensor) {
-        Statement property = sensor.getProperty(hasAcceptedValueProperty);
 
-        if (property == null) {
-            return false;
-        }
-
-        return property.getBoolean();
-    }
 }

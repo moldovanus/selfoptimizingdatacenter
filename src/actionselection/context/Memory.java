@@ -5,6 +5,7 @@
 package actionselection.context;
 
 import actionselection.command.Command;
+import actionselection.command.SelfOptimizingCommand;
 import greenContextOntology.ProtegeFactory;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -35,13 +36,14 @@ public class Memory implements Serializable {
         map.clear();
     }
 
-    public void restoreProtegeFactory(ProtegeFactory protegeFactory){
-        for(Queue<Command> queue : map.values()){
-            for(Command command : queue){
-                command.setProtegeFactory(protegeFactory);
+    //Todo : restore also SelfHealingProtegeFactory
+    public void restoreProtegeFactory(ProtegeFactory protegeFactory) {
+        for (Queue<Command> queue : map.values()) {
+            for (Command command : queue) {
+                if (queue instanceof SelfOptimizingCommand) {
+                    ((SelfOptimizingCommand)command).setProtegeFactory(protegeFactory);
+                }
             }
         }
     }
-
-
 }

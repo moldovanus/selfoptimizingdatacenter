@@ -12,30 +12,14 @@ import java.util.*;
  */
 public interface QoSPolicy extends Policy {
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#priority
+  
+ // Property http://www.owl-ontologies.com/Datacenter.owl#referenced
 
-    int getPriority();
+    Task getReferenced();
 
-    RDFProperty getPriorityProperty();
+    RDFProperty getReferencedProperty();
 
-    boolean hasPriority();
+    boolean hasReferenced();
 
-    void setPriority(int newPriority);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#references
-
-    Collection getReferences();
-
-    RDFProperty getReferencesProperty();
-
-    boolean hasReferences();
-
-    Iterator listReferences();
-
-    void addReferences(Task newReferences);
-
-    void removeReferences(Task oldReferences);
-
-    void setReferences(Collection newReferences);
+    void setReferenced(Task newReferenced);
 }

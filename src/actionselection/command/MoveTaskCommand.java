@@ -14,11 +14,12 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import contextawaremodel.GlobalVars;
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * @author Me
  */
-public class MoveTaskCommand extends Command {
+public class MoveTaskCommand extends SelfOptimizingCommand {
 
     private String oldServerName;
     private String newServerName;
@@ -36,23 +37,23 @@ public class MoveTaskCommand extends Command {
      * Moves the task
      */
     @Override
-    public void execute() {
+    public void execute(OntModel model) {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(newServer);
-        oldServer.removeRunningTasks(task);
-        newServer.addRunningTasks(task);
+        oldServer.removeRunningTasks(task,model);
+        newServer.addRunningTasks(task,model);
     }
 
     @Override
-    public void rewind() {
+    public void rewind(OntModel model) {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(oldServer);
-        newServer.removeRunningTasks(task);
-        oldServer.addRunningTasks(task);
+        newServer.removeRunningTasks(task,model);
+        oldServer.addRunningTasks(task,model);
 
     }
 

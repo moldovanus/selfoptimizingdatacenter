@@ -119,6 +119,7 @@ public class ActionsOutputFrame extends javax.swing.JFrame {
 
     /** Creates new form ActionsOutputFrame */
     public ActionsOutputFrame() {
+        super("Actions Output Frame");
         initComponents();
 
     }
@@ -132,7 +133,7 @@ public class ActionsOutputFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-
+        
         currentStatePanel = new javax.swing.JPanel();
         currentStateLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -200,7 +201,7 @@ public class ActionsOutputFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * @param actionsList 
      */
     public void setActionsList(ArrayList<String[]> actionsList) {
         this.actionsList.clear();

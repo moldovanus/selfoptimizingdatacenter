@@ -28,27 +28,6 @@ public interface CPU extends Component {
     void setAssociatedCore(Collection newAssociatedCore);
 
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
-
-    int getMaxAcceptableValue();
-
-    RDFProperty getMaxAcceptableValueProperty();
-
-    boolean hasMaxAcceptableValue();
-
-    void setMaxAcceptableValue(int newMaxAcceptableValue);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
-
-    int getMinAcceptableValue();
-
-    RDFProperty getMinAcceptableValueProperty();
-
-    boolean hasMinAcceptableValue();
-
-    void setMinAcceptableValue(int newMinAcceptableValue);
-
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#numberOfCores
     int getNumberOfCores();
@@ -58,46 +37,5 @@ public interface CPU extends Component {
     boolean hasNumberOfCores();
 
     void setNumberOfCores(int newNumberOfCores);
-    // Property http://www.owl-ontologies.com/Datacenter.owl#optimum
-/*
-    int getOptimum();
-
-    RDFProperty getOptimumProperty();
-
-    boolean hasOptimum();
-
-    void setOptimum(int newOptimum);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#total
-
-    int getTotal();
-
-    RDFProperty getTotalProperty();
-
-    boolean hasTotal();
-
-    void setTotal(int newTotal);
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#used
-
-    int getUsed();
-
-    RDFProperty getUsedProperty();
-
-    boolean hasUsed();
-
-    void setUsed(int newUsed);	 */
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#weight
-
-    float getWeight();
-
-    RDFProperty getWeightProperty();
-
-    boolean hasWeight();
-
-    void setWeight(float newWeight);
+  
 }

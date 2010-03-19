@@ -39,9 +39,9 @@ public class ContextSnapshot implements Comparable {
         }
     }
 
-    public void executeActions() {
+    public void executeActions(OntModel model) {
         for (Command command : actions) {
-            command.execute();
+            command.execute(model);
             System.out.println("Executing " + command.toString());
         }
     }
@@ -55,13 +55,13 @@ public class ContextSnapshot implements Comparable {
     /**
      * Rewinds in the inverse order
      */
-    public void rewind() {
+    public void rewind(OntModel model) {
 
         Object[] commands = actions.toArray();
 
         for (int i = commands.length - 1; i >= 0; i--) {
             Command command = (Command) commands[i];
-            command.rewind();
+            command.rewind(model);
             //System.out.println("Rewinding  " + command.toString());
         }
     }

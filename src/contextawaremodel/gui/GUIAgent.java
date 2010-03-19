@@ -41,7 +41,7 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
             if (!property.getName().equals("has-value-of-service")) {
                 return;
             }
-            Map<String, Map<String, String>> mapping = GlobalVars.getValueMapping();
+            Map<String, Map<String, String>> mapping = GlobalVars.valueMapping;
             String tempValue = resource.getPropertyValue(property).toString();
             final String newValue;
             Map<String, String> valueMapping = mapping.get(resource.getName());

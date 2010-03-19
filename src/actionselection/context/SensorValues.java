@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import selfHealingOntology.SelfHealingProtegeFactory;
+import selfHealingOntology.Sensor;
+
 /**
  *
  * @author Administrator
@@ -32,27 +35,16 @@ public class SensorValues implements Serializable {
         myMap = new HashMap<String, Integer>();
     }
 
-    public SensorValues(OntModel model, JenaOWLModel owlModel, String base) {
+    //TODO : modified to use protege factory
+    /**
+     *
+     * @param protegeFactory
+     */
+    public SensorValues(SelfHealingProtegeFactory protegeFactory) {
         myMap = new HashMap<String, Integer>();
-        Collection<RDFResource> resources = owlModel.getRDFResources();
-        for (RDFResource resource : resources) {
-            if (resource.getProtegeType().getNamedSuperclasses(true).contains(owlModel.getRDFSNamedClass("sensor"))) {
-                String name = resource.getProtegeType().getName();
-                String name1[] = name.split("-");
-                String nameF = "";
-                for (int i = 0; i < name1.length; i++) {
-                    nameF += name1[i].substring(0, 1).toUpperCase() + name1[i].substring(1, name1[i].length());
-                }
-                Individual res = model.getIndividual(base + "#" + nameF + "I").asIndividual();
-                Property resValue = model.getDatatypeProperty(base + "#has-value-of-service");
-                String init = res.getPropertyValue(resValue).toString();
-                try {
-                    myMap.put(name, new Integer((NumberFormat.getIntegerInstance()).parse(init.split("\\^")[0]).intValue()));
-                } catch (ParseException ex) {
-                    Logger.getLogger(SensorValues.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
+        Collection<Sensor> sensors= protegeFactory.getAllSensorInstances();
+        for ( Sensor sensor : sensors){
+             myMap.put(sensor.getName(),sensor.getValueOfService());
         }
     }
 
@@ -108,7 +100,7 @@ public class SensorValues implements Serializable {
     public ArrayList<String> toMessage() {
         ArrayList<String> list = new ArrayList<String>();
         String stringValue = "";
-        Map<String,Map<String,String>> map = GlobalVars.getValueMapping();
+        Map<String,Map<String,String>> map = GlobalVars.valueMapping;
         for (String key : myMap.keySet()) {
             list.add("[ " + key + ": " + myMap.get(key) + "]  ");
         }
@@ -117,7 +109,7 @@ public class SensorValues implements Serializable {
 
     public ArrayList<String[]> toArrayList() {
         ArrayList<String[]> list = new ArrayList<String[]>();
-        Map<String, Map<String, String>> mapping = GlobalVars.getValueMapping();
+        Map<String, Map<String, String>> mapping = GlobalVars.valueMapping;
 
         for (String key : myMap.keySet()) {
             String[] entry = new String[2];

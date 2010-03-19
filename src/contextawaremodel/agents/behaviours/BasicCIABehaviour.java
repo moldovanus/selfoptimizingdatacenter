@@ -25,21 +25,8 @@ public class BasicCIABehaviour extends CyclicBehaviour {
     }
 
     @Override
-    public void action() {/*
-        System.out.println("CIA called");
-        ProtegeFactory factory = new ProtegeFactory(owlModel);
-        if (factory.getMemory("Memory_Test") == null) {
-            Memory memory = factory.createMemory("Memory_Test");
-            memory.setOptimum(512);
-            memory.setTotal(200);
-            memory.setUsed(245);
+    public void action() {
 
-            ACLMessage test = new ACLMessage(ACLMessage.INFORM_IF);
-            test.addReceiver(new AID(GlobalVars.GUIAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-
-            test.setContent(memory.getName());
-            agent.send(test);
-        }*/
         return;
 
         /*

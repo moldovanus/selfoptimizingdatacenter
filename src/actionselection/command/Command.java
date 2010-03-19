@@ -1,41 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package actionselection.command;
-
-import greenContextOntology.ProtegeFactory;
-import java.io.Serializable;
 
 import jade.core.Agent;
 
+import java.io.Serializable;
+
+import com.hp.hpl.jena.ontology.OntModel;
+
 /**
- *
- * @author Administrator
+ * Created by IntelliJ IDEA.
+ * User: Me
+ * Date: Mar 16, 2010
+ * Time: 10:13:12 PM
+ * To change this template use File | Settings | File Templates.
  */
-public abstract class Command implements Serializable {
-    protected transient ProtegeFactory protegeFactory;
-    protected int cost;
-    
-    public Command(  ProtegeFactory protegeFactory) {
-        this.protegeFactory = protegeFactory;
-    }
+public interface Command extends Serializable {
+    public abstract void execute(OntModel model);
 
-    public final void setProtegeFactory(ProtegeFactory protegeFactory) {
-        this.protegeFactory = protegeFactory;
-    }
-
-    public final int getCost() {
-        return cost;
-    }
-
-    public final void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public abstract void execute();
-
-    public abstract void rewind();
+    public abstract void rewind(OntModel model);
 
     @Override
     public abstract String toString();
@@ -45,11 +26,12 @@ public abstract class Command implements Serializable {
     public abstract String[] toStringArray();
 
     public abstract void executeOnX3D(Agent agent);
+
     public abstract void rewindOnX3D(Agent agent);
 
-    //TODO: AM scris equals
-    @Override
-    public boolean equals(Object obj) {
-        return this.toString().equals(obj.toString());
-    }
+    public  int getCost();
+
+    public void setCost(int cost);
+    
+
 }

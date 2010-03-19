@@ -13,13 +13,13 @@ import jade.core.Agent;
 
 import java.io.IOException;
 
-import sun.management.resources.agent;
 import contextawaremodel.GlobalVars;
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * @author Me
  */
-public class DeployTaskCommand extends Command {
+public class DeployTaskCommand extends SelfOptimizingCommand {
 
     private String serverName;
     private String taskName;
@@ -35,21 +35,21 @@ public class DeployTaskCommand extends Command {
      * Sets the task <code>taskName</code> associated server to <code>serverName</code>
      */
     @Override
-    public void execute() {
+    public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
-        server.addRunningTasks(task);
+        server.addRunningTasks(task,model);
     }
 
     /**
      * Implements Undo capability
      */
     @Override
-    public void rewind() {
+    public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        server.removeRunningTasks(task);
+        server.removeRunningTasks(task,model);
     }
 
     @Override

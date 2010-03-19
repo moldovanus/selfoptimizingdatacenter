@@ -4,10 +4,7 @@
  */
 package actionselection.command;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,17 +12,24 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import jade.core.Agent;
+import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import selfHealingOntology.SelfHealingProtegeFactory;
+import selfHealingOntology.Sensor;
+import contextawaremodel.GlobalVars;
+import com.hp.hpl.jena.ontology.OntModel;
+
 
 /**
- *
  * @author Administrator
  */
-/*public class DecrementCommand extends Command {
+
+public class DecrementCommand extends SelfHealingCommand {
 
     private int decrementValue = 1;
+    private String targetSensor;
 
     public int getDecrementValue() {
         return decrementValue;
@@ -35,82 +39,52 @@ import java.util.logging.Logger;
         this.decrementValue = decrementValue;
     }
 
-    public DecrementCommand(String targetIndividualName, String targetPropertyName, String hasWebServicePropertyName, OntModel policyConversionModel, int decrementValue) {
-        super(targetIndividualName, targetPropertyName, hasWebServicePropertyName, policyConversionModel);
+    public DecrementCommand(SelfHealingProtegeFactory protegeFactory, String targetSensor, int decrementValue) {
+        super(protegeFactory);
         this.decrementValue = decrementValue;
+        this.targetSensor = targetSensor;
+    }
+
+ 
+    public void execute(OntModel model) {
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        sensor.setValueOfService(sensor.getValueOfService() - decrementValue,model);
     }
 
     @Override
-    public void execute() {
-        Individual targetIndividual = policyConversionModel.getIndividual(targetIndividualName);
-        Property targetProperty = policyConversionModel.getProperty(targetPropertyName);
+    public void rewind(OntModel model) {
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        sensor.setValueOfService(sensor.getValueOfService() + decrementValue, model);
 
-        RDFNode rdfValue = targetIndividual.getPropertyValue(targetProperty);
-        try {
-            int value = integerNumberFormat.parse(rdfValue.toString().split("\\^")[0]).intValue();
-            value -= decrementValue;
-            targetIndividual.setPropertyValue(targetProperty, policyConversionModel.createLiteralStatement(
-                    targetIndividual, targetProperty, value).getLiteral().as(RDFNode.class));
-        } catch (java.text.ParseException ex) {
-            Logger.getLogger(IncrementCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public void rewind() {
-
-        Individual targetIndividual = policyConversionModel.getIndividual(targetIndividualName);
-        Property targetProperty = policyConversionModel.getProperty(targetPropertyName);
-
-        RDFNode rdfValue = targetIndividual.getPropertyValue(targetProperty);
-        try {
-            int value = integerNumberFormat.parse(rdfValue.toString().split("\\^")[0]).intValue();
-            value += decrementValue;
-            targetIndividual.setPropertyValue(targetProperty, policyConversionModel.createLiteralStatement(
-                    targetIndividual, targetProperty, value).getLiteral().as(RDFNode.class));
-        } catch (java.text.ParseException ex) {
-            Logger.getLogger(IncrementCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
     public String toString() {
-        return "Decrement " + targetIndividualName.substring(targetIndividualName.lastIndexOf("#")+1, targetIndividualName.length()) + " by " + decrementValue;
+        return "Decrement " + targetSensor + " by " + decrementValue;
     }
 
     @Override
     public void executeOnWebService() {
 
-        Individual targetIndividual = policyConversionModel.getIndividual(targetIndividualName);
-        Property targetProperty = policyConversionModel.getProperty(targetPropertyName);
-        Property hasWebServiceProperty = policyConversionModel.getProperty(hasWebServicePropertyName);
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
 
-
-        RDFNode rdfValue = targetIndividual.getPropertyValue(targetProperty);
-
-        int value = 0;
-        try {
-            value = integerNumberFormat.parse(rdfValue.toString().split("\\^")[0]).intValue();
-        } catch (ParseException ex) {
-            Logger.getLogger(IncrementCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int value = sensor.getValueOfService();
 
         String xmldata =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-                "<soap12:Body>" +
-                "<SetSensorValue xmlns=\"http://tempuri.org/\">\n<value>" + Integer.toString(value) + "</value>\n</SetSensorValue> \n" +
-                "</soap12:Body>\n" +
-                "</soap12:Envelope>";
+                        "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+                        "<soap12:Body>" +
+                        "<SetSensorValue xmlns=\"http://tempuri.org/\">\n<value>" + Integer.toString(value) + "</value>\n</SetSensorValue> \n" +
+                        "</soap12:Body>\n" +
+                        "</soap12:Envelope>";
 
         try {
 
-            RDFNode sensorWSUrl = targetIndividual.getPropertyValue(hasWebServiceProperty);
-            if (sensorWSUrl != null) {
-                String wsURL = sensorWSUrl.toString().split("\\^")[0];
-                wsURL = wsURL.substring(0, wsURL.lastIndexOf("/"));
+            String sensorURL = sensor.getWebServiceURI();
+            if (sensorURL != null) {
+
                 //Parse URL and create socket
-                String[] uriDetails = wsURL.split("[:/]+");
+                String[] uriDetails = sensorURL.split("[:/]+");
 
                 String hostname = uriDetails[1];
                 int port = Integer.valueOf(uriDetails[2]);
@@ -156,9 +130,36 @@ import java.util.logging.Logger;
     public String[] toStringArray() {
         String[] array = new String[3];
         array[0] = "Decrement";
-        array[1] = targetIndividualName.substring(targetIndividualName.lastIndexOf('#') + 1, targetIndividualName.length());
+        array[1] = targetSensor;
         array[2] = "" + decrementValue;
         return array;
     }
+
+    public void executeOnX3D(Agent agent) {
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{actionName, sensor.getValueOfService()});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
+    }
+
+    public void rewindOnX3D(Agent agent) {
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        try {
+            message.setContentObject(new Object[]{actionName, sensor.getValueOfService()});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        message.setLanguage("JavaSerialization");
+        agent.send(message);
+    }
 }
-*/

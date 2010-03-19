@@ -31,12 +31,20 @@ public class X3DAgent extends Agent {
     private final Agent selfReference = this;
     private ArrayList<X3DNode> taskLabels;
     private Map<String, X3DNode> tasks;
-    private Map<String, X3DNode> powerMeterLabels;
+    private Map<String, X3DNode> objectLabels;
     private ArrayList<String> wiresIndexes;
     static int server = 1;
-    private float[] activeWireColor = new float[]{0, 0.6f, 0};
-    private float[] activeServerColor = new float[]{0.3451f, 0.7804f, 0.8824f};
-    private float[] inactiveServerColor = new float[]{0.5f, 0.5f, 0.5f};
+
+    public final float POWER_METER_LABEL_TRANSLATION = 0.7f;
+    public final float SENSOR_LABEL_TRANSLATION = 0.4f;
+
+    public final float[] SENSOR_LABEL_COLOR = new float[]{0.5f,0,0};
+    public final float[] TASK_LABEL_COLOR = new float[]{0, 1, 0};
+    public final float[] POWER_LABEL_COLOR = new float[]{0, 0, 0.6f};
+    public final float[] ACTIVE_WIRE_COLOR = new float[]{0, 0.6f, 0};
+    public final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
+    public final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
+    
     private Timer changeWiresBackTimer;
     private Timer fanTimer;
     private Timer sensorAnimationTimer;
@@ -44,30 +52,30 @@ public class X3DAgent extends Agent {
 
     private ActionListener fanListener = new ActionListener() {
 
-              public void actionPerformed(ActionEvent e) {
-                  X3DNode sensor_1 = mainScene.getNamedNode("SensorTube_01_XFORM");
-                  X3DNode sensor_2 = mainScene.getNamedNode("SensorTube_02_XFORM");
-                  SFRotation rotation_1 = (SFRotation) sensor_1.getField("rotation");
-                  SFRotation rotation_2 = (SFRotation) sensor_2.getField("rotation");
-                  float[] values = new float[4];
-                  rotation_1.getValue(values);
-                  values[3] += fanIncrement;
-                  rotation_1.setValue(values);
-                  values[3] *= -1;
-                  rotation_2.setValue(values);
-              }
-          };
+        public void actionPerformed(ActionEvent e) {
+            X3DNode sensor_1 = mainScene.getNamedNode("SensorTube_01_XFORM");
+            X3DNode sensor_2 = mainScene.getNamedNode("SensorTube_02_XFORM");
+            SFRotation rotation_1 = (SFRotation) sensor_1.getField("rotation");
+            SFRotation rotation_2 = (SFRotation) sensor_2.getField("rotation");
+            float[] values = new float[4];
+            rotation_1.getValue(values);
+            values[3] += fanIncrement;
+            rotation_1.setValue(values);
+            values[3] *= -1;
+            rotation_2.setValue(values);
+        }
+    };
 
 
-    private ActionListener animateSensorsListener = new ActionListener(){
+    private ActionListener animateSensorsListener = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
             X3DNode fan = mainScene.getNamedNode("Fan_XFORM");
             SFRotation rotation = (SFRotation) fan.getField("rotation");
-                  float[] values = new float[4];
-                  rotation.getValue(values);
-                  values[3] += 0.1;
-                  rotation.setValue(values);
+            float[] values = new float[4];
+            rotation.getValue(values);
+            values[3] += 0.1;
+            rotation.setValue(values);
         }
     };
 
@@ -111,7 +119,7 @@ public class X3DAgent extends Agent {
         X3DComponent x3dComp = BrowserFactory.createX3DComponent(requestedParameters);
 
         taskLabels = new ArrayList<X3DNode>();
-        powerMeterLabels = new HashMap<String, X3DNode>();
+        objectLabels = new HashMap<String, X3DNode>();
         tasks = new HashMap<String, X3DNode>();
         wiresIndexes = new ArrayList<String>();
 
@@ -154,7 +162,7 @@ public class X3DAgent extends Agent {
                 X3DNode sigla = mainScene.getNamedNode("Sigla_UTCN_XFORM");
                 X3DNode tube = mainScene.getNamedNode("Server_0_tube_XFORM");
                 //X3DNode upperTubeOne = mainScene.getNamedNode("Server_0_tube_01_XFORM");
-               // X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
+                // X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
 
                 SFRotation rotation = (SFRotation) sigla.getField("rotation");
                 SFRotation rotationTube = (SFRotation) tube.getField("rotation");
@@ -170,7 +178,7 @@ public class X3DAgent extends Agent {
                 rotation.setValue(values);
                 rotationTube.setValue(values);
                 //rotation_1.setValue(newValues);
-               // newValues[3] *= -1;
+                // newValues[3] *= -1;
                 //rotation_2.setValue(newValues);
             }
         };
@@ -180,14 +188,14 @@ public class X3DAgent extends Agent {
         timer.start();
 
         for (int i = 1; i <= 5; i++) {
-            addLabelToPowerMeters("" + 1 * 10, "PowerMeterGroup_0" + i);
+            addObjectLabel("Watts: " + 1 * 10, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
         }
 
 
         fanTimer = new Timer(50, fanListener);
         fanTimer.start();
 
-        sensorAnimationTimer = new Timer(100,animateSensorsListener);
+        sensorAnimationTimer = new Timer(100, animateSensorsListener);
         sensorAnimationTimer.start();
 
         ActionListener simulationListener = new ActionListener() {
@@ -197,7 +205,7 @@ public class X3DAgent extends Agent {
                     mainScene.removeRootNode(entry);
                 }
 
-                for (Map.Entry<String, X3DNode> entry : powerMeterLabels.entrySet()) {
+                for (Map.Entry<String, X3DNode> entry : objectLabels.entrySet()) {
                     mainScene.removeRootNode(entry.getValue());
                 }
 
@@ -212,37 +220,37 @@ public class X3DAgent extends Agent {
 
                 addTask("Task_1", "Server_" + index_1, 1);
 
-                mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
-                mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_1);
+                mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
+                mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                 if (index_2 == index_1) {
                     addTask("Task_2", "Server_" + index_1, 0);
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                    addLabelToPowerMeters("20", "PowerMeterGroup_0" + index_1);
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
 
                     if (index_3 == index_1) {
-                        mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1));
-                        mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                        addLabelToPowerMeters("30", "PowerMeterGroup_0" + index_1);
+                        mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
+                        mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
+                        addObjectLabel("Watts: 30", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                         addTask("Task_3", "Server_" + index_1, 2);
                     }
                 } else {
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2));
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_2);
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
+                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_2", "Server_" + index_2, 1);
                 }
 
                 if (index_3 == index_2) {
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2));
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addLabelToPowerMeters("20", "PowerMeterGroup_0" + index_2);
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
+                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_3", "Server_" + index_2, 2);
                 } else {
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_3));
-                    mainScene.removeRootNode(powerMeterLabels.get("PowerMeterGroup_0" + index_3 + "_Inverse"));
-                    addLabelToPowerMeters("10", "PowerMeterGroup_0" + index_3);
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3));
+                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3 + "_Inverse"));
+                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_3, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_3", "Server_" + index_3, 1);
                 }
 
@@ -250,7 +258,7 @@ public class X3DAgent extends Agent {
                     if (i == index_1 || i == index_2 || i == index_3) {
                         continue;
                     }
-                    addLabelToPowerMeters("" + 0, "PowerMeterGroup_0" + i);
+                    addObjectLabel("Watts: " + 0, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
                 }
 
                 //x3dBrowser.replaceWorld(mainScene);
@@ -259,8 +267,10 @@ public class X3DAgent extends Agent {
         };
         Timer simulationTimer = new Timer(1000, simulationListener);
 
-        simulationTimer.start();
+        //simulationTimer.start();
         //addLabelToPowerMeters();
+        addObjectLabel("Temperature : 32", "SensorSphere_01",SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION );
+        addObjectLabel("Humidity : 32", "SensorSphere_02",SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION );
 
         final float[] initialWireColor = new float[]{0.8784f, 0.5608f, 0.3412f};
 
@@ -280,6 +290,7 @@ public class X3DAgent extends Agent {
 
     }
 
+
     private void setWireColor(String serverName, float[] color) {
         String[] elements = serverName.split("_");
         X3DNode material = mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
@@ -287,7 +298,7 @@ public class X3DAgent extends Agent {
         diffuseColor.setValue(color);
     }
 
-    private void addInverseLabelToPowerMeters(String power, String powerMeterName) {
+    private void addInverseObjectLabel(String textLabel, String objectName, float[] color, float translation) {
         //for ( int i = 1; i <= 5; i++){
         X3DNode transform = mainScene.createNode("Transform");
 
@@ -309,7 +320,7 @@ public class X3DAgent extends Agent {
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
 
-        diffuseColor.setValue(new float[]{0, 0, 1});
+        diffuseColor.setValue(color);
         ambientIntensity.setValue(1);
 
         SFNode appearanceMaterial = (SFNode) appearance.getField("material");
@@ -320,7 +331,7 @@ public class X3DAgent extends Agent {
 
         MFString string = (MFString) label.getField("string");
         string.clear();
-        string.insertValue(0, "Watts: " + power);
+        string.insertValue(0, textLabel);
 
         SFNode shapeGeometry = (SFNode) shape.getField("geometry");
         shapeGeometry.setValue(label);
@@ -331,11 +342,11 @@ public class X3DAgent extends Agent {
         SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
         float[] translationValues = new float[3];
 
-        X3DNode powerMeter = mainScene.getNamedNode(powerMeterName + "_XFORM");
+        X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
         SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
         powerMeterTranslation.getValue(translationValues);
         translationValues[1] += 0.2;
-        translationValues[0] -= 0.4;
+        translationValues[0] -= translation;
 
         serverTranslation.setValue(translationValues);
 
@@ -343,13 +354,14 @@ public class X3DAgent extends Agent {
         float[] rotationValues = new float[]{0, 1, 0, 0f};
         serverRotation.setValue(rotationValues);
         mainScene.addRootNode(transform);
-        powerMeterLabels.put(powerMeterName + "_Inverse", transform);
+        objectLabels.put(objectName + "_Inverse", transform);
         //}
     }
+    
 
-    public void addLabelToPowerMeters(String power, String powerMeterName) {
+    public void addObjectLabel(String textLabel, String objectName, float[] color,float translation) {
 
-        removePowerMeterLabel(powerMeterName);
+        removePowerMeterLabel(objectName);
 
         X3DNode transform = mainScene.createNode("Transform");
         X3DNode shape = mainScene.createNode("Shape");
@@ -370,7 +382,7 @@ public class X3DAgent extends Agent {
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
 
-        diffuseColor.setValue(new float[]{0, 0, 1});
+        diffuseColor.setValue(color);
         ambientIntensity.setValue(1);
 
         SFNode appearanceMaterial = (SFNode) appearance.getField("material");
@@ -381,7 +393,7 @@ public class X3DAgent extends Agent {
 
         MFString string = (MFString) label.getField("string");
         string.clear();
-        string.insertValue(0, "Watts: " + power);
+        string.insertValue(0, textLabel);
 
         SFNode shapeGeometry = (SFNode) shape.getField("geometry");
         shapeGeometry.setValue(label);
@@ -392,10 +404,12 @@ public class X3DAgent extends Agent {
         SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
         float[] translationValues = new float[3];
 
-        X3DNode powerMeter = mainScene.getNamedNode(powerMeterName + "_XFORM");
+        X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
         SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
         powerMeterTranslation.getValue(translationValues);
         translationValues[1] += 0.2;
+        translationValues[0] += translation;
+        
         serverTranslation.setValue(translationValues);
 
         SFRotation serverRotation = (SFRotation) transform.getField("rotation");
@@ -403,22 +417,22 @@ public class X3DAgent extends Agent {
         serverRotation.setValue(rotationValues);
 
         mainScene.addRootNode(transform);
-        powerMeterLabels.put(powerMeterName, transform);
-        addInverseLabelToPowerMeters(power, powerMeterName);
+        objectLabels.put(objectName, transform);
+        addInverseObjectLabel(textLabel, objectName, color,translation);
 
     }
 
-    public void removePowerMeterLabel(String powerMeterName) {
-        X3DNode label = powerMeterLabels.remove(powerMeterName);
+    public void removePowerMeterLabel(String objectName) {
+        X3DNode label = objectLabels.remove(objectName);
         if (label == null) {
             return;
         }
-        X3DNode inverseLabel = powerMeterLabels.remove(powerMeterName + "_Inverse");
+        X3DNode inverseLabel = objectLabels.remove(objectName + "_Inverse");
         mainScene.removeRootNode(label);
         mainScene.removeRootNode(inverseLabel);
     }
 
-    private void addLabelToTask(String taskName, X3DNode taskTransform) {
+    private void addLabelToTask(String taskName, X3DNode taskTransform, float[] color) {
 
         X3DNode transform = mainScene.createNode("Transform");
         X3DNode shape = mainScene.createNode("Shape");
@@ -439,7 +453,7 @@ public class X3DAgent extends Agent {
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
 
-        diffuseColor.setValue(new float[]{0, 1, 0});
+        diffuseColor.setValue(color);
         ambientIntensity.setValue(1);
 
         SFNode appearanceMaterial = (SFNode) appearance.getField("material");
@@ -477,14 +491,14 @@ public class X3DAgent extends Agent {
         MFNode taskTransformChildren = (MFNode) taskTransform.getField("children");
         taskTransformChildren.append(transform);
         mainScene.addRootNode(taskTransform);
-
+        //addInverseObjectLabel(taskName, taskTransform.getNodeName(), color);
         taskLabels.add(taskTransform);
     }
 
     public void addTask(String taskName, String serverName, int taskNumber) {
 
         wiresIndexes.add(serverName);
-        setWireColor(serverName, activeWireColor);
+        setWireColor(serverName, ACTIVE_WIRE_COLOR);
         changeWiresBackTimer.restart();
 
         X3DNode newShape = mainScene.createNode("Shape");
@@ -535,9 +549,7 @@ public class X3DAgent extends Agent {
         serverRotation.getValue(rotationValues);
         newTransformRotation.getValue(rotationValues);
 
-        //runningTasks.put(taskName, newTransform);
-
-        addLabelToTask(taskName, newTransform);
+        addLabelToTask(taskName,newTransform,TASK_LABEL_COLOR);
         tasks.put(taskName, newTransform);
     }
 
@@ -550,13 +562,13 @@ public class X3DAgent extends Agent {
         String[] elements = serverName.split("_");
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
-        diffuseColor.setValue(inactiveServerColor);
+        diffuseColor.setValue(INACTIVE_SERVER_COLOR);
     }
 
     public void wakeUpServer(String serverName) {
         String[] elements = serverName.split("_");
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
-        diffuseColor.setValue(activeServerColor);
+        diffuseColor.setValue(ACTIVE_SERVER_COLOR);
     }
 }

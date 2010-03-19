@@ -23,68 +23,29 @@ public class DefaultEnergyPolicy extends DefaultPolicy
     public DefaultEnergyPolicy() {
     }
 
+  
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#referenced
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#priority
-
-    public int getPriority() {
-        return getPropertyValueLiteral(getPriorityProperty()).getInt();
+    public Server getReferenced() {
+        return (Server) getPropertyValueAs(getReferencedProperty(), Server.class);
     }
 
 
-    public RDFProperty getPriorityProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#priority";
+    public RDFProperty getReferencedProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#referenced";
         final String name = getOWLModel().getResourceNameForURI(uri);
         return getOWLModel().getRDFProperty(name);
     }
 
 
-    public boolean hasPriority() {
-        return getPropertyValueCount(getPriorityProperty()) > 0;
+    public boolean hasReferenced() {
+        return getPropertyValueCount(getReferencedProperty()) > 0;
     }
 
 
-    public void setPriority(int newPriority) {
-        setPropertyValue(getPriorityProperty(), new java.lang.Integer(newPriority));
+    public void setReferenced(Server newReferenced) {
+        setPropertyValue(getReferencedProperty(), newReferenced);
     }
-
-
-
-    // Property http://www.owl-ontologies.com/Datacenter.owl#references
-
-    public Collection getReferences() {
-        return getPropertyValuesAs(getReferencesProperty(), Server.class);
-    }
-
-
-    public RDFProperty getReferencesProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#references";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasReferences() {
-        return getPropertyValueCount(getReferencesProperty()) > 0;
-    }
-
-
-    public Iterator listReferences() {
-        return listPropertyValuesAs(getReferencesProperty(), Server.class);
-    }
-
-
-    public void addReferences(Server newReferences) {
-        addPropertyValue(getReferencesProperty(), newReferences);
-    }
-
-
-    public void removeReferences(Server oldReferences) {
-        removePropertyValue(getReferencesProperty(), oldReferences);
-    }
-
-
-    public void setReferences(Collection newReferences) {
-        setPropertyValues(getReferencesProperty(), newReferences);
-    }
+ 
 }
