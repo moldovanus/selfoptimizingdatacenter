@@ -27,6 +27,29 @@ public interface CPU extends Component {
 
     void setAssociatedCore(Collection newAssociatedCore);
 
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
+
+    int getMaxAcceptableValue();
+
+    RDFProperty getMaxAcceptableValueProperty();
+
+    boolean hasMaxAcceptableValue();
+
+    void setMaxAcceptableValue(int newMaxAcceptableValue);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
+
+    int getMinAcceptableValue();
+
+    RDFProperty getMinAcceptableValueProperty();
+
+    boolean hasMinAcceptableValue();
+
+    void setMinAcceptableValue(int newMinAcceptableValue);
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#numberOfCores
     int getNumberOfCores();
 

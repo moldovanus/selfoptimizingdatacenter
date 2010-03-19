@@ -10,6 +10,28 @@ import edu.stanford.smi.protegex.owl.model.*;
  */
 public interface Component extends Resource {
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
+
+    int getMaxAcceptableValue();
+
+    RDFProperty getMaxAcceptableValueProperty();
+
+    boolean hasMaxAcceptableValue();
+
+    void setMaxAcceptableValue(int newMaxAcceptableValue);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
+
+    int getMinAcceptableValue();
+
+    RDFProperty getMinAcceptableValueProperty();
+
+    boolean hasMinAcceptableValue();
+
+    void setMinAcceptableValue(int newMinAcceptableValue);
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#optimum
 
     int getOptimum();

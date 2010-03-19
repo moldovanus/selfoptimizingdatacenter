@@ -65,6 +65,56 @@ public class DefaultCPU extends DefaultComponent
 
 
 
+    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
+
+    public int getMaxAcceptableValue() {
+        return getPropertyValueLiteral(getMaxAcceptableValueProperty()).getInt();
+    }
+
+
+    public RDFProperty getMaxAcceptableValueProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasMaxAcceptableValue() {
+        return getPropertyValueCount(getMaxAcceptableValueProperty()) > 0;
+    }
+
+
+    public void setMaxAcceptableValue(int newMaxAcceptableValue) {
+        setPropertyValue(getMaxAcceptableValueProperty(), new java.lang.Integer(newMaxAcceptableValue));
+    }
+
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
+
+    public int getMinAcceptableValue() {
+        return getPropertyValueLiteral(getMinAcceptableValueProperty()).getInt();
+    }
+
+
+    public RDFProperty getMinAcceptableValueProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasMinAcceptableValue() {
+        return getPropertyValueCount(getMinAcceptableValueProperty()) > 0;
+    }
+
+
+    public void setMinAcceptableValue(int newMinAcceptableValue) {
+        setPropertyValue(getMinAcceptableValueProperty(), new java.lang.Integer(newMinAcceptableValue));
+    }
+
+
+
     // Property http://www.owl-ontologies.com/Datacenter.owl#numberOfCores
 
     public int getNumberOfCores() {

@@ -74,7 +74,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     }
     private double energyRespectanceDegree(Server server){
     double respectance=0.0;
-
     CPU cpu = server.getAssociatedCPU();
     greenContextOntology.Memory memory =server.getAssociatedMemory();
     Storage storage = server.getAssociatedStorage();
@@ -82,17 +81,26 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
      Collection<Component> cores = cpu.getAssociatedCore();
         double diff = 0.0;
     for (Component core : cores){
-         diff = core.getUsed()-core.getOptimum();
-        if (diff>0)
+        diff =0.0;
+        if (core.getUsed()>core.getMaxAcceptableValue())
+         diff = core.getUsed()-core.getMaxAcceptableValue();
+        if (core.getUsed()<core.getMinAcceptableValue())
+         diff = core.getUsed()-core.getMinAcceptableValue();
         cpuCores+= diff;
     }
     cpuCores/=cores.size();
     respectance+=cpu.getWeight()*cpuCores;
-    diff =   memory.getUsed()-memory.getOptimum();
-    if (diff>0)
+    diff = 0.0;
+    if (memory.getUsed()>memory.getMaxAcceptableValue())
+         diff = memory.getUsed()-memory.getMaxAcceptableValue();
+    if (memory.getUsed()<memory.getMinAcceptableValue())
+         diff = memory.getUsed()-memory.getMinAcceptableValue();
     respectance+=memory.getWeight()*diff;
-    diff =  storage.getUsed()-storage.getOptimum();
-    if (diff>0)
+    diff = 0.0;
+    if (storage.getUsed()>storage.getMaxAcceptableValue())
+         diff = storage.getUsed()-storage.getMaxAcceptableValue();
+    if (storage.getUsed()<storage.getMinAcceptableValue())
+         diff = storage.getUsed()-storage.getMinAcceptableValue();
     respectance+=storage.getWeight()*diff;
     return respectance;
     }
@@ -122,14 +130,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
             boolean b = policy.getRespected();
 
-           // if (getEvaluateProp( policyConversionModel.getIndividual(policy.getURI()) ) ){
-           if (!policy.getRespected()) {
+           if (getEvaluateProp( policyConversionModel.getIndividual(policy.getURI()) ) ){
+          // if (!policy.getRespected()) {
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
                 if (policy.hasPriority())
-               // entropy+=policy.getPriority()*energyRespectanceDegree(server);
-                entropy+=policy.getPriority();
+                     entropy+=policy.getPriority()*energyRespectanceDegree(server);
+            //    entropy+=policy.getPriority();
             }
         }
         //System.out.println(" " + entropy);
