@@ -35,15 +35,15 @@ public class X3DAgent extends Agent {
     private ArrayList<String> wiresIndexes;
     static int server = 1;
 
-    public final float POWER_METER_LABEL_TRANSLATION = 0.7f;
-    public final float SENSOR_LABEL_TRANSLATION = 0.4f;
+    public static final float POWER_METER_LABEL_TRANSLATION = 0.7f;
+    public static final float SENSOR_LABEL_TRANSLATION = 0.4f;
 
-    public final float[] SENSOR_LABEL_COLOR = new float[]{0.5f,0,0};
-    public final float[] TASK_LABEL_COLOR = new float[]{0, 1, 0};
-    public final float[] POWER_LABEL_COLOR = new float[]{0, 0, 0.6f};
-    public final float[] ACTIVE_WIRE_COLOR = new float[]{0, 0.6f, 0};
-    public final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
-    public final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
+    public static final float[] SENSOR_LABEL_COLOR = new float[]{0.5f,0,0};
+    public static final float[] TASK_LABEL_COLOR = new float[]{0, 1, 0};
+    public static final float[] POWER_LABEL_COLOR = new float[]{0, 0, 0.6f};
+    public static final float[] ACTIVE_WIRE_COLOR = new float[]{0, 0.6f, 0};
+    public static final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
+    public static final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
     
     private Timer changeWiresBackTimer;
     private Timer fanTimer;
