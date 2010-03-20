@@ -44,7 +44,7 @@ public class SensorValues implements Serializable {
         myMap = new HashMap<String, Integer>();
         Collection<Sensor> sensors= protegeFactory.getAllSensorInstances();
         for ( Sensor sensor : sensors){
-             myMap.put(sensor.getName(),sensor.getValueOfService());
+             myMap.put(sensor.getName().split("#")[1],sensor.getValueOfService());
         }
     }
 

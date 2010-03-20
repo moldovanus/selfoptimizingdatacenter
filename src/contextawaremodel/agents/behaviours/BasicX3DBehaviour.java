@@ -38,13 +38,13 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
                     if (targetAction.equals("addTask")) {
                         agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
                         String[] data = ((String) actionInfo[2]).split("_");
-                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "ServerFrame_0" + (String) data[1], X3DAgent.POWER_LABEL_COLOR, X3DAgent.POWER_METER_LABEL_TRANSLATION);
+                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "PowerMeterGroup_0" + (String) data[1], X3DAgent.POWER_LABEL_COLOR, X3DAgent.POWER_METER_LABEL_TRANSLATION);
                     } else if (targetAction.equals("removeTask")) {
                         agent.removeTask((String) actionInfo[1]);
                     } else if (targetAction.equals("moveTask")) {
                         agent.removeTask((String) actionInfo[1]);
                         String[] data = ((String) actionInfo[2]).split("_");
-                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "ServerFrame_0" + (String) data[1], X3DAgent.POWER_LABEL_COLOR, X3DAgent.POWER_METER_LABEL_TRANSLATION);
+                        agent.addObjectLabel("Watts: " + ((Integer) actionInfo[3] * 10), "PowerMeterGroup_0" + (String) data[1], X3DAgent.POWER_LABEL_COLOR, X3DAgent.POWER_METER_LABEL_TRANSLATION);
                         agent.addTask((String) actionInfo[1], (String) actionInfo[2], (Integer) actionInfo[3]);
                     } else if (targetAction.equals("sendToLowPower")) {
                         agent.sendServerToLowPower((String) actionInfo[1]);

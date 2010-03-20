@@ -31,25 +31,25 @@ public class X3DAgent extends Agent {
     private final Agent selfReference = this;
     private ArrayList<X3DNode> taskLabels;
     private Map<String, X3DNode> tasks;
-    private Map<String, X3DNode> objectLabels;
+    private Map<String, MFString> objectLabels;
     private ArrayList<String> wiresIndexes;
     static int server = 1;
 
     public static final float POWER_METER_LABEL_TRANSLATION = 0.7f;
     public static final float SENSOR_LABEL_TRANSLATION = 0.4f;
 
-    public static final float[] SENSOR_LABEL_COLOR = new float[]{0.5f,0,0};
+    public static final float[] SENSOR_LABEL_COLOR = new float[]{0.5f, 0, 0};
     public static final float[] TASK_LABEL_COLOR = new float[]{0, 1, 0};
     public static final float[] POWER_LABEL_COLOR = new float[]{0, 0, 0.6f};
     public static final float[] ACTIVE_WIRE_COLOR = new float[]{0, 0.6f, 0};
     public static final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
     public static final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
-    
+
     private Timer changeWiresBackTimer;
     private Timer fanTimer;
     private Timer sensorAnimationTimer;
     private float fanIncrement = 0.1f;
-
+    private ExternalBrowser x3dBrowser;
     private ActionListener fanListener = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
@@ -119,7 +119,7 @@ public class X3DAgent extends Agent {
         X3DComponent x3dComp = BrowserFactory.createX3DComponent(requestedParameters);
 
         taskLabels = new ArrayList<X3DNode>();
-        objectLabels = new HashMap<String, X3DNode>();
+        objectLabels = new HashMap<String, MFString>();
         tasks = new HashMap<String, X3DNode>();
         wiresIndexes = new ArrayList<String>();
 
@@ -131,7 +131,7 @@ public class X3DAgent extends Agent {
         contentPane.add(x3dPanel, BorderLayout.CENTER);
 
         // Get an external browser
-        ExternalBrowser x3dBrowser = x3dComp.getBrowser();
+        x3dBrowser = x3dComp.getBrowser();
 
         boolean useXj3D = true;
 
@@ -161,25 +161,16 @@ public class X3DAgent extends Agent {
             public void actionPerformed(ActionEvent e) {
                 X3DNode sigla = mainScene.getNamedNode("Sigla_UTCN_XFORM");
                 X3DNode tube = mainScene.getNamedNode("Server_0_tube_XFORM");
-                //X3DNode upperTubeOne = mainScene.getNamedNode("Server_0_tube_01_XFORM");
-                // X3DNode upperTubeTwo = mainScene.getNamedNode("Server_0_tube_02_XFORM");
 
                 SFRotation rotation = (SFRotation) sigla.getField("rotation");
                 SFRotation rotationTube = (SFRotation) tube.getField("rotation");
-                //SFRotation rotation_1 = (SFRotation) upperTubeOne.getField("rotation");
-                //SFRotation rotation_2 = (SFRotation) upperTubeTwo.getField("rotation");
+
                 float[] values = new float[4];
                 rotation.getValue(values);
                 values[3] += 0.1;
 
-                //float[] newValues = new float[]{1, 0, 0, 0};
-                //rotation_1.getValue(newValues);
-                //newValues[3] += 0.1;
                 rotation.setValue(values);
                 rotationTube.setValue(values);
-                //rotation_1.setValue(newValues);
-                // newValues[3] *= -1;
-                //rotation_2.setValue(newValues);
             }
         };
 
@@ -201,7 +192,7 @@ public class X3DAgent extends Agent {
         ActionListener simulationListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                for (X3DNode entry : taskLabels) {
+                /*for (X3DNode entry : taskLabels) {
                     mainScene.removeRootNode(entry);
                 }
 
@@ -222,35 +213,35 @@ public class X3DAgent extends Agent {
 
                 mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
                 mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                 if (index_2 == index_1) {
                     addTask("Task_2", "Server_" + index_1, 0);
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
 
                     if (index_3 == index_1) {
                         mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
                         mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                        addObjectLabel("Watts: 30", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                        addObjectLabel("Watts: 30", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                         addTask("Task_3", "Server_" + index_1, 2);
                     }
                 } else {
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_2", "Server_" + index_2, 1);
                 }
 
                 if (index_3 == index_2) {
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_3", "Server_" + index_2, 2);
                 } else {
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3));
                     mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3 + "_Inverse"));
-                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_3, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_3, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                     addTask("Task_3", "Server_" + index_3, 1);
                 }
 
@@ -258,19 +249,19 @@ public class X3DAgent extends Agent {
                     if (i == index_1 || i == index_2 || i == index_3) {
                         continue;
                     }
-                    addObjectLabel("Watts: " + 0, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR,POWER_METER_LABEL_TRANSLATION);
+                    addObjectLabel("Watts: " + 0, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
                 }
 
                 //x3dBrowser.replaceWorld(mainScene);
-
+               */
             }
         };
         Timer simulationTimer = new Timer(1000, simulationListener);
 
         //simulationTimer.start();
         //addLabelToPowerMeters();
-        addObjectLabel("Temperature : 32", "SensorSphere_01",SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION );
-        addObjectLabel("Humidity : 32", "SensorSphere_02",SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION );
+        addObjectLabel("Temperature : 32", "SensorSphere_01", SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
+        addObjectLabel("Humidity : 21", "SensorSphere_02", SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
 
         final float[] initialWireColor = new float[]{0.8784f, 0.5608f, 0.3412f};
 
@@ -299,138 +290,158 @@ public class X3DAgent extends Agent {
     }
 
     private void addInverseObjectLabel(String textLabel, String objectName, float[] color, float translation) {
-        //for ( int i = 1; i <= 5; i++){
-        X3DNode transform = mainScene.createNode("Transform");
 
-        X3DNode shape = mainScene.createNode("Shape");
-        X3DNode label = mainScene.createNode("Text");
-        X3DNode appearance = mainScene.createNode("Appearance");
-        X3DNode material = mainScene.createNode("Material");
-        X3DNode fontStyle = mainScene.createNode("FontStyle");
+        if (!objectLabels.containsKey(objectName + "_Inverse")) {
+            
+            X3DNode transform = mainScene.createNode("Transform");
 
-        MFString justify = (MFString) fontStyle.getField("justify");
-        SFFloat size = (SFFloat) fontStyle.getField("size");
+            X3DNode shape = mainScene.createNode("Shape");
+            X3DNode label = mainScene.createNode("Text");
+            X3DNode appearance = mainScene.createNode("Appearance");
+            X3DNode material = mainScene.createNode("Material");
+            X3DNode fontStyle = mainScene.createNode("FontStyle");
 
-        justify.set1Value(0, "MIDDLE");
-        justify.set1Value(1, "MIDDLE");
-        size.setValue(0.15f);
-        SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
-        fontStyleAttribute.setValue(fontStyle);
+            MFString justify = (MFString) fontStyle.getField("justify");
+            SFFloat size = (SFFloat) fontStyle.getField("size");
 
-        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
-        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+            justify.set1Value(0, "MIDDLE");
+            justify.set1Value(1, "MIDDLE");
+            size.setValue(0.15f);
+            SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
+            fontStyleAttribute.setValue(fontStyle);
 
-        diffuseColor.setValue(color);
-        ambientIntensity.setValue(1);
+            SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+            SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
 
-        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
-        appearanceMaterial.setValue(material);
+            diffuseColor.setValue(color);
+            ambientIntensity.setValue(1);
 
-        SFNode shapeAppearance = (SFNode) shape.getField("appearance");
-        shapeAppearance.setValue(appearance);
+            SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+            appearanceMaterial.setValue(material);
 
-        MFString string = (MFString) label.getField("string");
-        string.clear();
-        string.insertValue(0, textLabel);
+            SFNode shapeAppearance = (SFNode) shape.getField("appearance");
+            shapeAppearance.setValue(appearance);
 
-        SFNode shapeGeometry = (SFNode) shape.getField("geometry");
-        shapeGeometry.setValue(label);
+            MFString string = (MFString) label.getField("string");
+            string.clear();
+            string.insertValue(0, textLabel);
 
-        MFNode newTransformChildren = (MFNode) transform.getField("children");
-        newTransformChildren.append(shape);
+            SFNode shapeGeometry = (SFNode) shape.getField("geometry");
+            shapeGeometry.setValue(label);
 
-        SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
-        float[] translationValues = new float[3];
+            MFNode newTransformChildren = (MFNode) transform.getField("children");
+            newTransformChildren.append(shape);
 
-        X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
-        SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
-        powerMeterTranslation.getValue(translationValues);
-        translationValues[1] += 0.2;
-        translationValues[0] -= translation;
+            SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
+            float[] translationValues = new float[3];
 
-        serverTranslation.setValue(translationValues);
+            X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
+            SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
+            powerMeterTranslation.getValue(translationValues);
+            translationValues[1] += 0.2;
+            translationValues[0] -= translation;
 
-        SFRotation serverRotation = (SFRotation) transform.getField("rotation");
-        float[] rotationValues = new float[]{0, 1, 0, 0f};
-        serverRotation.setValue(rotationValues);
-        mainScene.addRootNode(transform);
-        objectLabels.put(objectName + "_Inverse", transform);
-        //}
-    }
-    
+            serverTranslation.setValue(translationValues);
 
-    public void addObjectLabel(String textLabel, String objectName, float[] color,float translation) {
-
-        removePowerMeterLabel(objectName);
-
-        X3DNode transform = mainScene.createNode("Transform");
-        X3DNode shape = mainScene.createNode("Shape");
-        X3DNode label = mainScene.createNode("Text");
-        X3DNode appearance = mainScene.createNode("Appearance");
-        X3DNode material = mainScene.createNode("Material");
-        X3DNode fontStyle = mainScene.createNode("FontStyle");
-
-        MFString justify = (MFString) fontStyle.getField("justify");
-        SFFloat size = (SFFloat) fontStyle.getField("size");
-
-        justify.set1Value(0, "MIDDLE");
-        justify.set1Value(1, "MIDDLE");
-        size.setValue(0.15f);
-        SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
-        fontStyleAttribute.setValue(fontStyle);
-
-        SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
-        SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
-
-        diffuseColor.setValue(color);
-        ambientIntensity.setValue(1);
-
-        SFNode appearanceMaterial = (SFNode) appearance.getField("material");
-        appearanceMaterial.setValue(material);
-
-        SFNode shapeAppearance = (SFNode) shape.getField("appearance");
-        shapeAppearance.setValue(appearance);
-
-        MFString string = (MFString) label.getField("string");
-        string.clear();
-        string.insertValue(0, textLabel);
-
-        SFNode shapeGeometry = (SFNode) shape.getField("geometry");
-        shapeGeometry.setValue(label);
-
-        MFNode newTransformChildren = (MFNode) transform.getField("children");
-        newTransformChildren.append(shape);
-
-        SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
-        float[] translationValues = new float[3];
-
-        X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
-        SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
-        powerMeterTranslation.getValue(translationValues);
-        translationValues[1] += 0.2;
-        translationValues[0] += translation;
-        
-        serverTranslation.setValue(translationValues);
-
-        SFRotation serverRotation = (SFRotation) transform.getField("rotation");
-        float[] rotationValues = new float[]{0, 1, 0, 3f};
-        serverRotation.setValue(rotationValues);
-
-        mainScene.addRootNode(transform);
-        objectLabels.put(objectName, transform);
-        addInverseObjectLabel(textLabel, objectName, color,translation);
-
+            SFRotation serverRotation = (SFRotation) transform.getField("rotation");
+            float[] rotationValues = new float[]{0, 1, 0, 0f};
+            serverRotation.setValue(rotationValues);
+            mainScene.addRootNode(transform);
+            objectLabels.put(objectName + "_Inverse", string);
+        } else {
+            MFString string = objectLabels.get(objectName + "_Inverse");
+            //string.clear();
+            string.set1Value(0,textLabel);
+        }
     }
 
-    public void removePowerMeterLabel(String objectName) {
-        X3DNode label = objectLabels.remove(objectName);
+
+    public void addObjectLabel(String textLabel, String objectName, float[] color, float translation) {
+
+
+//        removeObjectLabel(objectName);
+        if (!objectLabels.containsKey(objectName)) {
+            X3DNode transform = mainScene.createNode("Transform");
+            X3DNode shape = mainScene.createNode("Shape");
+            X3DNode label = mainScene.createNode("Text");
+            X3DNode appearance = mainScene.createNode("Appearance");
+            X3DNode material = mainScene.createNode("Material");
+            X3DNode fontStyle = mainScene.createNode("FontStyle");
+
+            MFString justify = (MFString) fontStyle.getField("justify");
+            SFFloat size = (SFFloat) fontStyle.getField("size");
+
+            justify.set1Value(0, "MIDDLE");
+            justify.set1Value(1, "MIDDLE");
+            size.setValue(0.15f);
+            SFNode fontStyleAttribute = (SFNode) label.getField("fontStyle");
+            fontStyleAttribute.setValue(fontStyle);
+
+            SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
+            SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
+
+            diffuseColor.setValue(color);
+            ambientIntensity.setValue(1);
+
+            SFNode appearanceMaterial = (SFNode) appearance.getField("material");
+            appearanceMaterial.setValue(material);
+
+            SFNode shapeAppearance = (SFNode) shape.getField("appearance");
+            shapeAppearance.setValue(appearance);
+
+            MFString string = (MFString) label.getField("string");
+            string.clear();
+            string.insertValue(0, textLabel);
+
+            SFNode shapeGeometry = (SFNode) shape.getField("geometry");
+            shapeGeometry.setValue(label);
+
+            MFNode newTransformChildren = (MFNode) transform.getField("children");
+            newTransformChildren.append(shape);
+
+            SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
+            float[] translationValues = new float[3];
+
+            X3DNode powerMeter = mainScene.getNamedNode(objectName + "_XFORM");
+            SFVec3f powerMeterTranslation = (SFVec3f) powerMeter.getField("translation");
+            powerMeterTranslation.getValue(translationValues);
+            translationValues[1] += 0.2;
+            translationValues[0] += translation;
+
+            serverTranslation.setValue(translationValues);
+
+            SFRotation serverRotation = (SFRotation) transform.getField("rotation");
+            float[] rotationValues = new float[]{0, 1, 0, 3f};
+            serverRotation.setValue(rotationValues);
+
+            mainScene.addRootNode(transform);
+            objectLabels.put(objectName, string);
+            addInverseObjectLabel(textLabel, objectName, color, translation);
+        } else {
+            MFString string = objectLabels.get(objectName);
+            //string.clear();
+            string.set1Value(0,textLabel);
+            addInverseObjectLabel(textLabel, objectName, color, translation);
+        }
+    }
+
+    /*public void removeObjectLabel(String objectName) {
+
+        //X3DNode label = objectLabels.remove(objectName);
+        MFString label = objectLabels.remove(objectName);
         if (label == null) {
             return;
         }
-        X3DNode inverseLabel = objectLabels.remove(objectName + "_Inverse");
-        mainScene.removeRootNode(label);
-        mainScene.removeRootNode(inverseLabel);
-    }
+               label.clear();
+        label.insertValue(0,"SSSSSSSSSSSS");
+        //X3DNode inverseLabel = objectLabels.remove(objectName + "_Inverse");
+        MFString inverseLabel = objectLabels.remove(objectName + "_Inverse");
+        inverseLabel.clear();
+        inverseLabel.insertValue(0,"FFFFF");
+        //mainScene.removeRootNode(label);
+       // mainScene.removeRootNode(inverseLabel);
+    }*/
+
 
     private void addLabelToTask(String taskName, X3DNode taskTransform, float[] color) {
 
@@ -549,7 +560,7 @@ public class X3DAgent extends Agent {
         serverRotation.getValue(rotationValues);
         newTransformRotation.getValue(rotationValues);
 
-        addLabelToTask(taskName,newTransform,TASK_LABEL_COLOR);
+        addLabelToTask(taskName, newTransform, TASK_LABEL_COLOR);
         tasks.put(taskName, newTransform);
     }
 

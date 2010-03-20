@@ -80,7 +80,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"moveTask",taskName, newServerName, server.getRunningTasks().size() + 1});
+            message.setContentObject(new Object[]{"moveTask",taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -95,7 +95,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"removeTask",taskName});
+            message.setContentObject(new Object[]{"removeTask",taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

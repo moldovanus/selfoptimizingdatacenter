@@ -63,9 +63,17 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         hasAcceptedValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#acceptableSensorValue");
         model = jenaOWLModel;
         protegeFactory = new SelfHealingProtegeFactory(jenaOWLModel);
+
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+
+                //sinchronize X3D display values with ontology values
+                Collection<Sensor> sensors = protegeFactory.getAllSensorInstances();
+                for (Sensor sensor : sensors) {
+                    SetCommand command = new SetCommand(protegeFactory, sensor.getName(), sensor.getValueOfService());
+                    command.executeOnX3D(agent);
+                }
                 resultsFrame.setVisible(true);
             }
         });
@@ -86,7 +94,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         Collection<Policy> policies = protegeFactory.getAllPolicyInstances();
 
         for (Policy policy : policies) {
-            if ( !policy.getEvaluatePolicyP(policyConversionModel)) {
+            if (!policy.getEvaluatePolicyP(policyConversionModel)) {
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
@@ -258,7 +266,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         for (Policy policy : policies) {
             Collection<Sensor> sensors = policy.getAssociatedResources();
 
-            if (  !policy.getEvaluatePolicyP(policyConversionModel)) {
+            if (!policy.getEvaluatePolicyP(policyConversionModel)) {
 
                 brokenPoliciesNames.add(policy.getName());
 
@@ -393,8 +401,8 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             memory.memorize(currentValues, bestActionsList);
             contextSnapshot.executeActions(policyConversionModel);
             contextSnapshot.executeActionsOnOWL();
-
-            System.out.println("");
+            contextSnapshot.executeActionsOnX3D(agent);
+            
         } else {
             if (contextBroken) {
                 contextBroken = false;

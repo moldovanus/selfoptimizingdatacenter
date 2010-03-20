@@ -111,21 +111,7 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //	}
             //};
 
-            //synchronization factor
-            PelletOptions.USE_TRACING = true;
-
-            Model rawModel = ModelFactory.createDefaultModel();
-// create Pellet reasoner
-            Reasoner r = PelletReasonerFactory.theInstance().create();
-// create an inferencing model using the raw model
-            InfModel model = ModelFactory.createInfModel(r, rawModel);
-
-// get the underlying Pellet graph
-            PelletInfGraph pellet = (PelletInfGraph) model.getGraph();
-// check for inconsistency
-            boolean consistent = pellet.isConsistent();
-  
-
+          
             //initialize the simulator GUI
             //this.smw = new SimulatorMainWindow( new SimulatedContext(this.owlModel, this) );
             //this.smw.setLocationRelativeTo(null);
@@ -137,17 +123,17 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //star the Context Interpreting Agent
             AgentContainer container = (AgentContainer) getContainerController(); // get a container controller for creating new agents
             //createNewAgent(Name, Class name, arguments to the agent)
-            //cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
-            //cia.start();
+            cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
+            cia.start();
 
-            //gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
-            //gui.start();
+            gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
+            gui.start();
 
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
 
-            //x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModelDataCenter});
-            //x3d.start();
+            x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModelDataCenter});
+            x3d.start();
             //star the Request Processing Agent
 
             //createNewAgent(Name, Class name, arguments to the agent)

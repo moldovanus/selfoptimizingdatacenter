@@ -63,7 +63,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     public void executeOnX3D(Agent agent) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"wakeUpServer", serverName});
+            message.setContentObject(new Object[]{"wakeUpServer", serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -75,7 +75,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     public void rewindOnX3D(Agent agent) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"sendToLowPower", serverName});
+            message.setContentObject(new Object[]{"sendToLowPower", serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

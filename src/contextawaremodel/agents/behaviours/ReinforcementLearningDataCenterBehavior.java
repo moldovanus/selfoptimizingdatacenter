@@ -122,7 +122,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             Task task = policy.getReferenced();
             if (!policy.getRespected(policyConversionModel)) {
                 //if (!task.requestsSatisfied()) {
-                System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
+                //System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
@@ -141,7 +141,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             // if (getEvaluateProp( policyConversionModel.getIndividual(policy.getURI()) ) ){
             if (!policy.getRespected(policyConversionModel)) {
-                System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
+                //System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }

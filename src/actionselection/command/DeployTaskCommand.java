@@ -74,7 +74,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"addTask",taskName, serverName, server.getRunningTasks().size() + 1});
+            message.setContentObject(new Object[]{"addTask",taskName.split("#")[1], serverName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -89,7 +89,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"removeTask",taskName});
+            message.setContentObject(new Object[]{"removeTask",taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
