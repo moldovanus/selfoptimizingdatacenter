@@ -43,7 +43,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         while (iterator.hasNext()) {
             server.removeRunningTasks((Task) iterator.next(),model);
         }
-        server.setLowPowerState(true,model);
+        server.setIsInLowPowerState(true,model);
 
     }
 
@@ -55,7 +55,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         while (iterator.hasNext()) {
             server.addRunningTasks((Task) iterator.next(),model);
         }
-        server.setLowPowerState(false,model);
+        server.setIsInLowPowerState(false,model);
     }
 
     @Override

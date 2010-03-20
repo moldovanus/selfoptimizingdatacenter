@@ -83,28 +83,31 @@ public class DefaultServer extends DefaultResource
         setPropertyValue(getAssociatedStorageProperty(), newAssociatedStorage);
     }
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
-    public boolean getLowPowerState() {
-        return getPropertyValueLiteral(getLowPowerStateProperty()).getBoolean();
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
+
+    public boolean getIsInLowPowerState() {
+        return getPropertyValueLiteral(getIsInLowPowerStateProperty()).getBoolean();
     }
 
-    public RDFProperty getLowPowerStateProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#lowPowerState";
+
+    public RDFProperty getIsInLowPowerStateProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState";
         final String name = getOWLModel().getResourceNameForURI(uri);
         return getOWLModel().getRDFProperty(name);
     }
 
-    public boolean hasLowPowerState() {
-        return getPropertyValueCount(getLowPowerStateProperty()) > 0;
+
+    public boolean hasIsInLowPowerState() {
+        return getPropertyValueCount(getIsInLowPowerStateProperty()) > 0;
     }
 
-    public void setLowPowerState(boolean newLowPowerState, OntModel model) {
-        setPropertyValue(getLowPowerStateProperty(), new java.lang.Boolean(newLowPowerState), model);
+
+    public void setIsInLowPowerState(boolean newIsInLowPowerState,OntModel ontModel) {
+        setPropertyValue(getIsInLowPowerStateProperty(), new java.lang.Boolean(newIsInLowPowerState),ontModel);
     }
 
-    public void setLowPowerState(boolean newLowPowerState) {
-        setPropertyValue(getLowPowerStateProperty(), new java.lang.Boolean(newLowPowerState));
-    }
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
@@ -347,7 +350,7 @@ public class DefaultServer extends DefaultResource
 
         String description;
         description = "Server " + this.getName() + "\n";
-        description += "Inactive = " + this.getLowPowerState() + "\n";
+        description += "Inactive = " + this.getIsInLowPowerState() + "\n";
         Collection cores = this.getAssociatedCPU().getAssociatedCore();
         Iterator iterator = cores.iterator();
 

@@ -41,15 +41,16 @@ public interface Server extends Resource {
 
     void setAssociatedStorage(Storage newAssociatedStorage);
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#lowPowerState
-    boolean getLowPowerState();
 
-    RDFProperty getLowPowerStateProperty();
+    // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
 
-    boolean hasLowPowerState();
+    boolean getIsInLowPowerState();
 
-    void setLowPowerState(boolean newLowPowerState, OntModel model);
-    void setLowPowerState(boolean newLowPowerState );
+    RDFProperty getIsInLowPowerStateProperty();
+
+    boolean hasIsInLowPowerState();
+
+    void setIsInLowPowerState(boolean newIsInLowPowerState,OntModel ontModel);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
@@ -62,7 +63,7 @@ public interface Server extends Resource {
     Iterator listRunningTasks();
 
     void addRunningTasks(Task newRunningTasks,OntModel model);
-    void addRunningTasks(Task newRunningTasks);
+    //void addRunningTasks(Task newRunningTasks);
 
     void removeRunningTasks(Task oldRunningTasks, OntModel model);
     void removeRunningTasks(Task oldRunningTasks);

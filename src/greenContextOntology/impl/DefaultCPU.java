@@ -89,26 +89,5 @@ public class DefaultCPU extends DefaultComponent
         setPropertyValue(getNumberOfCoresProperty(), new java.lang.Integer(newNumberOfCores));
     }
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#weight
-
-    public float getWeight() {
-        return getPropertyValueLiteral(getWeightProperty()).getFloat();
-    }
-
-
-    public RDFProperty getWeightProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#weight";
-        final String name = getOWLModel().getResourceNameForURI(uri);
-        return getOWLModel().getRDFProperty(name);
-    }
-
-
-    public boolean hasWeight() {
-        return getPropertyValueCount(getWeightProperty()) > 0;
-    }
-
-
-    public void setWeight(float newWeight) {
-        setPropertyValue(getWeightProperty(), new java.lang.Float(newWeight));
-    }
+    
 }

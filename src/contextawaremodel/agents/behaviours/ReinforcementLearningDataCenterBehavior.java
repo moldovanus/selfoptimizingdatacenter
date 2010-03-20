@@ -106,8 +106,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         for (QoSPolicy policy : qosPolicies) {
             Task task = policy.getReferenced();
-            //if (!Policy.getRespected()) {
-            if (!task.requestsSatisfied()) {
+            if (!policy.getRespected(policyConversionModel)) {
+            //if (!task.requestsSatisfied()) {
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
@@ -120,7 +120,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Collection<EnergyPolicy> policies = protegeFactory.getAllEnergyPolicyInstances();
         for (EnergyPolicy policy : policies) {
             Server server = policy.getReferenced();
-            if (server.getLowPowerState()) {
+            if (server.getIsInLowPowerState( )) {
                 continue;
             }
 
@@ -182,7 +182,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             if (task != null) {
                 // deploy actions
                 for (Server serverInstance : servers) {
-                    if (!serverInstance.getLowPowerState() && serverInstance.hasResourcesFor(task )
+                    if (!serverInstance.getIsInLowPowerState( ) && serverInstance.hasResourcesFor(task )
                             && !serverInstance.containsTask(task) && !task.isRunning()) {
                         Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
@@ -206,12 +206,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 // move actions
                 Collection<Server> servers1 = protegeFactory.getAllServerInstances();
                 for (Server serverInstance : servers) {
-                    if (!serverInstance.getLowPowerState()) {
+                    if (!serverInstance.getIsInLowPowerState( )) {
                         Iterator it = serverInstance.listRunningTasks();
                         while (it.hasNext()) {
                             Task myTask = (DefaultTask) it.next();
                             for (Server otherServerInstance : servers1) {
-                                if (!otherServerInstance.getLowPowerState() && otherServerInstance.hasResourcesFor(myTask)
+                                if (!otherServerInstance.getIsInLowPowerState( ) && otherServerInstance.hasResourcesFor(myTask)
                                         && !otherServerInstance.containsTask(myTask)) {
                                     Command newAction = new MoveTaskCommand(protegeFactory, serverInstance.getName(), otherServerInstance.getName(), myTask.getName());
                                     ///de vazut daca a fost posibila
@@ -239,7 +239,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 while (it.hasNext()) {
                     Task myTask = (DefaultTask) it.next();
                     for (Server serverInstance : servers) {
-                        if (!serverInstance.getLowPowerState() && !serverInstance.containsTask(myTask)
+                        if (!serverInstance.getIsInLowPowerState( ) && !serverInstance.containsTask(myTask)
                                 && serverInstance.hasResourcesFor(myTask)) {
                             Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance.getName(), myTask.getName());
                             ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
@@ -262,7 +262,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             // wake up
 
             for (Server serverInstance : servers) {
-                if (serverInstance.getLowPowerState() && task != null && serverInstance.hasResourcesFor(task)) {
+                if (serverInstance.getIsInLowPowerState( ) && task != null && serverInstance.hasResourcesFor(task)) {
                     Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                     //verific peste tot daca nu cumva exista actiunea
@@ -280,7 +280,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
             // sleep
             for (Server serverInstance : servers) {
-                if (!serverInstance.getLowPowerState() && !serverInstance.hasRunningTasks()) {
+                if (!serverInstance.getIsInLowPowerState( ) && !serverInstance.hasRunningTasks()) {
                     Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                     if (!cs.getActions().contains(newAction)) {

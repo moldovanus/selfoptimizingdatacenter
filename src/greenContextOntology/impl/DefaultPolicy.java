@@ -62,7 +62,7 @@ public class DefaultPolicy extends DefaultContextElement
 
 
     public RDFProperty getReferencedProperty() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#referenced";
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#policyTarget";
         final String name = getOWLModel().getResourceNameForURI(uri);
         return getOWLModel().getRDFProperty(name);
     }
@@ -82,20 +82,28 @@ public class DefaultPolicy extends DefaultContextElement
     //TODO : check new method
     public boolean getRespected(OntModel ontModel) {
 
-        Individual ind = ontModel.getIndividual(this.getName());
+        Individual ind = ontModel.getIndividual(getName());
         Property isOK = ontModel.getProperty(getRespectedProperty().getName());
-        RDFNode ok = ind.getPropertyValue(isOK);
+        RDFNode ok = null;
+        try {
+            ok = ind.getPropertyValue(isOK);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Do not initialize the respected property of the policy. Because when SWRL rule triggers it will add another value not override the last one so the exactly one restriction is broken.");
+            System.err.println(e.getMessage());
+            System.err.println(e.getCause());
+            e.printStackTrace();
+        }
         if (ok == null) {
             return false;
         } else {
             return ok.toString().contains("true");
         }
+
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#respected
-    //TODO : check new method
     public boolean getRespected() {
-
+        System.err.println("Warning: call to getRespected() in DefaultPolicy. Use getRespected(OntModel model) if valid result expected.\n First does not return correct value( SWRL rules trigger only on OntModel  ");
         RDFSLiteral respected = getPropertyValueLiteral(getRespectedProperty());
         if (respected == null) {
             return false;

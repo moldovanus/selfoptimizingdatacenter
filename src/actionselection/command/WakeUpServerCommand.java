@@ -34,13 +34,13 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setLowPowerState(false,model);
+        server.setIsInLowPowerState(false,model);
     }
 
     @Override
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setLowPowerState(true,model);
+        server.setIsInLowPowerState(true,model);
     }
 
     @Override

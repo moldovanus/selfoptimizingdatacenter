@@ -10,13 +10,5 @@ import edu.stanford.smi.protegex.owl.model.*;
  */
 public interface Storage extends Component {
 
-    // Property http://www.owl-ontologies.com/Datacenter.owl#weight
-
-    float getWeight();
-
-    RDFProperty getWeightProperty();
-
-    boolean hasWeight();
-
-    void setWeight(float newWeight);
+   
 }

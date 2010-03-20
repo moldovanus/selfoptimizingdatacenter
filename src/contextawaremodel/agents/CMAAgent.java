@@ -2,6 +2,9 @@ package contextawaremodel.agents;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.InfModel;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.reasoner.Reasoner;
 import contextawaremodel.GlobalVars;
 
 import java.io.File;
@@ -20,6 +23,9 @@ import jade.core.behaviours.Behaviour;
 import jade.wrapper.AgentController;
 import contextawaremodel.ontology.*;
 import org.mindswap.pellet.jena.PelletReasonerFactory;
+import org.mindswap.pellet.jena.PelletInfGraph;
+
+import org.mindswap.pellet.PelletOptions;
 import policyconversioncore.PoliciesHandler;
 //import contextawaremodel.model.SimulatedContext;
 //import contextawaremodel.gui.SimulatorMainWindow;
@@ -106,7 +112,19 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //};
 
             //synchronization factor
+            PelletOptions.USE_TRACING = true;
 
+            Model rawModel = ModelFactory.createDefaultModel();
+// create Pellet reasoner
+            Reasoner r = PelletReasonerFactory.theInstance().create();
+// create an inferencing model using the raw model
+            InfModel model = ModelFactory.createInfModel(r, rawModel);
+
+// get the underlying Pellet graph
+            PelletInfGraph pellet = (PelletInfGraph) model.getGraph();
+// check for inconsistency
+            boolean consistent = pellet.isConsistent();
+  
 
             //initialize the simulator GUI
             //this.smw = new SimulatorMainWindow( new SimulatedContext(this.owlModel, this) );
