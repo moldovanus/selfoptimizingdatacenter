@@ -34,8 +34,8 @@ public class IncrementCommand extends SelfHealingCommand {
         return incrementValue;
     }
 
-    public void setIncrementValue(int decrementValue) {
-        this.incrementValue = decrementValue;
+    public void setIncrementValue(int incrementValue) {
+        this.incrementValue = incrementValue;
     }
 
     public IncrementCommand(SelfHealingProtegeFactory protegeFactory, String targetSensor, int incrementValue) {

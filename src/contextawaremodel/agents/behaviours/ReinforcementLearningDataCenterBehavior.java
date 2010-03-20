@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+import selfHealingOntology.SelfHealingProtegeFactory;
 
 /**
  * @author Administrator
@@ -37,7 +38,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     private OWLModel contextAwareModel;
     private OntModel policyConversionModel;
+    private OntModel selfHealingPolicyConversionModel;
     private JenaOWLModel owlModel;
+    private JenaOWLModel selfHealingOwlModel;
     private double smallestEntropy = 10000;
     private Memory memory;
     private Property evaluatePolicyProperty;
@@ -46,12 +49,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, Memory memory) {
+    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel,OntModel selfHealingPolicyConversionModel,JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
         evaluatePolicyProperty = policyConversionModel.getDatatypeProperty("http://www.owl-ontologies.com/Datacenter.owl#respected");
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
+         this.selfHealingPolicyConversionModel= selfHealingPolicyConversionModel;
+        this.selfHealingOwlModel= selfHealingOwlModel ;
         protegeFactory = new ProtegeFactory(owlModel);
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame();
@@ -331,6 +336,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
             }
+            SelfHealingProtegeFactory protegeF = new SelfHealingProtegeFactory(selfHealingOwlModel);
+
+            IncrementCommand c = new IncrementCommand(protegeF,"TemperatureSensorI",resultQueue.size());
+            System.out.println(c);
+            c.execute(selfHealingPolicyConversionModel);
         }
 
 
