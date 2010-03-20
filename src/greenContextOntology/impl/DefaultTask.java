@@ -210,4 +210,29 @@ public class DefaultTask extends DefaultContextElement
     public void setStorageWeight(float newStorageWeight) {
         setPropertyValue(getStorageWeightProperty(), new java.lang.Float(newStorageWeight));
     }
+
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#taskName
+
+    public String getTaskName() {
+        return (String) getPropertyValue(getTaskNameProperty());
+    }
+
+
+    public RDFProperty getTaskNameProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#taskName";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasTaskName() {
+        return getPropertyValueCount(getTaskNameProperty()) > 0;
+    }
+
+
+    public void setTaskName(String newTaskName) {
+        setPropertyValue(getTaskNameProperty(), newTaskName);
+    }
 }

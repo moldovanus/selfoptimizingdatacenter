@@ -82,4 +82,15 @@ public interface Task extends ContextElement {
     boolean hasStorageWeight();
 
     void setStorageWeight(float newStorageWeight);
+
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#taskName
+
+    String getTaskName();
+
+    RDFProperty getTaskNameProperty();
+
+    boolean hasTaskName();
+
+    void setTaskName(String newTaskName);
 }
