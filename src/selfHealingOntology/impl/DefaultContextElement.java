@@ -16,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  *
  * @version generated on Wed Mar 17 12:47:46 EET 2010
  */
-public class DefaultContextElement extends AbstractCodeGeneratorIndividual
+public class DefaultContextElement extends DefaultOWLIndividual
         implements ContextElement {
 
     public DefaultContextElement(OWLModel owlModel, FrameID id) {

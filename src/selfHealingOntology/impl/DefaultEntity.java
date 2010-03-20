@@ -2,6 +2,7 @@ package selfHealingOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
+import edu.stanford.smi.protegex.owl.model.impl.DefaultOWLIndividual;
 import edu.stanford.smi.protegex.owl.javacode.AbstractCodeGeneratorIndividual;
 import selfHealingOntology.*;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -15,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  *
  * @version generated on Wed Mar 17 12:47:46 EET 2010
  */
-public class DefaultEntity extends AbstractCodeGeneratorIndividual
+public class DefaultEntity extends DefaultOWLIndividual
         implements Entity {
 
     public DefaultEntity(OWLModel owlModel, FrameID id) {
