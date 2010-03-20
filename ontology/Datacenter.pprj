@@ -1,4 +1,4 @@
-; Sat Mar 20 12:30:21 EET 2010
+; Sat Mar 20 13:32:53 EET 2010
 ; 
 ;+ (version "3.4.3")
 ;+ (build "Build 572")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class10248]
-		[Datacenter_ProjectKB_Class10249]
-		[Datacenter_ProjectKB_Class10250]
-		[Datacenter_ProjectKB_Class10251]
-		[Datacenter_ProjectKB_Class10252]))
+		[Datacenter_ProjectKB_Class20065]
+		[Datacenter_ProjectKB_Class20066]
+		[Datacenter_ProjectKB_Class20067]
+		[Datacenter_ProjectKB_Class20068]
+		[Datacenter_ProjectKB_Class20069]))
 
 ([CLSES_TAB] of  Widget
 
@@ -29,31 +29,6 @@
 
 	(name "owl_build")
 	(string_value "572"))
-
-([Datacenter_ProjectKB_Class10248] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Datacenter_ProjectKB_Class10249] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class10250] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Datacenter_ProjectKB_Class10251] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class10252] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class1030] of  Widget
 
@@ -74,8 +49,8 @@
 		[Datacenter_ProjectKB_Class1049]
 		[Datacenter_ProjectKB_Class1051]
 		[Datacenter_ProjectKB_Class1056]
-		[Datacenter_ProjectKB_Class1119]
-		[Datacenter_ProjectKB_Class1121]))
+		[Datacenter_ProjectKB_Class65]
+		[Datacenter_ProjectKB_Class67]))
 
 ([Datacenter_ProjectKB_Class1034] of  Widget
 
@@ -187,24 +162,6 @@
 ([Datacenter_ProjectKB_Class11] of  Property_List
 )
 
-([Datacenter_ProjectKB_Class1119] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled")
-	(property_list [Datacenter_ProjectKB_Class1120]))
-
-([Datacenter_ProjectKB_Class1120] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class1121] of  Widget
-
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
-	(property_list [Datacenter_ProjectKB_Class1122]))
-
-([Datacenter_ProjectKB_Class1122] of  Property_List
-)
-
 ([Datacenter_ProjectKB_Class12] of  Widget
 
 	(is_hidden TRUE)
@@ -246,6 +203,31 @@
 	(is_hidden TRUE)
 	(property_list [Datacenter_ProjectKB_Class21])
 	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
+
+([Datacenter_ProjectKB_Class20065] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Datacenter_ProjectKB_Class20066] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class20067] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Datacenter_ProjectKB_Class20068] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class20069] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class21] of  Property_List
 )
@@ -466,6 +448,24 @@
 	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
 ([Datacenter_ProjectKB_Class64] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class65] of  Widget
+
+	(is_hidden FALSE)
+	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled")
+	(property_list [Datacenter_ProjectKB_Class66]))
+
+([Datacenter_ProjectKB_Class66] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class67] of  Widget
+
+	(is_hidden FALSE)
+	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
+	(property_list [Datacenter_ProjectKB_Class68]))
+
+([Datacenter_ProjectKB_Class68] of  Property_List
 )
 
 ([Datacenter_ProjectKB_Class7] of  Property_List
@@ -745,6 +745,9 @@
 	(property_list [Instance_88])
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_185095_Class0] of  Map
+)
+
 ([KB_301165_Instance_1013] of  Widget
 
 	(is_hidden FALSE)
@@ -834,9 +837,6 @@
 
 	(boolean_value TRUE)
 	(name "edu.stanford.smi.protegex.owl.testing.owldl.NoCardiRestrictionOnTransitivePropertiesOWLDLTest"))
-
-([KB_312827_Class0] of  Map
-)
 
 ([KB_313796_Instance_852] of  Widget
 
