@@ -292,7 +292,7 @@ public class X3DAgent extends Agent {
     private void addInverseObjectLabel(String textLabel, String objectName, float[] color, float translation) {
 
         if (!objectLabels.containsKey(objectName + "_Inverse")) {
-            
+
             X3DNode transform = mainScene.createNode("Transform");
 
             X3DNode shape = mainScene.createNode("Shape");
@@ -351,7 +351,11 @@ public class X3DAgent extends Agent {
         } else {
             MFString string = objectLabels.get(objectName + "_Inverse");
             //string.clear();
-            string.set1Value(0,textLabel);
+            if (string.size() == 0) {
+                string.insertValue(0, textLabel);
+            } else {
+                string.set1Value(0, textLabel);
+            }
         }
     }
 
@@ -420,7 +424,12 @@ public class X3DAgent extends Agent {
         } else {
             MFString string = objectLabels.get(objectName);
             //string.clear();
-            string.set1Value(0,textLabel);
+            if (string.size() == 0) {
+                string.insertValue(0, textLabel);
+            } else {
+                string.set1Value(0, textLabel);
+            }
+
             addInverseObjectLabel(textLabel, objectName, color, translation);
         }
     }
