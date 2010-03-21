@@ -61,7 +61,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     @Override
     public String toString() {
         String description;
-        description = "Send server \"" + serverName + "\" to low power state ";
+        description = "Send server \"" + serverName.split("#")[1] + "\" to low power state ";
         return description;
     }
 

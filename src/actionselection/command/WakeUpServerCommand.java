@@ -46,7 +46,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public String toString() {
         String description;
-        description = "Wake up server \"" + serverName + "\"";
+        description = "Wake up server \"" + serverName.split("#")[1] + "\"";
         return description;
     }
 

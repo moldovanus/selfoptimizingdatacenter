@@ -55,7 +55,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     @Override
     public String toString() {
         String description;
-        description = "Deploy task \"" + taskName + "\" to server \"" + serverName + "\"";
+        description = "Deploy task \"" + taskName.split("#")[1] + "\" to server \"" + serverName.split("#")[1] + "\"";
         return description;
     }
 

@@ -60,8 +60,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
     @Override
     public String toString() {
         String description;
-        description = "Move task \"" + taskName + "\" from server \"" + oldServerName
-                + "\" to server \"" + newServerName;
+        description = "Move task \"" + taskName.split("#")[1] + "\" from server \"" + oldServerName.split("#")[1]
+                + "\" to server \"" + newServerName.split("#")[1];
         return description;
     }
 
