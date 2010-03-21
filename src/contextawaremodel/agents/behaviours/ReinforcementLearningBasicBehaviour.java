@@ -389,6 +389,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 actions.add(command.toStringArray());
                 System.err.println(command);
                 message.add(command.toString());
+            
             }
 
             agent.getLogger().log(Color.BLUE, "Corrective actions", message);
@@ -400,8 +401,9 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
             memory.memorize(currentValues, bestActionsList);
             contextSnapshot.executeActions(policyConversionModel);
-            contextSnapshot.executeActionsOnOWL();
             contextSnapshot.executeActionsOnX3D(agent);
+            contextSnapshot.executeActionsOnOWL();
+            
             
         } else {
             if (contextBroken) {

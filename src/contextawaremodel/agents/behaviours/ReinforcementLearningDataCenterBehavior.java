@@ -55,7 +55,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         evaluatePolicyProperty = policyConversionModel.getDatatypeProperty("http://www.owl-ontologies.com/Datacenter.owl#respected");
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
-         this.selfHealingPolicyConversionModel= selfHealingPolicyConversionModel;
+       this.selfHealingPolicyConversionModel= selfHealingPolicyConversionModel;
         this.selfHealingOwlModel= selfHealingOwlModel ;
         protegeFactory = new ProtegeFactory(owlModel);
         this.owlModel = owlModel;
@@ -341,6 +341,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             IncrementCommand c = new IncrementCommand(protegeF,"TemperatureSensorI",resultQueue.size());
             System.out.println(c);
             c.execute(selfHealingPolicyConversionModel);
+            c.executeOnX3D(myAgent);
         }
 
 
