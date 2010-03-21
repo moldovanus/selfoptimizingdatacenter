@@ -34,18 +34,20 @@ public class LoggerGUI {
     private ArrayList<Object[]> messages;
     private String logPath = "";
     private String date;
+    private String logName;
 
-    public LoggerGUI() {
+    public LoggerGUI(String logName) {
+        this.logName = logName;
         init();
         setAllProperties();
         addComponents();
         frame.setVisible(true);
         date = new java.util.Date().toString();
-        date = date.replaceAll("[ :]", "_");
+        date = date.replaceAll("[:]", "_");
     }
 
     private void init() {
-        frame = new JFrame("Logger");
+        frame = new JFrame("Logger:" + logName);
         messages = new ArrayList<Object[]>();
         textArea = new JTextArea();
         scrollPane = new JScrollPane(textArea);
@@ -82,10 +84,10 @@ public class LoggerGUI {
     public void savePDF() {
         try {
 
-            String logName = logPath + "log" + date + ".pdf";
+            String pdfFileName = logPath + logName + "_" + date + ".pdf";
             Document document = new Document();
-            File file = new File(logName);
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(logName));
+            File file = new File(pdfFileName);
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfFileName));
             document.open();
 
             for (Object[] o : messages) {

@@ -58,7 +58,7 @@ public class IncrementCommand extends SelfHealingCommand {
 
     @Override
     public String toString() {
-        return "Increment " + targetSensor + " by " + incrementValue;
+        return "Increment " + targetSensor.split("#")[1] + " by " + incrementValue;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class IncrementCommand extends SelfHealingCommand {
     public String[] toStringArray() {
         String[] array = new String[3];
         array[0] = "Increment";
-        array[1] = targetSensor;
+        array[1] = targetSensor.split("#")[1];
         array[2] = "" + incrementValue;
         return array;
     }

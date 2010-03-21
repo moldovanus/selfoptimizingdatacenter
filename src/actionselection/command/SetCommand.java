@@ -62,7 +62,7 @@ public class SetCommand extends SelfHealingCommand {
 
     @Override
     public String toString() {
-        return "Set " + targetSensor + " to " + newValue;
+        return "Set " + targetSensor.split("#")[1] + " to " + newValue;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class SetCommand extends SelfHealingCommand {
     public String[] toStringArray() {
         String[] array = new String[3];
         array[0] = "Set";
-        array[1] = targetSensor;
+        array[1] = targetSensor.split("#")[1];
         array[2] = "" + newValue;
         return array;
     }

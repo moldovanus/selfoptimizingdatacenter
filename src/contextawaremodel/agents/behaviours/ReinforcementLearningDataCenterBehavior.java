@@ -19,17 +19,18 @@ import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import greenContextOntology.*;
+import greenContextOntology.Component;
 import greenContextOntology.impl.DefaultQoSPolicy;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.awt.*;
+
 import selfHealingOntology.SelfHealingProtegeFactory;
+import selfHealingOntology.Sensor;
 
 /**
  * @author Administrator
@@ -49,17 +50,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel,OntModel selfHealingPolicyConversionModel,JenaOWLModel selfHealingOwlModel, Memory memory) {
+    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
         evaluatePolicyProperty = policyConversionModel.getDatatypeProperty("http://www.owl-ontologies.com/Datacenter.owl#respected");
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
-       this.selfHealingPolicyConversionModel= selfHealingPolicyConversionModel;
-        this.selfHealingOwlModel= selfHealingOwlModel ;
+        this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
+        this.selfHealingOwlModel = selfHealingOwlModel;
         protegeFactory = new ProtegeFactory(owlModel);
         this.owlModel = owlModel;
-        resultsFrame = new ActionsOutputFrame();
+        resultsFrame = new ActionsOutputFrame("Datacenter");
         this.memory = memory;
 
 
@@ -76,7 +77,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private double taskRespectanceDegree(Task task) {
         TaskInfo received = task.getReceivedInfo();
         TaskInfo requested = task.getRequestedInfo();
-        double respectance = task.getCpuWeight() * (requested.getCores() - received.getCores() + requested.getCpu() - received.getCpu()) + task.getMemoryWeight() * (requested.getMemory() - received.getMemory()) + task.getStorageWeight() * (requested.getStorage() - received.getStorage());
+        double respectance = task.getCpuWeight()
+                * (requested.getCores() - received.getCores() + requested.getCpu() - received.getCpu())
+                + task.getMemoryWeight() * (requested.getMemory() - received.getMemory())
+                + task.getStorageWeight() * (requested.getStorage() - received.getStorage());
         return respectance;
     }
 
@@ -327,21 +331,84 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         resultsFrame.setActionsList(null);
 
         if (entropyAndPolicy.getSecond() != null) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA" + entropyAndPolicy.getSecond());
+            contextBroken = true;
+            /**
+             * Gather data for logging purposes
+             */
+
+            ArrayList<String> brokenPolicies = new ArrayList<String>();
+            Collection<QoSPolicy> qoSPolicies = protegeFactory.getAllQoSPolicyInstances();
+            for (Policy policy : qoSPolicies) {
+                if (!policy.getRespected(policyConversionModel)) {
+                    brokenPolicies.add(policy.getName().split("#")[1]);
+                }
+            }
+            Collection<EnergyPolicy> energyPolicies = protegeFactory.getAllEnergyPolicyInstances();
+            for (Policy policy : energyPolicies) {
+                if (!policy.getRespected(policyConversionModel)) {
+                    brokenPolicies.add(policy.getName().split("#")[1]);
+                }
+            }
+
+            agent.getSelfOptimizingLogger().log(Color.ORANGE, "Broken policies", brokenPolicies);
+
+            Collection<Server> servers = protegeFactory.getAllServerInstances();
+            Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+            ArrayList<String> currentState = new ArrayList(servers.size() + tasks.size());
+
+            for (Server server : servers) {
+                currentState.add(server.toString());
+            }
+
+            for (Task task : tasks) {
+                currentState.add(task.toString());
+            }
+
+            agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
+            /**
+             * End of logging
+             */
+
             ContextSnapshot result = reinforcementLearning(queue);
             System.out.println("Gasit rezultat ");
             Collection<Command> resultQueue = result.getActions();
+
+            ArrayList<String> message = new ArrayList<String>();
             for (Command o : resultQueue) {
+                message.add(o.toString());
                 System.out.println(o.toString());
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
             }
-            SelfHealingProtegeFactory protegeF = new SelfHealingProtegeFactory(selfHealingOwlModel);
 
-            IncrementCommand c = new IncrementCommand(protegeF,"TemperatureSensorI",resultQueue.size());
+            agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
+
+
+            //datacenter load influences temperature 
+            SelfHealingProtegeFactory selfHealingProtegeFactory = new SelfHealingProtegeFactory(selfHealingOwlModel);
+            IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory,selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultQueue.size());
+
             System.out.println(c);
             c.execute(selfHealingPolicyConversionModel);
             c.executeOnX3D(myAgent);
+            
+        } else {
+            if (contextBroken) {
+                contextBroken = false;
+                Collection<Server> servers = protegeFactory.getAllServerInstances();
+                Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+                ArrayList<String> currentState = new ArrayList(servers.size() + tasks.size());
+
+                for (Server server : servers) {
+                    currentState.add(server.toString());
+                }
+
+                for (Task task : tasks) {
+                    currentState.add(task.toString());
+                }
+
+                agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
+            }
         }
 
 

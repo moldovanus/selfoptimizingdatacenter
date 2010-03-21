@@ -97,7 +97,7 @@ public class SensorValues implements Serializable {
     }
 
 
-    public ArrayList<String> toMessage() {
+    public ArrayList<String> toLogMessage() {
         ArrayList<String> list = new ArrayList<String>();
         String stringValue = "";
         Map<String,Map<String,String>> map = GlobalVars.valueMapping;

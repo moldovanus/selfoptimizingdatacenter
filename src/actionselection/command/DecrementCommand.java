@@ -60,7 +60,7 @@ public class DecrementCommand extends SelfHealingCommand {
 
     @Override
     public String toString() {
-        return "Decrement " + targetSensor + " by " + decrementValue;
+        return "Decrement " + targetSensor.split("#")[1] + " by " + decrementValue;
     }
 
     @Override
@@ -130,7 +130,7 @@ public class DecrementCommand extends SelfHealingCommand {
     public String[] toStringArray() {
         String[] array = new String[3];
         array[0] = "Decrement";
-        array[1] = targetSensor;
+        array[1] = targetSensor.split("#")[1];
         array[2] = "" + decrementValue;
         return array;
     }

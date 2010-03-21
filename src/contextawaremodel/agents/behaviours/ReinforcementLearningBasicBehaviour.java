@@ -23,7 +23,6 @@ import jade.lang.acl.ACLMessage;
 
 import java.awt.Color;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +57,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         this.policyConversionModel = policyConversionModel;
         agent = (ReinforcementLearningAgent) a;
         this.memory = memory;
-        resultsFrame = new ActionsOutputFrame();
+        resultsFrame = new ActionsOutputFrame("Enviroment");
         evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
         hasAcceptedValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#acceptableSensorValue");
         model = jenaOWLModel;
@@ -311,16 +310,16 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         if (entropyState.getFirst() != 0) {
             contextBroken = true;
             ArrayList<String> list = new ArrayList<String>();
-            String policyName = entropyState.getSecond().getName();
+            String policyName = entropyState.getSecond().getName().split("#")[1];
             list.add(policyName);
-            agent.getLogger().log(Color.ORANGE, "Broken policy", list);
+            agent.getSelfHealingLogger().log(Color.ORANGE, "Broken policy", list);
 
-            agent.getLogger().log(Color.red, "Current state", currentValues.toMessage());
+            agent.getSelfHealingLogger().log(Color.red, "Current state", currentValues.toLogMessage());
 
             Policy brokenPolicy = entropyState.getSecond();
             Object[] associatedResources = brokenPolicy.getAssociatedResources().toArray();
 
-            ArrayList<Sensor> brokenSensorsList = new ArrayList<Sensor>();
+            ArrayList<String> brokenSensorsList = new ArrayList<String>();
             int associatedResourcesSize = associatedResources.length;
             for (int i = 0; i < associatedResourcesSize; i++) {
 
@@ -330,10 +329,10 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
                 //skip sensor if its value respects the Policy
                 if (!sensor.getAcceptableSensorValue(policyConversionModel)) {
-                    brokenSensorsList.add(sensor);
+                    brokenSensorsList.add(sensor.getName().split("#")[1]);
                 }
             }
-            agent.getLogger().log(Color.ORANGE, "Sensors that break the policies", brokenSensorsList);
+            agent.getSelfHealingLogger().log(Color.ORANGE, "Sensors that break the policies", brokenSensorsList);
 
 
             try {
@@ -392,7 +391,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             
             }
 
-            agent.getLogger().log(Color.BLUE, "Corrective actions", message);
+            agent.getSelfHealingLogger().log(Color.BLUE, "Corrective actions", message);
 
             System.err.println("===============================================================");
             System.err.println();
@@ -408,7 +407,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         } else {
             if (contextBroken) {
                 contextBroken = false;
-                agent.getLogger().log(Color.green, "Current state", currentValues.toMessage());
+                agent.getSelfHealingLogger().log(Color.green, "Current state", currentValues.toLogMessage());
             }
         }
 

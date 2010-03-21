@@ -349,7 +349,7 @@ public class DefaultServer extends DefaultResource
     public String toString() {
 
         String description;
-        description = "Server " + this.getName() + "\n";
+        description = "Server " + this.getName().split("#")[1] + "\n";
         description += "Inactive = " + this.getIsInLowPowerState() + "\n";
         Collection cores = this.getAssociatedCPU().getAssociatedCore();
         Iterator iterator = cores.iterator();

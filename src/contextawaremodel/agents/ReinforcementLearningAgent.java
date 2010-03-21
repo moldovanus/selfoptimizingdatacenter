@@ -40,7 +40,8 @@ public class ReinforcementLearningAgent extends Agent {
     private int runCount = 0;
     private boolean contextIsOK = true;
     private boolean contextDirty = false;
-    private LoggerGUI logger;
+    private LoggerGUI selfHealingLogger;
+    private LoggerGUI selfOptimizingLogger;
 
     public boolean isContextDirty() {
         return contextDirty;
@@ -80,14 +81,21 @@ public class ReinforcementLearningAgent extends Agent {
         runCount++;
     }
 
-    public LoggerGUI getLogger() {
-        return logger;
+    public LoggerGUI getSelfHealingLogger() {
+        return selfHealingLogger;
     }
 
-    public void setLogger(LoggerGUI logger) {
-        this.logger = logger;
+    public void setSelfHealingLogger(LoggerGUI selfHealingLogger) {
+        this.selfHealingLogger = selfHealingLogger;
     }
 
+    public LoggerGUI getSelfOptimizingLogger() {
+        return selfOptimizingLogger;
+    }
+
+    public void setSelfOptimizingLogger(LoggerGUI selfOptimizingLogger) {
+        this.selfOptimizingLogger = selfOptimizingLogger;
+    }
 
     @Override
     protected void setup() {
@@ -96,8 +104,12 @@ public class ReinforcementLearningAgent extends Agent {
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {
-            logger = new LoggerGUI();
-            logger.setLogPath("logs\\");
+            selfHealingLogger = new LoggerGUI("selfHealingLog");
+            selfHealingLogger.setLogPath("logs\\");
+
+            selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
+            selfOptimizingLogger.setLogPath("logs\\");
+
             this.contextAwareModel = (JenaOWLModel) args[0];
             this.policyConversionModel = (OntModel) args[1];
             jenaOwlModel = (JenaOWLModel) args[2];
@@ -158,14 +170,14 @@ public class ReinforcementLearningAgent extends Agent {
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
                 addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
-                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000,owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter,policyConversionModel,jenaOwlModel, memory1));
+                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
 
-                
+
                 /* Command c = new SetCommand("http://www.owl-ontologies.com/Ontology1230214892.owl#AlarmStateSensorI",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-value-of-service",
                         "http://www.owl-ontologies.com/Ontology1230214892.owl#has-web-service-URI", policyConversionModel, 0);

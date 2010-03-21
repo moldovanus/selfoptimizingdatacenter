@@ -165,7 +165,7 @@ public class DefaultTask extends DefaultContextElement
     @Override
     public String toString() {
         String description = "";
-        description += this.getName();
+        description += this.getName().split("#")[1];
         TaskInfo received = this.getReceivedInfo();
         TaskInfo requested = this.getRequestedInfo();
 
