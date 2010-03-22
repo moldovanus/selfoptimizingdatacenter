@@ -31,7 +31,6 @@ public class DefaultContextElement extends DefaultOWLIndividual
     public void setPropertyValue(RDFProperty rdfProperty, Object o, OntModel ontModel) {
         super.setPropertyValue(rdfProperty, o);
         Individual targetIndividual = ontModel.getIndividual(this.getName());
-        System.out.println("\n \n" + getName() + " \n" + targetIndividual);
         if (targetIndividual == null ){System.exit(1);}
         Property targetProperty = ontModel.getProperty(rdfProperty.getName());
         targetIndividual.removeAll(targetProperty);

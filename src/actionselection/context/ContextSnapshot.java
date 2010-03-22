@@ -11,6 +11,7 @@ import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import java.util.Queue;
 
 import contextawaremodel.agents.ReinforcementLearningAgent;
+import jade.core.Agent;
 
 /**
  * @author Administrator
@@ -42,7 +43,7 @@ public class ContextSnapshot implements Comparable {
     public void executeActions(OntModel model) {
         for (Command command : actions) {
             command.execute(model);
-            System.out.println("Executing " + command.toString());
+            //System.out.println("Executing " + command.toString());
         }
     }
 
@@ -125,7 +126,7 @@ public class ContextSnapshot implements Comparable {
         return description;
     }
 
-    public void executeActionsOnX3D(ReinforcementLearningAgent agent) {
+    public void executeActionsOnX3D(Agent agent) {
         for (Command command : actions) {
             command.executeOnX3D(agent);
         }

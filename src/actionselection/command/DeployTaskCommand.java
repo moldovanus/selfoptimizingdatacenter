@@ -14,6 +14,7 @@ import jade.core.Agent;
 import java.io.IOException;
 
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 
 /**
@@ -39,7 +40,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
-        server.addRunningTasks(task,model);
+        server.addRunningTasks(task, model);
     }
 
     /**
@@ -49,7 +50,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        server.removeRunningTasks(task,model);
+        server.removeRunningTasks(task, model);
     }
 
     @Override
@@ -66,7 +67,11 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
 
     @Override
     public String[] toStringArray() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String[] array = new String[3];
+        array[0] = "Deploy";
+        array[1] = taskName.split("#")[1];
+        array[2] = serverName.split("#")[1];
+        return array;
     }
 
     public void executeOnX3D(Agent agent) {
@@ -74,7 +79,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"addTask",taskName.split("#")[1], serverName.split("#")[1], server.getRunningTasks().size() + 1});
+            message.setContentObject(new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], serverName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -84,12 +89,12 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     }
 
 
-     public void rewindOnX3D(Agent agent) {
+    public void rewindOnX3D(Agent agent) {
 
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"removeTask",taskName.split("#")[1]});
+            message.setContentObject(new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

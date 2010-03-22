@@ -13,6 +13,7 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 
 /**
@@ -34,13 +35,13 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setIsInLowPowerState(false,model);
+        server.setIsInLowPowerState(false, model);
     }
 
     @Override
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.setIsInLowPowerState(true,model);
+        server.setIsInLowPowerState(true, model);
     }
 
     @Override
@@ -57,13 +58,17 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
 
     @Override
     public String[] toStringArray() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String[] array = new String[3];
+        array[0] = "Wake up";
+        array[1] = serverName.split("#")[1];
+        array[2] = "from low power state";
+        return array;
     }
 
     public void executeOnX3D(Agent agent) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"wakeUpServer", serverName.split("#")[1]});
+            message.setContentObject(new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -75,7 +80,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     public void rewindOnX3D(Agent agent) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"sendToLowPower", serverName.split("#")[1]});
+            message.setContentObject(new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

@@ -28,6 +28,8 @@ import jade.core.behaviours.TickerBehaviour;
 
 import java.util.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import selfHealingOntology.SelfHealingProtegeFactory;
 import selfHealingOntology.Sensor;
@@ -64,9 +66,28 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.memory = memory;
 
 
+        /*
+        Simulate task 1 ending activity\
+         */
+
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+
+                //sinchronize X3D display values with ontology values
+                Collection<Server> servers = protegeFactory.getAllServerInstances();
+
+
+                for (Server server : servers) {
+                    if (server.getIsInLowPowerState()) {
+                        SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
+                        sendServerToLowPowerStateCommand.executeOnX3D(agent);
+                    } else {
+                        WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
+                        wakeUpServerCommand.executeOnX3D(agent);
+                    }
+                }
+
                 resultsFrame.setVisible(true);
 
             }
@@ -377,8 +398,34 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             for (Command o : resultQueue) {
                 message.add(o.toString());
                 System.out.println(o.toString());
+                /*if (o instanceof DeployTaskCommand) {
+                    DeployTaskCommand command = (DeployTaskCommand) o;
+                    String[] data = o.toStringArray();
+                    //just test if i remove task
+                   if (data[1].equals("Task_1")) {
+                        final Task t = protegeFactory.getTask(data[1]);
+                        final Server s = protegeFactory.getServer(data[2]);
+
+                        final javax.swing.Timer timer = new javax.swing.Timer(10000, new ActionListener() {
+
+                            public void actionPerformed(ActionEvent e) {
+                                System.err.println("Removiiing");
+                                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, t.getName(), s.getName());
+                                command.execute(policyConversionModel);
+                                command.executeOnX3D(agent);
+                            }
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
+
+                }}*/
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
 
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
@@ -386,12 +433,20 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //datacenter load influences temperature 
             SelfHealingProtegeFactory selfHealingProtegeFactory = new SelfHealingProtegeFactory(selfHealingOwlModel);
-            IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory,selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultQueue.size());
+            IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory, selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultQueue.size());
 
+            System.out.println("\nDatacenter load temperature influence: ");
             System.out.println(c);
             c.execute(selfHealingPolicyConversionModel);
             c.executeOnX3D(myAgent);
-            
+            //wait for effect to be noticeable on X3D
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+
         } else {
             if (contextBroken) {
                 contextBroken = false;

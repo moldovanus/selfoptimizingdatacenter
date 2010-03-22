@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
@@ -25,15 +24,14 @@ import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
 
 public class X3DAgent extends Agent {
 
-    private JFrame frame;
+    public static final String ADD_TASK_COMMAND = "addTask";
+    public static final String REMOVE_TASK_COMMAND = "removeTask";
+    public static final String MOVE_TASK_COMMAND = "moveTask";
+    public static final String SEND_SERVER_TO_LOW_POWER_COMMAND = "sendToLowPower";
+    public static final String WAKE_UP_SERVER_COMMAND = "wakeUpServer";
+    public static final String SET_TEMPERATURE_COMMAND = "setTemperature";
+    public static final String SET_HUMIDITY_COMMAND = "setHumidity";
 
-    private X3DScene mainScene;
-    private final Agent selfReference = this;
-    private ArrayList<X3DNode> taskLabels;
-    private Map<String, X3DNode> tasks;
-    private Map<String, MFString> objectLabels;
-    private ArrayList<String> wiresIndexes;
-    static int server = 1;
 
     public static final float POWER_METER_LABEL_TRANSLATION = 0.7f;
     public static final float SENSOR_LABEL_TRANSLATION = 0.4f;
@@ -45,12 +43,27 @@ public class X3DAgent extends Agent {
     public static final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
     public static final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
 
+
+    private JFrame frame;
+
+    private X3DScene mainScene;
+    private final Agent selfReference = this;
+    private ArrayList<X3DNode> taskLabels;
+    private Map<String, X3DNode> tasks;
+    private Map<String, MFString> objectLabels;
+    private ArrayList<String> wiresIndexes;
+    static int server = 1;
+
     private Timer changeWiresBackTimer;
-    private Timer fanTimer;
+    private Timer fanAnimationTimer;
     private Timer sensorAnimationTimer;
     private float fanIncrement = 0.1f;
     private ExternalBrowser x3dBrowser;
-    private ActionListener fanListener = new ActionListener() {
+    private int activeServersNo = 6;
+
+    private X3DNode attentionArow;
+
+    private ActionListener sensorsAnimationListener = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
             X3DNode sensor_1 = mainScene.getNamedNode("SensorTube_01_XFORM");
@@ -59,30 +72,32 @@ public class X3DAgent extends Agent {
             SFRotation rotation_2 = (SFRotation) sensor_2.getField("rotation");
             float[] values = new float[4];
             rotation_1.getValue(values);
-            values[3] += fanIncrement;
+            values[3] += 0.1f;
             rotation_1.setValue(values);
-            values[3] *= -1;
+            float temp = values[3] * -1;
+            rotation_2.getValue(values);
+            values[3]  = temp;
             rotation_2.setValue(values);
         }
     };
 
 
-    private ActionListener animateSensorsListener = new ActionListener() {
+    private ActionListener fanAnimationListener = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
             X3DNode fan = mainScene.getNamedNode("Fan_XFORM");
             SFRotation rotation = (SFRotation) fan.getField("rotation");
             float[] values = new float[4];
             rotation.getValue(values);
-            values[3] += 0.1;
+            values[3] += fanIncrement;
             rotation.setValue(values);
         }
     };
 
     public void setFanSpeed(float speed) {
         fanIncrement = speed;
-        //fanTimer = new Timer(50,fanListener);
-        //fanTimer.start();
+        //fanAnimationTimer = new Timer(50,sensorsAnimationListener);
+        //fanAnimationTimer.start();
     }
 
 
@@ -101,7 +116,6 @@ public class X3DAgent extends Agent {
             System.out.println("[X3D] X3D Agent failed, owlModel arguments are null!");
             //return;
         }
-
 
         // this.policyConversionModel = (OntModel) args[0];
         System.out.println("[X3DAgent] : Hellooo ! ");
@@ -156,6 +170,9 @@ public class X3DAgent extends Agent {
             return;
         }
 
+        attentionArow = mainScene.getNamedNode("AttentionArrow_XFORM");
+        //mainScene.removeRootNode(attentionArow);
+
         ActionListener actionListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -183,10 +200,10 @@ public class X3DAgent extends Agent {
         }
 
 
-        fanTimer = new Timer(50, fanListener);
-        fanTimer.start();
+        fanAnimationTimer = new Timer(100, fanAnimationListener);
+        //fanAnimationTimer.start();
 
-        sensorAnimationTimer = new Timer(100, animateSensorsListener);
+        sensorAnimationTimer = new Timer(50, sensorsAnimationListener);
         sensorAnimationTimer.start();
 
         ActionListener simulationListener = new ActionListener() {
@@ -531,7 +548,6 @@ public class X3DAgent extends Agent {
         SFVec3f boxSize = (SFVec3f) newBox.getField("size");
         boxSize.setValue(new float[]{0.2699f, 0.08436f, 0.2801f});
 
-
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         SFFloat ambientIntensity = (SFFloat) material.getField("ambientIntensity");
 
@@ -546,9 +562,6 @@ public class X3DAgent extends Agent {
         shape_geometry.setValue(newBox);
         MFNode newTransformChildren = (MFNode) newTransform.getField("children");
         newTransformChildren.append(newShape);
-
-        //SFVec3f scale = (SFVec3f) newTransform.getField("scale");
-        //scale.setValue(new float[]{1.0f, 1.0f, 1.0f});
 
         SFVec3f translation = (SFVec3f) newTransform.getField("translation");
 
@@ -571,11 +584,19 @@ public class X3DAgent extends Agent {
 
         addLabelToTask(taskName, newTransform, TASK_LABEL_COLOR);
         tasks.put(taskName, newTransform);
+
+        //place attention arrow
+        String[] elements = serverName.split("_");
+        X3DNode planeTransform = mainScene.getNamedNode("Server_" + elements[1] + "_XFORM");
+        addAttentionArrow(planeTransform);
     }
 
     public void removeTask(String taskName) {
         X3DNode task = tasks.remove(taskName);
+
+        addAttentionArrow(task);
         mainScene.removeRootNode(task);
+
     }
 
     public void sendServerToLowPower(String serverName) {
@@ -583,6 +604,14 @@ public class X3DAgent extends Agent {
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(INACTIVE_SERVER_COLOR);
+        activeServersNo--;
+        fanAnimationTimer.setDelay(300 / activeServersNo);
+        fanAnimationTimer.restart();
+
+        //place attention arrow
+        X3DNode planeTransform = mainScene.getNamedNode("Server_" + elements[1] + "_XFORM");
+        addAttentionArrow(planeTransform);
+
     }
 
     public void wakeUpServer(String serverName) {
@@ -590,5 +619,69 @@ public class X3DAgent extends Agent {
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(ACTIVE_SERVER_COLOR);
+        activeServersNo++;
+        fanAnimationTimer.setDelay(300 / activeServersNo);
+        fanAnimationTimer.restart();
+
+
+        //place attention arrow
+        X3DNode planeTransform = mainScene.getNamedNode("Server_" + elements[1] + "_XFORM");
+        addAttentionArrow(planeTransform);
     }
+
+    private void addAttentionArrow(X3DNode targetNode) {
+        //place attention arrow
+        SFRotation planeRotation = (SFRotation) targetNode.getField("rotation");
+        SFRotation arrowRotation = (SFRotation) attentionArow.getField("rotation");
+        SFVec3f planeTranslation = (SFVec3f) targetNode.getField("translation");
+        SFVec3f arrowTranslation = (SFVec3f) attentionArow.getField("translation");
+        SFVec3f arrowScale = (SFVec3f) attentionArow.getField("scale");
+        arrowScale.setValue(new float[]{1, 1, 1});
+        float[] arrowTranslationValues = new float[4];
+        float[] arrowRotationValues = new float[4];
+        planeTranslation.getValue(arrowTranslationValues);
+        planeRotation.getValue(arrowRotationValues);
+        arrowTranslationValues[1] += 0.5;
+        arrowRotation.setValue(arrowRotationValues);
+        arrowTranslation.setValue(arrowTranslationValues);
+
+        //mainScene.addRootNode(attentionArow);
+
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                //mainScene.removeRootNode(attentionArow);
+                SFVec3f arrowScale = (SFVec3f) attentionArow.getField("scale");
+                arrowScale.setValue(new float[]{0, 0, 0});
+            }
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    public void animateSensor(String sensorTubeName) {
+        X3DNode node = mainScene.getNamedNode(sensorTubeName);
+        final SFRotation arrowRotation = (SFRotation) node.getField("rotation");
+        final float[] values = new float[4];
+        arrowRotation.getValue(values);
+        values[0] = 1;
+        values[1] = 0;
+        arrowRotation.setValue(values);
+
+        Timer timer = new Timer(2000, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                values[0] = 0;
+                values[1] = 1;
+                arrowRotation.setValue(values);
+            }
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+
+
+    }
+
 }

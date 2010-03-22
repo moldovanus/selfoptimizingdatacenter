@@ -66,12 +66,13 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-
-                //sinchronize X3D display values with ontology values
+                System.out.println("Synchronized Temperature and Humidity ");
+                //synchronize X3D display values with ontology values
                 Collection<Sensor> sensors = protegeFactory.getAllSensorInstances();
                 for (Sensor sensor : sensors) {
                     SetCommand command = new SetCommand(protegeFactory, sensor.getName(), sensor.getValueOfService());
                     command.executeOnX3D(agent);
+                    System.out.println(command);
                 }
                 resultsFrame.setVisible(true);
             }
@@ -388,7 +389,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 actions.add(command.toStringArray());
                 System.err.println(command);
                 message.add(command.toString());
-            
+
             }
 
             agent.getSelfHealingLogger().log(Color.BLUE, "Corrective actions", message);
@@ -399,11 +400,11 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             resultsFrame.setActionsList(actions);
 
             memory.memorize(currentValues, bestActionsList);
+            contextSnapshot.executeActionsOnOWL();
             contextSnapshot.executeActions(policyConversionModel);
             contextSnapshot.executeActionsOnX3D(agent);
-            contextSnapshot.executeActionsOnOWL();
-            
-            
+
+
         } else {
             if (contextBroken) {
                 contextBroken = false;

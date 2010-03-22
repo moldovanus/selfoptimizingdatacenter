@@ -14,6 +14,7 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 
 /**
@@ -42,8 +43,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(newServer);
-        oldServer.removeRunningTasks(task,model);
-        newServer.addRunningTasks(task,model);
+        oldServer.removeRunningTasks(task, model);
+        newServer.addRunningTasks(task, model);
     }
 
     @Override
@@ -52,8 +53,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(oldServer);
-        newServer.removeRunningTasks(task,model);
-        oldServer.addRunningTasks(task,model);
+        newServer.removeRunningTasks(task, model);
+        oldServer.addRunningTasks(task, model);
 
     }
 
@@ -72,7 +73,12 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
     @Override
     public String[] toStringArray() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String[] array = new String[3];
+        array[0] = "Move";
+        array[1] = taskName.split("#")[1];
+        array[2] = oldServerName.split("#")[1];
+        array[3] = newServerName.split("#")[1];
+        return array;
     }
 
     public void executeOnX3D(Agent agent) {
@@ -80,7 +86,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"moveTask",taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
+            message.setContentObject(new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -92,15 +98,27 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
     public void rewindOnX3D(Agent agent) {
 
-
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{"removeTask",taskName.split("#")[1]});
+            message.setContentObject(new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
         message.setLanguage("JavaSerialization");
         agent.send(message);
+
+
+        Server server = protegeFactory.getServer(oldServerName);
+        ACLMessage deployMessage = new ACLMessage(ACLMessage.INFORM);
+        try {
+            deployMessage.setContentObject(new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], oldServerName.split("#")[1], server.getRunningTasks().size() + 1});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        deployMessage.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
+        deployMessage.setLanguage("JavaSerialization");
+        agent.send(deployMessage);
+
     }
 }
