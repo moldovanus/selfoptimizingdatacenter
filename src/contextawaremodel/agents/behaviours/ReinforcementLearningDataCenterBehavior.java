@@ -18,6 +18,8 @@ import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import greenContextOntology.*;
 import greenContextOntology.Component;
 import greenContextOntology.impl.DefaultQoSPolicy;
@@ -445,7 +447,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-
 
         } else {
             if (contextBroken) {

@@ -4,6 +4,9 @@ import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
 import edu.stanford.smi.protegex.owl.model.impl.DefaultOWLIndividual;
 import edu.stanford.smi.protegex.owl.javacode.AbstractCodeGeneratorIndividual;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
+import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
 import greenContextOntology.*;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.Individual;
@@ -16,8 +19,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  *
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
- public class DefaultContextElement extends DefaultOWLIndividual
-         implements ContextElement {
+public class DefaultContextElement extends DefaultOWLIndividual
+        implements ContextElement {
 
     public DefaultContextElement(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
@@ -36,5 +39,18 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
         targetIndividual.setPropertyValue(targetProperty, ontModel.createLiteralStatement(
                 targetIndividual, targetProperty, o).getLiteral().as(RDFNode.class));
     }
+
+    public final void deleteInstance(OntModel ontModel, SWRLFactory swrlFactory) throws SWRLFactoryException {
+        super.delete();
+
+        //remove instance from underlying Ont model
+        Individual i = ontModel.getIndividual(getName());
+        i.remove();
+
+        //remove swrl rule associated to task
+        SWRLImp rule = swrlFactory.getImp(this.getName().split("#")[1] + "_QoSPolicy");
+        rule.delete();
+    }
+
 }
 

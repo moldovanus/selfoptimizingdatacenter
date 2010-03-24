@@ -1,4 +1,4 @@
-; Sun Mar 21 12:18:37 EET 2010
+; Mon Mar 22 16:45:00 EET 2010
 ; 
 ;+ (version "3.4.3")
 ;+ (build "Build 572")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[contextOntology_ProjectKB_Class10068]
-		[contextOntology_ProjectKB_Class10069]
-		[contextOntology_ProjectKB_Class10070]
-		[contextOntology_ProjectKB_Class10071]
-		[contextOntology_ProjectKB_Class10072]))
+		[contextOntology_ProjectKB_Class20103]
+		[contextOntology_ProjectKB_Class20104]
+		[contextOntology_ProjectKB_Class20105]
+		[contextOntology_ProjectKB_Class20106]
+		[contextOntology_ProjectKB_Class20107]))
 
 ([CLSES_TAB] of  Widget
 
@@ -24,33 +24,6 @@
 	(is_hidden TRUE)
 	(property_list [contextOntology_ProjectKB_Class11])
 	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
-
-([contextOntology_ProjectKB_Class10056] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [contextOntology_ProjectKB_Class10057])
-	(widget_class_name "dfki.protege.ontoviz_tab.OntovizTab"))
-
-([contextOntology_ProjectKB_Class10057] of  Property_List
-)
-
-([contextOntology_ProjectKB_Class10058] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [contextOntology_ProjectKB_Class10059])
-	(widget_class_name "edu.stanford.smi.protegex.changes.stats.ChangeStatisticsTab"))
-
-([contextOntology_ProjectKB_Class10059] of  Property_List
-)
-
-([contextOntology_ProjectKB_Class10060] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [contextOntology_ProjectKB_Class10061])
-	(widget_class_name "edu.stanford.smi.protegex.prompt.PromptTab"))
-
-([contextOntology_ProjectKB_Class10061] of  Property_List
-)
 
 ([contextOntology_ProjectKB_Class10062] of  Widget
 
@@ -83,31 +56,6 @@
 
 	(name "owl_build")
 	(string_value "572"))
-
-([contextOntology_ProjectKB_Class10068] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([contextOntology_ProjectKB_Class10069] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([contextOntology_ProjectKB_Class10070] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([contextOntology_ProjectKB_Class10071] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([contextOntology_ProjectKB_Class10072] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
 
 ([contextOntology_ProjectKB_Class1030] of  Widget
 
@@ -256,11 +204,6 @@
 ([contextOntology_ProjectKB_Class1206] of  Property_List
 )
 
-([contextOntology_ProjectKB_Class121] of  Integer
-
-	(integer_value 536)
-	(name "owl_build"))
-
 ([contextOntology_ProjectKB_Class13] of  Property_List
 )
 
@@ -296,6 +239,31 @@
 	(is_hidden TRUE)
 	(property_list [contextOntology_ProjectKB_Class21])
 	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
+
+([contextOntology_ProjectKB_Class20103] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([contextOntology_ProjectKB_Class20104] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([contextOntology_ProjectKB_Class20105] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([contextOntology_ProjectKB_Class20106] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([contextOntology_ProjectKB_Class20107] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
 
 ([contextOntology_ProjectKB_Class21] of  Property_List
 )
@@ -464,11 +432,20 @@
 
 ([contextOntology_ProjectKB_Class56] of  Widget
 
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
-	(property_list [contextOntology_ProjectKB_Class57]))
+	(is_hidden TRUE)
+	(property_list [contextOntology_ProjectKB_Class57])
+	(widget_class_name "dfki.protege.ontoviz_tab.OntovizTab"))
 
 ([contextOntology_ProjectKB_Class57] of  Property_List
+)
+
+([contextOntology_ProjectKB_Class58] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [contextOntology_ProjectKB_Class59])
+	(widget_class_name "edu.stanford.smi.protegex.changes.stats.ChangeStatisticsTab"))
+
+([contextOntology_ProjectKB_Class59] of  Property_List
 )
 
 ([contextOntology_ProjectKB_Class6] of  Widget
@@ -476,6 +453,24 @@
 	(is_hidden TRUE)
 	(property_list [contextOntology_ProjectKB_Class7])
 	(widget_class_name "edu.stanford.smi.protege.widget.ProtegePropertiesTab"))
+
+([contextOntology_ProjectKB_Class60] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [contextOntology_ProjectKB_Class61])
+	(widget_class_name "edu.stanford.smi.protegex.prompt.PromptTab"))
+
+([contextOntology_ProjectKB_Class61] of  Property_List
+)
+
+([contextOntology_ProjectKB_Class62] of  Widget
+
+	(is_hidden FALSE)
+	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
+	(property_list [contextOntology_ProjectKB_Class63]))
+
+([contextOntology_ProjectKB_Class63] of  Property_List
+)
 
 ([contextOntology_ProjectKB_Class7] of  Property_List
 )
@@ -724,7 +719,7 @@
 	(property_list [Instance_88])
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_194614_Class0] of  Map
+([KB_097600_Class0] of  Map
 )
 
 ([KB_205398_Class0] of  Property_List
