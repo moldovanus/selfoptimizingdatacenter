@@ -44,11 +44,12 @@ public class DefaultContextElement extends DefaultOWLIndividual
         super.delete();
 
         //remove instance from underlying Ont model
-        Individual i = ontModel.getIndividual(getName());
-        i.remove();
+        //Individual i = ontModel.getIndividual(getName());
+        //i.remove();
 
         //remove swrl rule associated to task
-        SWRLImp rule = swrlFactory.getImp(this.getName().split("#")[1] + "_QoSPolicy");
+        System.out.println("Deleting " + "http://www.owl-ontologies.com/Datacenter.owl#QoS_Policy_" + this.getName().split("_")[1] + "_swrl_rule");
+        SWRLImp rule = swrlFactory.getImp("http://www.owl-ontologies.com/Datacenter.owl#QoS_Policy_" + this.getName().split("_")[1] + "_swrl_rule");
         rule.delete();
     }
 

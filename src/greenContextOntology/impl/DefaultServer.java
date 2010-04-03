@@ -236,6 +236,7 @@ public class DefaultServer extends DefaultResource
 
         //remove task from ontology
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
+
     }
 
     public void removeRunningTasks(Task oldRunningTasks) {

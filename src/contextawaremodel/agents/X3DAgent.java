@@ -593,10 +593,8 @@ public class X3DAgent extends Agent {
 
     public void removeTask(String taskName) {
         X3DNode task = tasks.remove(taskName);
-
         addAttentionArrow(task);
         mainScene.removeRootNode(task);
-
     }
 
     public void sendServerToLowPower(String serverName) {

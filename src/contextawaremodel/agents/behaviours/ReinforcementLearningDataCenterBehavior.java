@@ -7,22 +7,20 @@ package contextawaremodel.agents.behaviours;
 import actionselection.command.*;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
-import actionselection.context.SensorValues;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
-import contextawaremodel.GlobalVars;
+import contextawaremodel.gui.TaskManagement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import greenContextOntology.*;
 import greenContextOntology.Component;
-import greenContextOntology.impl.DefaultQoSPolicy;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
@@ -30,11 +28,8 @@ import jade.core.behaviours.TickerBehaviour;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 import selfHealingOntology.SelfHealingProtegeFactory;
-import selfHealingOntology.Sensor;
 
 /**
  * @author Administrator
@@ -53,6 +48,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ReinforcementLearningAgent agent;
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
+    private SWRLFactory swrlFactory;
+    private TaskManagement taskManagementWindow;
 
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
@@ -66,11 +63,19 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame("Datacenter");
         this.memory = memory;
+        swrlFactory = new SWRLFactory(contextAwareModel);
 
+        for (SWRLImp imp : swrlFactory.getEnabledImps()) {
+            System.out.println(imp.toString());
+        }
+
+        //System.exit(1);
+
+        taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
 
         /*
-        Simulate task 1 ending activity\
-         */
+       Simulate task 1 ending activity\
+        */
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -90,6 +95,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     }
                 }
 
+                Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+                taskManagementWindow.setTasks(tasks);
+                taskManagementWindow.setVisible(true);
                 resultsFrame.setVisible(true);
 
             }
@@ -117,25 +125,44 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         double diff = 0.0;
         for (Component core : cores) {
             diff = 0.0;
-            if (core.getUsed() > core.getMaxAcceptableValue())
-                diff = core.getUsed() - core.getMaxAcceptableValue();
-            if (core.getUsed() < core.getMinAcceptableValue())
-                diff = core.getUsed() - core.getMinAcceptableValue();
+            int usedCore = core.getUsed();
+            int coreMaxAcceptableValue = core.getMaxAcceptableValue();
+
+            if (usedCore > coreMaxAcceptableValue) {
+                diff = usedCore - coreMaxAcceptableValue;
+            } else if (usedCore < coreMaxAcceptableValue) {
+                //TODO:changed din usedCore - coreMaxAcceptableValue pentru ca dadea entropie negativa
+                diff = coreMaxAcceptableValue - usedCore;
+            }
             cpuCores += diff;
         }
         cpuCores /= cores.size();
         respectance += cpu.getWeight() * cpuCores;
         diff = 0.0;
-        if (memory.getUsed() > memory.getMaxAcceptableValue())
-            diff = memory.getUsed() - memory.getMaxAcceptableValue();
-        if (memory.getUsed() < memory.getMinAcceptableValue())
-            diff = memory.getUsed() - memory.getMinAcceptableValue();
+
+        int usedMemory = memory.getUsed();
+        int memoryMaxAcceptableValue = memory.getMaxAcceptableValue();
+        int memoryMinAcceptableValue = memory.getMinAcceptableValue();
+
+        if (usedMemory > memoryMaxAcceptableValue) {
+            diff = usedMemory - memoryMaxAcceptableValue;
+        } else if (usedMemory < memoryMinAcceptableValue) {
+            diff = usedMemory - memoryMinAcceptableValue;
+        }
         respectance += memory.getWeight() * diff;
         diff = 0.0;
-        if (storage.getUsed() > storage.getMaxAcceptableValue())
-            diff = storage.getUsed() - storage.getMaxAcceptableValue();
-        if (storage.getUsed() < storage.getMinAcceptableValue())
-            diff = storage.getUsed() - storage.getMinAcceptableValue();
+
+        int usedStorage = storage.getUsed();
+        int storageMaxAcceptableValue = storage.getMaxAcceptableValue();
+        int storageMinAcceptableValue = storage.getMinAcceptableValue();
+
+        if (usedStorage > storageMaxAcceptableValue) {
+            diff = usedStorage - storageMaxAcceptableValue;
+        } else if (usedStorage < storageMinAcceptableValue) {
+            //TODO:changed din usedStorage - storageMinAcceptableValue pentru ca dadea entropie negativa
+            diff = storageMinAcceptableValue - usedStorage;
+        }
+
         respectance += storage.getWeight() * diff;
         return respectance;
     }
@@ -146,7 +173,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Collection<QoSPolicy> qosPolicies = protegeFactory.getAllQoSPolicyInstances();
 
         for (QoSPolicy policy : qosPolicies) {
+
             Task task = policy.getReferenced();
+
+            //if task has been deleted
+            if (task == null) {
+                continue;
+            }
+
             if (!policy.getRespected(policyConversionModel)) {
                 //if (!task.requestsSatisfied()) {
                 //System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
@@ -154,8 +188,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     brokenPolicy = policy;
                 }
 
-                if (policy.hasPriority())
+                if (policy.hasPriority()) {
                     entropy += policy.getPriority() * taskRespectanceDegree(task);
+                }
             }
         }
 
@@ -344,36 +379,52 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     @Override
     protected void onTick() {
+        System.out.println("Datacenter behavior on Tick");
+        /*Collection<QoSPolicy> qosPolicies = protegeFactory.getAllQoSPolicyInstances();
+        Collection<EnergyPolicy> energyPolicies = protegeFactory.getAllEnergyPolicyInstances();
+
+        for (QoSPolicy policy : qosPolicies) {
+            policy.setRespected(false, policyConversionModel);
+        }
+
+        for (EnergyPolicy policy : energyPolicies) {
+            policy.setRespected(false, policyConversionModel);
+        }*/
+
 
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
+
+        System.out.println(entropyAndPolicy.getFirst() + " " + entropyAndPolicy.getSecond());
+
         initialContext.setContextEntropy(entropyAndPolicy.getFirst());
         initialContext.setRewardFunction(computeRewardFunction(null, initialContext, null));
         queue.add(initialContext);
         resultsFrame.setActionsList(null);
 
         if (entropyAndPolicy.getSecond() != null) {
+
             contextBroken = true;
             /**
              * Gather data for logging purposes
              */
 
-            ArrayList<String> brokenPolicies = new ArrayList<String>();
+            ArrayList<String> brokenQoSPolicies = new ArrayList<String>();
             Collection<QoSPolicy> qoSPolicies = protegeFactory.getAllQoSPolicyInstances();
             for (Policy policy : qoSPolicies) {
                 if (!policy.getRespected(policyConversionModel)) {
-                    brokenPolicies.add(policy.getName().split("#")[1]);
+                    brokenQoSPolicies.add(policy.getName().split("#")[1]);
                 }
             }
-            Collection<EnergyPolicy> energyPolicies = protegeFactory.getAllEnergyPolicyInstances();
-            for (Policy policy : energyPolicies) {
+            Collection<EnergyPolicy> brokenEnergyPolicies = protegeFactory.getAllEnergyPolicyInstances();
+            for (Policy policy : brokenEnergyPolicies) {
                 if (!policy.getRespected(policyConversionModel)) {
-                    brokenPolicies.add(policy.getName().split("#")[1]);
+                    brokenQoSPolicies.add(policy.getName().split("#")[1]);
                 }
             }
 
-            agent.getSelfOptimizingLogger().log(Color.ORANGE, "Broken policies", brokenPolicies);
+            agent.getSelfOptimizingLogger().log(Color.ORANGE, "Broken policies", brokenQoSPolicies);
 
             Collection<Server> servers = protegeFactory.getAllServerInstances();
             Collection<Task> tasks = protegeFactory.getAllTaskInstances();
@@ -393,7 +444,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
              */
 
             ContextSnapshot result = reinforcementLearning(queue);
-            System.out.println("Gasit rezultat ");
+
             Collection<Command> resultQueue = result.getActions();
 
             ArrayList<String> message = new ArrayList<String>();
@@ -430,17 +481,21 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
 
+
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
 
+            int resultsSize = resultQueue.size();
+            if (resultsSize > 0) {
+                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+                //datacenter load influences temperature
+                SelfHealingProtegeFactory selfHealingProtegeFactory = new SelfHealingProtegeFactory(selfHealingOwlModel);
+                IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory, selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultsSize);
 
-            //datacenter load influences temperature 
-            SelfHealingProtegeFactory selfHealingProtegeFactory = new SelfHealingProtegeFactory(selfHealingOwlModel);
-            IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory, selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultQueue.size());
-
-            System.out.println("\nDatacenter load temperature influence: ");
-            System.out.println(c);
-            c.execute(selfHealingPolicyConversionModel);
-            c.executeOnX3D(myAgent);
+                System.out.println("\nDatacenter load temperature influence: ");
+                System.out.println(c);
+                c.execute(selfHealingPolicyConversionModel);
+                c.executeOnX3D(myAgent);
+            }
             //wait for effect to be noticeable on X3D
             try {
                 Thread.sleep(3000);
