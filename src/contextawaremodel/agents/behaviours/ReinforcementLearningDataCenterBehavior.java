@@ -348,9 +348,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
             // wake up
-            if (task != null)
+         
                 for (Server serverInstance : servers) {
-                    if (serverInstance.getIsInLowPowerState() && task != null && serverInstance.hasResourcesFor(task)) {
+                    if (serverInstance.getIsInLowPowerState()){ //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
                         Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                         //verific peste tot daca nu cumva exista actiunea

@@ -132,8 +132,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
 
-            x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModelDataCenter});
-            x3d.start();
+           // x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), new Object[]{this.policyConversionModelDataCenter});
+            //x3d.start();
             //star the Request Processing Agent
 
             //createNewAgent(Name, Class name, arguments to the agent)
