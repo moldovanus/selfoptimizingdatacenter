@@ -123,8 +123,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //star the Context Interpreting Agent
             AgentContainer container = (AgentContainer) getContainerController(); // get a container controller for creating new agents
             //createNewAgent(Name, Class name, arguments to the agent)
-            cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
-            cia.start();
+            //cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
+            //cia.start();
 
             gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
             gui.start();

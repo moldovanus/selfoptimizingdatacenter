@@ -404,7 +404,7 @@ public class ProtegeFactory {
         return owlModel.getRDFSNamedClass(name);
     }
 
-    public Policy createPolicy(String name) {
+  /*  public Policy createPolicy(String name) {
         final RDFSNamedClass cls = getPolicyClass();
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
@@ -439,7 +439,7 @@ public class ProtegeFactory {
         }
         return result;
     }
-
+*/
     public RDFSNamedClass getStorageClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#Storage";
         final String name = owlModel.getResourceNameForURI(uri);

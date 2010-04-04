@@ -90,14 +90,14 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
 
 
                 // Start the Memory Monitor window, but keep it hidden
-                final MemoryMonitor demo = new MemoryMonitor();
-                memoryMonitor = new JFrame("Memory Monitor");
-                memoryMonitor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                memoryMonitor.getContentPane().add("Center", demo);
-                memoryMonitor.pack();
-                memoryMonitor.setSize(new Dimension(400, 500));
-                memoryMonitor.setVisible(false);
-                WindowListener l = new WindowAdapter() {
+                //final MemoryMonitor demo = new MemoryMonitor();
+                //memoryMonitor = new JFrame("Memory Monitor");
+                //memoryMonitor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                //memoryMonitor.getContentPane().add("Center", demo);
+                //memoryMonitor.pack();
+                //memoryMonitor.setSize(new Dimension(400, 500));
+                //memoryMonitor.setVisible(false);
+                /*WindowListener l = new WindowAdapter() {
 
                     public void windowClosing(WindowEvent e) {
                         System.exit(0);
@@ -110,10 +110,10 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
                     public void windowIconified(WindowEvent e) {
                         demo.surf.stop();
                     }
-                };
+                };*/
 
                 //memoryMonitor.addWindowListener(l);
-                demo.surf.start();
+                //demo.surf.start();
             }
         };
         SwingUtilities.invokeLater(r);

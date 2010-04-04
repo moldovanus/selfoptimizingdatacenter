@@ -18,7 +18,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  *
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
-public class DefaultPolicy extends DefaultContextElement
+public abstract class DefaultPolicy extends DefaultContextElement
         implements Policy {
 
     public DefaultPolicy(OWLModel owlModel, FrameID id) {
@@ -80,26 +80,26 @@ public class DefaultPolicy extends DefaultContextElement
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#respected
     //TODO : check new method
-    public boolean getRespected(OntModel ontModel) {
-
-        Individual ind = ontModel.getIndividual(getName());
-        Property isOK = ontModel.getProperty(getRespectedProperty().getName());
-        RDFNode ok = null;
-        try {
-            ok = ind.getPropertyValue(isOK);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Do not initialize the respected property of the policy. Because when SWRL rule triggers it will add another value not override the last one so the exactly one restriction is broken.");
-            System.err.println(e.getMessage());
-            System.err.println(e.getCause());
-            e.printStackTrace();
-        }
-        if (ok == null) {
-            return false;
-        } else {
-            return ok.toString().contains("true");
-        }
-
-    }
+//    public boolean getRespected(OntModel ontModel) {
+//
+//        Individual ind = ontModel.getIndividual(getName());
+//        Property isOK = ontModel.getProperty(getRespectedProperty().getName());
+//        RDFNode ok = null;
+//        try {
+//            ok = ind.getPropertyValue(isOK);
+//        } catch (ArrayIndexOutOfBoundsException e) {
+//            System.err.println("Do not initialize the respected property of the policy. Because when SWRL rule triggers it will add another value not override the last one so the exactly one restriction is broken.");
+//            System.err.println(e.getMessage());
+//            System.err.println(e.getCause());
+//            e.printStackTrace();
+//        }
+//        if (ok == null) {
+//            return false;
+//        } else {
+//            return ok.toString().contains("true");
+//        }
+//
+//    }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#respected
     public boolean getRespected() {

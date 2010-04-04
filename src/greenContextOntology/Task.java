@@ -1,7 +1,8 @@
 package greenContextOntology;
 
 import edu.stanford.smi.protegex.owl.model.*;
- 
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+
 import com.hp.hpl.jena.ontology.OntModel;
 
 
@@ -93,4 +94,6 @@ public interface Task extends ContextElement {
     boolean hasTaskName();
 
     void setTaskName(String newTaskName);
+
+    void createSWRLRule(SWRLFactory swrlFactory);
 }

@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.text.NumberFormat;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -28,6 +29,8 @@ import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
 import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
 import actionselection.command.RemoveTaskFromServerCommand;
+import actionselection.command.Command;
+import actionselection.command.DeleteOWLIndividualCommand;
 
 /**
  * @author Moldovanus
@@ -42,6 +45,10 @@ public class TaskManagement extends javax.swing.JFrame {
      * @param ontModel
      * @param agent
      */
+
+    private Collection<Command> commands;
+    private int selectedIndex = 0;
+
     public TaskManagement(ProtegeFactory protegeFactory, SWRLFactory swrlFactory, OntModel ontModel, Agent agent) {
         super("Task Management");
         this.protegeFactory = protegeFactory;
@@ -49,6 +56,7 @@ public class TaskManagement extends javax.swing.JFrame {
         this.ontModel = ontModel;
         this.agent = agent;
         initComponents();
+        commands = new ArrayList<Command>();
     }
 
     /**
@@ -99,6 +107,8 @@ public class TaskManagement extends javax.swing.JFrame {
         addTaskMemoryLabel = new javax.swing.JLabel();
         addTaskStorageLabel = new javax.swing.JLabel();
         addTaskButton = new javax.swing.JButton();
+        addTaskNameField = new javax.swing.JTextField();
+        addTaskNameLabel = new JLabel("Name");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -318,12 +328,14 @@ public class TaskManagement extends javax.swing.JFrame {
                                         .addComponent(addTaskLabel)
                                         .addGroup(addTaskInfoPanel1Layout.createSequentialGroup()
                                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(addTaskNameLabel)
                                                 .addComponent(addTaskCoresNo)
                                                 .addComponent(addTaskCpuLabel)
                                                 .addComponent(addTaskMemoryLabel)
                                                 .addComponent(addTaskStorageLabel))
                                         .addGap(18, 18, 18)
                                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(addTaskNameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(addTaskStorageField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(addTaskMemoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(addTaskCpuField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -335,6 +347,10 @@ public class TaskManagement extends javax.swing.JFrame {
                 addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(addTaskInfoPanel1Layout.createSequentialGroup()
                         .addComponent(addTaskLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(addTaskNameLabel)
+                                .addComponent(addTaskNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(addTaskCoresNo)
@@ -397,9 +413,9 @@ public class TaskManagement extends javax.swing.JFrame {
         tasksList.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
-                int selectedIndex = e.getFirstIndex();
+                selectedIndex = e.getFirstIndex();
                 selectedTaskName = (String) tasksList.getModel().getElementAt(selectedIndex);
-                if ( selectedTaskName == null){
+                if (selectedTaskName == null) {
                     return;
                 }
                 selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
@@ -422,18 +438,23 @@ public class TaskManagement extends javax.swing.JFrame {
         deleteTaskButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                try {
-                    System.out.println("Deleting instance " + selectedTask);
+                //try {
+                System.out.println("Deleting instance " + selectedTask);
 
-                    RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
-                    command.execute(ontModel);
-                    command.executeOnX3D(agent);
-                    selectedTask.deleteInstance(ontModel, swrlFactory);
+                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
+                //command.execute(ontModel);
+                //command.executeOnX3D(agent);
+                //selectedTask.deleteInstance(ontModel, swrlFactory);
 
-                    System.out.println("Instance deleted");
-                } catch (SWRLFactoryException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+                DeleteOWLIndividualCommand deleteOWLIndividualCommand = new DeleteOWLIndividualCommand(selectedTask);
+
+                commands.add(command);
+                commands.add(deleteOWLIndividualCommand);
+
+                //System.out.println("Instance deleted");
+                //} catch (SWRLFactoryException e1) {
+                //   e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                //}
 
                 requestedCoresField.setText("");
                 requestedCpuField.setText("");
@@ -445,14 +466,49 @@ public class TaskManagement extends javax.swing.JFrame {
                 receivedStorageField.setText("");
                 receivedMemoryField.setText("");
 
-                setTasks(protegeFactory.getAllTaskInstances());
+                //tasksList.remove(selectedIndex);
+                //setTasks(protegeFactory.getAllTaskInstances());
 
 
             }
         });
 
+        addTaskButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                String taskName = addTaskNameField.getText();
+                Task task = protegeFactory.createTask(taskName);
+
+                TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
+                TaskInfo receivedInfo = protegeFactory.createTaskInfo(taskName + "ReceivedInfo");
+
+                task.setReceivedInfo(receivedInfo, ontModel);
+                task.setRequestedInfo(requestedInfo, ontModel);
+
+                requestedInfo.setCores(Integer.parseInt(requestedCoresField.getText()), ontModel);
+                requestedInfo.setCpu(Integer.parseInt(requestedCpuField.getText()), ontModel);
+                requestedInfo.setMemory(Integer.parseInt(requestedMemoryField.getText()), ontModel);
+                requestedInfo.setStorage(Integer.parseInt(requestedStorageField.getText()), ontModel);
+
+                receivedInfo.setCores(Integer.parseInt(receivedCoresField.getText()), ontModel);
+                receivedInfo.setCpu(Integer.parseInt(receivedCpuField.getText()), ontModel);
+                receivedInfo.setMemory(Integer.parseInt(receivedMemoryField.getText()), ontModel);
+                receivedInfo.setStorage(Integer.parseInt(receivedStorageField.getText()), ontModel);
+
+                task.createSWRLRule(swrlFactory);
+            }
+        });
+
     }// </editor-fold>//GEN-END:initComponents
 
+    public void executeCommands() {
+
+        for (Command command : commands) {
+            command.execute(ontModel);
+            command.executeOnX3D(agent);
+        }
+        commands.clear();
+    }
 
     /* public void addDeleteTaskListener(ActionListener listener) {
         deleteTaskButton.addActionListener(listener);
@@ -608,11 +664,14 @@ public class TaskManagement extends javax.swing.JFrame {
     private javax.swing.JLabel requestedLabel;
     private javax.swing.JTextField requestedMemoryField;
     private javax.swing.JLabel requestedMemoryLabel;
+
     private javax.swing.JTextField requestedStorageField;
     private javax.swing.JLabel requestedStorageLabel;
     private javax.swing.JPanel taskManagementPane;
     private javax.swing.JList tasksList;
     private javax.swing.JScrollPane tasksListPane;
+    private javax.swing.JTextField addTaskNameField;
+    private javax.swing.JLabel addTaskNameLabel;
 
     private String selectedTaskName;
 
@@ -623,5 +682,6 @@ public class TaskManagement extends javax.swing.JFrame {
 
     private Agent agent;
     // End of variables declaration//GEN-END:variables
+
 
 }

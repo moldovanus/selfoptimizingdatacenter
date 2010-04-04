@@ -84,7 +84,6 @@ public class DefaultServer extends DefaultResource
     }
 
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
 
     public boolean getIsInLowPowerState() {
@@ -104,10 +103,9 @@ public class DefaultServer extends DefaultResource
     }
 
 
-    public void setIsInLowPowerState(boolean newIsInLowPowerState,OntModel ontModel) {
-        setPropertyValue(getIsInLowPowerStateProperty(), new java.lang.Boolean(newIsInLowPowerState),ontModel);
+    public void setIsInLowPowerState(boolean newIsInLowPowerState, OntModel ontModel) {
+        setPropertyValue(getIsInLowPowerStateProperty(), new java.lang.Boolean(newIsInLowPowerState), ontModel);
     }
-
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
@@ -235,6 +233,7 @@ public class DefaultServer extends DefaultResource
         receivedSLA.setStorage(0, model);
 
         //remove task from ontology
+        getRunningTasks().remove(oldRunningTasks);
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
 
     }
@@ -383,5 +382,29 @@ public class DefaultServer extends DefaultResource
             }
         }
         return false;
+    }
+
+    public boolean optimumValuesRespected() {
+        CPU cpu = this.getAssociatedCPU();
+        for (Object o : cpu.getAssociatedCore()) {
+            Core core = (Core) o;
+            int usedCore = core.getUsed();
+            if (usedCore < core.getMinAcceptableValue() || usedCore > core.getMaxAcceptableValue()) {
+                return false;
+            }
+        }
+        Memory memory = this.getAssociatedMemory();
+        int usedMemory = memory.getUsed();
+        if (usedMemory < memory.getMinAcceptableValue() || usedMemory > memory.getMaxAcceptableValue()) {
+            return false;
+        }
+
+        Storage storage = this.getAssociatedStorage();
+        int usedStorage = storage.getUsed();
+        if (usedStorage < storage.getMinAcceptableValue() || usedStorage > storage.getMaxAcceptableValue()) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -32,12 +32,14 @@ public class DefaultContextElement extends DefaultOWLIndividual
 
     public void setPropertyValue(RDFProperty rdfProperty, Object o, OntModel ontModel) {
         super.setPropertyValue(rdfProperty, o);
-        Individual targetIndividual = ontModel.getIndividual(this.getName());
+        /*Individual targetIndividual = ontModel.getIndividual(this.getName());
 
         Property targetProperty = ontModel.getProperty(rdfProperty.getName());
-        targetIndividual.removeAll(targetProperty);
+        if (targetIndividual.getPropertyValue(targetProperty) != null) {
+            targetIndividual.removeAll(targetProperty);
+        }
         targetIndividual.setPropertyValue(targetProperty, ontModel.createLiteralStatement(
-                targetIndividual, targetProperty, o).getLiteral().as(RDFNode.class));
+                targetIndividual, targetProperty, o).getLiteral().as(RDFNode.class));*/
     }
 
     public final void deleteInstance(OntModel ontModel, SWRLFactory swrlFactory) throws SWRLFactoryException {
@@ -48,9 +50,9 @@ public class DefaultContextElement extends DefaultOWLIndividual
         //i.remove();
 
         //remove swrl rule associated to task
-        System.out.println("Deleting " + "http://www.owl-ontologies.com/Datacenter.owl#QoS_Policy_" + this.getName().split("_")[1] + "_swrl_rule");
+        /*System.out.println("Deleting " + "http://www.owl-ontologies.com/Datacenter.owl#QoS_Policy_" + this.getName().split("_")[1] + "_swrl_rule");
         SWRLImp rule = swrlFactory.getImp("http://www.owl-ontologies.com/Datacenter.owl#QoS_Policy_" + this.getName().split("_")[1] + "_swrl_rule");
-        rule.delete();
+        rule.delete();*/
     }
 
 }

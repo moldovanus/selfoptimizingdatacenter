@@ -95,5 +95,8 @@ public interface Server extends Resource {
     String toString();
 
     public boolean containsTask(Task task);
+
+    boolean optimumValuesRespected();
+
 }
 

@@ -2,6 +2,8 @@ package greenContextOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 
 import java.util.*;
 
@@ -234,5 +236,21 @@ public class DefaultTask extends DefaultContextElement
 
     public void setTaskName(String newTaskName) {
         setPropertyValue(getTaskNameProperty(), newTaskName);
+    }
+
+    public void createSWRLRule(SWRLFactory swrlFactory) {
+        TaskInfo receivedInfo = this.getReceivedInfo();
+        String rule = "Task(?TaskRef)  ?  taskName(?TaskRef, "
+                + this.getName().split("#")[1] + ")  ?  receivedInfo(?TaskRef, ?ReceivedInfo)  " +
+                "?  cores(?ReceivedInfo, ?ReceivedInfoCores)  ?  swrlb:equal(?ReceivedInfoCores, " + receivedInfo.getCores()+ ") " +
+                "?  cpu(?ReceivedInfo, ?ReceivedInfoCPU)  ?  swrlb:equal(?ReceivedInfoCPU," + receivedInfo.getCpu()+ ") " +
+                "?  memory(?ReceivedInfo, ?ReceivedInfoMemory)  ?  swrlb:equal(?ReceivedInfoMemory, " +  receivedInfo.getMemory()+")" +
+                "?  storage(?ReceivedInfo, ?ReceivedInfoStorage)  ?  swrlb:equal(?ReceivedInfoStorage, " + + receivedInfo.getStorage() + ")" +
+                "? respected(QoSPolicy_1, true)";
+        try {
+            swrlFactory.createImp(rule);
+        } catch (SWRLParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 }
