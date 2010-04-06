@@ -73,7 +73,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
     @Override
     public String[] toStringArray() {
-        String[] array = new String[3];
+        String[] array = new String[4];
         array[0] = "Move";
         array[1] = taskName.split("#")[1];
         array[2] = oldServerName.split("#")[1];

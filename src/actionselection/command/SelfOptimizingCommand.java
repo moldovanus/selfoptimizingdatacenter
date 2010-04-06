@@ -5,20 +5,20 @@
 package actionselection.command;
 
 import greenContextOntology.ProtegeFactory;
+
 import java.io.Serializable;
 
 import jade.core.Agent;
 import com.hp.hpl.jena.ontology.OntModel;
 
 /**
- *
  * @author Administrator
  */
 public abstract class SelfOptimizingCommand implements Command {
     protected transient ProtegeFactory protegeFactory;
     protected int cost;
 
-    public SelfOptimizingCommand(  ProtegeFactory protegeFactory) {
+    public SelfOptimizingCommand(ProtegeFactory protegeFactory) {
         this.protegeFactory = protegeFactory;
     }
 
@@ -46,11 +46,104 @@ public abstract class SelfOptimizingCommand implements Command {
     public abstract String[] toStringArray();
 
     public abstract void executeOnX3D(Agent agent);
+
     public abstract void rewindOnX3D(Agent agent);
 
     //TODO: AM scris equals
     @Override
     public boolean equals(Object obj) {
-        return this.toString().equals(obj.toString());
+        Command otherCommand = (Command) obj;
+        Class thisClass = this.getClass();
+        Class objectClass = otherCommand.getClass();
+
+        if (thisClass.equals(objectClass)) {
+            if (thisClass.equals(DeployTaskCommand.class)) {
+                return false;
+            }
+            if (thisClass.equals(MoveTaskCommand.class)) {
+
+                /*public String[] toStringArray() {
+                    String[] array = new String[3];
+                    array[0] = "Move";
+                    array[1] = taskName.split("#")[1];
+                    array[2] = oldServerName.split("#")[1];
+                    array[3] = newServerName.split("#")[1];
+                    return array;
+                }*/
+                String[] thisInfo = this.toStringArray();
+                String[] objectInfo = otherCommand.toStringArray();
+                if (thisInfo[1].equals(objectInfo[1])) {
+                    return thisInfo[2].equals(objectInfo[3]);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if (thisClass.equals(DeployTaskCommand.class) && objectClass.equals(MoveTaskCommand.class)) {
+            /*public String[] toStringArray() {
+                String[] array = new String[3];
+                array[0] = "Deploy";
+                array[1] = taskName.split("#")[1];
+                array[2] = serverName.split("#")[1];
+                return array;
+            }*/
+            String[] thisInfo = this.toStringArray();
+            String[] objectInfo = otherCommand.toStringArray();
+            if (thisInfo[1].equals(objectInfo[1])) {
+                return thisInfo[2].equals(objectInfo[3]);
+            } else {
+                return false;
+            }
+        } else if (thisClass.equals(DeployTaskCommand.class) && objectClass.equals(MoveTaskCommand.class)) {
+            //only this case because only in this order deploy Task and then move same Task can appear
+            /*public String[] toStringArray() {
+                String[] array = new String[3];
+                array[0] = "Deploy";
+                array[1] = taskName.split("#")[1];
+                array[2] = serverName.split("#")[1];
+                return array;
+            }*/
+            String[] thisInfo = this.toStringArray();
+            String[] objectInfo = otherCommand.toStringArray();
+            if (thisInfo[1].equals(objectInfo[1])) {
+                return thisInfo[2].equals(objectInfo[3]);
+            } else {
+                return false;
+            }
+        } else if ((thisClass.equals(SendServerToLowPowerStateCommand.class)
+                && objectClass.equals(WakeUpServerCommand.class))
+                || (thisClass.equals(WakeUpServerCommand.class)
+                && objectClass.equals(SendServerToLowPowerStateCommand.class))) {
+            /*
+            public String[] toStringArray() {
+                String[] array = new String[3];
+                array[0] = "Send";
+                array[1] = serverName.split("#")[1];
+                array[2] = "to low power state";
+                return array;
+            }*/
+            /*
+            public String[] toStringArray() {
+                    String[] array = new String[3];
+                    array[0] = "Wake up";
+                    array[1] = serverName.split("#")[1];
+                    array[2] = "from low power state";
+                    return array;
+                }
+            */
+            String[] thisInfo = this.toStringArray();
+            String[] objectInfo = otherCommand.toStringArray();
+            if (thisInfo[1].equals(objectInfo[1])) {
+                return true; // if one command sends it to low power and other wakes it up == cycle
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+        //return this.toString().equals(obj.toString());
     }
+
 }
