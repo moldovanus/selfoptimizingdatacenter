@@ -169,7 +169,7 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
+             //   addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 1000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));

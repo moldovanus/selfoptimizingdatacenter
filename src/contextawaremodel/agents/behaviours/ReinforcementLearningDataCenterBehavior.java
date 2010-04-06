@@ -44,7 +44,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private OntModel selfHealingPolicyConversionModel;
     private JenaOWLModel owlModel;
     private JenaOWLModel selfHealingOwlModel;
-    private double smallestEntropy = 10000;
+    private ContextSnapshot smallestEntropyContext ;
     private Memory memory;
     private Property evaluatePolicyProperty;
     private ActionsOutputFrame resultsFrame;
@@ -247,10 +247,19 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ContextSnapshot reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
 
         ContextSnapshot newContext = queue.poll();
+        if (newContext == null) return smallestEntropyContext;
         System.out.println("---A");
         Collection<Server> servers = protegeFactory.getAllServerInstances();
         newContext.executeActions(policyConversionModel);
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
+        if (smallestEntropyContext!= null)
+        {
+            if (entropyAndPolicy.getFirst()<smallestEntropyContext.getContextEntropy())
+                smallestEntropyContext = newContext;
+        }else
+        {
+        smallestEntropyContext = newContext;
+        }
 
         System.out.println("\n" + entropyAndPolicy.getFirst() + "  " + newContext.getRewardFunction() + "\n");//+ "  " + entropyAndPolicy.getSecond() + "\n");
         System.out.println("---B");
