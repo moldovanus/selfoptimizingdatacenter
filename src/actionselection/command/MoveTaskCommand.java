@@ -38,7 +38,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
      * Moves the task
      */
     @Override
-    public void execute(OntModel model) {
+    public void execute(OntModel model) {     
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);

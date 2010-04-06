@@ -51,6 +51,10 @@ public abstract class SelfOptimizingCommand implements Command {
 
     //TODO: AM scris equals
     @Override
+    /**
+     * This checks if two actions that leed to a cycle are compared and returns true if that is the case
+     * in order not to prune that branch and do not expand a scenario which contains cycles.
+     */
     public boolean equals(Object obj) {
         Command otherCommand = (Command) obj;
         Class thisClass = this.getClass();

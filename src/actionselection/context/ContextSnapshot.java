@@ -43,7 +43,7 @@ public class ContextSnapshot implements Comparable {
     public void executeActions(OntModel model) {
         for (Command command : actions) {
             command.execute(model);
-            System.out.println("Executing " + command.toString());
+            //System.out.println("Executing " + command.toString());
         }
     }
 

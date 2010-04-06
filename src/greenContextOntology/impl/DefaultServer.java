@@ -184,6 +184,11 @@ public class DefaultServer extends DefaultResource
         storage.setUsed(storage.getUsed() + receivedStorage, model);
 
         //add task to ontology
+        Collection tasks = getRunningTasks();
+        removePropertyValue(getRunningTasksProperty(), tasks);
+        tasks.add(newRunningTasks);
+
+        //setPropertyValue(getRunningTasksProperty(), newRunningTasks);
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
 
     }
@@ -201,7 +206,6 @@ public class DefaultServer extends DefaultResource
 
 
         TaskInfo receivedSLA = oldRunningTasks.getReceivedInfo();
-
 
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
@@ -233,7 +237,7 @@ public class DefaultServer extends DefaultResource
         receivedSLA.setStorage(0, model);
 
         //remove task from ontology
-        getRunningTasks().remove(oldRunningTasks);
+        //getRunningTasks().remove(oldRunningTasks);
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
 
     }
@@ -406,5 +410,79 @@ public class DefaultServer extends DefaultResource
         }
 
         return true;
+    }
+
+    public void collectPreviouselyDistributedResources(OntModel model) {
+        Collection runningTasks = getRunningTasks();
+        for (Object t : runningTasks) {
+            Task task = (Task) t;
+            removeRunningTasks(task, model);
+        }
+
+        for (Object t : runningTasks) {
+            Task task = (Task) t;
+            addRunningTasks(task, model);
+        }
+
+    }
+
+    public void distributeRemainingResources(OntModel model) {
+        Collection runningTasks = getRunningTasks();
+        CPU cpu = getAssociatedCPU();
+
+        for (Object task : runningTasks) {
+            for (Object object : cpu.getAssociatedCore()) {
+                Core core = (Core) object;
+
+                //TODO: modify. For now the empty cpu-s are assigned in order to the running tasks : which is wrong
+                if (core.getUsed() == 0) {
+                    //if core used in optimum parameters continue
+                    //throtelling used to reduce bla bla bla
+                    continue;
+                } else {
+                    TaskInfo received = ((Task) task).getReceivedInfo();
+                    received.setCores(received.getCores() + 1, model);
+                    //TODO: sinchronize used with given to task  - maybe finer control - CPU per core per task not just global cpu anr cor no
+                    core.setUsed(core.getMinAcceptableValue(), model);
+
+                    //in order to continue and assign the next empty core to the next task
+                    break;
+                }
+
+
+            }
+        }
+
+        Memory memory = getAssociatedMemory();
+        int usedMemory = memory.getUsed();
+        int memoryMinAcceptableValue = memory.getMinAcceptableValue();
+        if (usedMemory < memoryMinAcceptableValue) {
+            int remaining = memoryMinAcceptableValue - usedMemory;
+            int partition = remaining / runningTasks.size();
+            if (partition == 0) {
+                partition = 1;
+            }
+            for (Object task : runningTasks) {
+                TaskInfo received = ((Task) task).getReceivedInfo();
+                received.setMemory(received.getMemory() + partition, model);
+            }
+            memory.setUsed(remaining, model);
+        }
+
+        Storage storage = getAssociatedStorage();
+        int usedStorage = storage.getUsed();
+        int storageMinAcceptableValue = storage.getMinAcceptableValue();
+        if (usedStorage < storageMinAcceptableValue) {
+            int remaining = storageMinAcceptableValue - usedStorage;
+            int partition = remaining / runningTasks.size();
+            if (partition == 0) {
+                partition = 1;
+            }
+            for (Object task : runningTasks) {
+                TaskInfo received = ((Task) task).getReceivedInfo();
+                received.setStorage(received.getStorage() + partition, model);
+            }
+            storage.setUsed(remaining, model);
+        }
     }
 }

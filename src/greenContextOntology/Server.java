@@ -98,5 +98,9 @@ public interface Server extends Resource {
 
     boolean optimumValuesRespected();
 
+    void distributeRemainingResources(OntModel model);
+
+    void collectPreviouselyDistributedResources(OntModel model);
+
 }
 

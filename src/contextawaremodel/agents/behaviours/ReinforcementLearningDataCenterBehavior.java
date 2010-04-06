@@ -44,7 +44,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private OntModel selfHealingPolicyConversionModel;
     private JenaOWLModel owlModel;
     private JenaOWLModel selfHealingOwlModel;
-    private ContextSnapshot smallestEntropyContext ;
+    private ContextSnapshot smallestEntropyContext;
     private Memory memory;
     private Property evaluatePolicyProperty;
     private ActionsOutputFrame resultsFrame;
@@ -247,21 +247,21 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ContextSnapshot reinforcementLearning(PriorityQueue<ContextSnapshot> queue) {
 
         ContextSnapshot newContext = queue.poll();
-        if (newContext == null) return smallestEntropyContext;
+        if (newContext == null) {
+            return smallestEntropyContext;
+        }
         System.out.println("---A");
         Collection<Server> servers = protegeFactory.getAllServerInstances();
         newContext.executeActions(policyConversionModel);
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
-        if (smallestEntropyContext!= null)
-        {
-            if (entropyAndPolicy.getFirst()<smallestEntropyContext.getContextEntropy())
+        if (smallestEntropyContext != null) {
+            if (entropyAndPolicy.getFirst() < smallestEntropyContext.getContextEntropy())
                 smallestEntropyContext = newContext;
-        }else
-        {
-        smallestEntropyContext = newContext;
+        } else {
+            smallestEntropyContext = newContext;
         }
 
-        System.out.println("\n" + entropyAndPolicy.getFirst() + "  " + newContext.getRewardFunction() + "\n");//+ "  " + entropyAndPolicy.getSecond() + "\n");
+        System.out.println("\n" + entropyAndPolicy.getFirst() + "  " + newContext.getRewardFunction() + "  " + entropyAndPolicy.getSecond() + "\n");
         System.out.println("---B");
         DefaultTask task = null;
         DefaultServer server = null;
@@ -357,24 +357,24 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
             // wake up
-         
-                for (Server serverInstance : servers) {
-                    if (serverInstance.getIsInLowPowerState()){ //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
-                        Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
-                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                        //verific peste tot daca nu cumva exista actiunea
-                        if (!cs.getActions().contains(newAction)) {
-                            cs.getActions().add(newAction);
-                            // cs.executeActions();
-                            newAction.execute(policyConversionModel);
-                            cs.setContextEntropy(computeEntropy().getFirst());
-                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                            newAction.rewind(policyConversionModel);
-                            // cs.rewind();
-                            queue.add(cs);
-                        }
+
+            for (Server serverInstance : servers) {
+                if (serverInstance.getIsInLowPowerState()) { //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
+                    Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
+                    ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
+                    //verific peste tot daca nu cumva exista actiunea
+                    if (!cs.getActions().contains(newAction)) {
+                        cs.getActions().add(newAction);
+                        // cs.executeActions();
+                        newAction.execute(policyConversionModel);
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        newAction.rewind(policyConversionModel);
+                        // cs.rewind();
+                        queue.add(cs);
                     }
                 }
+            }
             // sleep
             for (Server serverInstance : servers) {
                 if (!serverInstance.getIsInLowPowerState() && !serverInstance.hasRunningTasks()) {
@@ -393,18 +393,26 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
             newContext.rewind(policyConversionModel);
-            
+
             logger.debug("Size " + queue.size());
-           
+
             newContext = reinforcementLearning(queue);
+        } else {
+            newContext.rewind(policyConversionModel);
         }
-        newContext.rewind(policyConversionModel);
         return newContext;
     }
 
     @Override
     protected void onTick() {
-        taskManagementWindow.executeCommands();
+
+
+        //returns true if there were commands to execute
+        if (taskManagementWindow.executeCommands()) {
+            taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+        }
+
+
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
@@ -420,14 +428,19 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         if (entropyAndPolicy.getSecond() != null) {
 
             contextBroken = true;
+
+            //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context   
+            for (Server server : protegeFactory.getAllServerInstances()) {
+                server.collectPreviouselyDistributedResources(policyConversionModel);
+            }
+
             /**
              * Gather data for logging purposes
              */
-
             ArrayList<String> brokenQoSPolicies = new ArrayList<String>();
             Collection<QoSPolicy> qoSPolicies = protegeFactory.getAllQoSPolicyInstances();
             for (Policy policy : qoSPolicies) {
-                if(policy.getReferenced() == null){
+                if (policy.getReferenced() == null) {
                     continue;
                 }
                 if (!policy.getRespected(policyConversionModel)) {
@@ -461,6 +474,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
              */
 
             ContextSnapshot result = reinforcementLearning(queue);
+
 
             Collection<Command> resultQueue = result.getActions();
 
@@ -499,11 +513,18 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
 
 
+            if (result.getContextEntropy() > 0) {
+                System.out.println("Distributing empty resources");
+                for (Server server : servers) {
+                    server.distributeRemainingResources(policyConversionModel);
+                }
+            }
+
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
 
             int resultsSize = resultQueue.size();
             if (resultsSize > 0) {
-                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+
                 //datacenter load influences temperature
                 SelfHealingProtegeFactory selfHealingProtegeFactory = new SelfHealingProtegeFactory(selfHealingOwlModel);
                 IncrementCommand c = new IncrementCommand(selfHealingProtegeFactory, selfHealingProtegeFactory.getSensor("TemperatureSensorI").getName(), resultsSize);
@@ -539,7 +560,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
         }
 
-        
+
     }
 
     public boolean getEvaluateProp(Individual policy) {

@@ -413,12 +413,18 @@ public class TaskManagement extends javax.swing.JFrame {
         tasksList.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
-                selectedIndex = e.getFirstIndex();
+                selectedIndex = tasksList.getSelectedIndex();
+
                 selectedTaskName = (String) tasksList.getModel().getElementAt(selectedIndex);
+                System.out.println("!!!!!!!!!!!!!!!!!!!! @@@@@@@@ Selecteeed : " + selectedTaskName);
+
+                //hack to avoid inconsistencies. list selection fires not ok
                 if (selectedTaskName == null) {
                     return;
                 }
+
                 selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
+
                 TaskInfo requested = selectedTask.getRequestedInfo();
                 TaskInfo received = selectedTask.getReceivedInfo();
 
@@ -466,9 +472,10 @@ public class TaskManagement extends javax.swing.JFrame {
                 receivedStorageField.setText("");
                 receivedMemoryField.setText("");
 
+                tasksList.disable();
+                tasksList.repaint();
                 //tasksList.remove(selectedIndex);
                 //setTasks(protegeFactory.getAllTaskInstances());
-
 
             }
         });
@@ -501,13 +508,16 @@ public class TaskManagement extends javax.swing.JFrame {
 
     }// </editor-fold>//GEN-END:initComponents
 
-    public void executeCommands() {
+    public boolean executeCommands() {
 
         for (Command command : commands) {
             command.execute(ontModel);
             command.executeOnX3D(agent);
         }
+        int size = commands.size();
         commands.clear();
+        return size != 0;
+
     }
 
     /* public void addDeleteTaskListener(ActionListener listener) {
@@ -615,6 +625,8 @@ public class TaskManagement extends javax.swing.JFrame {
             }
         });
         tasksListPane.setViewportView(tasksList);
+        tasksList.enable();
+        tasksList.repaint();
         /*
         tasksList.removeAll();
         for (Object o : collection) {
