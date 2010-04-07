@@ -189,11 +189,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             //System.out.println(task.getName().split("#")[1] + " " + policy.getRespected(policyConversionModel)); 
             if (!policy.getRespected(policyConversionModel)) {
                 //if (!task.requestsSatisfied()) {
-                //System.out.println("Broken policy : " + policy.getName().substring(policy.getName().lastIndexOf('#'), policy.getName().length()));
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
-
+                 
                 if (policy.hasPriority()) {
                     entropy += policy.getPriority() * taskRespectanceDegree(task);
                 }
@@ -233,7 +232,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         double function = 0.0d;
         if (previous != null) {
             function += previous.getRewardFunction();
-            //TODO: solve -1 la infinit :P
             double temp = previous.getContextEntropy() - current.getContextEntropy() - c.getCost();
             function += ContextSnapshot.gamma * temp;
         } else {
@@ -254,6 +252,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Collection<Server> servers = protegeFactory.getAllServerInstances();
         newContext.executeActions(policyConversionModel);
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
+
         if (smallestEntropyContext != null) {
             if (entropyAndPolicy.getFirst() < smallestEntropyContext.getContextEntropy())
                 smallestEntropyContext = newContext;
@@ -406,12 +405,15 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-
         //returns true if there were commands to execute
         if (taskManagementWindow.executeCommands()) {
             taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
         }
 
+        synchronized (this) {
+            taskManagementWindow.setClearForAdding(true);
+            notifyAll();
+        }
 
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
@@ -473,6 +475,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
              * End of logging
              */
 
+            //avoid addin new tasks when querying ontology
+            taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
 
 
@@ -481,31 +485,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             ArrayList<String> message = new ArrayList<String>();
             for (Command o : resultQueue) {
                 message.add(o.toString());
-                System.out.println(o.toString());
-                /*if (o instanceof DeployTaskCommand) {
-                    DeployTaskCommand command = (DeployTaskCommand) o;
-                    String[] data = o.toStringArray();
-                    //just test if i remove task
-                   if (data[1].equals("Task_1")) {
-                        final Task t = protegeFactory.getTask(data[1]);
-                        final Server s = protegeFactory.getServer(data[2]);
-
-                        final javax.swing.Timer timer = new javax.swing.Timer(10000, new ActionListener() {
-
-                            public void actionPerformed(ActionEvent e) {
-                                System.err.println("Removiiing");
-                                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, t.getName(), s.getName());
-                                command.execute(policyConversionModel);
-                                command.executeOnX3D(agent);
-                            }
-                        });
-                        timer.setRepeats(false);
-                        timer.start();
-
-                }}*/
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
                 try {
+                    //wait in order to be noticeable in X3D
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -533,6 +516,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 System.out.println(c);
                 c.execute(selfHealingPolicyConversionModel);
                 c.executeOnX3D(myAgent);
+
+                //refresh tasks list if context has been repaired
+                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
             }
             //wait for effect to be noticeable on X3D
             try {
@@ -564,13 +550,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     }
 
     public boolean getEvaluateProp(Individual policy) {
-        //System.out.println(base + "#EvaluatePolicyP");
         Statement property = policy.getProperty(evaluatePolicyProperty);
 
         if (property == null) {
             return false;
         }
-
+        
         return property.getBoolean();
     }
 }

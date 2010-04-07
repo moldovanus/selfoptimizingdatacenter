@@ -591,9 +591,13 @@ public class X3DAgent extends Agent {
         addAttentionArrow(planeTransform);
     }
 
+    //TODO: Change wires color also on Remove Task
     public void removeTask(String taskName) {
         X3DNode task = tasks.remove(taskName);
         addAttentionArrow(task);
+        /*wiresIndexes.add(serverName);
+        setWireColor(serverName, ACTIVE_WIRE_COLOR);
+        changeWiresBackTimer.restart();*/
         mainScene.removeRootNode(task);
     }
 

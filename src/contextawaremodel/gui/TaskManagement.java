@@ -14,6 +14,7 @@ package contextawaremodel.gui;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
 import greenContextOntology.TaskInfo;
+import greenContextOntology.Policy;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -48,6 +49,8 @@ public class TaskManagement extends javax.swing.JFrame {
 
     private Collection<Command> commands;
     private int selectedIndex = 0;
+    private boolean clearForAdding;
+    private boolean addingTask;
 
     public TaskManagement(ProtegeFactory protegeFactory, SWRLFactory swrlFactory, OntModel ontModel, Agent agent) {
         super("Task Management");
@@ -416,7 +419,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 selectedIndex = tasksList.getSelectedIndex();
 
                 selectedTaskName = (String) tasksList.getModel().getElementAt(selectedIndex);
-                System.out.println("!!!!!!!!!!!!!!!!!!!! @@@@@@@@ Selecteeed : " + selectedTaskName);
+                //aSystem.out.println("!!!!!!!!!!!!!!!!!!!! @@@@@@@@ Selecteeed : " + selectedTaskName);
 
                 //hack to avoid inconsistencies. list selection fires not ok
                 if (selectedTaskName == null) {
@@ -483,30 +486,64 @@ public class TaskManagement extends javax.swing.JFrame {
         addTaskButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+
+                //wait in order to avoid ontology inconsistencies
+                synchronized (this) {
+                    if (!clearForAdding) {
+                        try {
+                            wait(5000);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            return;
+                        }
+                    }
+                }
+
+                addingTask = true;
+
                 String taskName = addTaskNameField.getText();
                 Task task = protegeFactory.createTask(taskName);
+                Policy policy = protegeFactory.createQoSPolicy(taskName + "Policy");
 
                 TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
                 TaskInfo receivedInfo = protegeFactory.createTaskInfo(taskName + "ReceivedInfo");
 
+
+                requestedInfo.setCores(Integer.parseInt(addTaskCoresField.getText()), ontModel);
+                requestedInfo.setCpu(Integer.parseInt(addTaskCpuField.getText()), ontModel);
+                requestedInfo.setMemory(Integer.parseInt(addTaskMemoryField.getText()), ontModel);
+                requestedInfo.setStorage(Integer.parseInt(addTaskStorageField.getText()), ontModel);
+
+                receivedInfo.setCores(0, ontModel);
+                receivedInfo.setCpu(0, ontModel);
+                receivedInfo.setMemory(0, ontModel);
+                receivedInfo.setStorage(0, ontModel);
+
                 task.setReceivedInfo(receivedInfo, ontModel);
                 task.setRequestedInfo(requestedInfo, ontModel);
+                policy.setReferenced(task);
+                policy.setPriority(1);
 
-                requestedInfo.setCores(Integer.parseInt(requestedCoresField.getText()), ontModel);
-                requestedInfo.setCpu(Integer.parseInt(requestedCpuField.getText()), ontModel);
-                requestedInfo.setMemory(Integer.parseInt(requestedMemoryField.getText()), ontModel);
-                requestedInfo.setStorage(Integer.parseInt(requestedStorageField.getText()), ontModel);
+                //todo:add means of specifying the priority from the user interface
+                task.setCpuWeight(0.1f);
+                task.setMemoryWeight(0.1f);
+                task.setStorageWeight(0.1f);
 
-                receivedInfo.setCores(Integer.parseInt(receivedCoresField.getText()), ontModel);
-                receivedInfo.setCpu(Integer.parseInt(receivedCpuField.getText()), ontModel);
-                receivedInfo.setMemory(Integer.parseInt(receivedMemoryField.getText()), ontModel);
-                receivedInfo.setStorage(Integer.parseInt(receivedStorageField.getText()), ontModel);
-
-                task.createSWRLRule(swrlFactory);
+                synchronized (this) {
+                    addingTask = false;
+                    //notify ReinforcementLearningDatacenterBehavior that task has been created
+                    notifyAll();
+                }
+                //task.createSWRLRule(swrlFactory);
             }
         });
 
     }// </editor-fold>//GEN-END:initComponents
+
+    public void setClearForAdding(boolean clearForAdding) {
+        this.clearForAdding = clearForAdding;
+    }
+
 
     public boolean executeCommands() {
 

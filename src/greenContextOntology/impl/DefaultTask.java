@@ -47,6 +47,9 @@ public class DefaultTask extends DefaultContextElement
     }
 
     public void setAssociatedServer(Server newAssociatedServer) {
+        if (hasAssociatedServer()){
+            removePropertyValue(getAssociatedServerProperty(), newAssociatedServer);
+        }
         setPropertyValue(getAssociatedServerProperty(), newAssociatedServer);
     }
 
