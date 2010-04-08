@@ -62,6 +62,7 @@ public class X3DAgent extends Agent {
     private int activeServersNo = 6;
 
     private X3DNode attentionArow;
+    private X3DNode inverseAttentionArow;
 
     private ActionListener sensorsAnimationListener = new ActionListener() {
 
@@ -171,6 +172,7 @@ public class X3DAgent extends Agent {
         }
 
         attentionArow = mainScene.getNamedNode("AttentionArrow_XFORM");
+        inverseAttentionArow = mainScene.getNamedNode("InverseAttentionArrow_XFORM");
         //mainScene.removeRootNode(attentionArow);
 
         ActionListener actionListener = new ActionListener() {
@@ -594,11 +596,12 @@ public class X3DAgent extends Agent {
     //TODO: Change wires color also on Remove Task
     public void removeTask(String taskName) {
         X3DNode task = tasks.remove(taskName);
-        addAttentionArrow(task);
+        addInverseAttentionArrow(task);
         /*wiresIndexes.add(serverName);
         setWireColor(serverName, ACTIVE_WIRE_COLOR);
         changeWiresBackTimer.restart();*/
         mainScene.removeRootNode(task);
+    
     }
 
     public void sendServerToLowPower(String serverName) {
@@ -654,6 +657,37 @@ public class X3DAgent extends Agent {
             public void actionPerformed(ActionEvent e) {
                 //mainScene.removeRootNode(attentionArow);
                 SFVec3f arrowScale = (SFVec3f) attentionArow.getField("scale");
+                arrowScale.setValue(new float[]{0, 0, 0});
+            }
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private void addInverseAttentionArrow(X3DNode targetNode) {
+        //place attention arrow
+        SFRotation planeRotation = (SFRotation) targetNode.getField("rotation");
+        SFRotation arrowRotation = (SFRotation) inverseAttentionArow.getField("rotation");
+        SFVec3f planeTranslation = (SFVec3f) targetNode.getField("translation");
+        SFVec3f arrowTranslation = (SFVec3f) inverseAttentionArow.getField("translation");
+        SFVec3f arrowScale = (SFVec3f) inverseAttentionArow.getField("scale");
+        arrowScale.setValue(new float[]{1, 1, 1});
+        float[] arrowTranslationValues = new float[4];
+        float[] arrowRotationValues = new float[4];
+        planeTranslation.getValue(arrowTranslationValues);
+        planeRotation.getValue(arrowRotationValues);
+        arrowTranslationValues[1] += 1;
+        arrowRotation.setValue(arrowRotationValues);
+        arrowTranslation.setValue(arrowTranslationValues);
+
+        //mainScene.addRootNode(attentionArow);
+
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                //mainScene.removeRootNode(attentionArow);
+                SFVec3f arrowScale = (SFVec3f) inverseAttentionArow.getField("scale");
                 arrowScale.setValue(new float[]{0, 0, 0});
             }
         });

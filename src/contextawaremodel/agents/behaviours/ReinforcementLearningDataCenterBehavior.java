@@ -485,6 +485,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             ArrayList<String> message = new ArrayList<String>();
             for (Command o : resultQueue) {
                 message.add(o.toString());
+                System.out.println(o.toString());
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
                 try {
@@ -542,7 +543,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     currentState.add(task.toString());
                 }
 
-                agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
+                agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
             }
         }
 
