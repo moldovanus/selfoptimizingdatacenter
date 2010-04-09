@@ -16,6 +16,7 @@ import java.io.IOException;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.utils.X3DMessageSender;
 
 /**
  * @author Me
@@ -38,7 +39,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
      * Moves the task
      */
     @Override
-    public void execute(OntModel model) {     
+    public void execute(OntModel model) {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
@@ -84,41 +85,31 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
     public void executeOnX3D(Agent agent) {
         Server server = protegeFactory.getServer(newServerName);
 
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 
 
     public void rewindOnX3D(Agent agent) {
 
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
 
 
         Server server = protegeFactory.getServer(oldServerName);
-        ACLMessage deployMessage = new ACLMessage(ACLMessage.INFORM);
         try {
-            deployMessage.setContentObject(new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], oldServerName.split("#")[1], server.getRunningTasks().size() + 1});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], oldServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        deployMessage.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        deployMessage.setLanguage("JavaSerialization");
-        agent.send(deployMessage);
+
 
     }
 }

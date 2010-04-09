@@ -20,6 +20,7 @@ import selfHealingOntology.Sensor;
 import selfHealingOntology.SelfHealingProtegeFactory;
 import contextawaremodel.GlobalVars;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.utils.X3DMessageSender;
 
 /**
  * @author Me
@@ -49,14 +50,14 @@ public class SetCommand extends SelfHealingCommand {
     public void execute(OntModel model) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
         previousValue = sensor.getValueOfService();
-        sensor.setValueOfService(newValue,model);
+        sensor.setValueOfService(newValue, model);
     }
 
     @Override
-    public void rewind(OntModel model)  {
+    public void rewind(OntModel model) {
 
-       Sensor sensor = protegeFactory.getSensor(targetSensor);
-       sensor.setValueOfService(previousValue,model);
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        sensor.setValueOfService(previousValue, model);
 
     }
 
@@ -137,30 +138,24 @@ public class SetCommand extends SelfHealingCommand {
     }
 
     public void executeOnX3D(Agent agent) {
-         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        String actionName = (sensor.getName().contains("Temperature")) ? "setTemperature" : "setHumidity";
         try {
-            message.setContentObject(new Object[]{actionName, sensor.getValueOfService()});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 
     public void rewindOnX3D(Agent agent) {
-         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        String actionName =( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        Sensor sensor = protegeFactory.getSensor(targetSensor);
+        String actionName = (sensor.getName().contains("Temperature")) ? "setTemperature" : "setHumidity";
         try {
-            message.setContentObject(new Object[]{ actionName, sensor.getValueOfService()});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 }

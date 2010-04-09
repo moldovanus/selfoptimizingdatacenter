@@ -24,7 +24,7 @@ public class GlobalVars {
     public static final String WORLD_FILE_SCHEMA = "ontology/worldFile.xsd";
     public static final String ONTOLOGY_CLASS_NAME = "ontology-class-name";
     public static final String ONTOLOGY_INDIVIDUAL_NAME = "ontology-individual-name";
-    public static final String X3D_SCENE_FILE = "x3d/datacenter.x3d" ;
+    public static final String X3D_SCENE_FILE = "x3d/datacenter.x3d";
     public static final String DATA_NAME = "data-name";
     public static final String DATA_VALUE = "data-value";
     public static final String CONTEXT_ELEMENT = "context-element";
@@ -37,8 +37,25 @@ public class GlobalVars {
     public static final int INDIVIDUAL_CREATED = 1;
     public static final int INDIVIDUAL_MODIFIED = 2;
     public static final Map<String, String> brokenResources = new HashMap<String, String>();
-   //public static final Map<String, String> validResources = new HashMap<String, String>();
-    public static Map<String,Map<String, String>> valueMapping = new HashMap<String,Map<String, String>>();
+    //public static final Map<String, String> validResources = new HashMap<String, String>();
+    public static Map<String, Map<String, String>> valueMapping = new HashMap<String, Map<String, String>>();
+    private static String x3DPlatformName = "acasa-25f3f1aa5:1099/JADE";
+    private static String x3DPlatformAddress = "http://acasa-25f3f1aa5:7778/acc";
 
-     
+    //ok because the x3DPlatformAddress will be  changed only once per run
+    public static String getX3DPlatformAddress() {
+        return x3DPlatformAddress;
+    }
+
+    public synchronized static void setX3DPlatformAddress(String x3DPlatformAddress) {
+        GlobalVars.x3DPlatformAddress = x3DPlatformAddress;
+    }
+
+    public static String getX3DPlatformName() {
+        return x3DPlatformName;
+    }
+
+    public synchronized static void setX3DPlatformName(String x3DPlatformName) {
+        GlobalVars.x3DPlatformName = x3DPlatformName;
+    }
 }

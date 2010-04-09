@@ -20,6 +20,7 @@ import selfHealingOntology.SelfHealingProtegeFactory;
 import selfHealingOntology.Sensor;
 import contextawaremodel.GlobalVars;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.utils.X3DMessageSender;
 
 
 /**
@@ -138,28 +139,22 @@ public class DecrementCommand extends SelfHealingCommand {
     public void executeOnX3D(Agent agent) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
         String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{actionName, sensor.getValueOfService()});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 
     public void rewindOnX3D(Agent agent) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
         String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{actionName, sensor.getValueOfService()});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 }

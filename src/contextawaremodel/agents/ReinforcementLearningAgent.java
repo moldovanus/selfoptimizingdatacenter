@@ -101,6 +101,8 @@ public class ReinforcementLearningAgent extends Agent {
     protected void setup() {
         System.out.println("[RL agent] Hello!");
 
+        
+
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {
@@ -169,7 +171,7 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-             //   addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));

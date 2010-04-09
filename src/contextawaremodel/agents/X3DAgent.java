@@ -77,7 +77,7 @@ public class X3DAgent extends Agent {
             rotation_1.setValue(values);
             float temp = values[3] * -1;
             rotation_2.getValue(values);
-            values[3]  = temp;
+            values[3] = temp;
             rotation_2.setValue(values);
         }
     };
@@ -112,11 +112,11 @@ public class X3DAgent extends Agent {
     @Override
     protected void setup() {
 
-        Object[] args = getArguments();
+        /*Object[] args = getArguments();
         if (args == null) {
             System.out.println("[X3D] X3D Agent failed, owlModel arguments are null!");
             //return;
-        }
+        }*/
 
         // this.policyConversionModel = (OntModel) args[0];
         System.out.println("[X3DAgent] : Hellooo ! ");
@@ -601,7 +601,7 @@ public class X3DAgent extends Agent {
         setWireColor(serverName, ACTIVE_WIRE_COLOR);
         changeWiresBackTimer.restart();*/
         mainScene.removeRootNode(task);
-    
+
     }
 
     public void sendServerToLowPower(String serverName) {

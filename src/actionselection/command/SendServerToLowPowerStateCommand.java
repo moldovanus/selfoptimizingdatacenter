@@ -18,6 +18,7 @@ import jade.lang.acl.ACLMessage;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.utils.X3DMessageSender;
 
 /**
  * @author Me
@@ -30,7 +31,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost =2;
+        cost = 2;
     }
 
     /**
@@ -42,9 +43,9 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         oldTasks = server.getRunningTasks();
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.removeRunningTasks((Task) iterator.next(),model);
+            server.removeRunningTasks((Task) iterator.next(), model);
         }
-        server.setIsInLowPowerState(true,model);
+        server.setIsInLowPowerState(true, model);
 
     }
 
@@ -54,9 +55,9 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.addRunningTasks((Task) iterator.next(),model);
+            server.addRunningTasks((Task) iterator.next(), model);
         }
-        server.setIsInLowPowerState(false,model);
+        server.setIsInLowPowerState(false, model);
     }
 
     @Override
@@ -82,26 +83,20 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     }
 
     public void executeOnX3D(Agent agent) {
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 
     public void rewindOnX3D(Agent agent) {
-        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
-            message.setContentObject(new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        message.addReceiver(new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName()));
-        message.setLanguage("JavaSerialization");
-        agent.send(message);
+
     }
 }
