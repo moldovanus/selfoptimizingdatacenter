@@ -2,7 +2,6 @@ package greenContextOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
-import edu.stanford.smi.protegex.owl.model.impl.DefaultOWLIndividual;
 
 import java.util.*;
 
@@ -83,13 +82,10 @@ public class DefaultServer extends DefaultResource
         setPropertyValue(getAssociatedStorageProperty(), newAssociatedStorage);
     }
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
-
     public boolean getIsInLowPowerState() {
         return getPropertyValueLiteral(getIsInLowPowerStateProperty()).getBoolean();
     }
-
 
     public RDFProperty getIsInLowPowerStateProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState";
@@ -97,16 +93,13 @@ public class DefaultServer extends DefaultResource
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasIsInLowPowerState() {
         return getPropertyValueCount(getIsInLowPowerStateProperty()) > 0;
     }
 
-
     public void setIsInLowPowerState(boolean newIsInLowPowerState, OntModel ontModel) {
         setPropertyValue(getIsInLowPowerStateProperty(), new java.lang.Boolean(newIsInLowPowerState), ontModel);
     }
-
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
     public Collection getRunningTasks() {
@@ -135,8 +128,8 @@ public class DefaultServer extends DefaultResource
      */
     public void addRunningTasks(Task newRunningTasks, OntModel model) {
 
-        TaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
-        TaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
+        RequestedTaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
+        ReceivedTaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
 
         //System.out.println("-----------\n before" + newRunningTasks.toString() + "\n");
 
@@ -152,7 +145,7 @@ public class DefaultServer extends DefaultResource
             Core core = coresIterator.next();
             //TODO : to be modified for more core flexibility
             int availableCore = core.getTotal() - core.getUsed();
-            int requestedCPU = requestedSLA.getCpu();
+            int requestedCPU = requestedSLA.getCpuMaxAcceptableValue();
             //TODO : remove size checks if performance needed
             if (requestedCPU > availableCore) {
                 //    i--;
@@ -161,7 +154,7 @@ public class DefaultServer extends DefaultResource
             }
             //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
             coreCount--;
-            receivedSLA.setCpu(requestedCPU, model);
+            receivedSLA.setCpuReceived(requestedCPU, model);
             core.setUsed(core.getUsed() + requestedCPU, model);
             receivedSLA.addReceivedCoreIndex(index);
             index++;
@@ -171,16 +164,16 @@ public class DefaultServer extends DefaultResource
 
         Memory memory = this.getAssociatedMemory();
         int availableMemory = memory.getTotal() - memory.getUsed();
-        int requestedMemory = requestedSLA.getMemory();
+        int requestedMemory = requestedSLA.getMemoryMaxAcceptableValue();
         int receivedMemory = (requestedMemory < availableMemory) ? requestedMemory : availableMemory;
-        receivedSLA.setMemory(receivedMemory, model);
+        receivedSLA.setMemoryReceived(receivedMemory, model);
         memory.setUsed(memory.getUsed() + receivedMemory, model);
 
         Storage storage = this.getAssociatedStorage();
         int availableStorage = storage.getTotal() - storage.getUsed();
-        int requestedStorage = requestedSLA.getStorage();
+        int requestedStorage = requestedSLA.getStorageMaxAcceptableValue();
         int receivedStorage = (requestedStorage < availableStorage) ? requestedStorage : availableStorage;
-        receivedSLA.setStorage(receivedStorage, model);
+        receivedSLA.setStorageReceived(receivedStorage, model);
         storage.setUsed(storage.getUsed() + receivedStorage, model);
 
         //add task to ontology
@@ -205,7 +198,7 @@ public class DefaultServer extends DefaultResource
     public void removeRunningTasks(Task oldRunningTasks, OntModel model) {
 
 
-        TaskInfo receivedSLA = oldRunningTasks.getReceivedInfo();
+        ReceivedTaskInfo receivedSLA = oldRunningTasks.getReceivedInfo();
 
         CPU cpu = this.getAssociatedCPU();
         Collection<Core> cores = cpu.getAssociatedCore();
@@ -218,23 +211,23 @@ public class DefaultServer extends DefaultResource
             Core core = coresIterator.next();
             //TODO : to check the multicore modification if it's ok
             if (receivedCoresIndexes.contains(i)) {
-                int receivedCPU = receivedSLA.getCpu();
+                int receivedCPU = receivedSLA.getCpuReceived();
                 core.setUsed(core.getUsed() - receivedCPU, model);
                 receivedSLA.removeReceivedCoreIndex(i);
             }
 
         }
 
-        receivedSLA.setCpu(0, model);
+        receivedSLA.setCpuReceived(0, model);
 
         Memory memory = this.getAssociatedMemory();
-        memory.setUsed(memory.getUsed() - receivedSLA.getMemory(), model);
-        receivedSLA.setMemory(0, model);
+        memory.setUsed(memory.getUsed() - receivedSLA.getMemoryReceived(), model);
+        receivedSLA.setMemoryReceived(0, model);
 
         Storage storage = this.getAssociatedStorage();
 
-        storage.setUsed(storage.getUsed() - receivedSLA.getStorage(), model);
-        receivedSLA.setStorage(0, model);
+        storage.setUsed(storage.getUsed() - receivedSLA.getStorageReceived(), model);
+        receivedSLA.setStorageReceived(0, model);
 
         //remove task from ontology
         //getRunningTasks().remove(oldRunningTasks);
@@ -256,7 +249,7 @@ public class DefaultServer extends DefaultResource
      */
     public boolean hasResourcesFor(Task task) {
 
-        TaskInfo requestedSLA = task.getRequestedInfo();
+        RequestedTaskInfo requestedSLA = task.getRequestedInfo();
 
         CPU cpu = this.getAssociatedCPU();
         Collection cores = cpu.getAssociatedCore();
@@ -269,7 +262,7 @@ public class DefaultServer extends DefaultResource
         for (Object coreInst : cores) {
 
             Core core = (Core) coreInst;
-            if (core.getUsed() + requestedSLA.getCpu() > core.getTotal()) {
+            if (core.getUsed() + requestedSLA.getCpuMaxAcceptableValue() > core.getTotal()) {
                 continue;
             } else {
                 requestedCores--;
@@ -281,13 +274,13 @@ public class DefaultServer extends DefaultResource
         }
 
         Memory memory = this.getAssociatedMemory();
-        if (memory.getUsed() + requestedSLA.getMemory() > memory.getTotal()) {
+        if (memory.getUsed() + requestedSLA.getMemoryMaxAcceptableValue() > memory.getTotal()) {
             return false;
         }
 
         Storage storage = this.getAssociatedStorage();
 
-        if (storage.getUsed() + requestedSLA.getStorage() > storage.getTotal()) {
+        if (storage.getUsed() + requestedSLA.getStorageMaxAcceptableValue() > storage.getTotal()) {
             return false;
         }
 
@@ -313,18 +306,15 @@ public class DefaultServer extends DefaultResource
         return (String) getPropertyValue(getServerNameProperty());
     }
 
-
     public RDFProperty getServerNameProperty() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#serverName";
         final String name = getOWLModel().getResourceNameForURI(uri);
         return getOWLModel().getRDFProperty(name);
     }
 
-
     public boolean hasServerName() {
         return getPropertyValueCount(getServerNameProperty()) > 0;
     }
-
 
     public void setServerName(String newServerName) {
         setPropertyValue(getServerNameProperty(), newServerName);
@@ -440,7 +430,7 @@ public class DefaultServer extends DefaultResource
                     //throtelling used to reduce bla bla bla
                     continue;
                 } else {
-                    TaskInfo received = ((Task) task).getReceivedInfo();
+                    ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
                     received.setCores(received.getCores() + 1, model);
                     //TODO: sinchronize used with given to task  - maybe finer control - CPU per core per task not just global cpu anr cor no
                     core.setUsed(core.getMinAcceptableValue(), model);
@@ -463,8 +453,8 @@ public class DefaultServer extends DefaultResource
                 partition = 1;
             }
             for (Object task : runningTasks) {
-                TaskInfo received = ((Task) task).getReceivedInfo();
-                received.setMemory(received.getMemory() + partition, model);
+                ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
+                received.setMemoryReceived(received.getMemoryReceived() + partition, model);
             }
             memory.setUsed(remaining, model);
         }
@@ -479,8 +469,8 @@ public class DefaultServer extends DefaultResource
                 partition = 1;
             }
             for (Object task : runningTasks) {
-                TaskInfo received = ((Task) task).getReceivedInfo();
-                received.setStorage(received.getStorage() + partition, model);
+                ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
+                received.setStorageReceived(received.getStorageReceived() + partition, model);
             }
             storage.setUsed(remaining, model);
         }

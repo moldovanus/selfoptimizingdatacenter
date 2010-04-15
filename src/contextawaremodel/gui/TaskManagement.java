@@ -13,7 +13,7 @@ package contextawaremodel.gui;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
-import greenContextOntology.TaskInfo;
+ 
 import greenContextOntology.Policy;
 
 import javax.swing.*;
@@ -428,7 +428,7 @@ public class TaskManagement extends javax.swing.JFrame {
 
                 selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
 
-                TaskInfo requested = selectedTask.getRequestedInfo();
+                /*TaskInfo requested = selectedTask.getRequestedInfo();
                 TaskInfo received = selectedTask.getReceivedInfo();
 
                 requestedCoresField.setText("" + requested.getCores());
@@ -439,7 +439,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 receivedCoresField.setText("" + received.getCores());
                 receivedCpuField.setText("" + received.getCpu());
                 receivedStorageField.setText("" + received.getStorage());
-                receivedMemoryField.setText("" + received.getMemory());
+                receivedMemoryField.setText("" + received.getMemory());*/
             }
         });
 
@@ -505,7 +505,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 Task task = protegeFactory.createTask(taskName);
                 Policy policy = protegeFactory.createQoSPolicy(taskName + "Policy");
 
-                TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
+                /*TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
                 TaskInfo receivedInfo = protegeFactory.createTaskInfo(taskName + "ReceivedInfo");
 
 
@@ -533,7 +533,7 @@ public class TaskManagement extends javax.swing.JFrame {
                     addingTask = false;
                     //notify ReinforcementLearningDatacenterBehavior that task has been created
                     notifyAll();
-                }
+                }*/
                 //task.createSWRLRule(swrlFactory);
             }
         });

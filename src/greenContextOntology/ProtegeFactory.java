@@ -3,7 +3,6 @@ package greenContextOntology;
 import greenContextOntology.impl.*;
 
 import edu.stanford.smi.protegex.owl.model.*;
-
 import java.util.*;
 
 
@@ -314,44 +313,42 @@ public class ProtegeFactory {
         return result;
     }
 
-    public RDFSNamedClass getTaskInfoClass() {
-        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#TaskInfo";
+    public RDFSNamedClass getRequestedTaskInfoClass() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#RequestedTaskInfo";
         final String name = owlModel.getResourceNameForURI(uri);
         return owlModel.getRDFSNamedClass(name);
     }
 
-    public TaskInfo createTaskInfo(String name) {
-        final RDFSNamedClass cls = getTaskInfoClass();
+    public RequestedTaskInfo createRequestedTaskInfo(String name) {
+        final RDFSNamedClass cls = getRequestedTaskInfoClass();
         if (name == null) {
             name = owlModel.getNextAnonymousResourceName();
         }
-        return new DefaultTaskInfo(owlModel, cls.createInstance(name).getFrameID());
+        return  new DefaultRequestedTaskInfo(owlModel, cls.createInstance(name).getFrameID());
     }
 
-    public TaskInfo getTaskInfo(String name) {
-        RDFResource res = owlModel.getRDFResource(name);
-        if (res == null) {
+    public RequestedTaskInfo getRequestedTaskInfo(String name) {
+        RDFResource res = owlModel.getRDFResource(  name);
+        if (res == null) {return null;}
+        if (res instanceof RequestedTaskInfo) {
+            return (RequestedTaskInfo) res;
+        } else if (res.hasProtegeType(getRequestedTaskInfoClass())) {
+            return new DefaultRequestedTaskInfo(owlModel, res.getFrameID());
+        }
             return null;
         }
-        if (res instanceof TaskInfo) {
-            return (TaskInfo) res;
-        } else if (res.hasProtegeType(getTaskInfoClass())) {
-            return new DefaultTaskInfo(owlModel, res.getFrameID());
-        }
-        return null;
+
+    public Collection<RequestedTaskInfo> getAllRequestedTaskInfoInstances() {
+        return getAllRequestedTaskInfoInstances(false);
     }
 
-    public Collection<TaskInfo> getAllTaskInfoInstances() {
-        return getAllTaskInfoInstances(false);
-    }
-
-    public Collection<TaskInfo> getAllTaskInfoInstances(boolean transitive) {
-        Collection<TaskInfo> result = new ArrayList<TaskInfo>();
-        final RDFSNamedClass cls = getTaskInfoClass();
+    public Collection<RequestedTaskInfo> getAllRequestedTaskInfoInstances(boolean transitive) {
+        Collection<RequestedTaskInfo> result = new ArrayList<RequestedTaskInfo>();
+        final RDFSNamedClass cls = getRequestedTaskInfoClass();
         RDFResource owlIndividual;
         for (Iterator it = cls.getInstances(transitive).iterator(); it.hasNext();) {
             owlIndividual = (RDFResource) it.next();
-            result.add(new DefaultTaskInfo(owlModel, owlIndividual.getFrameID()));
+            result.add(new DefaultRequestedTaskInfo(owlModel, owlIndividual.getFrameID()));
         }
         return result;
     }
@@ -565,6 +562,48 @@ public class ProtegeFactory {
         }
         return result;
     }
+
+
+    public RDFSNamedClass getReceivedTaskInfoClass() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#ReceivedTaskInfo";
+        final String name = owlModel.getResourceNameForURI(uri);
+        return owlModel.getRDFSNamedClass(name);
+    }
+
+    public ReceivedTaskInfo createReceivedTaskInfo(String name) {
+        final RDFSNamedClass cls = getReceivedTaskInfoClass();
+        if (name == null) {
+            name = owlModel.getNextAnonymousResourceName();
+        }
+        return  new DefaultReceivedTaskInfo(owlModel, cls.createInstance(name).getFrameID());
+    }
+
+    public ReceivedTaskInfo getReceivedTaskInfo(String name) {
+        RDFResource res = owlModel.getRDFResource(name);
+        if (res == null) {return null;}
+        if (res instanceof ReceivedTaskInfo) {
+            return (ReceivedTaskInfo) res;
+        } else if (res.hasProtegeType(getReceivedTaskInfoClass())) {
+            return new DefaultReceivedTaskInfo(owlModel, res.getFrameID());
+        }
+        return null;
+    }
+
+    public Collection<ReceivedTaskInfo> getAllReceivedTaskInfoInstances() {
+        return getAllReceivedTaskInfoInstances(false);
+    }
+
+    public Collection<ReceivedTaskInfo> getAllReceivedTaskInfoInstances(boolean transitive) {
+        Collection<ReceivedTaskInfo> result = new ArrayList<ReceivedTaskInfo>();
+        final RDFSNamedClass cls = getReceivedTaskInfoClass();
+        RDFResource owlIndividual;
+        for (Iterator it = cls.getInstances(transitive).iterator();it.hasNext();) {
+            owlIndividual = (RDFResource) it.next();
+            result.add(new DefaultReceivedTaskInfo(owlModel, owlIndividual.getFrameID()));
+        }
+        return result;
+    }
+
 
     public RDFSNamedClass getCPUClass() {
         final String uri = "http://www.owl-ontologies.com/Datacenter.owl#CPU";

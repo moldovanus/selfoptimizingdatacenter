@@ -610,7 +610,7 @@ public class X3DAgent extends Agent {
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(INACTIVE_SERVER_COLOR);
         activeServersNo--;
-        fanAnimationTimer.setDelay(300 / activeServersNo);
+        fanAnimationTimer.setDelay(100 / activeServersNo);
         fanAnimationTimer.restart();
 
         //place attention arrow
@@ -625,7 +625,7 @@ public class X3DAgent extends Agent {
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(ACTIVE_SERVER_COLOR);
         activeServersNo++;
-        fanAnimationTimer.setDelay(300 / activeServersNo);
+        fanAnimationTimer.setDelay(100 / activeServersNo);
         fanAnimationTimer.restart();
 
 

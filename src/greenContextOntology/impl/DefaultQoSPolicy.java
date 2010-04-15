@@ -29,19 +29,19 @@ public class DefaultQoSPolicy extends DefaultPolicy
 
     public boolean getRespected(OntModel ontModel) {
         Task task = this.getReferenced();
-        TaskInfo receivedInfo = task.getReceivedInfo();
-        TaskInfo requestedInfo = task.getRequestedInfo();
+        ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
+        RequestedTaskInfo requestedInfo = task.getRequestedInfo();
         
         if (receivedInfo.getCores() < requestedInfo.getCores()) {
             return false;
         }
-        if (receivedInfo.getCpu() < requestedInfo.getCpu()) {
+        if (receivedInfo.getCpuReceived() < requestedInfo.getCpuMinAcceptableValue()) {
             return false;
         }
-        if (receivedInfo.getMemory() < requestedInfo.getMemory()) {
+        if (receivedInfo.getMemoryReceived() < requestedInfo.getMemoryMinAcceptableValue()) {
             return false;
         }
-        if (receivedInfo.getStorage() < requestedInfo.getStorage()) {
+        if (receivedInfo.getStorageReceived() < requestedInfo.getStorageMinAcceptableValue()) {
             return false;
         }
         

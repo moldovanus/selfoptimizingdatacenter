@@ -8,6 +8,7 @@ import edu.stanford.smi.protegex.owl.model.event.PropertyValueAdapter;
 import edu.stanford.smi.protegex.owl.model.event.PropertyValueListener;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import jade.wrapper.StaleProxyException;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ import java.awt.event.WindowListener;
 import java.util.Collection;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -59,6 +62,8 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
 
     @Override
     protected void setup() {
+
+
         System.out.println("[GUIAgent] Hello!");
 
         Object[] args = getArguments();
@@ -70,7 +75,12 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
             this.doDelete();
             return;
         }
-
+        
+        try {
+            this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
+        } catch (StaleProxyException ex) {
+            Logger.getLogger(GUIAgent.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // Start the Swing GUI
         Runnable r = new Runnable() {
@@ -81,6 +91,7 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
                             UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception e) {
                 }
+
 
                 // Start the Main Window
                 GUIAgent.this.mainWindow = new MainWindow(GUIAgent.this, owlModel);

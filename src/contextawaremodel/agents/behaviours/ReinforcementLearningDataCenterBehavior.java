@@ -111,12 +111,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     // function for computing the contribution to the entropy of task @param task
     private double taskRespectanceDegree(Task task) {
-        TaskInfo received = task.getReceivedInfo();
-        TaskInfo requested = task.getRequestedInfo();
+        ReceivedTaskInfo received = task.getReceivedInfo();
+        RequestedTaskInfo requested = task.getRequestedInfo();
+
+        //TODO : poate trebe bagat si minimu in task respectance
         double respectance = task.getCpuWeight()
-                * (requested.getCores() - received.getCores() + requested.getCpu() - received.getCpu())
-                + task.getMemoryWeight() * (requested.getMemory() - received.getMemory())
-                + task.getStorageWeight() * (requested.getStorage() - received.getStorage());
+                * (requested.getCores() - received.getCores() + requested.getCpuMaxAcceptableValue() - received.getCpuReceived())
+                + task.getMemoryWeight() * (requested.getMemoryMaxAcceptableValue() - received.getMemoryReceived())
+                + task.getStorageWeight() * (requested.getStorageMaxAcceptableValue() - received.getStorageReceived());
         return respectance;
     }
 
@@ -232,7 +234,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         double function = 0.0d;
         if (previous != null) {
             function += previous.getRewardFunction();
-            double temp = previous.getContextEntropy() - current.getContextEntropy() - c.getCost();
+            double temp = previous.getContextEntropy() - current.getContextEntropy() - c.getCost()-current.getActions().size();
             function += ContextSnapshot.gamma * temp;
         } else {
             function -= current.getContextEntropy();

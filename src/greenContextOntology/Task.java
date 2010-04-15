@@ -48,26 +48,26 @@ public interface Task extends ContextElement {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
 
-    TaskInfo getReceivedInfo();
+    ReceivedTaskInfo getReceivedInfo();
 
     RDFProperty getReceivedInfoProperty();
 
     boolean hasReceivedInfo();
 
-    void setReceivedInfo(TaskInfo newReceivedInfo, OntModel model);
-    void setReceivedInfo(TaskInfo newReceivedInfo);
+    void setReceivedInfo(ReceivedTaskInfo newReceivedInfo, OntModel model);
+    void setReceivedInfo(ReceivedTaskInfo newReceivedInfo);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#requestedInfo
 
-    TaskInfo getRequestedInfo();
+    RequestedTaskInfo getRequestedInfo();
 
     RDFProperty getRequestedInfoProperty();
 
     boolean hasRequestedInfo();
 
-    void setRequestedInfo(TaskInfo newRequestedInfo, OntModel model);
-    void setRequestedInfo(TaskInfo newRequestedInfo);
+    void setRequestedInfo(RequestedTaskInfo newRequestedInfo, OntModel model);
+    void setRequestedInfo(RequestedTaskInfo newRequestedInfo);
 
     @Override
     String toString();
