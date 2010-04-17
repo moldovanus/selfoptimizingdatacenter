@@ -81,12 +81,17 @@ public class ReceiveMessageRLBehaviour extends CyclicBehaviour {
                     break;
                 case ACLMessage.INFORM_IF:
                     System.out.println("http://www.owl-ontologies.com/Datacenter.owl#" + message.getContent().split("-")[0]);
-                    Task selectedTask = protegeFactory.getTask("http://www.owl-ontologies.com/Datacenter.owl#" + message.getContent().split("-")[0]);
+                    Task selectedTask = protegeFactory.getTask( "http://www.owl-ontologies.com/Datacenter.owl#"+message.getContent().split("-")[0]);
+                    if(selectedTask.getAssociatedServer()!= null)     {
                     RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
                     command.execute(jenaModel);
                     command.executeOnX3D(agent);
                     selectedTask.deleteInstance(jenaModel, swrlFactory);
                     agent.sendAllTasksToClient();
+                    }else
+                    {
+                    agent.sendRefuseMessage();   
+                    }
                     break;
                 case ACLMessage.SUBSCRIBE:
                     Boolean value = (Boolean) message.getContentObject();

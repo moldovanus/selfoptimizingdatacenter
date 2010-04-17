@@ -647,7 +647,10 @@ public boolean executeCommands() {
             tasksList.add(o.toString(), new JLabel(o.toString()));
         }*/
     }
-
+    public void reenableTasksList(){
+        tasksList.enable();
+        tasksList.repaint();
+    }
 
     public String getSelectedTaskName() {
         return selectedTaskName;

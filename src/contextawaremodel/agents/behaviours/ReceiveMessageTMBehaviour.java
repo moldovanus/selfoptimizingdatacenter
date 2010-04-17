@@ -5,6 +5,8 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import javax.swing.*;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Me
@@ -32,7 +34,7 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
             switch (message.getPerformative()) {
                 case ACLMessage.INFORM_REF:
                     String mes = message.getContent();
-                    String parts[]= mes.split("/");
+                    String parts[]= mes.split("<");
                     String names[]= new String[parts.length];
                     String cpuReceived[]= new String[parts.length];
                     String memoryReceived[]= new String[parts.length];
@@ -49,7 +51,7 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                     for (String s: parts)
                     {
                         System.out.println(s);
-                        String str[]=s.split("#");
+                        String str[]=s.split("=");
                         names[index]=str[0];
                         minCpuRequested[index] = str[1] ;
                         maxCpuRequested[index] = str[2] ;
@@ -72,6 +74,10 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
 
                 case ACLMessage.SUBSCRIBE:
                    
+                    break;
+                case ACLMessage.REFUSE:     
+                    JOptionPane.showMessageDialog(null,message.getContent(),"The transaction wasn't effectuated",1);
+                    agent.reenableTasks();
                     break;
             }
         } catch (Exception ex) {

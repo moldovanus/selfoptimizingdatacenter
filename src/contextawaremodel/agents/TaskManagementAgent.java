@@ -26,7 +26,9 @@ public class TaskManagementAgent extends Agent {
         taskManagementWindow = new TaskManagement(this);
         taskManagementWindow.setVisible(true);
     }
-
+    public void reenableTasks(){
+        taskManagementWindow.reenableTasksList();
+    }
     public void populateTaskWindow(String[] names, String[] minCpuRequested, String[] maxCpuRequested, String[] minMemoryRequested, String[] maxMemoryRequested, String[] minStorageRequested, String[] maxStorageRequested, String[] cpuReceived, String[] memoryReceived, String[] storageReceived) {
         taskManagementWindow.populate(names, minCpuRequested, maxCpuRequested, minMemoryRequested, maxMemoryRequested, minStorageRequested, maxStorageRequested, cpuReceived, memoryReceived, storageReceived);
     }

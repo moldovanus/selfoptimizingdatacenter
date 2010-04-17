@@ -103,6 +103,14 @@ public class ReinforcementLearningAgent extends Agent {
     public void setSelfOptimizingLogger(LoggerGUI selfOptimizingLogger) {
         this.selfOptimizingLogger = selfOptimizingLogger;
     }
+    public void sendRefuseMessage(){
+            ACLMessage msg = new ACLMessage(ACLMessage.REFUSE);
+        msg.setContent("Server not found");
+        msg.addReceiver(new AID(GlobalVars.TMAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
+
+            this.send(msg);
+        
+    }
       public void sendAllTasksToClient(){
           ProtegeFactory protegeFactory = new ProtegeFactory(owlModelDataCenter);
          Collection<Task> tasks= protegeFactory.getAllTaskInstances();
@@ -113,8 +121,8 @@ public class ReinforcementLearningAgent extends Agent {
         for (Task task:tasks){
           receivedInfo = task.getReceivedInfo();
           requestedInfo = task.getRequestedInfo();
-          s+=task.getTaskName()+"-"+task.isRunning()+"#"+requestedInfo.getCores()+"#"+requestedInfo.getCpuMinAcceptableValue()+"#"+requestedInfo.getCpuMaxAcceptableValue()+"#"+requestedInfo.getMemoryMinAcceptableValue()+"#"+requestedInfo.getMemoryMaxAcceptableValue()+"#"+requestedInfo.getStorageMinAcceptableValue()+"#"+requestedInfo.getStorageMaxAcceptableValue();
-          s+="#"+receivedInfo.getCores()+"#"+receivedInfo.getCpuReceived()+"#"+receivedInfo.getMemoryReceived()+"#"+receivedInfo.getStorageReceived()+"/";
+          s+=task.getLocalName()+"-"+task.isRunning()+"="+requestedInfo.getCores()+"="+requestedInfo.getCpuMinAcceptableValue()+"="+requestedInfo.getCpuMaxAcceptableValue()+"="+requestedInfo.getMemoryMinAcceptableValue()+"="+requestedInfo.getMemoryMaxAcceptableValue()+"="+requestedInfo.getStorageMinAcceptableValue()+"="+requestedInfo.getStorageMaxAcceptableValue();
+          s+="="+receivedInfo.getCores()+"="+receivedInfo.getCpuReceived()+"="+receivedInfo.getMemoryReceived()+"="+receivedInfo.getStorageReceived()+"<";
 
         }
              ACLMessage msg = new ACLMessage(ACLMessage.INFORM_REF);
@@ -208,7 +216,7 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
-                addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel,jenaOwlModelDataCenter));
+                addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel,owlModelDataCenter));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
