@@ -1,0 +1,2 @@
+ams@moldovanus:1099/JADE
+http://moldovanus:7778/acc

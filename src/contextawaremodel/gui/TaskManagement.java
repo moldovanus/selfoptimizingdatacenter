@@ -11,27 +11,18 @@
 
 package contextawaremodel.gui;
 
-import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
- 
-import greenContextOntology.Policy;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.text.NumberFormat;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import contextawaremodel.agents.TaskManagementAgent;
+import contextawaremodel.GlobalVars;
 
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
-import com.hp.hpl.jena.ontology.OntModel;
-import jade.core.Agent;
-import actionselection.command.RemoveTaskFromServerCommand;
-import actionselection.command.Command;
-import actionselection.command.DeleteOWLIndividualCommand;
 
 /**
  * @author Moldovanus
@@ -41,25 +32,17 @@ public class TaskManagement extends javax.swing.JFrame {
     /**
      * Creates new form TaskManagement
      *
-     * @param protegeFactory
-     * @param swrlFactory
-     * @param ontModel
      * @param agent
      */
 
-    private Collection<Command> commands;
     private int selectedIndex = 0;
     private boolean clearForAdding;
     private boolean addingTask;
 
-    public TaskManagement(ProtegeFactory protegeFactory, SWRLFactory swrlFactory, OntModel ontModel, Agent agent) {
+    public TaskManagement(    TaskManagementAgent agent) {
         super("Task Management");
-        this.protegeFactory = protegeFactory;
-        this.swrlFactory = swrlFactory;
-        this.ontModel = ontModel;
-        this.agent = agent;
+        this.agent = agent ;
         initComponents();
-        commands = new ArrayList<Command>();
     }
 
     /**
@@ -425,10 +408,10 @@ public class TaskManagement extends javax.swing.JFrame {
                 if (selectedTaskName == null) {
                     return;
                 }
+                // TODO: Call procedure for modify from agent-> sends message with what to modify to RL
+                /*selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
 
-                selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
-
-                /*TaskInfo requested = selectedTask.getRequestedInfo();
+                TaskInfo requested = selectedTask.getRequestedInfo();
                 TaskInfo received = selectedTask.getReceivedInfo();
 
                 requestedCoresField.setText("" + requested.getCores());
@@ -439,7 +422,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 receivedCoresField.setText("" + received.getCores());
                 receivedCpuField.setText("" + received.getCpu());
                 receivedStorageField.setText("" + received.getStorage());
-                receivedMemoryField.setText("" + received.getMemory());*/
+                receivedMemoryField.setText("" + received.getMemory());          */
             }
         });
 
@@ -448,18 +431,10 @@ public class TaskManagement extends javax.swing.JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 //try {
-                System.out.println("Deleting instance " + selectedTask);
-
-                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
-                //command.execute(ontModel);
-                //command.executeOnX3D(agent);
-                //selectedTask.deleteInstance(ontModel, swrlFactory);
-
-                DeleteOWLIndividualCommand deleteOWLIndividualCommand = new DeleteOWLIndividualCommand(selectedTask);
-
-                commands.add(command);
-                commands.add(deleteOWLIndividualCommand);
-
+                System.out.println("Deleting instance " );
+                //TODO : delete task = > agent
+                agent.sendTaskMessageToRL(selectedTaskName, GlobalVars.INDIVIDUAL_DELETED);
+               
                 //System.out.println("Instance deleted");
                 //} catch (SWRLFactoryException e1) {
                 //   e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -500,12 +475,13 @@ public class TaskManagement extends javax.swing.JFrame {
                 }
 
                 addingTask = true;
-
+                //TODO : add task from agent
                 String taskName = addTaskNameField.getText();
+                /*
                 Task task = protegeFactory.createTask(taskName);
                 Policy policy = protegeFactory.createQoSPolicy(taskName + "Policy");
 
-                /*TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
+                TaskInfo requestedInfo = protegeFactory.createTaskInfo(taskName + "RequestedInfo");
                 TaskInfo receivedInfo = protegeFactory.createTaskInfo(taskName + "ReceivedInfo");
 
 
@@ -523,17 +499,18 @@ public class TaskManagement extends javax.swing.JFrame {
                 task.setRequestedInfo(requestedInfo, ontModel);
                 policy.setReferenced(task);
                 policy.setPriority(1);
-
-                //todo:add means of specifying the priority from the user interface
+                */
+                //todo:add means of specifying the priority from the user interface and send it to the agent
+                /*
                 task.setCpuWeight(0.1f);
                 task.setMemoryWeight(0.1f);
                 task.setStorageWeight(0.1f);
-
+                  */
                 synchronized (this) {
                     addingTask = false;
                     //notify ReinforcementLearningDatacenterBehavior that task has been created
                     notifyAll();
-                }*/
+                }
                 //task.createSWRLRule(swrlFactory);
             }
         });
@@ -544,7 +521,7 @@ public class TaskManagement extends javax.swing.JFrame {
         this.clearForAdding = clearForAdding;
     }
 
-
+           /*
     public boolean executeCommands() {
 
         for (Command command : commands) {
@@ -556,7 +533,7 @@ public class TaskManagement extends javax.swing.JFrame {
         return size != 0;
 
     }
-
+        */
     /* public void addDeleteTaskListener(ActionListener listener) {
         deleteTaskButton.addActionListener(listener);
     }
@@ -635,30 +612,25 @@ public class TaskManagement extends javax.swing.JFrame {
         receivedStorageField.setText("" + value);
     }*/
 
+      public void populate(String [] names,String [] minCpuRequested,String [] maxCpuRequested,String [] minMemoryRequested,String [] maxMemoryRequested,String [] minStorageRequested,String [] maxStorageRequested,String [] cpuReceived,String [] memoryReceived,String [] storageReceived)
+    {
+      setTasks(names);
 
-    public void setTasks(final Collection collection) {
+    }
+    public void setTasks(final String[] collection) {
         tasksList.removeAll();
 
         tasksList.setModel(new javax.swing.AbstractListModel() {
-            Object[] objects = collection.toArray();
+            Object[] objects = collection;
 
             public int getSize() {
                 return objects.length;
             }
 
             public Object getElementAt(int i) {
-                Task task = null;
-                String name = null;
-                try {
-                    task = ((Task) objects[i]);
-                    name = "" + task.getName().split("#")[1] + "  -  ";
-                    name += task.isRunning() ? "deployed" : "waiting";
-                } catch (Exception e) {
-                    System.err.println("Array index out of bounds exception eaten");
-                }
 
-
-                return name;
+                return collection[i];
+             
             }
         });
         tasksListPane.setViewportView(tasksList);
@@ -723,14 +695,14 @@ public class TaskManagement extends javax.swing.JFrame {
     private javax.swing.JLabel addTaskNameLabel;
 
     private String selectedTaskName;
-
+    /*
     private ProtegeFactory protegeFactory;
     private OntModel ontModel;
     private SWRLFactory swrlFactory;
     private Task selectedTask;
+                      */
 
-    private Agent agent;
     // End of variables declaration//GEN-END:variables
-
+    TaskManagementAgent agent;
 
 }

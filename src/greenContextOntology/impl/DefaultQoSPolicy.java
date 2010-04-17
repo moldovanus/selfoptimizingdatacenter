@@ -31,7 +31,9 @@ public class DefaultQoSPolicy extends DefaultPolicy
         Task task = this.getReferenced();
         ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
         RequestedTaskInfo requestedInfo = task.getRequestedInfo();
+
         
+
         if (receivedInfo.getCores() < requestedInfo.getCores()) {
             return false;
         }

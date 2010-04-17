@@ -13,19 +13,20 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
-import contextawaremodel.gui.TaskManagement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
+import contextawaremodel.GlobalVars;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import greenContextOntology.*;
 import greenContextOntology.Component;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
+import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.ControllerException;
+import jade.lang.acl.ACLMessage;
 
 import java.util.*;
 import java.awt.*;
@@ -52,7 +53,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
     private SWRLFactory swrlFactory;
-    private TaskManagement taskManagementWindow;
     private Logger logger;
 
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
@@ -74,8 +74,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         }*/
 
         //System.exit(1);
+        agent.sendAllTasksToClient();
 
-        taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
 
         /*
        Simulate task 1 ending activity\
@@ -100,8 +100,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
 
                 Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-                taskManagementWindow.setTasks(tasks);
-                taskManagementWindow.setVisible(true);
                 resultsFrame.setVisible(true);
 
             }
@@ -182,7 +180,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         for (QoSPolicy policy : qosPolicies) {
 
             Task task = policy.getReferenced();
-
             //if task has been deleted
             if (task == null) {
                 continue;
@@ -190,11 +187,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //System.out.println(task.getName().split("#")[1] + " " + policy.getRespected(policyConversionModel)); 
             if (!policy.getRespected(policyConversionModel)) {
+                //System.out.println("Broken");
+                //System.out.println(task);
                 //if (!task.requestsSatisfied()) {
                 if (brokenPolicy == null) {
                     brokenPolicy = policy;
                 }
-                 
+
                 if (policy.hasPriority()) {
                     entropy += policy.getPriority() * taskRespectanceDegree(task);
                 }
@@ -234,7 +233,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         double function = 0.0d;
         if (previous != null) {
             function += previous.getRewardFunction();
-            double temp = previous.getContextEntropy() - current.getContextEntropy() - c.getCost()-current.getActions().size();
+            double temp = previous.getContextEntropy() - current.getContextEntropy() - c.getCost() - current.getActions().size();
             function += ContextSnapshot.gamma * temp;
         } else {
             function -= current.getContextEntropy();
@@ -408,13 +407,16 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     protected void onTick() {
 
         //returns true if there were commands to execute
-        if (taskManagementWindow.executeCommands()) {
-            taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
-        }
+        //TODO: refresh after receiving new commands from it - > or sth
 
+        // if (taskManagementWindow.executeCommands()) {
+        //  taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+        // }
+
+        //TODO: check this !
         synchronized (this) {
-            taskManagementWindow.setClearForAdding(true);
-            notifyAll();
+            //   taskManagementWindow.setClearForAdding(true);
+            //  notifyAll();
         }
 
         System.out.println("Datacenter behavior on Tick");
@@ -478,7 +480,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
              */
 
             //avoid addin new tasks when querying ontology
-            taskManagementWindow.setClearForAdding(false);
+            //TODO: check check check!  TM
+            // taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
 
 
@@ -521,7 +524,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 c.executeOnX3D(myAgent);
 
                 //refresh tasks list if context has been repaired
-                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+                //TODO : check TM
+                //taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
             }
             //wait for effect to be noticeable on X3D
             try {
@@ -558,7 +562,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         if (property == null) {
             return false;
         }
-        
+
         return property.getBoolean();
     }
 }

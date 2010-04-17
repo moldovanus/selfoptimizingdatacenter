@@ -61,7 +61,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
     private AgentController rl = null;
     //x3d agent
     private AgentController x3d = null;
-
+    //task management agent
+    private AgentController tm = null;
     @Override
     protected void setup() {
         System.out.println("CMA Agent " + getLocalName() + " started.");
@@ -133,13 +134,15 @@ public class CMAAgent extends Agent implements CMAAExternal {
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
 
+            tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
+            tm.start();
 
             //todo : change when running X3DAgent remotely
-            String platformName = this.getContainerController().getPlatformName();
+           /* String platformName = this.getContainerController().getPlatformName();
             GlobalVars.setX3DPlatformName(platformName);
             GlobalVars.setX3DPlatformAddress("http://" + platformName.split(":")[0] + ":7778/acc");
             x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
-            x3d.start();
+            x3d.start();*/
 
             //star the Request Processing Agent
 

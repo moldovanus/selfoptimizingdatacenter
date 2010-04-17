@@ -118,6 +118,7 @@ public class ProtegeFactory {
     }
 
     public Task getTask(String name) {
+
         RDFResource res = owlModel.getRDFResource(name);
         if (res == null) {
             return null;

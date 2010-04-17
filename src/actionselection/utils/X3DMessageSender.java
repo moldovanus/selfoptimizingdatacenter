@@ -24,8 +24,12 @@ public final class X3DMessageSender {
     public static void sendX3DMessage(Agent agent, Serializable messageContent) throws IOException {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         message.setContentObject(messageContent);
-        AID aid = new AID(GlobalVars.X3DAGENT_NAME + "@" + GlobalVars.getX3DPlatformName());
-        aid.addAddresses(GlobalVars.getX3DPlatformAddress());
+
+        //TODO :  change when running remote
+        //AID aid = new AID(GlobalVars.X3DAGENT_NAME + "@" + GlobalVars.getX3DPlatformName());
+        //aid.addAddresses(GlobalVars.getX3DPlatformAddress());
+        AID aid = new AID(GlobalVars.X3DAGENT_NAME + "@" + agent.getContainerController().getPlatformName());
+
         message.addReceiver(aid);
         message.setLanguage("JavaSerialization");
         agent.send(message);

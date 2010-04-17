@@ -13,14 +13,21 @@ import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import jade.core.Agent;
+import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Collection;
 
 import logger.LoggerGUI;
+import greenContextOntology.Task;
+import greenContextOntology.ReceivedTaskInfo;
+import greenContextOntology.RequestedTaskInfo;
+import greenContextOntology.ProtegeFactory;
 
 /**
  * @author Administrator
@@ -96,7 +103,34 @@ public class ReinforcementLearningAgent extends Agent {
     public void setSelfOptimizingLogger(LoggerGUI selfOptimizingLogger) {
         this.selfOptimizingLogger = selfOptimizingLogger;
     }
+      public void sendAllTasksToClient(){
+          ProtegeFactory protegeFactory = new ProtegeFactory(owlModelDataCenter);
+         Collection<Task> tasks= protegeFactory.getAllTaskInstances();
+        String s = "";
+        ReceivedTaskInfo receivedInfo ;
+        RequestedTaskInfo requestedInfo;
 
+        for (Task task:tasks){
+          receivedInfo = task.getReceivedInfo();
+          requestedInfo = task.getRequestedInfo();
+          s+=task.getTaskName()+"-"+task.isRunning()+"#"+requestedInfo.getCores()+"#"+requestedInfo.getCpuMinAcceptableValue()+"#"+requestedInfo.getCpuMaxAcceptableValue()+"#"+requestedInfo.getMemoryMinAcceptableValue()+"#"+requestedInfo.getMemoryMaxAcceptableValue()+"#"+requestedInfo.getStorageMinAcceptableValue()+"#"+requestedInfo.getStorageMaxAcceptableValue();
+          s+="#"+receivedInfo.getCores()+"#"+receivedInfo.getCpuReceived()+"#"+receivedInfo.getMemoryReceived()+"#"+receivedInfo.getStorageReceived()+"/";
+
+        }
+             ACLMessage msg = new ACLMessage(ACLMessage.INFORM_REF);
+       if (msg != null) {
+             msg.setContent(s);
+            msg.addReceiver(new AID(GlobalVars.TMAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
+            /*
+            try {
+                msg.setContentObject(indvName);
+                msg.setLanguage("JavaSerialization");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }   */
+            this.send(msg);
+        }
+    }
     @Override
     protected void setup() {
         System.out.println("[RL agent] Hello!");
@@ -174,7 +208,7 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
-                addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel));
+                addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel,owlModelDataCenter));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));
