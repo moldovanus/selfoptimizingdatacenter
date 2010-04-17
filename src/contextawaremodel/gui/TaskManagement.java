@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.Collection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import contextawaremodel.agents.TaskManagementAgent;
 import contextawaremodel.GlobalVars;
 
@@ -39,9 +40,9 @@ public class TaskManagement extends javax.swing.JFrame {
     private boolean clearForAdding;
     private boolean addingTask;
 
-    public TaskManagement(    TaskManagementAgent agent) {
+    public TaskManagement(TaskManagementAgent agent) {
         super("Task Management");
-        this.agent = agent ;
+        this.agent = agent;
         initComponents();
     }
 
@@ -399,9 +400,14 @@ public class TaskManagement extends javax.swing.JFrame {
         tasksList.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
+
                 selectedIndex = tasksList.getSelectedIndex();
 
-                selectedTaskName = (String) tasksList.getModel().getElementAt(selectedIndex);
+                try {
+                    selectedTaskName = (String) tasksList.getModel().getElementAt(selectedIndex);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    System.err.println("ArrayIndexOutOfBoundsException  eaten");
+                }
                 //aSystem.out.println("!!!!!!!!!!!!!!!!!!!! @@@@@@@@ Selecteeed : " + selectedTaskName);
 
                 //hack to avoid inconsistencies. list selection fires not ok
@@ -431,10 +437,10 @@ public class TaskManagement extends javax.swing.JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 //try {
-                System.out.println("Deleting instance " );
+                System.out.println("Deleting instance ");
                 //TODO : delete task = > agent
                 agent.sendTaskMessageToRL(selectedTaskName, GlobalVars.INDIVIDUAL_DELETED);
-               
+
                 //System.out.println("Instance deleted");
                 //} catch (SWRLFactoryException e1) {
                 //   e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -521,19 +527,19 @@ public class TaskManagement extends javax.swing.JFrame {
         this.clearForAdding = clearForAdding;
     }
 
-           /*
-    public boolean executeCommands() {
+    /*
+public boolean executeCommands() {
 
-        for (Command command : commands) {
-            command.execute(ontModel);
-            command.executeOnX3D(agent);
-        }
-        int size = commands.size();
-        commands.clear();
-        return size != 0;
-
+    for (Command command : commands) {
+        command.execute(ontModel);
+        command.executeOnX3D(agent);
     }
-        */
+    int size = commands.size();
+    commands.clear();
+    return size != 0;
+
+}
+    */
     /* public void addDeleteTaskListener(ActionListener listener) {
         deleteTaskButton.addActionListener(listener);
     }
@@ -612,11 +618,11 @@ public class TaskManagement extends javax.swing.JFrame {
         receivedStorageField.setText("" + value);
     }*/
 
-      public void populate(String [] names,String [] minCpuRequested,String [] maxCpuRequested,String [] minMemoryRequested,String [] maxMemoryRequested,String [] minStorageRequested,String [] maxStorageRequested,String [] cpuReceived,String [] memoryReceived,String [] storageReceived)
-    {
-      setTasks(names);
+    public void populate(String[] names, String[] minCpuRequested, String[] maxCpuRequested, String[] minMemoryRequested, String[] maxMemoryRequested, String[] minStorageRequested, String[] maxStorageRequested, String[] cpuReceived, String[] memoryReceived, String[] storageReceived) {
+        setTasks(names);
 
     }
+
     public void setTasks(final String[] collection) {
         tasksList.removeAll();
 
@@ -628,9 +634,8 @@ public class TaskManagement extends javax.swing.JFrame {
             }
 
             public Object getElementAt(int i) {
-
                 return collection[i];
-             
+
             }
         });
         tasksListPane.setViewportView(tasksList);

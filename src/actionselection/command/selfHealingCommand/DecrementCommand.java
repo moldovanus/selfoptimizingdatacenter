@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
+package actionselection.command.selfHealingCommand;
 
 
 import java.io.BufferedReader;
@@ -14,11 +14,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import selfHealingOntology.SelfHealingProtegeFactory;
 import selfHealingOntology.Sensor;
-import contextawaremodel.GlobalVars;
 import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.utils.X3DMessageSender;
 

@@ -2,18 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
-import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.utils.X3DMessageSender;

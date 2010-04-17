@@ -2,14 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import greenContextOntology.ProtegeFactory;
 
-import java.io.Serializable;
-
 import jade.core.Agent;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.command.Command;
 
 /**
  * @author Administrator
@@ -80,6 +79,8 @@ public abstract class SelfOptimizingCommand implements Command {
                 } else {
                     return false;
                 }
+            } else if (thisClass.equals(NegotiateResourcesCommand.class) ) {
+                return this.toString().equals(obj.toString());
             } else {
                 return false;
             }

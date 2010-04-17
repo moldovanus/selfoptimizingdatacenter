@@ -1,8 +1,9 @@
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
 import edu.stanford.smi.protegex.owl.model.OWLIndividual;
+import actionselection.command.Command;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +12,7 @@ import edu.stanford.smi.protegex.owl.model.OWLIndividual;
  * Time: 12:07:57 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DeleteOWLIndividualCommand implements Command{
+public class DeleteOWLIndividualCommand implements Command {
 
     OWLIndividual individual;
     public DeleteOWLIndividualCommand(OWLIndividual individual) {

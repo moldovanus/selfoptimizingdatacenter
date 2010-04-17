@@ -475,4 +475,34 @@ public class DefaultServer extends DefaultResource
             storage.setUsed(remaining, model);
         }
     }
+
+    public void giveMoreResourcesToTask(double[] resources, Task task, OntModel model) {
+
+        ReceivedTaskInfo receivedTaskInfo = task.getReceivedInfo();
+
+        Collection<Integer> receivedCores = receivedTaskInfo.getReceivedCoreIndex();
+        Object[] cores = this.getAssociatedCPU().getAssociatedCore().toArray();
+        for (Integer index : receivedCores) {
+            Core core = (Core) cores[index];
+            core.setUsed(core.getUsed() + (int) resources[0], model);
+        }
+        receivedTaskInfo.setCpuReceived(((Core)cores[0]).getUsed() + (int) resources[0], model);
+
+        Memory memory = this.getAssociatedMemory();
+        int newMemoryValue = (memory.getUsed() + (int) resources[1]);
+        memory.setUsed(newMemoryValue, model);
+        receivedTaskInfo.setMemoryReceived(newMemoryValue);
+
+        Storage storage = this.getAssociatedStorage();
+        int newStorageValue = (storage.getUsed() + (int) resources[2]);
+        storage.setUsed(newStorageValue, model);
+        receivedTaskInfo.setStorageReceived(newStorageValue);
+
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void removeExtraResourcesGivenToTask(Task task, OntModel model) {
+        removeRunningTasks(task, model);
+        addRunningTasks(task, model);
+    }
 }

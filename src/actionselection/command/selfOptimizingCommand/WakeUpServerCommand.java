@@ -2,20 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
-import greenContextOntology.Task;
+import jade.core.Agent;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.io.IOException;
 
-import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.utils.X3DMessageSender;
@@ -23,15 +17,14 @@ import actionselection.utils.X3DMessageSender;
 /**
  * @author Me
  */
-public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
+public class WakeUpServerCommand extends SelfOptimizingCommand {
 
     private String serverName;
-    private Collection oldTasks;
 
-    public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
+    public WakeUpServerCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 2;
+        cost = 4;
     }
 
     /**
@@ -40,33 +33,21 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     @Override
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        oldTasks = server.getRunningTasks();
-        Iterator iterator = oldTasks.iterator();
-        while (iterator.hasNext()) {
-            server.removeRunningTasks((Task) iterator.next(), model);
-        }
-        server.setIsInLowPowerState(true, model);
-
+        server.setIsInLowPowerState(false, model);
     }
-
 
     @Override
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        Iterator iterator = oldTasks.iterator();
-        while (iterator.hasNext()) {
-            server.addRunningTasks((Task) iterator.next(), model);
-        }
-        server.setIsInLowPowerState(false, model);
+        server.setIsInLowPowerState(true, model);
     }
 
     @Override
     public String toString() {
         String description;
-        description = "Send server \"" + serverName.split("#")[1] + "\" to low power state ";
+        description = "Wake up server \"" + serverName.split("#")[1] + "\"";
         return description;
     }
-
 
     @Override
     public void executeOnWebService() {
@@ -76,15 +57,15 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     @Override
     public String[] toStringArray() {
         String[] array = new String[3];
-        array[0] = "Send";
+        array[0] = "Wake up";
         array[1] = serverName.split("#")[1];
-        array[2] = "to low power state";
+        array[2] = "from low power state";
         return array;
     }
 
     public void executeOnX3D(Agent agent) {
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -93,7 +74,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     public void rewindOnX3D(Agent agent) {
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

@@ -2,8 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
-
+package actionselection.command.selfHealingCommand;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,57 +12,51 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import selfHealingOntology.Sensor;
 import selfHealingOntology.SelfHealingProtegeFactory;
-import contextawaremodel.GlobalVars;
+import selfHealingOntology.Sensor;
+import jade.core.Agent;
 import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.utils.X3DMessageSender;
 
 /**
- * @author Me
+ *
+ * @author Administrator
  */
 
-public class SetCommand extends SelfHealingCommand {
+public class IncrementCommand extends SelfHealingCommand {
 
-    private int newValue = 1;
-    private int previousValue = 1;
+    private int incrementValue = 1;
     private String targetSensor;
 
-    public SetCommand(SelfHealingProtegeFactory protegeFactory, String targetSensor, int newValue) {
+    public int getIncrementValue() {
+        return incrementValue;
+    }
+
+    public void setIncrementValue(int incrementValue) {
+        this.incrementValue = incrementValue;
+    }
+
+    public IncrementCommand(SelfHealingProtegeFactory protegeFactory, String targetSensor, int incrementValue) {
         super(protegeFactory);
+        this.incrementValue = incrementValue;
         this.targetSensor = targetSensor;
-        this.newValue = newValue;
-    }
-
-    public int getNewValue() {
-        return newValue;
-    }
-
-    public void setNewValue(int newValue) {
-        this.newValue = newValue;
     }
 
     @Override
     public void execute(OntModel model) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        previousValue = sensor.getValueOfService();
-        sensor.setValueOfService(newValue, model);
+        sensor.setValueOfService(sensor.getValueOfService() + incrementValue,model);
     }
 
     @Override
     public void rewind(OntModel model) {
-
         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        sensor.setValueOfService(previousValue, model);
-
+        sensor.setValueOfService(sensor.getValueOfService() - incrementValue,model);
     }
 
     @Override
     public String toString() {
-        return "Set " + targetSensor.split("#")[1] + " to " + newValue;
+        return "Increment " + targetSensor.split("#")[1] + " by " + incrementValue;
     }
 
     @Override
@@ -126,22 +119,23 @@ public class SetCommand extends SelfHealingCommand {
             ex.printStackTrace();
 
         }
+
     }
 
     @Override
     public String[] toStringArray() {
         String[] array = new String[3];
-        array[0] = "Set";
+        array[0] = "Increment";
         array[1] = targetSensor.split("#")[1];
-        array[2] = "" + newValue;
+        array[2] = "" + incrementValue;
         return array;
     }
 
     public void executeOnX3D(Agent agent) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        String actionName = (sensor.getName().contains("Temperature")) ? "setTemperature" : "setHumidity";
+        String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
+            X3DMessageSender.sendX3DMessage(agent,new Object[]{ actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -150,7 +144,7 @@ public class SetCommand extends SelfHealingCommand {
 
     public void rewindOnX3D(Agent agent) {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
-        String actionName = (sensor.getName().contains("Temperature")) ? "setTemperature" : "setHumidity";
+        String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
         try {
             X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {

@@ -27,6 +27,8 @@ public class DefaultEnergyPolicy extends DefaultPolicy
 
 
     public boolean getRespected(OntModel ontModel) {
+        //TODO : maybe add checking if all the cores from the server are used
+
         Server server = this.getReferenced();
         if ( server.getIsInLowPowerState()){
             return true;

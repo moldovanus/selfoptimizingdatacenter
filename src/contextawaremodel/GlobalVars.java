@@ -33,6 +33,8 @@ public class GlobalVars {
     public static final String ONTOLOGY_DATACENTER_FILE = "ontology/Datacenter.owl";
     public static final String POLICIES_FILE = "ontology/TestPolicies.xml";
     public static final String MEMORY_FILE = "memory/memory.dat";
+    public static final String FUZZY_LOGIC_CONTROL_FILE = "fuzzy/negotiator.fcl";
+
     //public static final String MEMORY_DATACENTER_FILE = "memory/memory.dat";
     public static final int INDIVIDUAL_DELETED = 0;
     public static final int INDIVIDUAL_CREATED = 1;

@@ -17,11 +17,9 @@ import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import actionselection.command.RemoveTaskFromServerCommand;
+import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
-
-import java.util.Collection;
 
 /**
  * @author Moldovanus

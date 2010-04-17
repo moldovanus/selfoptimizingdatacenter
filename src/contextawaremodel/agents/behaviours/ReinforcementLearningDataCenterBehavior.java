@@ -5,6 +5,8 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.*;
+import actionselection.command.selfOptimizingCommand.*;
+import actionselection.command.selfHealingCommand.IncrementCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.gui.ActionsOutputFrame;
@@ -14,7 +16,6 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.GlobalVars;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -23,17 +24,15 @@ import greenContextOntology.Component;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
-import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
-import jade.wrapper.ControllerException;
-import jade.lang.acl.ACLMessage;
 
 import java.util.*;
 import java.awt.*;
 
 import selfHealingOntology.SelfHealingProtegeFactory;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import negotiator.Negotiator;
+import negotiator.impl.NegotiatorFactory;
 
 /**
  * @author Administrator
@@ -54,6 +53,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ProtegeFactory protegeFactory;
     private SWRLFactory swrlFactory;
     private Logger logger;
+    private Negotiator negotiator;
 
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
@@ -68,6 +68,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         resultsFrame = new ActionsOutputFrame("Datacenter");
         this.memory = memory;
         swrlFactory = new SWRLFactory(contextAwareModel);
+
+        negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
         /*for (SWRLImp imp : swrlFactory.getEnabledImps()) {
             System.out.println(imp.toString());
@@ -112,7 +114,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         ReceivedTaskInfo received = task.getReceivedInfo();
         RequestedTaskInfo requested = task.getRequestedInfo();
 
-        //TODO : poate trebe bagat si minimu in task respectance
+        //TODO : poate trebe bagat si minimu in task respectance cum is range-uri
         double respectance = task.getCpuWeight()
                 * (requested.getCores() - received.getCores() + requested.getCpuMaxAcceptableValue() - received.getCpuReceived())
                 + task.getMemoryWeight() * (requested.getMemoryMaxAcceptableValue() - received.getMemoryReceived())
@@ -392,6 +394,38 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     }
                 }
             }
+
+
+            //TODO: check if the server negotiation is ok :P
+            //check if all tasks have been deployed and if yes and context still broken try and allocate more
+            //resources to the task in order to reach server optimum values
+            boolean allDeployed = true;
+            Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+            for (Task t : tasks) {
+                if (!t.isRunning()) {
+                    allDeployed = false;
+                    break;
+                }
+            }
+
+            //TODO : to be changed to allow allocating less than maximum also
+            //negotiate allocating more resources only if all the tasks have been deployed
+            if (allDeployed) {
+                NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator,server.getName());
+                ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
+                if (!cs.getActions().contains(negotiateResourcesCommand)) {
+                    System.out.println("Not contains " + negotiateResourcesCommand );
+                    cs.getActions().add(negotiateResourcesCommand);
+                    //  cs.executeActions();
+                    negotiateResourcesCommand.execute(policyConversionModel);
+                    cs.setContextEntropy(computeEntropy().getFirst());
+                    cs.setRewardFunction(computeRewardFunction(newContext, cs, negotiateResourcesCommand));
+                    // cs.rewind();
+                    negotiateResourcesCommand.rewind(policyConversionModel);
+                    queue.add(cs);
+                }
+            }
+
             newContext.rewind(policyConversionModel);
 
             logger.debug("Size " + queue.size());
@@ -503,7 +537,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
             if (result.getContextEntropy() > 0) {
-                System.out.println("Distributing empty resources");
+                System.out.println("Distributing empty resources : This should not happen anymore");
                 for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
                 }

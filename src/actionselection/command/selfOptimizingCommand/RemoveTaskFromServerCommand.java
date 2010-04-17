@@ -1,16 +1,13 @@
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 
 import java.io.IOException;
 
-import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import actionselection.utils.X3DMessageSender;
 

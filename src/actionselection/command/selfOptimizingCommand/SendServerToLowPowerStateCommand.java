@@ -2,18 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package actionselection.command;
+package actionselection.command.selfOptimizingCommand;
 
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
-import jade.lang.acl.ACLMessage;
-import jade.core.AID;
-import jade.core.Agent;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.io.IOException;
 
-import contextawaremodel.GlobalVars;
+import jade.core.Agent;
 import contextawaremodel.agents.X3DAgent;
 import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.utils.X3DMessageSender;
@@ -21,45 +20,50 @@ import actionselection.utils.X3DMessageSender;
 /**
  * @author Me
  */
-public class DeployTaskCommand extends SelfOptimizingCommand {
+public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     private String serverName;
-    private String taskName;
+    private Collection oldTasks;
 
-    public DeployTaskCommand(ProtegeFactory protegeFactory, String serverName, String taskName) {
+    public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        this.taskName = taskName;
-        cost = 1;
+        cost = 2;
     }
 
     /**
-     * Sets the task <code>taskName</code> associated server to <code>serverName</code>
+     * Sets the lowPowerState property of a Server to <code>true</code>
      */
     @Override
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        Task task = protegeFactory.getTask(taskName);
-        task.setAssociatedServer(server);
-        server.addRunningTasks(task, model);
+        oldTasks = server.getRunningTasks();
+        Iterator iterator = oldTasks.iterator();
+        while (iterator.hasNext()) {
+            server.removeRunningTasks((Task) iterator.next(), model);
+        }
+        server.setIsInLowPowerState(true, model);
+
     }
 
-    /**
-     * Implements Undo capability
-     */
+
     @Override
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        Task task = protegeFactory.getTask(taskName);
-        server.removeRunningTasks(task, model);
+        Iterator iterator = oldTasks.iterator();
+        while (iterator.hasNext()) {
+            server.addRunningTasks((Task) iterator.next(), model);
+        }
+        server.setIsInLowPowerState(false, model);
     }
 
     @Override
     public String toString() {
         String description;
-        description = "Deploy task \"" + taskName.split("#")[1] + "\" to server \"" + serverName.split("#")[1] + "\"";
+        description = "Send server \"" + serverName.split("#")[1] + "\" to low power state ";
         return description;
     }
+
 
     @Override
     public void executeOnWebService() {
@@ -69,26 +73,24 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     @Override
     public String[] toStringArray() {
         String[] array = new String[3];
-        array[0] = "Deploy";
-        array[1] = taskName.split("#")[1];
-        array[2] = serverName.split("#")[1];
+        array[0] = "Send";
+        array[1] = serverName.split("#")[1];
+        array[2] = "to low power state";
         return array;
     }
 
     public void executeOnX3D(Agent agent) {
-        Server server = protegeFactory.getServer(serverName);
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], serverName.split("#")[1], server.getRunningTasks().size() + 1});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
     }
 
-
     public void rewindOnX3D(Agent agent) {
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

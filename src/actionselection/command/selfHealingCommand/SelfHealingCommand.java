@@ -1,9 +1,10 @@
-package actionselection.command;
+package actionselection.command.selfHealingCommand;
 
 import greenContextOntology.ProtegeFactory;
 import jade.core.Agent;
 import selfHealingOntology.SelfHealingProtegeFactory;
 import com.hp.hpl.jena.ontology.OntModel;
+import actionselection.command.Command;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +13,7 @@ import com.hp.hpl.jena.ontology.OntModel;
  * Time: 10:09:56 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class SelfHealingCommand implements Command{
+public abstract class SelfHealingCommand implements Command {
     protected transient SelfHealingProtegeFactory protegeFactory;
     protected int cost;
 

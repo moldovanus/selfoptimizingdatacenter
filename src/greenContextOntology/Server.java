@@ -102,5 +102,7 @@ public interface Server extends Resource {
 
     void collectPreviouselyDistributedResources(OntModel model);
 
+    void giveMoreResourcesToTask(double[] resources, Task task,OntModel model);
+    void removeExtraResourcesGivenToTask(Task task,OntModel model);
 }
 

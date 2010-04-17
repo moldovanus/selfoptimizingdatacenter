@@ -5,7 +5,7 @@
 package actionselection.context;
 
 import actionselection.command.Command;
-import actionselection.command.SelfOptimizingCommand;
+import actionselection.command.selfOptimizingCommand.SelfOptimizingCommand;
 import greenContextOntology.ProtegeFactory;
 import java.io.Serializable;
 import java.util.HashMap;

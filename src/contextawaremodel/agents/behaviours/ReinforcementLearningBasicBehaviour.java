@@ -5,9 +5,9 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
-import actionselection.command.IncrementCommand;
-import actionselection.command.DecrementCommand;
-import actionselection.command.SetCommand;
+import actionselection.command.selfHealingCommand.SetCommand;
+import actionselection.command.selfHealingCommand.DecrementCommand;
+import actionselection.command.selfHealingCommand.IncrementCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;

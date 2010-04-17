@@ -1,22 +1,9 @@
 package contextawaremodel.agents.behaviours;
 
-import contextawaremodel.agents.ReinforcementLearningAgent;
 import contextawaremodel.agents.TaskManagementAgent;
-import contextawaremodel.GlobalVars;
-import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
-import edu.stanford.smi.protegex.owl.model.RDFProperty;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import greenContextOntology.ProtegeFactory;
-import greenContextOntology.Task;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import actionselection.command.RemoveTaskFromServerCommand;
 
 /**
  * Created by IntelliJ IDEA.

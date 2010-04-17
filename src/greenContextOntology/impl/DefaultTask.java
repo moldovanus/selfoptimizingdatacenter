@@ -177,7 +177,7 @@ public class DefaultTask extends DefaultContextElement
 
     public boolean isRunning() {
         ReceivedTaskInfo received = this.getReceivedInfo();
-        if (received.getCpuReceived() > 0 || received.getMemoryReceived() > 0 || received.getStorageReceived() > 0) {
+        if (received.getCores() > 0) {
             return true;
         } else {
             return false;  //To change body of implemented methods use File | Settings | File Templates.
