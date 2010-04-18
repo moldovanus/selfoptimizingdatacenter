@@ -22,6 +22,7 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
 
     public NegotiateResourcesCommand(ProtegeFactory protegeFactory, Negotiator negotiator, String serverName) {
         super(protegeFactory);
+        cost = 5;
         this.negotiator = negotiator;
         this.serverName = serverName;
     }

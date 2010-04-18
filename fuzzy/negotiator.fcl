@@ -22,50 +22,50 @@ END_VAR
 
 // Fuzzify input variable 'server_cpu'
 FUZZIFY server_cpu
-    TERM available := (0, 0) (600, 1) (800,0) ; 
+    TERM available_cpu := (0, 0) (600, 1) (800,0) ; 
 END_FUZZIFY
 
 FUZZIFY server_memory
-    TERM available := (0, 0) (600, 1) (800,0) ; 
+    TERM available_memory := (0, 0) (600, 1) (800,0) ; 
 END_FUZZIFY
 
 FUZZIFY server_storage
-    TERM available := (0, 0) (600, 1) (800,0) ; 
+    TERM available_storage := (0, 0) (600, 1) (800,0) ; 
 END_FUZZIFY
 
 
 
  
 FUZZIFY task_cpu
-    TERM requested := (200, 0) (400,1) ;
+    TERM requested_cpu := (200, 0) (400,1) ;
 END_FUZZIFY
 
 FUZZIFY task_memory
-    TERM requested := (200, 0) (400,1) ;
+    TERM requested_memory := (200, 0) (400,1) ;
 END_FUZZIFY
 
 FUZZIFY task_storage
-    TERM requested := (200, 0) (400,1) ;
+    TERM requested_storage := (200, 0) (400,1) ;
 END_FUZZIFY
 
 
 
 DEFUZZIFY negotiated_cpu
-    TERM negotiated := (0,0) (199,0) (200,1) (400,1) (800,0);
+    TERM negotiated_cpu_value := (0,1) (199,1) ;
     METHOD : COG;
     // Default value is 0 (if no rule activates defuzzifier)
     DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY negotiated_memory
-    TERM negotiated := (0,0) (199,0) (200,1) (400,1) (800,0);
+    TERM negotiated_memory_value := (0,1) (199,1) ;
     METHOD : COG;
     // Default value is 0 (if no rule activates defuzzifier)
     DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY negotiated_storage
-    TERM negotiated := (0,0) (199,0) (200,1) (400,1) (800,0);
+    TERM negotiated_storage_value := (0,1) (199,1) ;
     METHOD : COG;
     // Default value is 0 (if no rule activates defuzzifier)
     DEFAULT := 0;
@@ -81,12 +81,12 @@ RULEBLOCK No1
     // Use 'max' accumulation method
     ACCU : MAX;
 
-    RULE 1 : IF server_cpu IS available AND task_cpu IS requested 
-                THEN negotiated_cpu IS negotiated;
-	RULE 2 : IF server_storage IS available AND task_storage IS requested 
-                THEN negotiated_storage IS negotiated;
-	RULE 3 : IF server_memory IS available AND task_memory IS requested 
-                THEN negotiated_memory IS negotiated;
+    RULE 1 : IF server_cpu IS available_cpu AND task_cpu IS requested_cpu 
+                THEN negotiated_cpu IS negotiated_cpu_value;
+	RULE 2 : IF server_storage IS available_storage AND task_storage IS requested_storage 
+                THEN negotiated_storage IS negotiated_storage_value;
+	RULE 3 : IF server_memory IS available_memory AND task_memory IS requested_memory 
+                THEN negotiated_memory IS negotiated_memory_value;
 				
  
 END_RULEBLOCK

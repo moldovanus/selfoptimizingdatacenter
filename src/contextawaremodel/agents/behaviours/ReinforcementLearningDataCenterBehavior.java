@@ -252,6 +252,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         ContextSnapshot newContext = queue.poll();
         if (newContext == null) {
+            System.out.println("Could not repair the context totally. Returning best solution.");
             return smallestEntropyContext;
         }
         System.out.println("---A");
@@ -287,10 +288,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     if (!serverInstance.getIsInLowPowerState() && serverInstance.hasResourcesFor(task)
                             && !serverInstance.containsTask(task) && !task.isRunning()) {
                         Command newAction = new DeployTaskCommand(protegeFactory, serverInstance.getName(), task.getName());
-                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                        deployed = true;
-                        //verific peste tot daca nu cumva exista actiunea
-                        if (!cs.getActions().contains(newAction)) {
+                        if (!newContext.getActions().contains(newAction)) {
+                            ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                             cs.getActions().add(newAction);
 
                             newAction.execute(policyConversionModel);
@@ -344,10 +343,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         if (!serverInstance.getIsInLowPowerState() && !serverInstance.containsTask(myTask)
                                 && serverInstance.hasResourcesFor(myTask)) {
                             Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance.getName(), myTask.getName());
-                            ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-
-                            //verific peste tot daca nu cumva exista actiunea
-                            if (!cs.getActions().contains(newAction)) {
+                           if (!newContext.getActions().contains(newAction)) {
+                                ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                                 cs.getActions().add(newAction);
                                 //cs.executeActions();
                                 newAction.execute(policyConversionModel);
@@ -384,8 +381,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             for (Server serverInstance : servers) {
                 if (!serverInstance.getIsInLowPowerState() && !serverInstance.hasRunningTasks()) {
                     Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
-                    ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                    if (!cs.getActions().contains(newAction)) {
+
+                if (!newContext.getActions().contains(newAction)) {
+                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                         cs.getActions().add(newAction);
                         //  cs.executeActions();
                         newAction.execute(policyConversionModel);
@@ -399,7 +397,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
 
 
-            //TODO: check if the server negotiation is ok :P
+           /* //TODO: check if the server negotiation is ok :P
             //check if all tasks have been deployed and if yes and context still broken try and allocate more
             //resources to the task in order to reach server optimum values
             boolean allDeployed = true;
@@ -411,27 +409,30 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
             }
 
-            //TODO : to be changed to allow allocating less than maximum also
+            //TODO : to be changed to allow allocating less than maximum also ? nush ce am vrut sa zic aici
             //negotiate allocating more resources only if all the tasks have been deployed
-            if (allDeployed) {
+            //if (allDeployed &&
+            //always try a negotiation in order to solve problems :P
+            if( server != null) {
                 NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator,server.getName());
-                ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                if (!cs.getActions().contains(negotiateResourcesCommand)) {
-                    System.out.println("Not contains " + negotiateResourcesCommand );
+
+                if (!newContext.getActions().contains(negotiateResourcesCommand)) {
+                    ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                     cs.getActions().add(negotiateResourcesCommand);
                     //  cs.executeActions();
                     negotiateResourcesCommand.execute(policyConversionModel);
                     cs.setContextEntropy(computeEntropy().getFirst());
+                    Pair<Double,Policy> e = computeEntropy();
+
+                    System.out.println("After negotiation " + negotiateResourcesCommand + "\n For server : " + server +   + e.getFirst() + "  " + e.getSecond());
                     cs.setRewardFunction(computeRewardFunction(newContext, cs, negotiateResourcesCommand));
                     // cs.rewind();
                     negotiateResourcesCommand.rewind(policyConversionModel);
                     queue.add(cs);
                 }
-            }
+            }*/
 
             newContext.rewind(policyConversionModel);
-
-            logger.debug("Size " + queue.size());
 
             newContext = reinforcementLearning(queue);
         } else {
@@ -472,11 +473,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             contextBroken = true;
 
+            //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context   
-            for (Server server : protegeFactory.getAllServerInstances()) {
+            /*for (Server server : protegeFactory.getAllServerInstances()) {
                 server.collectPreviouselyDistributedResources(policyConversionModel);
             }
-
+*/
             /**
              * Gather data for logging purposes
              */
@@ -541,9 +543,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             if (result.getContextEntropy() > 0) {
                 System.out.println("Distributing empty resources : This should not happen anymore");
-                for (Server server : servers) {
+                /*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
-                }
+                }*/
             }
 
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
