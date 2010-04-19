@@ -32,10 +32,10 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
 
         Collection<Task> tasks = server.getRunningTasks();
         for (Task task : tasks) {
-            double[] result = negotiator.negotiate(server, task);
-            server.changeOptimumCPURange((int) result[0]);
+            negotiator.negotiate(server, task);
+           /* server.changeOptimumCPURange((int) result[0]);
             server.changeOptimumMemoryRange((int) result[1]);
-            server.changeOptimumStorageRange((int) result[2]);
+            server.changeOptimumStorageRange((int) result[2]);*/
             //server.giveMoreResourcesToTask(result, task, model);
 
         }

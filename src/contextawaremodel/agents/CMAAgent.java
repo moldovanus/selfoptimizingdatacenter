@@ -128,14 +128,14 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //cia.start();
             //this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
 
-            gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
+           /* gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
             gui.start();
-
+*/
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
-
+/*
             tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
-            tm.start();
+            tm.start();*/
 
             //todo : change when running X3DAgent remotely
            /* String platformName = this.getContainerController().getPlatformName();
@@ -155,7 +155,7 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //ema = container.createNewAgent(GlobalVars.EMAGENT_NAME, EMAgent.class.getName(), new Object[] {this.owlModel});
             //ema.start();
 
-            addBehaviour(new BasicCMAABehaviour(this, this.owlModel));
+           // addBehaviour(new BasicCMAABehaviour(this, this.owlModel));
 
         } catch (Exception e) {
             e.printStackTrace();

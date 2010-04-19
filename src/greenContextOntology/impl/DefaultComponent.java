@@ -45,7 +45,9 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setMaxAcceptableValue(int newMaxAcceptableValue) {
-        maxAcceptableValue = getMaxAcceptableValue();
+        if (hasMaxAcceptableValue()) {
+            maxAcceptableValue = getMaxAcceptableValue();
+        }
         setPropertyValue(getMaxAcceptableValueProperty(), new java.lang.Integer(newMaxAcceptableValue));
     }
 
@@ -70,7 +72,9 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setMinAcceptableValue(int newMinAcceptableValue) {
-        minAcceptableValue = getMinAcceptableValue();
+        if (hasMinAcceptableValue()) {
+            minAcceptableValue = getMinAcceptableValue();
+        }
         setPropertyValue(getMinAcceptableValueProperty(), new java.lang.Integer(newMinAcceptableValue));
     }
 

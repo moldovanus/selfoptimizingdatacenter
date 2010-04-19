@@ -11,52 +11,58 @@ import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunction;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionPieceWiseLinear;
 import net.sourceforge.jFuzzyLogic.membership.Value;
+import net.sourceforge.jFuzzyLogic.rule.LinguisticTerm;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
+import org.antlr.runtime.RecognitionException;
+
+import java.util.Collection;
 
 /**
  * @author Administrator
  */
 public class FuzzyLogicNegotiator implements Negotiator {
 
-    //TODO : Maybe remove variables in order to evaluate only what is needed. Currently FIS evaluates all three fields : storage memory cpu
-
     private FIS fis;
     private FunctionBlock functionBlock;
-    private MembershipFunction taskCPUMembershipFunction;
-    private MembershipFunction taskMemoryMembershipFunction;
-    private MembershipFunction taskStorageMembershipFunction;
 
-    private MembershipFunction negotiatedCPUMembershipFunction;
-    private MembershipFunction negotiatedMemoryMembershipFunction;
-    private MembershipFunction negotiatedStorageMembershipFunction;
+    private MembershipFunction requestedRangeMembershipFunction;
+    /*
+  private MembershipFunction serverRangeMembershipFunction;
+  private MembershipFunction negotiatedRangeMembershipFunction;*/
 
-    private Variable negotiatedCPU;
-    private Variable negotiatedMemory;
-    private Variable negotiatedStorage;
+    private Variable serverRange;
+    private Variable requestedRange;
+    private Variable negotiatedRange;
+
+    private LinguisticTerm serverRangeValue;
+    private LinguisticTerm requestedRangeValue;
+    private LinguisticTerm negotiatedRangeValue;
 
 
-    protected FuzzyLogicNegotiator(String fuzzyControlLangageFile) {
-        fis = FIS.load(fuzzyControlLangageFile, true);
+    protected FuzzyLogicNegotiator(String fuzzyControlLanguageFile) {
+        fis = FIS.load(fuzzyControlLanguageFile, true);
         // Error while loading?
         if (fis == null) {
             System.err.println("FuzzyLogicNegotiator creation failed : Can't load file: '"
-                    + fuzzyControlLangageFile + "'.");
+                    + fuzzyControlLanguageFile + "'.");
             return;
         }
 
         functionBlock = fis.getFunctionBlock("negotiator");
 
-        taskCPUMembershipFunction = functionBlock.getVariable("task_cpu").getLinguisticTerm("requested_cpu").getMembershipFunction();
-        taskMemoryMembershipFunction = functionBlock.getVariable("task_memory").getLinguisticTerm("requested_memory").getMembershipFunction();
-        taskStorageMembershipFunction = functionBlock.getVariable("task_storage").getLinguisticTerm("requested_storage").getMembershipFunction();
+        /* requestedRangeMembershipFunction = functionBlock.getVariable("requested_range").getLinguisticTerm("requested_range_value").getMembershipFunction();
+      serverRangeMembershipFunction = functionBlock.getVariable("server_range").getLinguisticTerm("server_range_value").getMembershipFunction();
+      negotiatedRangeMembershipFunction = functionBlock.getVariable("negotiated_range").getLinguisticTerm("negotiated_range_value").getMembershipFunction();*/
 
-        negotiatedCPU = functionBlock.getVariable("negotiated_cpu");
-        negotiatedMemory = functionBlock.getVariable("negotiated_memory");
-        negotiatedStorage = functionBlock.getVariable("negotiated_storage");
+        serverRange = functionBlock.getVariable("server_range");
+        requestedRange = functionBlock.getVariable("requested_range");
+        negotiatedRange = functionBlock.getVariable("negotiated_range");
 
-        negotiatedCPUMembershipFunction = negotiatedCPU.getLinguisticTerm("negotiated_cpu_value").getMembershipFunction();
-        negotiatedMemoryMembershipFunction = negotiatedMemory.getLinguisticTerm("negotiated_memory_value").getMembershipFunction();
-        negotiatedStorageMembershipFunction = negotiatedStorage.getLinguisticTerm("negotiated_storage_value").getMembershipFunction();
+        serverRangeValue = serverRange.getLinguisticTerm("server_range_value");
+        requestedRangeValue = requestedRange.getLinguisticTerm("requested_range_value");
+        negotiatedRangeValue = negotiatedRange.getLinguisticTerm("negotiated_range_value");
+
+        requestedRangeMembershipFunction = requestedRangeValue.getMembershipFunction();
 
     }
 
@@ -65,69 +71,95 @@ public class FuzzyLogicNegotiator implements Negotiator {
      * @param task
      * @return [negotiated CPU, negotiated Memory, negotiated Storage]
      */
-    public double[] negotiate(Server server, Task task) {
+    public void negotiate(Server server, Task task) {
 
-        //TODO : de facut ceva cu asta k i garbadge : si de facut cumva sa stim k am indesat task ( negociat) k la move-deploy sa punem cum era sau nush. ceva de genu
-
-        double[] result = new double[]{0, 0, 0};
-        boolean cpuChanged = false;
-        boolean memoryChanged = false;
-        boolean storageChanged = false;
-
-
-        Core core = (Core) server.getAssociatedCPU().getAssociatedCore().iterator().next();
+        //TODO: eventually to reintroduce variables for each of the 3 elements in the file and evaluate all of them at the same time.
+        Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
         Memory memory = server.getAssociatedMemory();
         Storage storage = server.getAssociatedStorage();
         RequestedTaskInfo requestedTaskInfo = task.getRequestedInfo();
 
-        int maxCPU = core.getMaxAcceptableValue();
-        int usedCPU = core.getUsed();
-        int totalCPU = core.getTotal();
-        int minRequestedCPU = requestedTaskInfo.getCpuMinAcceptableValue();
-        int maxRequestedCPU = requestedTaskInfo.getCpuMaxAcceptableValue();
+        int requestedCores = requestedTaskInfo.getCores();
+
+        for (Core core : cores) {
+
+            int maxCPU = core.getMaxAcceptableValue();
+            int usedCPU = core.getUsed();
+            int totalCPU = core.getTotal();
+            int minRequestedCPU = requestedTaskInfo.getCpuMinAcceptableValue();
+            int maxRequestedCPU = requestedTaskInfo.getCpuMaxAcceptableValue();
+
+            //TODO: if needed on the else branch the requested values can be negotiated in order to give more resources than needed to the task
+            //negotiate CPU max optimum value
+            if (maxCPU - usedCPU < minRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) {
+
+                int[] values;
+                int[] membership = new int[]{1, 0};
+                int count = 0;
+                Value[] serverValues;
+                Value[] membershipValues;
+
+                //convert available CPU ranges in Value type
+                values = new int[]{maxCPU, totalCPU};
+                count = values.length;
+                serverValues = new Value[count];
+                membershipValues = new Value[count];
+                for (int i = 0; i < count; i++) {
+                    serverValues[i] = new Value(values[i]);
+                    membershipValues[i] = new Value(membership[i]);
+                    //System.out.println(serverValues[i] + ", " + membershipValues[i]);
+                }
+
+                //create a new membership function for the CPU
+                MembershipFunction serverCpuMembershipFunction = new MembershipFunctionPieceWiseLinear(serverValues, membershipValues);
+
+                serverRangeValue.setMembershipFunction(serverCpuMembershipFunction);
+                negotiatedRangeValue.getMembershipFunction().setParameter(0, usedCPU + minRequestedCPU);
+                negotiatedRangeValue.getMembershipFunction().setParameter(1, 0);
+                negotiatedRangeValue.getMembershipFunction().setParameter(2, usedCPU + maxRequestedCPU);
+                negotiatedRangeValue.getMembershipFunction().setParameter(3, 1);
+
+                requestedRangeMembershipFunction.setParameter(0, usedCPU + minRequestedCPU);
+                requestedRangeMembershipFunction.setParameter(2, usedCPU + maxRequestedCPU);
+
+                negotiatedRange.setUniverseMin(maxCPU);
+                negotiatedRange.setUniverseMax(totalCPU);
+
+                //After modifying the output variable membership function a new FIS has to be created in order to evaluate the rules properly
+                //Otherwise the value from the FIS creation time is used for deffuzification of the output variable
+                FIS finalFuzzyInferenceSystem = null;
+                try {
+                    finalFuzzyInferenceSystem = FIS.createFromString(fis.toString(), true);
+                } catch (RecognitionException e) {
+                    System.err.println(e.getMessage());
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    return;
+                }
 
 
-        //negotiate CPU max optimum value
-        if (maxCPU - usedCPU < minRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) {
-            cpuChanged = true;
-            int[] values;
-            int[] membership = new int[]{1, 0};
-            int count = 0;
-            Value[] serverValues;
-            Value[] membershipValues;
+                finalFuzzyInferenceSystem.setVariable("server_range", usedCPU + minRequestedCPU + 1);
+                finalFuzzyInferenceSystem.setVariable("requested_range", usedCPU + minRequestedCPU + 1);
 
-            //convert available CPU ranges in Value type
-            values = new int[]{maxCPU, totalCPU};
-            count = values.length;
-            serverValues = new Value[count];
-            membershipValues = new Value[count];
-            for (int i = 0; i < count; i++) {
-                serverValues[i] = new Value(values[i]);
-                membershipValues[i] = new Value(membership[i]);
-                //System.out.println(serverValues[i] + ", " + membershipValues[i]);
+
+                finalFuzzyInferenceSystem.evaluate();
+                //System.out.println(finalFuzzyInferenceSystem);
+                //finalFuzzyInferenceSystem.chart();
+
+
+                System.out.println("Negotiated for " + core.getLocalName() + " from " + core.getMaxAcceptableValue() +
+                        " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+
+                core.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+
+                //only negotiate for requested number of cores
+                requestedCores--;
+                if (requestedCores == 0) {
+                    break;
+                }
             }
-
-            //create a new membership function for the CPU
-            MembershipFunction serverCpuMembershipFunction = new MembershipFunctionPieceWiseLinear(serverValues, membershipValues);
-
-            //set the new membership function for the server_cpu variable
-            functionBlock.getVariable("server_cpu").getLinguisticTerm("available_cpu").setMembershipFunction(serverCpuMembershipFunction);
-            negotiatedCPU.getLinguisticTerm("negotiated_cpu_value").setMembershipFunction(serverCpuMembershipFunction);
-
-            taskCPUMembershipFunction.setParameter(0, usedCPU + minRequestedCPU);
-            taskCPUMembershipFunction.setParameter(2, usedCPU + maxRequestedCPU);
-
-            negotiatedCPU.setUniverseMin(maxCPU);
-            negotiatedCPU.setUniverseMax(totalCPU);
-
-            fis.getVariable("server_cpu").setValue(maxCPU + 1);
-            fis.getVariable("task_cpu").setValue(usedCPU + minRequestedCPU + 1);
-
-
         }
 
         int maxMemory = memory.getMaxAcceptableValue();
-        int minMemory = memory.getMinAcceptableValue();
         int usedMemory = memory.getUsed();
         int totalMemory = memory.getTotal();
         int maxRequestedMemory = requestedTaskInfo.getMemoryMaxAcceptableValue();
@@ -136,8 +168,6 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
         //negotiate Memory max optimum value
         if (maxMemory - usedMemory < minRequestedMemory && minRequestedMemory <= totalMemory - usedMemory) {
-
-            memoryChanged = true;
 
             int[] values;
             int[] membership = new int[]{1, 0};
@@ -157,26 +187,48 @@ public class FuzzyLogicNegotiator implements Negotiator {
             MembershipFunction serverMemoryMembershipFunction = new MembershipFunctionPieceWiseLinear(serverValues, membershipValues);
 
             //set the new membership function for the server_memory variable
-            functionBlock.getVariable("server_memory").getLinguisticTerm("available_memory").setMembershipFunction(serverMemoryMembershipFunction);
-            // negotiatedMemory.getLinguisticTerm("negotiated_memory_value").setMembershipFunction(serverMemoryMembershipFunction);
+            serverRangeValue.setMembershipFunction(serverMemoryMembershipFunction);
+            negotiatedRangeValue.setMembershipFunction(serverMemoryMembershipFunction);
 
-            fis.getVariable("server_memory").setValue(maxMemory + 1);
-            fis.getVariable("task_memory").setValue(usedMemory + minRequestedMemory + 1);
+            /* serverRange.setValue(maxMemory + 1);
+                        requestedRange.setValue(usedMemory + minRequestedMemory + 1);
+            */
+            requestedRangeMembershipFunction.setParameter(0, usedMemory + minRequestedMemory);
+            requestedRangeMembershipFunction.setParameter(2, usedMemory + maxRequestedMemory);
 
-            taskMemoryMembershipFunction.setParameter(0, usedMemory + minRequestedMemory);
-            taskMemoryMembershipFunction.setParameter(2, usedMemory + maxRequestedMemory);
+            negotiatedRange.setUniverseMin(maxMemory);
+            negotiatedRange.setUniverseMax(totalMemory);
 
-            negotiatedMemory.setUniverseMin(maxMemory);
-            negotiatedMemory.setUniverseMax(totalMemory);
 
-            negotiatedMemoryMembershipFunction.setParameter(0, minMemory + 1);
-            negotiatedMemoryMembershipFunction.setParameter(2, totalMemory - 1);
+            //After modifying the output variable membership function a new FIS has to be created in order to evaluate the rules properly
+            //Otherwise the value from the FIS creation time is used for deffuzification of the output variable
+            FIS finalFuzzyInferenceSystem = null;
+            try {
+                finalFuzzyInferenceSystem = FIS.createFromString(fis.toString(), true);
+            } catch (RecognitionException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                return;
+            }
 
+
+            finalFuzzyInferenceSystem.setVariable("server_range", usedMemory + 1);
+            finalFuzzyInferenceSystem.setVariable("requested_range", usedMemory + minRequestedMemory + 1);
+
+
+            finalFuzzyInferenceSystem.evaluate();
+            //System.out.println(finalFuzzyInferenceSystem);
+            //finalFuzzyInferenceSystem.chart();
+
+
+            System.out.println("Negotiated for " + memory.getLocalName() + " from " + memory.getMaxAcceptableValue() +
+                    " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+
+            memory.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
 
         }
 
         int maxStorage = storage.getMaxAcceptableValue();
-        int minStorage = storage.getMinAcceptableValue();
         int usedStorage = storage.getUsed();
         int totalStorage = storage.getTotal();
         int minRequestedStorage = requestedTaskInfo.getStorageMinAcceptableValue();
@@ -184,8 +236,6 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
         //negotiate Storage max optimum value
         if (maxStorage - usedStorage < minRequestedStorage && minRequestedStorage <= totalStorage - usedStorage) {
-
-            storageChanged = true;
 
             int[] values;
             int[] membership = new int[]{1, 0};
@@ -205,43 +255,44 @@ public class FuzzyLogicNegotiator implements Negotiator {
             MembershipFunction serverStorageMembershipFunction = new MembershipFunctionPieceWiseLinear(serverValues, membershipValues);
 
             //set the new membership function for the server_storage variable
-            functionBlock.getVariable("server_storage").getLinguisticTerm("available_storage").setMembershipFunction(serverStorageMembershipFunction);
-            negotiatedStorage.getLinguisticTerm("negotiated_storage_value").setMembershipFunction(serverStorageMembershipFunction);
+            serverRangeValue.setMembershipFunction(serverStorageMembershipFunction);
+            negotiatedRangeValue.setMembershipFunction(serverStorageMembershipFunction);
 
-            fis.getVariable("server_storage").setValue(maxStorage + 1);
-            fis.getVariable("task_storage").setValue(usedStorage + minRequestedStorage + 1);
 
-            taskStorageMembershipFunction.setParameter(0, usedStorage + minRequestedStorage);
-            taskStorageMembershipFunction.setParameter(2, usedStorage + maxRequestedStorage);
+            requestedRangeMembershipFunction.setParameter(0, usedStorage + minRequestedStorage);
+            requestedRangeMembershipFunction.setParameter(2, usedStorage + maxRequestedStorage);
 
-            negotiatedStorage.setUniverseMin(maxStorage);
-            negotiatedStorage.setUniverseMax(totalStorage);
+            negotiatedRange.setUniverseMin(maxStorage);
+            negotiatedRange.setUniverseMax(totalStorage);
 
-            negotiatedStorageMembershipFunction.setParameter(0, maxStorage + 1);
-            negotiatedStorageMembershipFunction.setParameter(2, totalStorage - 1);
+            //After modifying the output variable's membership function a new FIS has to be created in order to evaluate the rules properly
+            //Otherwise the value from the FIS creation time is used for deffuzification of the output variable
+            FIS finalFuzzyInferenceSystem = null;
+            try {
+                finalFuzzyInferenceSystem = FIS.createFromString(fis.toString(), true);
+            } catch (RecognitionException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                return;
+            }
+
+
+            finalFuzzyInferenceSystem.setVariable("server_range", usedStorage + 1);
+            finalFuzzyInferenceSystem.setVariable("requested_range", usedStorage + minRequestedStorage + 1);
+
+
+            finalFuzzyInferenceSystem.evaluate();
+            //System.out.println(finalFuzzyInferenceSystem);
+            //finalFuzzyInferenceSystem.chart();
+
+
+            System.out.println("Negotiated for " + storage.getLocalName() + " from " + storage.getMaxAcceptableValue() +
+                    " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+            memory.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
 
         }
 
 
-        fis.evaluate();
-        //System.out.println(fis);
-        // fis.chart();
-
-
-        if (cpuChanged) {
-            result[0] = fis.getVariable("negotiated_cpu").getValue();
-        }
-        if (memoryChanged) {
-            result[1] = fis.getVariable("negotiated_memory").getValue();
-        }
-        if (storageChanged) {
-            result[2] = fis.getVariable("negotiated_storage").getValue();
-        }
-
-
-        //throw new UnsupportedOperationException("Not supported yet.");
-
-        return result;
     }
 
 
