@@ -50,7 +50,7 @@ public abstract class SelfOptimizingCommand implements Command {
 
     @Override
     /**
-     * This checks if two actions that leed to a cycle are compared and returns true if that is the case
+     * This checks if two actions that led to a cycle are compared and returns true if that is the case
      * in order not to prune that branch and do not expand a scenario which contains cycles.
      */
     public final boolean equals(Object obj) {
@@ -79,7 +79,7 @@ public abstract class SelfOptimizingCommand implements Command {
                 } else {
                     return false;
                 }
-            } else if (thisClass.equals(NegotiateResourcesCommand.class) ) {
+            } else if (thisClass.equals(NegotiateResourcesCommand.class)) {
                 return this.toString().equals(obj.toString());
             } else {
                 return false;

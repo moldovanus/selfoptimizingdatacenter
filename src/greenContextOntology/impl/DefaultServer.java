@@ -18,6 +18,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 public class DefaultServer extends DefaultResource
         implements Server {
 
+
     public DefaultServer(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
     }
@@ -26,6 +27,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
+
     public CPU getAssociatedCPU() {
         return (CPU) getPropertyValueAs(getAssociatedCPUProperty(), CPU.class);
     }
@@ -45,6 +47,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedMemory
+
     public Memory getAssociatedMemory() {
         return (Memory) getPropertyValueAs(getAssociatedMemoryProperty(), Memory.class);
     }
@@ -64,6 +67,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedStorage
+
     public Storage getAssociatedStorage() {
         return (Storage) getPropertyValueAs(getAssociatedStorageProperty(), Storage.class);
     }
@@ -83,6 +87,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
+
     public boolean getIsInLowPowerState() {
         return getPropertyValueLiteral(getIsInLowPowerStateProperty()).getBoolean();
     }
@@ -102,6 +107,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
+
     public Collection getRunningTasks() {
         return getPropertyValuesAs(getRunningTasksProperty(), Task.class);
     }
@@ -321,6 +327,7 @@ public class DefaultServer extends DefaultResource
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#webService
+
     public String getWebService() {
         return (String) getPropertyValue(getWebServiceProperty());
     }
@@ -402,7 +409,7 @@ public class DefaultServer extends DefaultResource
         return true;
     }
 
-    public void collectPreviouselyDistributedResources(OntModel model) {
+    public void collectPreviouslyDistributedResources(OntModel model) {
         Collection runningTasks = getRunningTasks();
         for (Object t : runningTasks) {
             Task task = (Task) t;
@@ -486,7 +493,7 @@ public class DefaultServer extends DefaultResource
             Core core = (Core) cores[index];
             core.setUsed(core.getUsed() + (int) resources[0], model);
         }
-        receivedTaskInfo.setCpuReceived(((Core)cores[0]).getUsed() + (int) resources[0], model);
+        receivedTaskInfo.setCpuReceived(((Core) cores[0]).getUsed() + (int) resources[0], model);
 
         Memory memory = this.getAssociatedMemory();
         int newMemoryValue = (memory.getUsed() + (int) resources[1]);
@@ -504,5 +511,39 @@ public class DefaultServer extends DefaultResource
     public void removeExtraResourcesGivenToTask(Task task, OntModel model) {
         removeRunningTasks(task, model);
         addRunningTasks(task, model);
+    }
+
+    public void changeOptimumCPURange(int max) {
+        //TODO: optimum ranges for a specific core can be negotiated so implement method that does that
+        CPU cpu = getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        for (Core core : cores) {
+
+            core.setMaxAcceptableValue(max);
+        }
+
+    }
+
+    public void changeOptimumMemoryRange(int max) {
+        Memory memory = getAssociatedMemory();
+        memory.setMaxAcceptableValue(max);
+
+    }
+
+    public void changeOptimumStorageRange(int max) {
+        Storage storage = getAssociatedStorage();
+        storage.setMaxAcceptableValue(max);
+
+    }
+
+    public void resetOptimumValues() {
+        CPU cpu = getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        for (Core core : cores) {
+            core.restoreDefaultOptimumValues();
+        }
+        getAssociatedMemory().restoreDefaultOptimumValues();
+        getAssociatedStorage().restoreDefaultOptimumValues();
+
     }
 }

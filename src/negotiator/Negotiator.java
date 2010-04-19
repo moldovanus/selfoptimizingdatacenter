@@ -15,7 +15,6 @@ public interface Negotiator {
 
     public double[] negotiate(Server server, Task task);
 
-
     public class IntervalEntry {
         private double value;
         private double membership;

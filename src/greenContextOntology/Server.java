@@ -15,6 +15,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 public interface Server extends Resource {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
+
     CPU getAssociatedCPU();
 
     RDFProperty getAssociatedCPUProperty();
@@ -24,6 +25,7 @@ public interface Server extends Resource {
     void setAssociatedCPU(CPU newAssociatedCPU);
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedMemory
+
     Memory getAssociatedMemory();
 
     RDFProperty getAssociatedMemoryProperty();
@@ -33,6 +35,7 @@ public interface Server extends Resource {
     void setAssociatedMemory(Memory newAssociatedMemory);
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedStorage
+
     Storage getAssociatedStorage();
 
     RDFProperty getAssociatedStorageProperty();
@@ -50,10 +53,11 @@ public interface Server extends Resource {
 
     boolean hasIsInLowPowerState();
 
-    void setIsInLowPowerState(boolean newIsInLowPowerState,OntModel ontModel);
+    void setIsInLowPowerState(boolean newIsInLowPowerState, OntModel ontModel);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
+
     Collection getRunningTasks();
 
     RDFProperty getRunningTasksProperty();
@@ -62,13 +66,15 @@ public interface Server extends Resource {
 
     Iterator listRunningTasks();
 
-    void addRunningTasks(Task newRunningTasks,OntModel model);
+    void addRunningTasks(Task newRunningTasks, OntModel model);
     //void addRunningTasks(Task newRunningTasks);
 
     void removeRunningTasks(Task oldRunningTasks, OntModel model);
+
     void removeRunningTasks(Task oldRunningTasks);
 
-    void setRunningTasks(Collection newRunningTasks,OntModel model);
+    void setRunningTasks(Collection newRunningTasks, OntModel model);
+
     void setRunningTasks(Collection newRunningTasks);
 // Property http://www.owl-ontologies.com/Datacenter.owl#serverName
 
@@ -81,6 +87,7 @@ public interface Server extends Resource {
     void setServerName(String newServerName);
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#webService
+
     String getWebService();
 
     RDFProperty getWebServiceProperty();
@@ -89,7 +96,7 @@ public interface Server extends Resource {
 
     void setWebService(String newWebService);
 
-    public boolean hasResourcesFor(Task task );
+    public boolean hasResourcesFor(Task task);
 
     @Override
     String toString();
@@ -100,9 +107,18 @@ public interface Server extends Resource {
 
     void distributeRemainingResources(OntModel model);
 
-    void collectPreviouselyDistributedResources(OntModel model);
+    void collectPreviouslyDistributedResources(OntModel model);
 
-    void giveMoreResourcesToTask(double[] resources, Task task,OntModel model);
-    void removeExtraResourcesGivenToTask(Task task,OntModel model);
+    void giveMoreResourcesToTask(double[] resources, Task task, OntModel model);
+
+    void removeExtraResourcesGivenToTask(Task task, OntModel model);
+
+    void changeOptimumCPURange(int max);
+
+    void changeOptimumMemoryRange(int max);
+
+    void changeOptimumStorageRange(int max);
+
+    void resetOptimumValues();
 }
 

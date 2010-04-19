@@ -16,7 +16,6 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.GlobalVars;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -25,9 +24,7 @@ import greenContextOntology.Component;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
-import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
-import jade.lang.acl.ACLMessage;
 
 import java.util.*;
 import java.awt.*;
@@ -113,6 +110,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     }
 
     // function for computing the contribution to the entropy of task @param task
+
     private double taskRespectanceDegree(Task task) {
         ReceivedTaskInfo received = task.getReceivedInfo();
         RequestedTaskInfo requested = task.getRequestedInfo();
@@ -281,7 +279,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     server = (DefaultServer) policy.getReferenced();
                 }
             }
-            Boolean deployed = false;     /// sa zica daca ii  deployed sau nu
+            boolean deployed = false;     /// sa zica daca ii  deployed sau nu
             if (task != null) {
                 // deploy actions
                 for (Server serverInstance : servers) {
@@ -343,7 +341,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         if (!serverInstance.getIsInLowPowerState() && !serverInstance.containsTask(myTask)
                                 && serverInstance.hasResourcesFor(myTask)) {
                             Command newAction = new MoveTaskCommand(protegeFactory, server.getName(), serverInstance.getName(), myTask.getName());
-                           if (!newContext.getActions().contains(newAction)) {
+                            if (!newContext.getActions().contains(newAction)) {
                                 ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                                 cs.getActions().add(newAction);
                                 //cs.executeActions();
@@ -382,7 +380,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 if (!serverInstance.getIsInLowPowerState() && !serverInstance.hasRunningTasks()) {
                     Command newAction = new SendServerToLowPowerStateCommand(protegeFactory, serverInstance.getName());
 
-                if (!newContext.getActions().contains(newAction)) {
+                    if (!newContext.getActions().contains(newAction)) {
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                         cs.getActions().add(newAction);
                         //  cs.executeActions();
@@ -397,17 +395,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
 
 
-           /* //TODO: check if the server negotiation is ok :P
-            //check if all tasks have been deployed and if yes and context still broken try and allocate more
-            //resources to the task in order to reach server optimum values
-            boolean allDeployed = true;
-            Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-            for (Task t : tasks) {
-                if (!t.isRunning()) {
-                    allDeployed = false;
-                    break;
-                }
-            }
+            /*
 
             //TODO : to be changed to allow allocating less than maximum also ? nush ce am vrut sa zic aici
             //negotiate allocating more resources only if all the tasks have been deployed
@@ -476,7 +464,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context   
             /*for (Server server : protegeFactory.getAllServerInstances()) {
-                server.collectPreviouselyDistributedResources(policyConversionModel);
+                server.collectPreviouslyDistributedResources(policyConversionModel);
             }
 */
             /**

@@ -12,7 +12,10 @@ import com.hp.hpl.jena.ontology.OntModel;
  * @version generated on Sun Mar 07 13:11:11 EET 2010
  */
 public class DefaultComponent extends DefaultResource
-         implements Component {
+        implements Component {
+
+    int minAcceptableValue;
+    int maxAcceptableValue;
 
     public DefaultComponent(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
@@ -22,7 +25,7 @@ public class DefaultComponent extends DefaultResource
     public DefaultComponent() {
     }
 
-	    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
+    // Property http://www.owl-ontologies.com/Datacenter.owl#maxAcceptableValue
 
     public int getMaxAcceptableValue() {
         return getPropertyValueLiteral(getMaxAcceptableValueProperty()).getInt();
@@ -42,9 +45,9 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setMaxAcceptableValue(int newMaxAcceptableValue) {
+        maxAcceptableValue = getMaxAcceptableValue();
         setPropertyValue(getMaxAcceptableValueProperty(), new java.lang.Integer(newMaxAcceptableValue));
     }
-
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
@@ -67,10 +70,10 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setMinAcceptableValue(int newMinAcceptableValue) {
+        minAcceptableValue = getMinAcceptableValue();
         setPropertyValue(getMinAcceptableValueProperty(), new java.lang.Integer(newMinAcceptableValue));
     }
 
-  
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#total
 
@@ -96,7 +99,6 @@ public class DefaultComponent extends DefaultResource
     }
 
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#used
 
     public int getUsed() {
@@ -116,11 +118,11 @@ public class DefaultComponent extends DefaultResource
     }
 
 
-    public void setUsed(int newUsed,OntModel model) {
-        setPropertyValue(getUsedProperty(), new java.lang.Integer(newUsed),model);
+    public void setUsed(int newUsed, OntModel model) {
+        setPropertyValue(getUsedProperty(), new java.lang.Integer(newUsed), model);
     }
 
-     // Property http://www.owl-ontologies.com/Datacenter.owl#weight
+    // Property http://www.owl-ontologies.com/Datacenter.owl#weight
 
     public float getWeight() {
         return getPropertyValueLiteral(getWeightProperty()).getFloat();
@@ -142,5 +144,10 @@ public class DefaultComponent extends DefaultResource
     public void setWeight(float newWeight) {
         setPropertyValue(getWeightProperty(), new java.lang.Float(newWeight));
     }
-    
+
+    public void restoreDefaultOptimumValues() {
+        setMinAcceptableValue(minAcceptableValue);
+        setMaxAcceptableValue(maxAcceptableValue);
+    }
+
 }

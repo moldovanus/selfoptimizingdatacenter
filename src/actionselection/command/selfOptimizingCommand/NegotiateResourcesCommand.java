@@ -33,14 +33,18 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
         Collection<Task> tasks = server.getRunningTasks();
         for (Task task : tasks) {
             double[] result = negotiator.negotiate(server, task);
-            server.giveMoreResourcesToTask(result, task, model);
+            server.changeOptimumCPURange((int) result[0]);
+            server.changeOptimumMemoryRange((int) result[1]);
+            server.changeOptimumStorageRange((int) result[2]);
+            //server.giveMoreResourcesToTask(result, task, model);
+
         }
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
-        server.collectPreviouselyDistributedResources(model);
+        server.resetOptimumValues();
     }
 
     public String toString() {
