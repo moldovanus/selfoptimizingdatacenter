@@ -46,7 +46,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private JenaOWLModel selfHealingOwlModel;
     private ContextSnapshot smallestEntropyContext;
     private Memory memory;
-    private Property evaluatePolicyProperty;
     private ActionsOutputFrame resultsFrame;
     private ReinforcementLearningAgent agent;
     private boolean contextBroken = false;
@@ -58,7 +57,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
-        evaluatePolicyProperty = policyConversionModel.getDatatypeProperty("http://www.owl-ontologies.com/Datacenter.owl#respected");
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
@@ -636,13 +634,4 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     }
 
-    public boolean getEvaluateProp(Individual policy) {
-        Statement property = policy.getProperty(evaluatePolicyProperty);
-
-        if (property == null) {
-            return false;
-        }
-
-        return property.getBoolean();
-    }
 }

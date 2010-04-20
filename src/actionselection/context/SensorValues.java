@@ -35,7 +35,6 @@ public class SensorValues implements Serializable {
         myMap = new HashMap<String, Integer>();
     }
 
-    //TODO : modified to use protege factory
     /**
      *
      * @param protegeFactory
@@ -57,7 +56,8 @@ public class SensorValues implements Serializable {
             return false;
         }
         final SensorValues other = (SensorValues) obj;
-        return this.equals(other);
+
+        return myMap.equals(other.getMyMap());
     }
 
     @Override
