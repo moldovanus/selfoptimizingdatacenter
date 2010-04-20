@@ -39,7 +39,8 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                     String cpuReceived[]= new String[parts.length];
                     String memoryReceived[]= new String[parts.length];
                     String storageReceived[]= new String[parts.length];
-
+                    String coresReceived[]= new String[parts.length];
+                     String coresRequested[]= new String[parts.length];
                      String minCpuRequested[]= new String[parts.length];
                     String minMemoryRequested[]= new String[parts.length];
                     String minStorageRequested[]= new String[parts.length];
@@ -53,19 +54,22 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                         System.out.println(s);
                         String str[]=s.split("=");
                         names[index]=str[0];
-                        minCpuRequested[index] = str[1] ;
-                        maxCpuRequested[index] = str[2] ;
-                        minMemoryRequested[index] = str[3];
-                        maxMemoryRequested[index] = str[4] ;
-                        minStorageRequested[index] = str[5] ;
-                        maxStorageRequested[index] = str[6];
-                        cpuReceived[index] = str[7] ;
-                        memoryReceived[index] = str[8];
-                        storageReceived[index] = str[9];
+                        coresRequested[index] = str[1];
+                        minCpuRequested[index] = str[2] ;
+                        maxCpuRequested[index] = str[3] ;
+                        minMemoryRequested[index] = str[4];
+                        maxMemoryRequested[index] = str[5] ;
+                        minStorageRequested[index] = str[6] ;
+                        maxStorageRequested[index] = str[7];
+                        coresReceived[index] = str[8]  ;
+                        cpuReceived[index] = str[9] ;
+                        memoryReceived[index] = str[10];
+                        storageReceived[index] = str[11];
                         index++;
                     }
                     agent.clear();
-                    agent.populateTaskWindow(names,minCpuRequested,maxCpuRequested,minMemoryRequested,maxMemoryRequested,minStorageRequested,maxStorageRequested,cpuReceived,memoryReceived,storageReceived);
+                    agent.populateTaskWindow(names,coresRequested,minCpuRequested,maxCpuRequested,minMemoryRequested,maxMemoryRequested,minStorageRequested,maxStorageRequested,coresReceived ,cpuReceived,memoryReceived,storageReceived);
+                    agent.clearFields();
                     break;
 
                 case ACLMessage.INFORM:

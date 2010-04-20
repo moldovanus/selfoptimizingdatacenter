@@ -65,7 +65,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
         // FuzzyLogicNegotiator test
-        /*
+      
         Task task = protegeFactory.createTask("TestTask");
         RequestedTaskInfo  requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
         ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
@@ -106,14 +106,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         server.setAssociatedMemory(serverMemory);
         server.setAssociatedStorage(storage);
 
-        Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+        Negotiator negotiator = NegotiatorFactory.getNashNegotiator();
 
 
         negotiator.negotiate(server,task);
  
         System.exit(1);
 
-         */
 
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame("Datacenter");
@@ -167,6 +166,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         RequestedTaskInfo requested = task.getRequestedInfo();
 
         //TODO : poate trebe bagat si minimu in task respectance cum is range-uri
+        
         double respectance = task.getCpuWeight()
                 * (requested.getCores() - received.getCores() + requested.getCpuMaxAcceptableValue() - received.getCpuReceived())
                 + task.getMemoryWeight() * (requested.getMemoryMaxAcceptableValue() - received.getMemoryReceived())
@@ -554,7 +554,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
             /**
-             * End of logging
+             * End of logging                                                                                           ew
              */
 
             //avoid addin new tasks when querying ontology

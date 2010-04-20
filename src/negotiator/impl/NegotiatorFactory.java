@@ -12,16 +12,25 @@ import contextawaremodel.GlobalVars;
  */
 public final class NegotiatorFactory {
     private static FuzzyLogicNegotiator fuzzyLogicNegotiator;
-
+    private static NashNegotiator nashNegotiator;
     private NegotiatorFactory() {
     }
 
+    public static synchronized Negotiator getNashNegotiator() {
+        NashNegotiator negotiator = nashNegotiator;
+        if (negotiator == null) {
+            nashNegotiator = new NashNegotiator();
+            negotiator = nashNegotiator;
+        }
+        return negotiator;
+    }
     public static synchronized Negotiator getFuzzyLogicNegotiator() {
         FuzzyLogicNegotiator negotiator = fuzzyLogicNegotiator;
         if (negotiator == null) {
-            fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
+            //fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
             negotiator = fuzzyLogicNegotiator;
         }
-        return negotiator;
+        //return negotiator;
+        return null;
     }
 }

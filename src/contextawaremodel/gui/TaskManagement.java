@@ -39,7 +39,17 @@ public class TaskManagement extends javax.swing.JFrame {
     private int selectedIndex = 0;
     private boolean clearForAdding;
     private boolean addingTask;
-
+    String [] coresRequested;
+     String[] minCpuRequested;
+    String[] maxCpuRequested;
+    String[] minMemoryRequested;
+    String[] maxMemoryRequested;
+    String[] minStorageRequested;
+    String[] maxStorageRequested;
+    String[] coresReceived;
+    String[] cpuReceived;
+    String[] memoryReceived;
+    String[] storageReceived;
     public TaskManagement(TaskManagementAgent agent) {
         super("Task Management");
         this.agent = agent;
@@ -415,20 +425,15 @@ public class TaskManagement extends javax.swing.JFrame {
                     return;
                 }
                 // TODO: Call procedure for modify from agent-> sends message with what to modify to RL
-                /*selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
+               requestedCoresField.setText("" + coresRequested[selectedIndex]);
+                requestedCpuField.setText("" + minCpuRequested[selectedIndex]);
+                requestedStorageField.setText("" +  minStorageRequested[selectedIndex]);
+                requestedMemoryField.setText("" +  minMemoryRequested[selectedIndex]);
 
-                TaskInfo requested = selectedTask.getRequestedInfo();
-                TaskInfo received = selectedTask.getReceivedInfo();
-
-                requestedCoresField.setText("" + requested.getCores());
-                requestedCpuField.setText("" + requested.getCpu());
-                requestedStorageField.setText("" + requested.getStorage());
-                requestedMemoryField.setText("" + requested.getMemory());
-
-                receivedCoresField.setText("" + received.getCores());
-                receivedCpuField.setText("" + received.getCpu());
-                receivedStorageField.setText("" + received.getStorage());
-                receivedMemoryField.setText("" + received.getMemory());          */
+                receivedCoresField.setText("" + coresReceived[selectedIndex]);
+                receivedCpuField.setText("" + cpuReceived[selectedIndex]);
+                receivedStorageField.setText("" + storageReceived[selectedIndex]);
+                receivedMemoryField.setText("" + memoryReceived[selectedIndex]);          
             }
         });
 
@@ -440,22 +445,6 @@ public class TaskManagement extends javax.swing.JFrame {
                 System.out.println("Deleting instance ");
                 //TODO : delete task = > agent
                 agent.sendTaskMessageToRL(selectedTaskName, GlobalVars.INDIVIDUAL_DELETED);
-
-                //System.out.println("Instance deleted");
-                //} catch (SWRLFactoryException e1) {
-                //   e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                //}
-
-                requestedCoresField.setText("");
-                requestedCpuField.setText("");
-                requestedStorageField.setText("");
-                requestedMemoryField.setText("");
-
-                receivedCoresField.setText("");
-                receivedCpuField.setText("");
-                receivedStorageField.setText("");
-                receivedMemoryField.setText("");
-
                 tasksList.disable();
                 tasksList.repaint();
                 //tasksList.remove(selectedIndex);
@@ -618,7 +607,19 @@ public boolean executeCommands() {
         receivedStorageField.setText("" + value);
     }*/
 
-    public void populate(String[] names, String[] minCpuRequested, String[] maxCpuRequested, String[] minMemoryRequested, String[] maxMemoryRequested, String[] minStorageRequested, String[] maxStorageRequested, String[] cpuReceived, String[] memoryReceived, String[] storageReceived) {
+    public void populate(String[] names,String[] coresRequested ,String[] minCpuRequested, String[] maxCpuRequested, String[] minMemoryRequested, String[] maxMemoryRequested, String[] minStorageRequested, String[] maxStorageRequested, String[] coresReceived,String[] cpuReceived, String[] memoryReceived, String[] storageReceived) {
+        this.coresRequested = coresRequested;
+
+        this.minCpuRequested = minCpuRequested;
+        this.maxCpuRequested = maxCpuRequested;
+        this.minMemoryRequested = minMemoryRequested;
+        this.maxMemoryRequested = maxMemoryRequested;
+        this.minStorageRequested = minStorageRequested;
+        this.maxStorageRequested = maxStorageRequested;
+        this.coresReceived = coresReceived;
+        this.cpuReceived = cpuReceived;
+        this.memoryReceived = memoryReceived;
+        this.storageReceived = storageReceived;
         setTasks(names);
 
     }
@@ -646,6 +647,18 @@ public boolean executeCommands() {
         for (Object o : collection) {
             tasksList.add(o.toString(), new JLabel(o.toString()));
         }*/
+    }
+    public void setEmptyFields(){
+        requestedCoresField.setText("");
+        requestedCpuField.setText("");
+        requestedStorageField.setText("");
+        requestedMemoryField.setText("");
+
+        receivedCoresField.setText("");
+        receivedCpuField.setText("");
+        receivedStorageField.setText("");
+        receivedMemoryField.setText("");
+        
     }
     public void reenableTasksList(){
         tasksList.enable();
