@@ -170,10 +170,50 @@
                                                              DEF='Server_1_XFORM'
                                                              translation='0.0212 0.2374 1.718'
                                                             >
+															
                                                              <Transform
                                                               DEF='ServerFrame_01_XFORM'
                                                               translation='0.000228 -0.2374 0'
                                                              >
+															  <Transform 
+															      	scale = '0.2 0.2 0.2'
+																	rotation = '0 1 0 3'
+																	translation='0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 1"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
+																<Transform 
+															      	scale = '0.2 0.2 0.2'
+																	translation='-0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 1"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
                                                               <Transform
                                                                DEF='ServerFrame_01_WRAPXFORM'
                                                               >
@@ -235,6 +275,45 @@
                                                               translation='0 -0.2374 0'
                                                               rotation='0 1 0 -0.7851'
                                                              >
+															 <Transform 
+															      	scale = '0.2 0.2 0.2'
+																	rotation = '0 1 0 3'
+																	translation='0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 2"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
+																<Transform 
+															      	scale = '0.2 0.2 0.2'
+																	translation='-0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 2"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
                                                               <Transform
                                                                DEF='ServerFrame_02_WRAPXFORM'
                                                               >
@@ -294,6 +373,45 @@
                                                               translation='0.004447 -0.2374 0'
                                                               rotation='0 -1 0 -3.912'
                                                              >
+															 <Transform 
+															      	scale = '0.2 0.2 0.2'
+																	rotation = '0 1 0 3'
+																	translation='0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 3"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
+																<Transform 
+															      	scale = '0.2 0.2 0.2'
+																	translation='-0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 3"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
                                                               <Transform
                                                                DEF='ServerFrame_03_WRAPXFORM'
                                                               >
@@ -353,6 +471,45 @@
                                                               translation='0.001168 -0.2374 -0.0006724'
                                                               rotation='0 -1 0 -2.395'
                                                              >
+															 <Transform 
+															      	scale = '0.2 0.2 0.2'
+																	rotation = '0 1 0 3'
+																	translation='0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 4"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
+																<Transform 
+															      	scale = '0.2 0.2 0.2'
+																	translation='-0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 4"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
                                                               <Transform
                                                                DEF='ServerFrame_04_WRAPXFORM'
                                                               >
@@ -412,6 +569,45 @@
                                                               translation='0 -0.2374 0.001298'
                                                               rotation='0 -1 0 -0.7675'
                                                              >
+															 <Transform 
+															      	scale = '0.2 0.2 0.2'
+																	rotation = '0 1 0 3'
+																	translation='0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 5"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
+																<Transform 
+															      	scale = '0.2 0.2 0.2'
+																	translation='-0.2 0.8 0'
+																	>
+																	<Shape
+																		 
+																		>
+																		<Appearance      >
+																			<Material
+																				 
+																				diffuseColor='1 1 1'
+																				ambientIntensity='1'
+																				/>
+																		</Appearance>
+																		<Text  string='"Server 5"' solid="true">
+																		 
+																		</Text>
+																	</Shape>
+																</Transform>
                                                               <Transform
                                                                DEF='ServerFrame_05_WRAPXFORM'
                                                               >

@@ -143,8 +143,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
             GlobalVars.setX3DPlatformAddress("http://" + platformName.split(":")[0] + ":7778/acc");
             x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
             x3d.start();*/
-            //x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
-            //x3d.start();
+            x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
+            x3d.start();
 
             //star the Request Processing Agent
 

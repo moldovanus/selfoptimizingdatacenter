@@ -137,7 +137,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         /*  *//*
        Simulate task 1 ending activity\
-        *//*
+        */
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -161,7 +161,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 resultsFrame.setVisible(true);
 
             }
-        });*/
+        });
         logger = Logger.getLogger(ReinforcementLearningDataCenterBehavior.class);
     }
 
@@ -577,13 +577,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 System.out.println(o.toString());
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
+
                 try {
-                    //wait in order to be noticeable in X3D
                     Thread.sleep(3000);
-                    //JOptionPane.showConfirmDialog(null,"Bla");
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+
             }
 
 
@@ -613,11 +613,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 //taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
             }
             //wait for effect to be noticeable on X3D
+
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
 
         } else {
             if (contextBroken) {
