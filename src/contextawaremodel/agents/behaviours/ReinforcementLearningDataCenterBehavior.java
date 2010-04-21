@@ -67,58 +67,58 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
         // FuzzyLogicNegotiator test
-      /*
-        Task task = protegeFactory.createTask("TestTask");
-        RequestedTaskInfo  requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
-        ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
-        requestedTaskInfo.setCores(1);
-        requestedTaskInfo.setCpuMaxAcceptableValue(1750);
-        requestedTaskInfo.setCpuMinAcceptableValue(1650);
-        requestedTaskInfo.setMemoryMaxAcceptableValue(500);
-        requestedTaskInfo.setMemoryMinAcceptableValue(200);
-        requestedTaskInfo.setStorageMaxAcceptableValue(3);
-        requestedTaskInfo.setStorageMinAcceptableValue(1);
+        /*
+                Task task = protegeFactory.createTask("TestTask");
+                RequestedTaskInfo  requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
+                ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
+                requestedTaskInfo.setCores(1);
+                requestedTaskInfo.setCpuMaxAcceptableValue(1750);
+                requestedTaskInfo.setCpuMinAcceptableValue(1650);
+                requestedTaskInfo.setMemoryMaxAcceptableValue(500);
+                requestedTaskInfo.setMemoryMinAcceptableValue(200);
+                requestedTaskInfo.setStorageMaxAcceptableValue(3);
+                requestedTaskInfo.setStorageMinAcceptableValue(1);
 
 
-        task.setReceivedInfo(receivedTaskInfo);
-        task.setRequestedInfo(requestedTaskInfo);
+                task.setReceivedInfo(receivedTaskInfo);
+                task.setRequestedInfo(requestedTaskInfo);
 
-        Server server = protegeFactory.createServer("TestServer_1");
-        CPU cpu = protegeFactory.createCPU("TestCPU_1");
-        greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
-        Storage storage = protegeFactory.createStorage("TestStorage_1");
-        Core core_1 = protegeFactory.createCore("TestCore_1");
-        core_1.setMaxAcceptableValue(1500);
-        core_1.setMinAcceptableValue(1100);
-        core_1.setTotal(1655);
-        core_1.setUsed(1,policyConversionModel);
+                Server server = protegeFactory.createServer("TestServer_1");
+                CPU cpu = protegeFactory.createCPU("TestCPU_1");
+                greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
+                Storage storage = protegeFactory.createStorage("TestStorage_1");
+                Core core_1 = protegeFactory.createCore("TestCore_1");
+                core_1.setMaxAcceptableValue(1500);
+                core_1.setMinAcceptableValue(1100);
+                core_1.setTotal(1655);
+                core_1.setUsed(1,policyConversionModel);
 
-        serverMemory.setMaxAcceptableValue(600);
-        serverMemory.setMinAcceptableValue(1);
-        serverMemory.setUsed(1,policyConversionModel);
-        serverMemory.setTotal(600);
+                serverMemory.setMaxAcceptableValue(600);
+                serverMemory.setMinAcceptableValue(1);
+                serverMemory.setUsed(1,policyConversionModel);
+                serverMemory.setTotal(600);
 
-        storage.setMaxAcceptableValue(600);
-        storage.setMinAcceptableValue(1);
-        storage.setUsed(1,policyConversionModel);
-        storage.setTotal(700);
-        
-        cpu.addAssociatedCore(core_1);
-        server.setAssociatedCPU(cpu);
-        server.setAssociatedMemory(serverMemory);
-        server.setAssociatedStorage(storage);
+                storage.setMaxAcceptableValue(600);
+                storage.setMinAcceptableValue(1);
+                storage.setUsed(1,policyConversionModel);
+                storage.setTotal(700);
 
-        Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+                cpu.addAssociatedCore(core_1);
+                server.setAssociatedCPU(cpu);
+                server.setAssociatedMemory(serverMemory);
+                server.setAssociatedStorage(storage);
+
+                Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
 
-        negotiator.negotiate(server,task);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        System.exit(1);
-*/
+                negotiator.negotiate(server,task);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                System.exit(1);
+        */
 
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame("Datacenter");
@@ -135,7 +135,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         agent.sendAllTasksToClient();
 
 
-      /*  *//*
+        /*  *//*
        Simulate task 1 ending activity\
         *//*
 
@@ -172,7 +172,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         RequestedTaskInfo requested = task.getRequestedInfo();
 
         //TODO : poate trebe bagat si minimu in task respectance cum is range-uri
-        
+
         double respectance = task.getCpuWeight()
                 * (requested.getCores() - received.getCores() + requested.getCpuMaxAcceptableValue() - received.getCpuReceived())
                 + task.getMemoryWeight() * (requested.getMemoryMaxAcceptableValue() - received.getMemoryReceived())

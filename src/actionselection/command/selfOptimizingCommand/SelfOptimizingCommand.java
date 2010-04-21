@@ -62,6 +62,7 @@ public abstract class SelfOptimizingCommand implements Command {
             if (thisClass.equals(DeployTaskCommand.class)) {
                 return false;
             }
+
             if (thisClass.equals(MoveTaskCommand.class)) {
 
                 /*public String[] toStringArray() {
