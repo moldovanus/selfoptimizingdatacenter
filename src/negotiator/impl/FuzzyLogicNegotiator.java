@@ -11,6 +11,7 @@ import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunction;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionPieceWiseLinear;
 import net.sourceforge.jFuzzyLogic.membership.Value;
+import net.sourceforge.jFuzzyLogic.plot.JDialogFis;
 import net.sourceforge.jFuzzyLogic.rule.LinguisticTerm;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
 import org.antlr.runtime.RecognitionException;
@@ -34,13 +35,26 @@ public class FuzzyLogicNegotiator implements Negotiator {
     private Variable requestedRange;
     private Variable negotiatedRange;
 
+    private Variable serverAndRequested;
+
     private LinguisticTerm serverRangeValue;
     private LinguisticTerm requestedRangeValue;
     private LinguisticTerm negotiatedRangeValue;
 
+    private LinguisticTerm serverValue;
+    private LinguisticTerm requestedValue;
 
     protected FuzzyLogicNegotiator(String fuzzyControlLanguageFile) {
+
+        try {
         fis = FIS.load(fuzzyControlLanguageFile, true);
+        } catch (RuntimeException e) {
+
+            System.err.println("FuzzyLogicNegotiator creation failed : Can't load file: '"
+                    + fuzzyControlLanguageFile + "'.");
+            e.printStackTrace();
+            return;
+        }
         // Error while loading?
         if (fis == null) {
             System.err.println("FuzzyLogicNegotiator creation failed : Can't load file: '"
@@ -57,10 +71,13 @@ public class FuzzyLogicNegotiator implements Negotiator {
         serverRange = functionBlock.getVariable("server_range");
         requestedRange = functionBlock.getVariable("requested_range");
         negotiatedRange = functionBlock.getVariable("negotiated_range");
+        serverAndRequested = functionBlock.getVariable("server_and_requested");
 
         serverRangeValue = serverRange.getLinguisticTerm("server_range_value");
         requestedRangeValue = requestedRange.getLinguisticTerm("requested_range_value");
         negotiatedRangeValue = negotiatedRange.getLinguisticTerm("negotiated_range_value");
+        serverValue = serverAndRequested.getLinguisticTerm("server_value");
+        requestedValue = serverAndRequested.getLinguisticTerm("requested_value");
 
         requestedRangeMembershipFunction = requestedRangeValue.getMembershipFunction();
 
@@ -122,6 +139,13 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 requestedRangeMembershipFunction.setParameter(0, usedCPU + minRequestedCPU);
                 requestedRangeMembershipFunction.setParameter(2, usedCPU + maxRequestedCPU);
 
+                serverValue.setMembershipFunction(serverCpuMembershipFunction);
+                requestedValue.setMembershipFunction(requestedRangeMembershipFunction);
+
+                //serverAndRequested.setValue();
+                serverAndRequested.setUniverseMin(maxCPU);
+                serverAndRequested.setUniverseMax(totalCPU);
+
                 negotiatedRange.setUniverseMin(maxCPU);
                 negotiatedRange.setUniverseMax(totalCPU);
 
@@ -139,12 +163,19 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
                 finalFuzzyInferenceSystem.setVariable("server_range", usedCPU + minRequestedCPU + 1);
                 finalFuzzyInferenceSystem.setVariable("requested_range", usedCPU + minRequestedCPU + 1);
-
+                JDialogFis jDialogFis = new JDialogFis(finalFuzzyInferenceSystem);
+                jDialogFis.setSize(800, 600);
 
                 finalFuzzyInferenceSystem.evaluate();
+
+                finalFuzzyInferenceSystem.setVariable("server_and_requested",usedCPU + maxRequestedCPU - 1) ;
+                finalFuzzyInferenceSystem.evaluate();
+                jDialogFis.repaint();
+
+
                 //System.out.println(finalFuzzyInferenceSystem);
                 //finalFuzzyInferenceSystem.chart();
-
+                jDialogFis.repaint();
 
                 System.out.println("Negotiated for " + core.getLocalName() + " from " + core.getMaxAcceptableValue() +
                         " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());

@@ -128,14 +128,14 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //cia.start();
             //this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
 
-           /* gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
+            gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
             gui.start();
-*/
+
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
-/*
+
             tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
-            tm.start();*/
+            tm.start(); 
 
             //todo : change when running X3DAgent remotely
            /* String platformName = this.getContainerController().getPlatformName();
@@ -143,6 +143,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
             GlobalVars.setX3DPlatformAddress("http://" + platformName.split(":")[0] + ":7778/acc");
             x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
             x3d.start();*/
+            x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
+            x3d.start();
 
             //star the Request Processing Agent
 

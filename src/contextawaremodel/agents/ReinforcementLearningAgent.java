@@ -149,10 +149,10 @@ public class ReinforcementLearningAgent extends Agent {
         Object[] args = getArguments();
         if (args != null) {
             selfHealingLogger = new LoggerGUI("selfHealingLog");
-            selfHealingLogger.setLogPath("logs\\");
+            selfHealingLogger.setLogPath("logs/");
 
             selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
-            selfOptimizingLogger.setLogPath("logs\\");
+            selfOptimizingLogger.setLogPath("logs/");
 
             this.contextAwareModel = (JenaOWLModel) args[0];
             this.policyConversionModel = (OntModel) args[1];
@@ -213,7 +213,7 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-                //addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
+                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
                 //addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel,owlModelDataCenter));

@@ -11,6 +11,7 @@ END_VAR
 // Define output variable
 VAR_OUTPUT
     negotiated_range : REAL;
+      server_and_requested : REAL;
 END_VAR
 
 // Fuzzify input variable 'server_cpu'
@@ -18,7 +19,7 @@ FUZZIFY server_range
     TERM server_range_value := (0, 1) (0,0) ;
 END_FUZZIFY
 
- 
+
 FUZZIFY requested_range
     TERM requested_range_value := (0, 0) (0,1) ;
 END_FUZZIFY
@@ -31,6 +32,13 @@ DEFUZZIFY negotiated_range
 END_DEFUZZIFY
 
 
+DEFUZZIFY server_and_requested
+    TERM server_value := (0,0) (0,1) ;
+    TERM requested_value := (0,0) (0,1) ;
+         METHOD : COG;
+    // Default value is 0 (if no rule activates defuzzifier)
+    DEFAULT := 0;
+END_DEFUZZIFY
 
 RULEBLOCK No1
     // Use 'min' for 'and' (also implicit use 'max'
@@ -42,9 +50,14 @@ RULEBLOCK No1
     ACCU : MAX;
 
     RULE 1 : IF server_range IS server_range_value AND requested_range IS requested_range_value
-                THEN negotiated_range IS negotiated_range_value;
+                THEN negotiated_range IS negotiated_range_value  ;
 
- 
+    RULE 2 : IF server_range IS server_range_value AND requested_range IS requested_range_value
+                THEN server_and_requested IS requested_value ;
+
+
+
+
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

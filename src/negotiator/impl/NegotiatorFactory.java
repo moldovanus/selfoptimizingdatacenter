@@ -27,10 +27,10 @@ public final class NegotiatorFactory {
     public static synchronized Negotiator getFuzzyLogicNegotiator() {
         FuzzyLogicNegotiator negotiator = fuzzyLogicNegotiator;
         if (negotiator == null) {
-            //fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
+            fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
             negotiator = fuzzyLogicNegotiator;
         }
-        //return negotiator;
-        return null;
+        return negotiator;
+        //return null;
     }
 }

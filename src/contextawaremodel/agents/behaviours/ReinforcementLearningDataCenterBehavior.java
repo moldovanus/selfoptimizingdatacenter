@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 import negotiator.Negotiator;
 import negotiator.impl.NegotiatorFactory;
 
+import javax.swing.*;
+
 /**
  * @author Administrator
  */
@@ -65,13 +67,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
         // FuzzyLogicNegotiator test
-      
+      /*
         Task task = protegeFactory.createTask("TestTask");
         RequestedTaskInfo  requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
         ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
         requestedTaskInfo.setCores(1);
         requestedTaskInfo.setCpuMaxAcceptableValue(1750);
-        requestedTaskInfo.setCpuMinAcceptableValue(1600);
+        requestedTaskInfo.setCpuMinAcceptableValue(1650);
         requestedTaskInfo.setMemoryMaxAcceptableValue(500);
         requestedTaskInfo.setMemoryMinAcceptableValue(200);
         requestedTaskInfo.setStorageMaxAcceptableValue(3);
@@ -88,7 +90,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Core core_1 = protegeFactory.createCore("TestCore_1");
         core_1.setMaxAcceptableValue(1500);
         core_1.setMinAcceptableValue(1100);
-        core_1.setTotal(1800);
+        core_1.setTotal(1655);
         core_1.setUsed(1,policyConversionModel);
 
         serverMemory.setMaxAcceptableValue(600);
@@ -106,13 +108,17 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         server.setAssociatedMemory(serverMemory);
         server.setAssociatedStorage(storage);
 
-        Negotiator negotiator = NegotiatorFactory.getNashNegotiator();
+        Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
 
         negotiator.negotiate(server,task);
- 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         System.exit(1);
-
+*/
 
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame("Datacenter");
@@ -129,9 +135,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         agent.sendAllTasksToClient();
 
 
-        /*
+      /*  *//*
        Simulate task 1 ending activity\
-        */
+        *//*
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -155,7 +161,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 resultsFrame.setVisible(true);
 
             }
-        });
+        });*/
         logger = Logger.getLogger(ReinforcementLearningDataCenterBehavior.class);
     }
 
@@ -574,6 +580,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 try {
                     //wait in order to be noticeable in X3D
                     Thread.sleep(3000);
+                    //JOptionPane.showConfirmDialog(null,"Bla");
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
