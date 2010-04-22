@@ -27,7 +27,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         super(protegeFactory);
         this.serverName = serverName;
         this.taskName = taskName;
-        cost = 1;
+        cost = 100;
     }
 
     /**

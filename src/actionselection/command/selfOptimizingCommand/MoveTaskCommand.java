@@ -29,7 +29,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         this.oldServerName = oldServerName;
         this.newServerName = newServerName;
         this.taskName = taskName;
-        cost = 3;
+        cost = 300;
     }
 
     /**

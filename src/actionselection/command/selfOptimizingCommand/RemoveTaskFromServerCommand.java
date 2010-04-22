@@ -27,7 +27,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         super(protegeFactory);
         this.taskName = taskName;
         this.serverName = serverName;
-        cost = 3;
+        cost = 300;
     }
 
     public void execute(OntModel model) {
