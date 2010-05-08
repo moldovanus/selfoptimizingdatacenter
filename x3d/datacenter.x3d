@@ -186,7 +186,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -205,7 +205,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -286,7 +286,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -305,7 +305,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -384,7 +384,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -403,7 +403,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -482,7 +482,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -501,7 +501,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -580,7 +580,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>
@@ -599,7 +599,7 @@
 																		<Appearance      >
 																			<Material
 																				 
-																				diffuseColor='1 1 1'
+																				diffuseColor='0.6 0 0'
 																				ambientIntensity='1'
 																				/>
 																		</Appearance>

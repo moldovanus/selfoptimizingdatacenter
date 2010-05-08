@@ -1,0 +1,1 @@
+ -Djava.library.path='C:\Program Files\Xj3D\bin'

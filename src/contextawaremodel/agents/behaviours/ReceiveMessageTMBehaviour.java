@@ -67,9 +67,9 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                         storageReceived[index] = str[11];
                         index++;
                     }
-                    agent.clear();
-                    agent.populateTaskWindow(names,coresRequested,minCpuRequested,maxCpuRequested,minMemoryRequested,maxMemoryRequested,minStorageRequested,maxStorageRequested,coresReceived ,cpuReceived,memoryReceived,storageReceived);
-                    agent.clearFields();
+                   // agent.clear();
+                   // agent.populateTaskWindow(names,coresRequested,minCpuRequested,maxCpuRequested,minMemoryRequested,maxMemoryRequested,minStorageRequested,maxStorageRequested,coresReceived ,cpuReceived,memoryReceived,storageReceived);
+                    //agent.clearFields();
                     break;
 
                 case ACLMessage.INFORM:
@@ -81,7 +81,7 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                     break;
                 case ACLMessage.REFUSE:     
                     JOptionPane.showMessageDialog(null,message.getContent(),"The transaction wasn't effectuated",1);
-                    agent.reenableTasks();
+                    //agent.reenableTasks();
                     break;
             }
         } catch (Exception ex) {

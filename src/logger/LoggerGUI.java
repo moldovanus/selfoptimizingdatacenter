@@ -10,6 +10,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
@@ -23,7 +24,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- *
  * @author Me
  */
 public class LoggerGUI {
@@ -67,7 +67,7 @@ public class LoggerGUI {
 
     public void log(Color messageColor, String header, ArrayList message) {
 
-        String date = "_" +  new java.util.Date().toString();
+        String date = "_" + new java.util.Date().toString();
         messages.add(new Object[]{messageColor, header, message, date});
 
 
@@ -80,6 +80,7 @@ public class LoggerGUI {
 
         savePDF();
     }
+
 
     public void savePDF() {
         try {

@@ -16,6 +16,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
+import contextawaremodel.gui.TaskManagement;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -55,6 +56,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private SWRLFactory swrlFactory;
     private Logger logger;
     private Negotiator negotiator;
+    private TaskManagement taskManagementWindow;
 
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
@@ -64,7 +66,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
         this.selfHealingOwlModel = selfHealingOwlModel;
         protegeFactory = new ProtegeFactory(owlModel);
-
+        taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
         /*
@@ -158,6 +160,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
 
                 Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+                taskManagementWindow.setTasks(tasks);
+                taskManagementWindow.setVisible(true);
                 resultsFrame.setVisible(true);
 
             }
@@ -245,7 +249,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 continue;
             }
 
-            //System.out.println(task.getName().split("#")[1] + " " + policy.getRespected(policyConversionModel)); 
+            //System.out.println(task.getName().split("#")[1] + " " + policy.getRespected(policyConversionModel));
             if (!policy.getRespected(policyConversionModel)) {
                 //System.out.println("Broken");
                 //System.out.println(task);
@@ -308,6 +312,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         ContextSnapshot newContext = queue.poll();
         if (newContext == null) {
             System.out.println("Could not repair the context totally. Returning best solution.");
+            //agent.getSelfOptimizingLogger().log(Color.red, "No solution found", "Could not repair the context totally. Returning best solution.");
             return smallestEntropyContext;
         }
         System.out.println("---A");
@@ -492,14 +497,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         //returns true if there were commands to execute
         //TODO: refresh after receiving new commands from it - > or sth
 
-        // if (taskManagementWindow.executeCommands()) {
-        //  taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
-        // }
+        if (taskManagementWindow.executeCommands()) {
+            taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+        }
 
         //TODO: check this !
         synchronized (this) {
-            //   taskManagementWindow.setClearForAdding(true);
-            //  notifyAll();
+            taskManagementWindow.setClearForAdding(true);
+            notifyAll();
         }
 
         System.out.println("Datacenter behavior on Tick");
@@ -519,7 +524,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             contextBroken = true;
 
             //TODO: activate only after a deploy or delete  to recollect
-            //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context   
+            //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
             /*for (Server server : protegeFactory.getAllServerInstances()) {
                 server.collectPreviouslyDistributedResources(policyConversionModel);
             }
@@ -565,7 +570,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
-            // taskManagementWindow.setClearForAdding(false);
+            taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
 
 
@@ -610,7 +615,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                 //refresh tasks list if context has been repaired
                 //TODO : check TM
-                //taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
             }
             //wait for effect to be noticeable on X3D
 

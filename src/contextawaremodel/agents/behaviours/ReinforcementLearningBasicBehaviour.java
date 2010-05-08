@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import selfHealingOntology.*;
 
@@ -361,7 +361,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 System.err.println("Reinforcement alg running time: " + value + " seconds");
 
             } catch (Exception ex) {
-                Logger.getLogger(ReinforcementLearningBasicBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
                 return;
             }
 

@@ -28,7 +28,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     public SendServerToLowPowerStateCommand(ProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 200;
+        cost = 400;
     }
 
     /**
