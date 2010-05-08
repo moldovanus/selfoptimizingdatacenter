@@ -29,7 +29,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("http://192.168.2.101");
         ServerManagementProxy.DEBUG = true;
        // serverManagementProxy.getServerInfo();
-        serverManagementProxy.wakeUpServer("02-17-31-65-C3-5F", "192.168.2.101");
+        serverManagementProxy.wakeUpServer("02-17-31-65-C3-5F", "192.168.2.101",9);
         System.out.println("End");
 
     }
@@ -271,7 +271,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     }
 
 
-    public void wakeUpServer(String mac, String ipAddress) {
+    public void wakeUpServer(String mac, String ipAddress, int port) {
 
         try {
             //Socket sock = new Socket(hostName, 80);
@@ -282,8 +282,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
             //Send header
             String data = "";
-
-                data += "mac=" + mac + "&ipAddress=" + ipAddress ;
+            data += "mac=" + mac + "&ipAddress=" + ipAddress +"&port=" + port ;
             
             System.out.println(data);
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));

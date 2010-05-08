@@ -26,5 +26,11 @@ public interface ServerManagementProxyInterface{
 
         void deleteVirtualMachine(String vmName);
 
-        void wakeUpServer(String mac, String ipAddress); 
+    /**
+     *
+     * @param mac - mac address of the server to be woken up
+     * @param ipAddress - ip of router
+     * @param port - port forwarded to the server to be waken up
+     */
+        void wakeUpServer(String mac, String ipAddress, int port); 
 }
