@@ -58,7 +58,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);
-
+             proxy.deleteVirtualMachine(task.getName());
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
