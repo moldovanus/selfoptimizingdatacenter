@@ -4,6 +4,7 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -67,6 +68,12 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
+        Server server = protegeFactory.getServer(serverName);
+        ServerManagementProxy proxy = server.getProxy();
+
+        if (proxy != null) {
+            //TODO:sendServerToSleep web service;
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

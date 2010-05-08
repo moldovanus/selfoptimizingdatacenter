@@ -1,5 +1,6 @@
 package greenContextOntology.impl;
 
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.*;
 
@@ -18,6 +19,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 public class DefaultServer extends DefaultResource
         implements Server {
 
+    private ServerManagementProxy proxy;
 
     public DefaultServer(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
@@ -256,6 +258,7 @@ public class DefaultServer extends DefaultResource
     public boolean hasResourcesFor(Task task) {
 
         RequestedTaskInfo requestedSLA = task.getRequestedInfo();
+
 
         CPU cpu = this.getAssociatedCPU();
         Collection cores = cpu.getAssociatedCore();
@@ -545,5 +548,13 @@ public class DefaultServer extends DefaultResource
         getAssociatedMemory().restoreDefaultOptimumValues();
         getAssociatedStorage().restoreDefaultOptimumValues();
 
+    }
+
+    public ServerManagementProxy getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(ServerManagementProxy proxy) {
+        this.proxy = proxy;
     }
 }

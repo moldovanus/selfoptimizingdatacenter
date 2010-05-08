@@ -25,4 +25,6 @@ public interface ServerManagementProxyInterface{
         void stopVirtualMachine(String vmName);
 
         void deleteVirtualMachine(String vmName);
+
+        void wakeUpServer(String mac, String ipAddress); 
 }

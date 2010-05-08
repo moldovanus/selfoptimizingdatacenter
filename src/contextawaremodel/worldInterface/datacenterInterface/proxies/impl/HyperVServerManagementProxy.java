@@ -26,9 +26,10 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     }
 
     public static void main(String[] args) {
-        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
+        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("http://192.168.2.101");
         ServerManagementProxy.DEBUG = true;
-        serverManagementProxy.moveDestinationActions("A", "B", "V");
+       // serverManagementProxy.getServerInfo();
+        serverManagementProxy.wakeUpServer("02-17-31-65-C3-5F", "192.168.2.101");
         System.out.println("End");
 
     }
@@ -37,8 +38,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
         ServerDto serverDto = null;
         try {
-            //Parse URL and create socket
-
             URL url = new URL(hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
@@ -98,7 +97,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "path1=" + path1 + "&path2='" + path2 + "'&vmName='" + vmName + "'";
+            String data = "path1=" + path1 + "&path2=" + path2 + "&vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");
@@ -129,7 +128,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "path=" + path + "'&vmName='" + vmName + "'";
+            String data = "path=" + path + "&vmName=" + vmName ;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");
@@ -159,7 +158,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "from=" + from + "&to='" + to + "'&vmName='" + vmName + "'";
+            String data = "from=" + from + "&to=" + to + "&vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");
@@ -190,7 +189,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "vmName='" + vmName + "'";
+            String data = "vmName=" + vmName ;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");
@@ -220,7 +219,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "vmName='" + vmName + "'";
+            String data = "vmName=" + vmName ;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");
@@ -250,7 +249,43 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoOutput(true);
 
             //Send header
-            String data = "vmName='" + vmName + "'";
+            String data = "vmName=" + vmName ;
+            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write(data);
+            wr.write("\r\n");
+
+            wr.flush();
+            if (DEBUG) {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                // Response
+                String line;
+                while ((line = rd.readLine()) != null) {
+
+                    System.out.println(line);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void wakeUpServer(String mac, String ipAddress) {
+
+        try {
+            //Socket sock = new Socket(hostName, 80);
+            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/WakeUpServer ");
+            URLConnection connection = url.openConnection();
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            //Send header
+            String data = "";
+
+                data += "mac=" + mac + "&ipAddress=" + ipAddress ;
+            
+            System.out.println(data);
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
             wr.write(data);
             wr.write("\r\n");

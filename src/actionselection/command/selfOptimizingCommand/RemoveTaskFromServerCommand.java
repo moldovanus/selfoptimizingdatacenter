@@ -1,6 +1,7 @@
 package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import jade.core.Agent;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
@@ -51,6 +52,14 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
     }
 
     public void executeOnWebService() {
+        Server server = protegeFactory.getServer(serverName);
+        Task task = protegeFactory.getTask(taskName);
+        ServerManagementProxy proxy = server.getProxy();
+
+        if (proxy != null) {
+            //TODO:proxy.deleteVirtualMachine(vmName);
+
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

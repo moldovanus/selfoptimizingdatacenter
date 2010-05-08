@@ -4,6 +4,7 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -60,6 +61,12 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
+        Server server = protegeFactory.getServer(serverName);
+        Task task = protegeFactory.getTask(taskName);
+        ServerManagementProxy proxy = server.getProxy();
+        if (proxy != null) {
+            //TODO: proxy.deployVirtualMachine(to,from.vmname);
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

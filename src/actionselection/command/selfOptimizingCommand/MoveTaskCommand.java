@@ -4,6 +4,7 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -66,6 +67,16 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
+        Server oldServer = protegeFactory.getServer(oldServerName);
+        Server newServer = protegeFactory.getServer(newServerName);
+        Task task = protegeFactory.getTask(taskName);
+        ServerManagementProxy oldServerProxy = oldServer.getProxy();
+        ServerManagementProxy newServerProxy = newServer.getProxy();
+        if (oldServerProxy != null && newServerProxy != null) {
+            // TODO: oldServerProxy.moveSourceActions(path,vmname);
+           // TODO: newServerProxy.moveDestinationActions(path1,path2,vmname);
+
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -83,7 +94,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(newServerName);
 
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -94,7 +105,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
     public void rewindOnX3D(Agent agent) {
 
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -102,7 +113,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
         Server server = protegeFactory.getServer(oldServerName);
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], oldServerName.split("#")[1], server.getRunningTasks().size() + 1});
+            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], oldServerName.split("#")[1], server.getRunningTasks().size() + 1});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

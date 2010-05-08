@@ -1,5 +1,6 @@
 package greenContextOntology;
 
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import edu.stanford.smi.protegex.owl.model.*;
 
 import java.util.*;
@@ -120,5 +121,9 @@ public interface Server extends Resource {
     void changeOptimumStorageRange(int max);
 
     void resetOptimumValues();
+
+    public ServerManagementProxy getProxy();
+
+    public void setProxy(ServerManagementProxy proxy);
 }
 
