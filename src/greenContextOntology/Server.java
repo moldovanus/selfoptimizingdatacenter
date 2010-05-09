@@ -98,6 +98,31 @@ public interface Server extends Resource {
     void setWebService(String newWebService);
 
     public boolean hasResourcesFor(Task task);
+     // Property http://www.owl-ontologies.com/Datacenter.owl#virtualMachinesPath
+
+    Collection getVirtualMachinesPath();
+
+    RDFProperty getVirtualMachinesPathProperty();
+
+    boolean hasVirtualMachinesPath();
+
+    Iterator listVirtualMachinesPath();
+
+    void addVirtualMachinesPath(String newVirtualMachinesPath);
+
+    void removeVirtualMachinesPath(String oldVirtualMachinesPath);
+
+    void setVirtualMachinesPath(Collection newVirtualMachinesPath);
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#serverIPAddress
+
+    String getServerIPAddress();
+
+    RDFProperty getServerIPAddressProperty();
+
+    boolean hasServerIPAddress();
+
+    void setServerIPAddress(String newServerIPAddress);
 
     @Override
     String toString();
@@ -125,5 +150,8 @@ public interface Server extends Resource {
     public ServerManagementProxy getProxy();
 
     public void setProxy(ServerManagementProxy proxy);
+
+
+
 }
 

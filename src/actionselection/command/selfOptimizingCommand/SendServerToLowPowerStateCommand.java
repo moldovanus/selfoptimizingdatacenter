@@ -70,11 +70,9 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         ServerManagementProxy proxy = server.getProxy();
-
         if (proxy != null) {
-            //TODO:sendServerToSleep web service;
+            proxy.sendServerToSleep();
         }
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

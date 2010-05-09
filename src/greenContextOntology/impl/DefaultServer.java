@@ -250,6 +250,67 @@ public class DefaultServer extends DefaultResource
         removePropertyValue(getRunningTasksProperty(), oldRunningTasks);
     }
 
+     // Property http://www.owl-ontologies.com/Datacenter.owl#serverIPAddress
+
+    public String getServerIPAddress() {
+        return (String) getPropertyValue(getServerIPAddressProperty());
+    }
+
+
+    public RDFProperty getServerIPAddressProperty() {
+        final String uri = "http://www.owl-ontologies.com/Datacenter.owl#serverIPAddress";
+        final String name = getOWLModel().getResourceNameForURI(uri);
+        return getOWLModel().getRDFProperty(name);
+    }
+
+
+    public boolean hasServerIPAddress() {
+        return getPropertyValueCount(getServerIPAddressProperty()) > 0;
+    }
+
+
+    public void setServerIPAddress(String newServerIPAddress) {
+        setPropertyValue(getServerIPAddressProperty(), newServerIPAddress);
+    }
+
+    // Property http://www.owl-ontologies.com/Datacenter.owl#virtualMachinesPath
+
+       public Collection getVirtualMachinesPath() {
+           return getPropertyValues(getVirtualMachinesPathProperty());
+       }
+
+
+       public RDFProperty getVirtualMachinesPathProperty() {
+           final String uri = "http://www.owl-ontologies.com/Datacenter.owl#virtualMachinesPath";
+           final String name = getOWLModel().getResourceNameForURI(uri);
+           return getOWLModel().getRDFProperty(name);
+       }
+
+
+       public boolean hasVirtualMachinesPath() {
+           return getPropertyValueCount(getVirtualMachinesPathProperty()) > 0;
+       }
+
+
+       public Iterator listVirtualMachinesPath() {
+           return listPropertyValues(getVirtualMachinesPathProperty());
+       }
+
+
+       public void addVirtualMachinesPath(String newVirtualMachinesPath) {
+           addPropertyValue(getVirtualMachinesPathProperty(), newVirtualMachinesPath);
+       }
+
+
+       public void removeVirtualMachinesPath(String oldVirtualMachinesPath) {
+           removePropertyValue(getVirtualMachinesPathProperty(), oldVirtualMachinesPath);
+       }
+
+
+       public void setVirtualMachinesPath(Collection newVirtualMachinesPath) {
+           setPropertyValues(getVirtualMachinesPathProperty(), newVirtualMachinesPath);
+       }
+    
     /**
      * @param task task to be accomodated on the server
      * @return true if there are enough resoruces to satify the task's

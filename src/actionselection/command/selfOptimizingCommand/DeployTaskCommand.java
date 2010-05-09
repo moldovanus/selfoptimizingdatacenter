@@ -65,7 +65,9 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         ServerManagementProxy proxy = server.getProxy();
         if (proxy != null) {
-             proxy.deployVirtualMachine("//HOME-Z5VXXZDRPO/"+server.getServerName(),"//"+server.getServerName(),task.getName());
+             proxy.deployVirtualMachine("//HOME-Z5VXXZDRPO/"+server.getServerName(),
+                     "//"+server.getServerName() + "/" + server.getVirtualMachinesPath().iterator().next(),
+                     task.getName());
             
         }
         throw new UnsupportedOperationException("Not supported yet.");

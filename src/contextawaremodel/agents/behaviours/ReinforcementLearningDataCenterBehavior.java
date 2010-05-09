@@ -17,6 +17,9 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import contextawaremodel.gui.TaskManagement;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
+import contextawaremodel.worldInterface.dtos.ServerDto;
+import contextawaremodel.worldInterface.dtos.StorageDto;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -29,6 +32,7 @@ import jade.core.behaviours.TickerBehaviour;
 
 import java.util.*;
 import java.awt.*;
+import java.util.List;
 
 import selfHealingOntology.SelfHealingProtegeFactory;
 import org.apache.log4j.Logger;
@@ -141,31 +145,53 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
        Simulate task 1 ending activity\
         */
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
 
-            public void run() {
-
-                //synchronize X3D display values with ontology values
-                Collection<Server> servers = protegeFactory.getAllServerInstances();
+        //synchronize X3D display values with ontology values
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
 
 
-                for (Server server : servers) {
-                    if (server.getIsInLowPowerState()) {
-                        SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
-                        sendServerToLowPowerStateCommand.executeOnX3D(agent);
-                    } else {
-                        WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
-                        wakeUpServerCommand.executeOnX3D(agent);
-                    }
+        for (Server server : servers) {
+            if (server.hasServerIPAddress()) {
+                HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+                server.setProxy(proxy);
+                ServerDto serverInfo = proxy.getServerInfo();
+                //TODO : to return totalCPU also
+                CPU cpu = server.getAssociatedCPU();
+                Collection cores = cpu.getAssociatedCore();
+                int totalCPU = serverInfo.getTotalCPU();
+                Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
+                int index = 0;
+                for (Object item : cores) {
+                    Core core = (Core) item;
+                    core.setTotal(totalCPU);
+                    core.setUsed(totalCPU - (Integer) freeCPUValues[index++], policyConversionModel);
                 }
 
-                Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-                taskManagementWindow.setTasks(tasks);
-                taskManagementWindow.setVisible(true);
-                resultsFrame.setVisible(true);
+                greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
+                int totalMemory = serverInfo.getTotalMemory();
+                serverMemory.setTotal(totalMemory);
+                serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(),policyConversionModel);
+
+                Storage storage = server.getAssociatedStorage();
+                List<StorageDto> storageList = serverInfo.getStorage();
+                
 
             }
-        });
+            if (server.getIsInLowPowerState()) {
+                SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
+                sendServerToLowPowerStateCommand.executeOnX3D(agent);
+            } else {
+                WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
+                wakeUpServerCommand.executeOnX3D(agent);
+            }
+        }
+
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+        taskManagementWindow.setTasks(tasks);
+        taskManagementWindow.setVisible(true);
+        resultsFrame.setVisible(true);
+
+
         logger = Logger.getLogger(ReinforcementLearningDataCenterBehavior.class);
     }
 
