@@ -29,7 +29,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("http://192.168.2.101");
         ServerManagementProxy.DEBUG = true;
         // serverManagementProxy.getServerInfo();
-        serverManagementProxy.wakeUpServer("00-17-08-44-AF-CC", "188.24.32.114", 9);
+        serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 
     }
@@ -99,6 +99,13 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "path1=" + path1 + "&path2=" + path2 + "&vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/MoveDestinationActions HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
+            wr.write(data);
+            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
 
@@ -130,6 +137,14 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "path=" + path + "&vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+
+            wr.write("POST /ServerManagement/Service1.asmx/MoveSourceActions HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
+            wr.write(data);
+            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
 
@@ -160,6 +175,14 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "from=" + from + "&to=" + to + "&vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/DeployVirtualMachine HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
+            wr.write(data);
+            wr.write("\r\n");
+
             wr.write(data);
             wr.write("\r\n");
 
@@ -191,6 +214,11 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/StartVirtualMachine HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
 
@@ -221,6 +249,12 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/StopVirtualMachine HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
+
             wr.write(data);
             wr.write("\r\n");
 
@@ -251,6 +285,11 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             //Send header
             String data = "vmName=" + vmName;
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/DeleteVirtualMachine HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
 
@@ -286,6 +325,11 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
             System.out.println(data);
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/WakeUpServer HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + data.length() + "\r\n");
+            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
 
@@ -313,6 +357,14 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
+            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+            wr.write("POST /ServerManagement/Service1.asmx/SendServerToSleep HTTP/1.1\r\n");
+            wr.write("Host: " + hostName + "\r\n");
+            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+            wr.write("Content-Length: " + 0 + "\r\n");
+            wr.write("\r\n");
+
+            wr.flush();
 
             if (DEBUG) {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
