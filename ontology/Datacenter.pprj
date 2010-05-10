@@ -1,4 +1,4 @@
-; Mon May 10 17:12:51 EEST 2010
+; Mon May 10 17:25:52 EEST 2010
 ; 
 ;+ (version "3.4.2")
 ;+ (build "Build 562")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class10135]
-		[Datacenter_ProjectKB_Class10136]
-		[Datacenter_ProjectKB_Class10137]
-		[Datacenter_ProjectKB_Class10138]
-		[Datacenter_ProjectKB_Class10139]))
+		[Datacenter_ProjectKB_Class10145]
+		[Datacenter_ProjectKB_Class10146]
+		[Datacenter_ProjectKB_Class10147]
+		[Datacenter_ProjectKB_Class10148]
+		[Datacenter_ProjectKB_Class10149]))
 
 ([CLSES_TAB] of  Widget
 
@@ -310,27 +310,27 @@
 ([Datacenter_ProjectKB_Class10064] of  Property_List
 )
 
-([Datacenter_ProjectKB_Class10135] of  String
+([Datacenter_ProjectKB_Class10145] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "%3ANAME"))
 
-([Datacenter_ProjectKB_Class10136] of  String
+([Datacenter_ProjectKB_Class10146] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([Datacenter_ProjectKB_Class10137] of  String
+([Datacenter_ProjectKB_Class10147] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([Datacenter_ProjectKB_Class10138] of  String
+([Datacenter_ProjectKB_Class10148] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([Datacenter_ProjectKB_Class10139] of  String
+([Datacenter_ProjectKB_Class10149] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "%3ANAME"))

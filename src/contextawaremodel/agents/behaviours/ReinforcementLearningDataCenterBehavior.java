@@ -137,11 +137,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         //System.exit(1);
         agent.sendAllTasksToClient();
 
-
         /*  *//*
        Simulate task 1 ending activity\
         */
-
 
         //synchronize X3D display values with ontology values
         Collection<Server> servers = protegeFactory.getAllServerInstances();
@@ -151,9 +149,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             if (server.hasServerIPAddress()) {
                 HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
                 server.setProxy(proxy);
-
                 ServerDto serverInfo = proxy.getServerInfo();
-                
+
                 CPU cpu = server.getAssociatedCPU();
                 Collection cores = cpu.getAssociatedCore();
                 int totalCPU = serverInfo.getTotalCPU();
@@ -168,14 +165,25 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
                 int totalMemory = serverInfo.getTotalMemory();
                 serverMemory.setTotal(totalMemory);
-                serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(),policyConversionModel);
+                serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(), policyConversionModel);
 
                 Storage storage = server.getAssociatedStorage();
                 List<StorageDto> storageList = serverInfo.getStorage();
-                
+                StorageDto targetStorage = null;
+                String storagePath = (String) server.getVirtualMachinesPath().iterator().next();
+                for (StorageDto storageDto : storageList) {
+                    if (storageDto.getName().charAt(0) == storagePath.charAt(0)) {
+                        targetStorage = storageDto;
+                        break;
+                    }
+                }
+
+                int storageSize = targetStorage.getSize();
+                storage.setTotal(storageSize);
+                storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
 
             }
-           /* if (server.getIsInLowPowerState()) {
+            /* if (server.getIsInLowPowerState()) {
                 SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
                 sendServerToLowPowerStateCommand.executeOnX3D(agent);
             } else {
@@ -479,7 +487,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     }
                 }
             }
-
 
             /*
 

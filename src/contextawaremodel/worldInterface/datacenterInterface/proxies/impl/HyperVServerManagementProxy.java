@@ -26,7 +26,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     }
 
     public static void main(String[] args) {
-        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("http://192.168.2.101");
+        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
         ServerManagementProxy.DEBUG = true;
         serverManagementProxy.getServerInfo();
         //serverManagementProxy.sendServerToSleep();
