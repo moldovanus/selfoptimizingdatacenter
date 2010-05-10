@@ -4,6 +4,7 @@
  */
 package contextawaremodel.agents.behaviours;
 
+import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -14,12 +15,11 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import greenContextOntology.ProtegeFactory;
+import greenContextOntology.Task;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
-import greenContextOntology.ProtegeFactory;
-import greenContextOntology.Task;
 
 /**
  * @author Moldovanus
@@ -87,10 +87,11 @@ public class ReceiveMessageRLBehaviour extends CyclicBehaviour {
                     command.execute(jenaModel);
                     command.executeOnX3D(agent);
                     selectedTask.deleteInstance(jenaModel, swrlFactory);
+
                     agent.sendAllTasksToClient();
                     }else
                     {
-                    agent.sendRefuseMessage();   
+                        agent.sendRefuseMessage();
                     }
                     break;
                 case ACLMessage.SUBSCRIBE:

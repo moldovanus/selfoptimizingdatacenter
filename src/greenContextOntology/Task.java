@@ -1,9 +1,8 @@
 package greenContextOntology;
 
-import edu.stanford.smi.protegex.owl.model.*;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-
 import com.hp.hpl.jena.ontology.OntModel;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 
 
 /**

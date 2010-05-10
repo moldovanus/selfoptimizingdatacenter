@@ -1,9 +1,10 @@
 package contextawaremodel.gui;
 
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import java.io.PrintStream;
-import javax.swing.JOptionPane;
+
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.io.PrintStream;
 
 public class MainWindow extends javax.swing.JFrame {
 

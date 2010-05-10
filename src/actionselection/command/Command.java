@@ -1,10 +1,9 @@
 package actionselection.command;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
 
 import java.io.Serializable;
-
-import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Created by IntelliJ IDEA.

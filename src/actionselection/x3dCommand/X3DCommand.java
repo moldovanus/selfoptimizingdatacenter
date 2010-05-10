@@ -4,8 +4,9 @@
  */
 package actionselection.x3dCommand;
 
-import java.io.Serializable;
 import org.web3d.x3d.sai.X3DScene;
+
+import java.io.Serializable;
 
 /**
  *

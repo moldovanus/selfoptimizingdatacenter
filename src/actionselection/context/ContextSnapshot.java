@@ -6,12 +6,10 @@ package actionselection.context;
 
 import actionselection.command.Command;
 import com.hp.hpl.jena.ontology.OntModel;
-import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
-
-import java.util.Queue;
-
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import jade.core.Agent;
+
+import java.util.Queue;
 
 /**
  * @author Administrator

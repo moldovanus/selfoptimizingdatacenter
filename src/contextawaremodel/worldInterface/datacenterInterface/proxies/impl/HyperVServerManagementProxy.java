@@ -28,8 +28,8 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public static void main(String[] args) {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("http://192.168.2.101");
         ServerManagementProxy.DEBUG = true;
-        // serverManagementProxy.getServerInfo();
-        serverManagementProxy.sendServerToSleep();
+        serverManagementProxy.getServerInfo();
+        //serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 
     }
@@ -38,7 +38,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
         ServerDto serverDto = null;
         try {
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -91,7 +91,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void moveDestinationActions(String path1, String path2, String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/MoveDestinationActions");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/MoveDestinationActions");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -129,7 +129,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void moveSourceActions(String path, String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/MoveSourceActions");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/MoveSourceActions");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -167,7 +167,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void deployVirtualMachine(String from, String to, String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine ");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine ");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -206,7 +206,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void startVirtualMachine(String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/StartVirtualMachine");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/StartVirtualMachine");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -241,7 +241,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void stopVirtualMachine(String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/StopVirtualMachine");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/StopVirtualMachine");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -277,7 +277,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void deleteVirtualMachine(String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/DeleteVirtualMachine");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeleteVirtualMachine");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -314,7 +314,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/WakeUpServer ");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/WakeUpServer ");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -353,7 +353,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL(hostName + "/ServerManagement/Service1.asmx/SendServerToSleep");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/SendServerToSleep");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -366,6 +366,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
             wr.flush();
 
+            //connection hangs until server wakes up. Good because this invokes Restart so it waiths until server goes to sleep :D 
             if (DEBUG) {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 // Response

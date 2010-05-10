@@ -1,10 +1,9 @@
 package actionselection.command.selfHealingCommand;
 
-import greenContextOntology.ProtegeFactory;
+import actionselection.command.Command;
+import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
 import selfHealingOntology.SelfHealingProtegeFactory;
-import com.hp.hpl.jena.ontology.OntModel;
-import actionselection.command.Command;
 
 /**
  * Created by IntelliJ IDEA.

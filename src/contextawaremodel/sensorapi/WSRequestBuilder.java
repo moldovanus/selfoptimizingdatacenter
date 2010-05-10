@@ -1,20 +1,15 @@
 package contextawaremodel.sensorapi;
 
 import contextawaremodel.GlobalVars;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
 
 public class WSRequestBuilder {
 

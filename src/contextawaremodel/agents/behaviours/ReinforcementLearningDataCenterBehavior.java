@@ -4,17 +4,17 @@
  */
 package contextawaremodel.agents.behaviours;
 
-import actionselection.command.*;
-import actionselection.command.selfOptimizingCommand.*;
+import actionselection.command.Command;
 import actionselection.command.selfHealingCommand.IncrementCommand;
+import actionselection.command.selfOptimizingCommand.DeployTaskCommand;
+import actionselection.command.selfOptimizingCommand.MoveTaskCommand;
+import actionselection.command.selfOptimizingCommand.SendServerToLowPowerStateCommand;
+import actionselection.command.selfOptimizingCommand.WakeUpServerCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
-import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import contextawaremodel.gui.TaskManagement;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
@@ -29,17 +29,14 @@ import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
-
-import java.util.*;
-import java.awt.*;
-import java.util.List;
-
-import selfHealingOntology.SelfHealingProtegeFactory;
-import org.apache.log4j.Logger;
 import negotiator.Negotiator;
 import negotiator.impl.NegotiatorFactory;
+import org.apache.log4j.Logger;
+import selfHealingOntology.SelfHealingProtegeFactory;
 
-import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -154,8 +151,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             if (server.hasServerIPAddress()) {
                 HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
                 server.setProxy(proxy);
+
                 ServerDto serverInfo = proxy.getServerInfo();
-                //TODO : to return totalCPU also
+                
                 CPU cpu = server.getAssociatedCPU();
                 Collection cores = cpu.getAssociatedCore();
                 int totalCPU = serverInfo.getTotalCPU();
@@ -177,13 +175,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 
 
             }
-            if (server.getIsInLowPowerState()) {
+           /* if (server.getIsInLowPowerState()) {
                 SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
                 sendServerToLowPowerStateCommand.executeOnX3D(agent);
             } else {
                 WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
                 wakeUpServerCommand.executeOnX3D(agent);
-            }
+            }*/
         }
 
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();

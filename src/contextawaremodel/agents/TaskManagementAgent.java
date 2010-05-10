@@ -1,13 +1,11 @@
 package contextawaremodel.agents;
 
-import jade.core.Agent;
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.ReceiveMessageTMBehaviour;
 import contextawaremodel.gui.TaskManagement;
-
-import java.io.IOException;
+import jade.core.AID;
+import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
 
 /**

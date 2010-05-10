@@ -5,12 +5,13 @@ import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
 import org.LiveGraph.LiveGraph;
 import org.LiveGraph.dataFile.common.PipeClosedByReaderException;
 import org.LiveGraph.dataFile.write.DataStreamWriter;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class LiveGraphGUIBehaviour extends TickerBehaviour {
 

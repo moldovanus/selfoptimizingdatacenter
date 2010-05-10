@@ -1,14 +1,14 @@
 package contextawaremodel.agents.behaviours;
 
-import contextawaremodel.agents.CMAAgent;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.CMAAgent;
+import contextawaremodel.worldInterface.WorldElement;
+import contextawaremodel.worldInterface.WorldFileParser;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLIndividual;
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
-import contextawaremodel.worldInterface.WorldElement;
-import contextawaremodel.worldInterface.WorldFileParser;
 import jade.core.behaviours.TickerBehaviour;
 
 import java.util.HashMap;

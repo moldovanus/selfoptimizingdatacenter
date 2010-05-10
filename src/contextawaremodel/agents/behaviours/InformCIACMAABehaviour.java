@@ -1,12 +1,12 @@
 package contextawaremodel.agents.behaviours;
 
-import java.io.IOException;
-
-import contextawaremodel.agents.CMAAgent;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.CMAAgent;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
+
+import java.io.IOException;
 
 //behaviour to inform the CIA about the changes in the semantic space
 public class InformCIACMAABehaviour extends OneShotBehaviour {

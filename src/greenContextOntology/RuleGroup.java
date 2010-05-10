@@ -1,6 +1,6 @@
 package greenContextOntology;
 
-import edu.stanford.smi.protegex.owl.model.*;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
  
 
 /**

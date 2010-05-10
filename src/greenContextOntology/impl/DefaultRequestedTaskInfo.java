@@ -2,7 +2,8 @@ package greenContextOntology.impl;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import edu.stanford.smi.protege.model.FrameID;
-import edu.stanford.smi.protegex.owl.model.*;
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import greenContextOntology.RequestedTaskInfo;
 
 /**

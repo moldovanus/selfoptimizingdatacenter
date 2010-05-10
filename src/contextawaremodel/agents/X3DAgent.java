@@ -4,6 +4,8 @@
  */
 package contextawaremodel.agents;
 
+import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
 import jade.core.Agent;
 import org.web3d.x3d.sai.*;
 
@@ -14,9 +16,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import contextawaremodel.GlobalVars;
-import contextawaremodel.agents.behaviours.BasicX3DBehaviour;
 
 /**
  * @author Administrator

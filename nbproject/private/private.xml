@@ -2,4 +2,10 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/profiler/1" version="0.9.1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Documents%20and%20Settings/Me/Desktop/incercare_intelij/selfoptimizing/src/contextawaremodel/gui/MemoryMonitor.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Me/Desktop/incercare_intelij/selfoptimizing/src/contextawaremodel/gui/ReceiveChangesGUIBehaviour.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Me/Desktop/incercare_intelij/selfoptimizing/src/greenContextOntology/impl/DefaultContextElement.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Me/Desktop/incercare_intelij/selfoptimizing/src/contextawaremodel/agents/behaviours/ReinforcementLearningDataCenterBehavior.java</file>
+    </open-files>
 </project-private>

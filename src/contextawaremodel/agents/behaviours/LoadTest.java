@@ -19,11 +19,12 @@ package contextawaremodel.agents.behaviours;
  * purpose. Use it at your own risk. If there's a problem you get to fix it.
  *
  ****************************************************************************/
-import java.awt.*;
-import java.util.HashMap;
-import javax.swing.*;
 
 import org.web3d.x3d.sai.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * An example of how to use Xj3D Specific SAI routines.

@@ -1,9 +1,9 @@
 package negotiator.impl;
 
-import negotiator.Negotiator;
+import greenContextOntology.RequestedTaskInfo;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
-import greenContextOntology.RequestedTaskInfo;
+import negotiator.Negotiator;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,9 +1,9 @@
 package actionselection.command.selfOptimizingCommand;
 
-import com.hp.hpl.jena.ontology.OntModel;
-import jade.core.Agent;
-import edu.stanford.smi.protegex.owl.model.OWLIndividual;
 import actionselection.command.Command;
+import com.hp.hpl.jena.ontology.OntModel;
+import edu.stanford.smi.protegex.owl.model.OWLIndividual;
+import jade.core.Agent;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,20 +1,17 @@
 package contextawaremodel.agents.behaviours;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.RPAgent;
-
 import contextawaremodel.model.ActionPlan;
 import contextawaremodel.model.AgentRequest;
-import contextawaremodel.model.RealWorldElement;
 import contextawaremodel.model.SemanticSpace;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.io.IOException;
 
 public class BasicRPABehaviour extends CyclicBehaviour {
 

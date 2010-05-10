@@ -2,31 +2,19 @@ package contextawaremodel.agents;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.InfModel;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.reasoner.Reasoner;
 import contextawaremodel.GlobalVars;
-
-import java.io.File;
-import java.io.InputStream;
-
-
-import contextawaremodel.agents.behaviours.BasicCMAABehaviour;
 import contextawaremodel.agents.behaviours.InformCIACMAABehaviour;
-
-import contextawaremodel.gui.GUIAgent;
+import contextawaremodel.ontology.MyFactory;
 import edu.stanford.smi.protegex.owl.ProtegeOWL;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import jade.core.Agent;
-import jade.wrapper.AgentContainer;
 import jade.core.behaviours.Behaviour;
+import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
-import contextawaremodel.ontology.*;
 import org.mindswap.pellet.jena.PelletReasonerFactory;
-import org.mindswap.pellet.jena.PelletInfGraph;
-
-import org.mindswap.pellet.PelletOptions;
 import policyconversioncore.PoliciesHandler;
+
+import java.io.File;
 //import contextawaremodel.model.SimulatedContext;
 //import contextawaremodel.gui.SimulatorMainWindow;
 

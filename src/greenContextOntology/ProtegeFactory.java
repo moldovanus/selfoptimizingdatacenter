@@ -1,9 +1,14 @@
 package greenContextOntology;
 
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import greenContextOntology.impl.*;
 
-import edu.stanford.smi.protegex.owl.model.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**

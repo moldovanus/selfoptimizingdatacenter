@@ -1,18 +1,14 @@
 package contextawaremodel.agents.behaviours;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
-import contextawaremodel.agents.CMAAgent;
 import contextawaremodel.GlobalVars;
-import contextawaremodel.ontology.*;
-
+import contextawaremodel.agents.CMAAgent;
 import contextawaremodel.model.AgentRequest;
-import contextawaremodel.model.RealWorldElement;
+import contextawaremodel.ontology.actor;
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
+
+import java.io.IOException;
 
 public class InformRPACMAABehaviour extends OneShotBehaviour {
 

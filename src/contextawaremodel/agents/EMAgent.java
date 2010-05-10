@@ -2,10 +2,7 @@ package contextawaremodel.agents;
 
 import contextawaremodel.agents.behaviours.BasicEMABehaviour;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
-import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
-import jade.domain.FIPANames;
-import jade.domain.mobility.MobilityOntology;
 
 public class EMAgent extends Agent {
     //	the owl model

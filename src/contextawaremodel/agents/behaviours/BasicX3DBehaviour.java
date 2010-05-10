@@ -4,8 +4,6 @@
  */
 package contextawaremodel.agents.behaviours;
 
-import actionselection.x3dCommand.X3DCommand;
-import actionselection.x3dCommand.X3DStringCommand;
 import contextawaremodel.agents.X3DAgent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;

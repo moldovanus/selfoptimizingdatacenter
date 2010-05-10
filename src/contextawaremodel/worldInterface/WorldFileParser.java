@@ -2,15 +2,12 @@ package contextawaremodel.worldInterface;
 
 import contextawaremodel.GlobalVars;
 import contextawaremodel.WorldFileValidationException;
-import java.io.File;
+import org.w3c.dom.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Schema;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import java.io.File;
 
 public class WorldFileParser {
 

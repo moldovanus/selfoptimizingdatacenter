@@ -1,15 +1,13 @@
 package contextawaremodel.gui;
 
-import edu.stanford.smi.protegex.owl.model.RDFIndividual;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.model.impl.DefaultOWLIndividual;
-import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
-import java.awt.Component;
-import javax.swing.JTree;
+
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 public class OntologyTreeCellRenderer extends DefaultTreeCellRenderer {
 

@@ -5,19 +5,15 @@
 package actionselection.command.selfHealingCommand;
 
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-
+import actionselection.utils.X3DMessageSender;
+import com.hp.hpl.jena.ontology.OntModel;
 import jade.core.Agent;
 import selfHealingOntology.SelfHealingProtegeFactory;
 import selfHealingOntology.Sensor;
-import com.hp.hpl.jena.ontology.OntModel;
-import actionselection.utils.X3DMessageSender;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
 
 
 /**

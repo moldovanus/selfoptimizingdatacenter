@@ -10,21 +10,11 @@ import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.wrapper.StaleProxyException;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import javax.swing.*;
 import java.util.Collection;
-
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.UIManager;
 
 public class GUIAgent extends GuiAgent implements GUIAgentExternal {
 

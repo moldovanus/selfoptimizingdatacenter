@@ -11,24 +11,22 @@
 
 package contextawaremodel.gui;
 
-import greenContextOntology.*;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import java.text.NumberFormat;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
-import com.hp.hpl.jena.ontology.OntModel;
-import jade.core.Agent;
-import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
 import actionselection.command.Command;
 import actionselection.command.selfOptimizingCommand.DeleteOWLIndividualCommand;
+import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
+import com.hp.hpl.jena.ontology.OntModel;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import greenContextOntology.*;
+import jade.core.Agent;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author Moldovanus

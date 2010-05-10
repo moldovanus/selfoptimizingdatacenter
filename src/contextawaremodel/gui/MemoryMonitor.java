@@ -40,17 +40,17 @@ package contextawaremodel.gui;
  * @(#)MemoryMonitor.java	1.3 05/11/17
  */
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import java.lang.management.*;
-import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.util.Date;
 
 
 /**

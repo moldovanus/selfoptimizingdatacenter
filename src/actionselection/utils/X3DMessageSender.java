@@ -1,13 +1,12 @@
 package actionselection.utils;
 
-import jade.lang.acl.ACLMessage;
+import contextawaremodel.GlobalVars;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import contextawaremodel.GlobalVars;
 
 /**
  * Created by IntelliJ IDEA.

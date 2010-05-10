@@ -10,10 +10,10 @@
  */
 package actionselection.gui;
 
-import java.util.ArrayList;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import java.util.ArrayList;
 
 /**
  * @author Administrator

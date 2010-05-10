@@ -4,11 +4,10 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
-import greenContextOntology.ProtegeFactory;
-
-import jade.core.Agent;
-import com.hp.hpl.jena.ontology.OntModel;
 import actionselection.command.Command;
+import com.hp.hpl.jena.ontology.OntModel;
+import greenContextOntology.ProtegeFactory;
+import jade.core.Agent;
 
 /**
  * @author Administrator

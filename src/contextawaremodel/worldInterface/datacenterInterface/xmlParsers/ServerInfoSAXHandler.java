@@ -1,6 +1,5 @@
 package contextawaremodel.worldInterface.datacenterInterface.xmlParsers;
 
-import contextawaremodel.GlobalVars;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
 import org.xml.sax.SAXException;

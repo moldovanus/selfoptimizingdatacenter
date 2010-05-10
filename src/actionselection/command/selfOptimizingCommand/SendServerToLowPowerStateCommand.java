@@ -4,19 +4,18 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
+import actionselection.utils.X3DMessageSender;
+import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
+import jade.core.Agent;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
-import java.io.IOException;
-
-import jade.core.Agent;
-import contextawaremodel.agents.X3DAgent;
-import com.hp.hpl.jena.ontology.OntModel;
-import actionselection.utils.X3DMessageSender;
 
 /**
  * @author Me

@@ -1,7 +1,8 @@
 package greenContextOntology;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import edu.stanford.smi.protegex.owl.model.*;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
+
 import java.util.Collection;
 import java.util.Iterator;
 

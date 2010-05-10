@@ -2,7 +2,6 @@ package contextawaremodel.agents.behaviours;
 
 import contextawaremodel.agents.EMAgent;
 import contextawaremodel.model.ActionPlan;
-import contextawaremodel.model.SemanticSpace;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;

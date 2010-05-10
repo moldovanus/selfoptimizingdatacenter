@@ -4,24 +4,15 @@
  */
 package actionselection.context;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Property;
 import contextawaremodel.GlobalVars;
-import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
+import selfHealingOntology.SelfHealingProtegeFactory;
+import selfHealingOntology.Sensor;
+
 import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import selfHealingOntology.SelfHealingProtegeFactory;
-import selfHealingOntology.Sensor;
 
 /**
  *

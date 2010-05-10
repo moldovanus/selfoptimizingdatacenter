@@ -1,9 +1,9 @@
 package contextawaremodel.gui;
 
+import javax.swing.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import javax.swing.JTextArea;
 
 public class MyPrintStream extends ByteArrayOutputStream {
 

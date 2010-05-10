@@ -1,10 +1,6 @@
 package contextawaremodel.worldInterface.datacenterInterface.proxies.impl;
 
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
-import contextawaremodel.worldInterface.dtos.ServerDto;
-
-import java.io.*;
-import java.net.Socket;
 
 /**
  * Created by IntelliJ IDEA.

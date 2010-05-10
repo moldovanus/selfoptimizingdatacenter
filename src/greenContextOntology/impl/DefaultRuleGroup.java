@@ -1,8 +1,9 @@
 package greenContextOntology.impl;
 
 import edu.stanford.smi.protege.model.FrameID;
-import edu.stanford.smi.protegex.owl.model.*;
-import greenContextOntology.*;
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
+import greenContextOntology.RuleGroup;
  
 
 /**

@@ -1,10 +1,10 @@
 package contextawaremodel.model;
 
+import contextawaremodel.GlobalVars;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import contextawaremodel.GlobalVars;
 
 public class SemanticSpace implements Serializable {
 	//contains the real world elements that make up the semantic space

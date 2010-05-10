@@ -1,7 +1,7 @@
 package negotiator.impl;
 
-import negotiator.Negotiator;
 import contextawaremodel.GlobalVars;
+import negotiator.Negotiator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +13,7 @@ import contextawaremodel.GlobalVars;
 public final class NegotiatorFactory {
     private static FuzzyLogicNegotiator fuzzyLogicNegotiator;
     private static NashNegotiator nashNegotiator;
-    private NegotiatorFactory() {
+    private NegotiatorFactory() {                           
     }
 
     public static synchronized Negotiator getNashNegotiator() {
@@ -27,10 +27,10 @@ public final class NegotiatorFactory {
     public static synchronized Negotiator getFuzzyLogicNegotiator() {
         FuzzyLogicNegotiator negotiator = fuzzyLogicNegotiator;
         if (negotiator == null) {
-      //      fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
+         fuzzyLogicNegotiator = new FuzzyLogicNegotiator(GlobalVars.FUZZY_LOGIC_CONTROL_FILE);
             negotiator = fuzzyLogicNegotiator;
         }
-        return null;
-        //return null;
+
+         return negotiator;
     }
 }

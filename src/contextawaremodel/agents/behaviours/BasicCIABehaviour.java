@@ -1,13 +1,8 @@
 package contextawaremodel.agents.behaviours;
 
-import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.CIAgent;
-
 import contextawaremodel.model.SemanticSpace;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-//import greenContextOntology.Memory;
-//import greenContextOntology.ProtegeFactory;
-//import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 //import jade.lang.acl.ACLMessage;
 

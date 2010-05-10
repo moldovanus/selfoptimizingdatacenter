@@ -5,14 +5,18 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
-import actionselection.command.selfHealingCommand.SetCommand;
 import actionselection.command.selfHealingCommand.DecrementCommand;
 import actionselection.command.selfHealingCommand.IncrementCommand;
+import actionselection.command.selfHealingCommand.SetCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Statement;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
@@ -20,19 +24,12 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
-
-import java.awt.Color;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.logging.Level;
-
-
 import selfHealingOntology.*;
 
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntModel;
+import java.awt.*;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.Queue;
 
 
 /**

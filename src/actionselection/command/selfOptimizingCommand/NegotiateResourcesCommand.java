@@ -1,10 +1,10 @@
 package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import jade.core.Agent;
 import greenContextOntology.ProtegeFactory;
-import greenContextOntology.Task;
 import greenContextOntology.Server;
+import greenContextOntology.Task;
+import jade.core.Agent;
 import negotiator.Negotiator;
 
 import java.util.Collection;
