@@ -876,12 +876,6 @@
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
             <swrl:propertyPredicate rdf:resource="#respected"/>
-            <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_3">
-                <priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-                >1</priority>
-              </EnergyPolicy>
-            </swrl:argument1>
           </swrl:DatavaluedPropertyAtom>
         </rdf:first>
       </swrl:AtomList>
@@ -2057,12 +2051,6 @@
           <swrl:DatavaluedPropertyAtom>
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
-            <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_4">
-                <priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-                >1</priority>
-              </EnergyPolicy>
-            </swrl:argument1>
             <swrl:propertyPredicate rdf:resource="#respected"/>
           </swrl:DatavaluedPropertyAtom>
         </rdf:first>
@@ -3370,12 +3358,6 @@
             <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swrl:argument2>
             <swrl:propertyPredicate rdf:resource="#respected"/>
-            <swrl:argument1>
-              <EnergyPolicy rdf:ID="EnergyPolicy_5">
-                <priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-                >1</priority>
-              </EnergyPolicy>
-            </swrl:argument1>
           </swrl:DatavaluedPropertyAtom>
         </rdf:first>
         <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
@@ -3944,12 +3926,11 @@
   <swrl:Variable rdf:ID="statVal"/>
   <swrl:Variable rdf:ID="n"/>
   <owl:AllDifferent>
-    <owl:distinctMembers rdf:parseType="Collection">
-      <EnergyPolicy rdf:about="#EnergyPolicy_1"/>
-      <EnergyPolicy rdf:about="#EnergyPolicy_2"/>
-      <EnergyPolicy rdf:about="#EnergyPolicy_3"/>
-      <EnergyPolicy rdf:about="#EnergyPolicy_4"/>
-      <EnergyPolicy rdf:about="#EnergyPolicy_5"/>
+    <owl:distinctMembers rdf:parseType="Resource">
+      <rdf:first rdf:resource="#EnergyPolicy_1"/>
+      <rdf:rest rdf:parseType="Resource">
+        <rdf:first rdf:resource="#EnergyPolicy_2"/>
+      </rdf:rest>
     </owl:distinctMembers>
   </owl:AllDifferent>
   <swrl:AtomList>
