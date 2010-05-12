@@ -62,6 +62,10 @@ public class DefaultCPU extends DefaultComponent
 
 
     public void setAssociatedCore(Collection newAssociatedCore) {
+        /*Collection cores = getAssociatedCore();
+        for(Object core : cores){
+            removeAssociatedCore((Core)core);
+        }*/
         setPropertyValues(getAssociatedCoreProperty(), newAssociatedCore);
     }
 

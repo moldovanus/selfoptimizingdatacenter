@@ -152,19 +152,28 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 ServerDto serverInfo = proxy.getServerInfo();
 
                 CPU cpu = server.getAssociatedCPU();
-                Collection cores = cpu.getAssociatedCore();
+                int coreCount = serverInfo.getCoreCount();
+                Collection cores = new ArrayList(coreCount);
+                for (int i = 0; i < coreCount; i++) {
+                    cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
+                }
+                cpu.setAssociatedCore(cores);
+
                 int totalCPU = serverInfo.getTotalCPU();
                 Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
                 int index = 0;
                 int freeCPU = totalCPU - (Integer) freeCPUValues[0];
                 for (Object item : cores) {
                     Core core = (Core) item;
+                    core.setMaxAcceptableValue(totalCPU);
+                    core.setMinAcceptableValue(1);
                     core.setTotal(totalCPU);
                     core.setUsed(freeCPU, policyConversionModel);
                 }
 
                 greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
                 int totalMemory = serverInfo.getTotalMemory();
+                serverMemory.setMaxAcceptableValue(totalMemory);
                 serverMemory.setTotal(totalMemory);
                 serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(), policyConversionModel);
 
@@ -180,6 +189,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
 
                 int storageSize = targetStorage.getSize();
+                storage.setMaxAcceptableValue(storageSize);
                 storage.setTotal(storageSize);
                 storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
 

@@ -64,4 +64,6 @@ public class ServerDto {
     public void setFreeMemory(int freeMemory) {
         this.freeMemory = freeMemory;
     }
+
+
 }
