@@ -13,6 +13,7 @@
     xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
   xml:base="http://www.owl-ontologies.com/Datacenter.owl">
   <owl:Ontology rdf:about="">
+    
   </owl:Ontology>
   <owl:Class rdf:ID="Task">
     <rdfs:subClassOf>
@@ -4451,6 +4452,8 @@
     </owl:distinctMembers>
   </owl:AllDifferent>
   <QoSPolicy rdf:ID="QoSPolicy_2">
+    <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</respected>
     <priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >1</priority>
     <referenced>
@@ -4499,6 +4502,8 @@
   <QoSPolicy rdf:ID="QoSPolicy_3">
     <priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >1</priority>
+    <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</respected>
     <referenced>
       <Task rdf:ID="Task_3">
         <memoryWeight rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
@@ -4587,6 +4592,8 @@
         </requestedInfo>
       </Task>
     </referenced>
+    <respected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</respected>
   </QoSPolicy>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
