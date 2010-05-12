@@ -28,7 +28,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public static void main(String[] args) {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
         ServerManagementProxy.DEBUG = true;
-        serverManagementProxy.getServerInfo();
+        //serverManagementProxy.getServerInfo();
         //serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 
@@ -61,7 +61,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                     System.out.println(line);
                 }
                 if (line.length() > 0 && line.charAt(1) != '?') {
-
                     content += "\n" + line;
                 }
             }
@@ -115,7 +114,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
-
                     System.out.println(line);
                 }
             }

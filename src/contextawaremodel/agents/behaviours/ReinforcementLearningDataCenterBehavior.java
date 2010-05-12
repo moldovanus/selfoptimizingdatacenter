@@ -156,10 +156,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 int totalCPU = serverInfo.getTotalCPU();
                 Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
                 int index = 0;
+                int freeCPU = totalCPU - (Integer) freeCPUValues[0];
                 for (Object item : cores) {
                     Core core = (Core) item;
                     core.setTotal(totalCPU);
-                    core.setUsed(totalCPU - (Integer) freeCPUValues[index++], policyConversionModel);
+                    core.setUsed(freeCPU, policyConversionModel);
                 }
 
                 greenContextOntology.Memory serverMemory = server.getAssociatedMemory();

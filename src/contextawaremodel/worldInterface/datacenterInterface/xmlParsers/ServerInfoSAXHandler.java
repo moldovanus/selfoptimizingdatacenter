@@ -88,6 +88,7 @@ public class ServerInfoSAXHandler extends DefaultHandler {
     }
 
     public ServerDto getServerDto() {
+        serverDto.setStorage(storageInfo);
         return serverDto;
     }
 
@@ -102,10 +103,7 @@ public class ServerInfoSAXHandler extends DefaultHandler {
             inFreeCPU = true;
         } else if (localName.equals(STORAGE)) {
             inStorage = true;
-            if (!inStorageList) {
-                inStorageList = true;
-                currentStorage = new StorageDto();
-            }
+            currentStorage = new StorageDto();
         } else if (localName.equals(TOTAL_MEMORY)) {
             inTotalMemory = true;
         } else if (localName.equals(FREE_MEMORY)) {
@@ -139,6 +137,7 @@ public class ServerInfoSAXHandler extends DefaultHandler {
             inCoreCount = false;
         } else if (localName.equals(FREE_CPU)) {
             inFreeCPU = false;
+            serverDto.setFreeCPU(freeCPUValues);
         } else if (localName.equals(FREE_CPU_VAL)) {
             try {
                 freeCPUValues.add(numberFormat.parse(text).intValue());
@@ -148,6 +147,7 @@ public class ServerInfoSAXHandler extends DefaultHandler {
             inFreeCPUVal = false;
         } else if (localName.equals(STORAGE)) {
             inStorage = false;
+            storageInfo.add(currentStorage);
         } else if (localName.equals(TOTAL_MEMORY)) {
             try {
                 serverDto.setTotalMemory(numberFormat.parse(text).intValue());

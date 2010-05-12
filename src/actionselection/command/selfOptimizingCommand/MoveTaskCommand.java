@@ -72,14 +72,14 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         ServerManagementProxy oldServerProxy = oldServer.getProxy();
         ServerManagementProxy newServerProxy = newServer.getProxy();
         if (oldServerProxy != null && newServerProxy != null) {
-            oldServerProxy.moveSourceActions("//"+oldServer.getServerName() + "/" + oldServer.getVirtualMachinesPath().iterator().next(),
+            oldServerProxy.moveSourceActions("//"+oldServer.getServerIPAddress() + "/" + oldServer.getVirtualMachinesPath().iterator().next(),
                     task.getName());
-            newServerProxy.moveDestinationActions("//"+oldServer.getServerName(),
-                    "//"+newServer.getServerName()+ "/" + newServer.getVirtualMachinesPath().iterator().next(),
+            newServerProxy.moveDestinationActions("//"+oldServer.getServerIPAddress(),
+                    "//"+newServer.getServerIPAddress()+ "/" + newServer.getVirtualMachinesPath().iterator().next(),
                     task.getName());
            
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+       // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
