@@ -1,6 +1,8 @@
 package contextawaremodel.agents.behaviours;
 
 import contextawaremodel.agents.TaskManagementAgent;
+import contextawaremodel.gui.TaskDto;
+import greenContextOntology.Task;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -20,7 +22,7 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
 
     public ReceiveMessageTMBehaviour(Agent agent) {
         super(agent);
-        this.agent=(TaskManagementAgent)agent;
+        this.agent = (TaskManagementAgent) agent;
     }
 
     @Override
@@ -33,13 +35,23 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
         try {
             switch (message.getPerformative()) {
                 case ACLMessage.INFORM_REF:
-                    String mes = message.getContent();
-                    String parts[]= mes.split("<");
+                    TaskDto[] tasks = (TaskDto[]) message.getContentObject();
+                    /*String parts[]= mes.split("<");
                     String names[]= new String[parts.length];
                     String cpuReceived[]= new String[parts.length];
                     String memoryReceived[]= new String[parts.length];
                     String storageReceived[]= new String[parts.length];
                     String coresReceived[]= new String[parts.length];
+
+
+
+
+
+
+
+
+
+
                      String coresRequested[]= new String[parts.length];
                      String minCpuRequested[]= new String[parts.length];
                     String minMemoryRequested[]= new String[parts.length];
@@ -66,10 +78,11 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                         memoryReceived[index] = str[10];
                         storageReceived[index] = str[11];
                         index++;
-                    }
-                   // agent.clear();
-                   // agent.populateTaskWindow(names,coresRequested,minCpuRequested,maxCpuRequested,minMemoryRequested,maxMemoryRequested,minStorageRequested,maxStorageRequested,coresReceived ,cpuReceived,memoryReceived,storageReceived);
-                    //agent.clearFields();
+                    }              */
+
+                    //agent.clear();
+                    agent.populateTaskWindow(tasks);
+                    agent.clearFields();
                     break;
 
                 case ACLMessage.INFORM:
@@ -77,10 +90,10 @@ public class ReceiveMessageTMBehaviour extends CyclicBehaviour {
                     break;
 
                 case ACLMessage.SUBSCRIBE:
-                   
+
                     break;
-                case ACLMessage.REFUSE:     
-                    JOptionPane.showMessageDialog(null,message.getContent(),"The transaction wasn't effectuated",1);
+                case ACLMessage.REFUSE:
+                    JOptionPane.showMessageDialog(null, message.getContent(), "The transaction wasn't effectuated", 1);
                     //agent.reenableTasks();
                     break;
             }

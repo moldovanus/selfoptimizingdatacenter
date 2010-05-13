@@ -7,8 +7,10 @@ package contextawaremodel.agents;
 import actionselection.context.Memory;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.behaviours.ReceiveMessageRLBehaviour;
 import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
 import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterBehavior;
+import contextawaremodel.gui.TaskDto;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import greenContextOntology.ProtegeFactory;
@@ -110,20 +112,45 @@ public class ReinforcementLearningAgent extends Agent {
     public void sendAllTasksToClient() {
         ProtegeFactory protegeFactory = new ProtegeFactory(owlModelDataCenter);
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-        String s = "";
-        ReceivedTaskInfo receivedInfo;
-        RequestedTaskInfo requestedInfo;
 
+        TaskDto[] t = new TaskDto[tasks.size()];
+        int i = 0;
         for (Task task : tasks) {
-            receivedInfo = task.getReceivedInfo();
+            /*  receivedInfo = task.getReceivedInfo();
             requestedInfo = task.getRequestedInfo();
             s += task.getLocalName() + "-" + task.isRunning() + "=" + requestedInfo.getCores() + "=" + requestedInfo.getCpuMinAcceptableValue() + "=" + requestedInfo.getCpuMaxAcceptableValue() + "=" + requestedInfo.getMemoryMinAcceptableValue() + "=" + requestedInfo.getMemoryMaxAcceptableValue() + "=" + requestedInfo.getStorageMinAcceptableValue() + "=" + requestedInfo.getStorageMaxAcceptableValue();
             s += "=" + receivedInfo.getCores() + "=" + receivedInfo.getCpuReceived() + "=" + receivedInfo.getMemoryReceived() + "=" + receivedInfo.getStorageReceived() + "<";
+            */
+            t[i] = new TaskDto();
+            t[i].setTaskName(task.getTaskName());
+            t[i].setRunning(task.isRunning());
+            RequestedTaskInfo requestedInfo = task.getRequestedInfo();
+            ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
 
+            t[i].setRequestedCores(requestedInfo.getCores());
+            t[i].setRequestedCPUMax(requestedInfo.getCpuMaxAcceptableValue());
+            t[i].setRequestedCPUMin(requestedInfo.getCpuMinAcceptableValue());
+            t[i].setRequestedMemoryMax(requestedInfo.getMemoryMaxAcceptableValue());
+            t[i].setRequestedMemoryMin(requestedInfo.getMemoryMinAcceptableValue());
+            t[i].setRequestedStorageMax(requestedInfo.getStorageMaxAcceptableValue());
+            t[i].setRequestedStorageMin(requestedInfo.getStorageMinAcceptableValue());
+
+            t[i].setReceivedCores(receivedInfo.getCores());
+            t[i].setReceivedCPUMax(receivedInfo.getCpuReceived());
+            t[i].setReceivedCPUMin(receivedInfo.getCpuReceived());
+            t[i].setReceivedMemoryMax(receivedInfo.getMemoryReceived());
+            t[i].setReceivedMemoryMin(receivedInfo.getMemoryReceived());
+            t[i].setReceivedStorageMax(receivedInfo.getStorageReceived());
+            t[i].setReceivedStorageMin(receivedInfo.getStorageReceived());
+            i++;
         }
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM_REF);
         if (msg != null) {
-            msg.setContent(s);
+            try {
+                msg.setContentObject(t);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
             msg.addReceiver(new AID(GlobalVars.TMAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
             /*
             try {
@@ -211,7 +238,7 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memory));
                 addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter, jenaOwlModelDataCenter, policyConversionModel, jenaOwlModel, memory1));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));
-                //addBehaviour(new ReceiveMessageRLBehaviour(this, contextAwareModel, policyConversionModel,owlModelDataCenter));
+                addBehaviour(new ReceiveMessageRLBehaviour(this, jenaOwlModel, policyConversionModel, jenaOwlModelDataCenter, policyConversionModelDataCenter));
                 //addBehaviour(new StoreMemoryBehaviour(this, 5000, memory));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
                 //addBehaviour(new GarbadgeCollectForcerAgent(this,60000));

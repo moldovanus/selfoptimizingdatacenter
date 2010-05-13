@@ -372,8 +372,6 @@ public class DefaultServer extends DefaultResource
         if (cores.size() < requestedCores) {
             return false;
         }
-
-
         for (Object coreInst : cores) {
 
             Core core = (Core) coreInst;

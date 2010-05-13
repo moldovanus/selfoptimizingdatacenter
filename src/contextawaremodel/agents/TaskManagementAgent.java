@@ -2,10 +2,15 @@ package contextawaremodel.agents;
 
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.ReceiveMessageTMBehaviour;
+import contextawaremodel.gui.TaskDto;
 import contextawaremodel.gui.TaskManagement;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+
+import java.io.IOException;
+import java.io.Serializable;
 
 
 /**
@@ -21,31 +26,40 @@ public class TaskManagementAgent extends Agent {
     protected void setup() {
         System.out.println("Task Management Agent " + getLocalName() + " started.");
         this.addBehaviour(new ReceiveMessageTMBehaviour(this));
-        //taskManagementWindow = new TaskManagement(this);
-       // taskManagementWindow.setVisible(true);
+        taskManagementWindow = new TaskManagement(this);
+        taskManagementWindow.setVisible(true);
     }
-  /*  public void reenableTasks(){
+
+    public void reenableTasks() {
         taskManagementWindow.reenableTasksList();
     }
-    public void clearFields(){
+
+    public void clearFields() {
         taskManagementWindow.setEmptyFields();
     }
-    public void populateTaskWindow(String[] names,String [] coresRequested, String[] minCpuRequested, String[] maxCpuRequested, String[] minMemoryRequested, String[] maxMemoryRequested, String[] minStorageRequested, String[] maxStorageRequested,String[] coresReceived,String[] cpuReceived, String[] memoryReceived, String[] storageReceived) {
-        taskManagementWindow.populate(names, coresRequested,minCpuRequested , maxCpuRequested, minMemoryRequested, maxMemoryRequested, minStorageRequested, maxStorageRequested,coresReceived, cpuReceived, memoryReceived, storageReceived);
-    }*/
 
-    
+    public void populateTaskWindow(TaskDto[] tasks) {
+        taskManagementWindow.setTasks(tasks);
+    }
 
-    public void sendTaskMessageToRL(String message, int aCode) {
+
+    public void sendTaskMessageToRL(Object message, int aCode) {
         ACLMessage msg;
 
         System.out.println("Code" + aCode);
         switch (aCode) {
             case GlobalVars.INDIVIDUAL_CREATED:
                 msg = new ACLMessage(ACLMessage.INFORM);
+                try {
+                    msg.setContentObject((Serializable) message);
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 break;
             case GlobalVars.INDIVIDUAL_DELETED:
                 msg = new ACLMessage(ACLMessage.INFORM_IF);
+                msg.setContent((String) message);
+
                 break;
             case GlobalVars.INDIVIDUAL_MODIFIED:
                 msg = new ACLMessage(ACLMessage.INFORM_REF);
@@ -56,7 +70,6 @@ public class TaskManagementAgent extends Agent {
         }
 
         if (msg != null) {
-            msg.setContent(message);
             msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
             /*
             try {

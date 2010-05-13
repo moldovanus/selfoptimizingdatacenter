@@ -12,18 +12,19 @@
 package contextawaremodel.gui;
 
 import actionselection.command.Command;
-import actionselection.command.selfOptimizingCommand.DeleteOWLIndividualCommand;
 import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.TaskManagementAgent;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import greenContextOntology.*;
-import jade.core.Agent;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,19 +43,19 @@ public class TaskManagement extends javax.swing.JFrame {
      * @param agent
      */
 
-    private Collection<Command> commands;
+    // private Collection<Command> commands;
     private int selectedIndex = 0;
     private boolean clearForAdding;
     private boolean addingTask;
 
-    public TaskManagement(ProtegeFactory protegeFactory, SWRLFactory swrlFactory, OntModel ontModel, Agent agent) {
+    public TaskManagement(TaskManagementAgent agent) {
         super("Task Management");
-        this.protegeFactory = protegeFactory;
-        this.swrlFactory = swrlFactory;
-        this.ontModel = ontModel;
+        // this.protegeFactory = protegeFactory;
+        //  this.swrlFactory = swrlFactory;
+        //  this.ontModel = ontModel;
         this.agent = agent;
         initComponents();
-        commands = new ArrayList<Command>();
+        // commands = new ArrayList<Command>();
     }
 
     /**
@@ -420,20 +421,24 @@ public class TaskManagement extends javax.swing.JFrame {
                 if (selectedTaskName == null) {
                     return;
                 }
+                TaskDto selectedTaskDto = null;
+                int length = tasks.length;
+                for (int i = 0; i < length; i++) {
+                    if (selectedTaskName.equalsIgnoreCase(tasks[i].getTaskName())) {
+                        selectedTaskDto = tasks[i];
+                    }
+                }
 
-                selectedTask = protegeFactory.getTask(selectedTaskName.split(" ")[0]);
-                RequestedTaskInfo requested = selectedTask.getRequestedInfo();
-                ReceivedTaskInfo received = selectedTask.getReceivedInfo();
 
-                requestedCoresField.setText("" + requested.getCores());
-                requestedCpuField.setText("" + requested.getCpuMinAcceptableValue());
-                requestedStorageField.setText("" + requested.getStorageMinAcceptableValue());
-                requestedMemoryField.setText("" + requested.getMemoryMinAcceptableValue());
+                requestedCoresField.setText("" + selectedTaskDto.getRequestedCores());
+                requestedCpuField.setText("" + selectedTaskDto.getRequestedCPUMin());
+                requestedStorageField.setText("" + selectedTaskDto.getRequestedStorageMin());
+                requestedMemoryField.setText("" + selectedTaskDto.getRequestedMemoryMin());
 
-                receivedCoresField.setText("" + received.getCores());
-                receivedCpuField.setText("" + received.getCpuReceived());
-                receivedStorageField.setText("" + received.getStorageReceived());
-                receivedMemoryField.setText("" + received.getMemoryReceived());
+                receivedCoresField.setText("" + selectedTaskDto.getReceivedCores());
+                receivedCpuField.setText("" + selectedTaskDto.getReceivedCPUMin());
+                receivedStorageField.setText("" + selectedTaskDto.getReceivedStorageMin());
+                receivedMemoryField.setText("" + selectedTaskDto.getReceivedMemoryMin());
             }
         });
 
@@ -442,23 +447,25 @@ public class TaskManagement extends javax.swing.JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 //try {
-                System.out.println("Deleting instance " + selectedTask);
+                // System.out.println("Deleting instance " + selectedTask);
 
-                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
+                // RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, selectedTask.getName(), selectedTask.getAssociatedServer().getName());
                 //command.execute(ontModel);
                 //command.executeOnX3D(agent);
                 //selectedTask.deleteInstance(ontModel, swrlFactory);
+                /*
+            DeleteOWLIndividualCommand deleteOWLIndividualCommand = new DeleteOWLIndividualCommand(selectedTask);
 
-                DeleteOWLIndividualCommand deleteOWLIndividualCommand = new DeleteOWLIndividualCommand(selectedTask);
+            commands.add(command);
+            commands.add(deleteOWLIndividualCommand);
+                */
 
-                commands.add(command);
-                commands.add(deleteOWLIndividualCommand);
-
+                agent.sendTaskMessageToRL(selectedTaskName, GlobalVars.INDIVIDUAL_DELETED);
                 //System.out.println("Instance deleted");
                 //} catch (SWRLFactoryException e1) {
                 //   e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 //}
-
+                /*
                 requestedCoresField.setText("");
                 requestedCpuField.setText("");
                 requestedStorageField.setText("");
@@ -471,6 +478,7 @@ public class TaskManagement extends javax.swing.JFrame {
 
                 tasksList.disable();
                 tasksList.repaint();
+                */
                 //tasksList.remove(selectedIndex);
                 //setTasks(protegeFactory.getAllTaskInstances());
 
@@ -496,6 +504,16 @@ public class TaskManagement extends javax.swing.JFrame {
                 addingTask = true;
 
                 String taskName = addTaskNameField.getText();
+                TaskDto dtoTask = new TaskDto();
+                dtoTask.setTaskName(taskName);
+                dtoTask.setRequestedCores(Integer.parseInt(addTaskCoresField.getText().trim()));
+                dtoTask.setRequestedCPUMax(Integer.parseInt(addTaskCpuField.getText().trim()));
+                dtoTask.setRequestedCPUMin(Integer.parseInt(addTaskCpuField.getText().trim()));
+                dtoTask.setRequestedMemoryMax(Integer.parseInt(addTaskMemoryField.getText().trim()));
+                dtoTask.setRequestedMemoryMin(Integer.parseInt(addTaskMemoryField.getText().trim()));
+                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageField.getText().trim()));
+                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageField.getText().trim()));
+                /*
                 Task task = protegeFactory.createTask(taskName);
                 QoSPolicy policy = protegeFactory.createQoSPolicy(taskName + "Policy");
 
@@ -524,12 +542,14 @@ public class TaskManagement extends javax.swing.JFrame {
                 task.setStorageWeight(0.33f);
                 task.setMemoryWeight(0.33f);
 
-                policy.setReferenced(task);
-                policy.setRespected(false);
-                policy.setPriority(1);
+                */
+                agent.sendTaskMessageToRL(dtoTask, GlobalVars.INDIVIDUAL_CREATED);
+                /* policy.setReferenced(task);
+                // policy.setRespected(false);
+                 policy.setPriority(1);
 
+                */
 
-                
                 synchronized (this) {
                     addingTask = false;
                     //notify ReinforcementLearningDatacenterBehavior that task has been created
@@ -545,7 +565,25 @@ public class TaskManagement extends javax.swing.JFrame {
         this.clearForAdding = clearForAdding;
     }
 
+    public void setEmptyFields() {
+        requestedCoresField.setText("");
+        requestedCpuField.setText("");
+        requestedStorageField.setText("");
+        requestedMemoryField.setText("");
 
+        receivedCoresField.setText("");
+        receivedCpuField.setText("");
+        receivedStorageField.setText("");
+        receivedMemoryField.setText("");
+
+        //tasksList.disable();
+
+    }
+
+    public void reenableTasksList() {
+        tasksList.enable();
+    }
+    /*
     public boolean executeCommands() {
 
         for (Command command : commands) {
@@ -562,7 +600,7 @@ public class TaskManagement extends javax.swing.JFrame {
         return size != 0;
 
     }
-
+      */
     /* public void addDeleteTaskListener(ActionListener listener) {
         deleteTaskButton.addActionListener(listener);
     }
@@ -642,25 +680,28 @@ public class TaskManagement extends javax.swing.JFrame {
     }*/
 
 
-    public void setTasks(final Collection collection) {
+    public void setTasks(final TaskDto[] collection) {
+        tasks = collection;
         tasksList.removeAll();
 
         tasksList.setModel(new javax.swing.AbstractListModel() {
-            Object[] objects = collection.toArray();
+            Object[] objects = collection;
 
             public int getSize() {
                 return objects.length;
             }
 
             public Object getElementAt(int i) {
-                Task task = null;
+                TaskDto taskDto = null;
                 String name = null;
                 try {
-                    task = ((Task) objects[i]);
-                    name = "" + task.getName().split("#")[1] + "  -  ";
-                    name += task.isRunning() ? "deployed" : "waiting";
-                } catch (Exception e) {
+                    taskDto = ((TaskDto) objects[i]);
+                    name = "" + taskDto.getTaskName();
+                    // name += taskDto.isRunning() ? "deployed" : "waiting";
+                } catch (ArrayIndexOutOfBoundsException e) {
                     System.err.println("Array index out of bounds exception eaten");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
 
@@ -729,13 +770,13 @@ public class TaskManagement extends javax.swing.JFrame {
     private javax.swing.JLabel addTaskNameLabel;
 
     private String selectedTaskName;
+    private TaskDto tasks[];
+    // private ProtegeFactory protegeFactory;
+    // private OntModel ontModel;
+    // private SWRLFactory swrlFactory;
+    // private Task selectedTask;
 
-    private ProtegeFactory protegeFactory;
-    private OntModel ontModel;
-    private SWRLFactory swrlFactory;
-    private Task selectedTask;
-
-    private Agent agent;
+    private TaskManagementAgent agent;
     // End of variables declaration//GEN-END:variables
 
 

@@ -57,7 +57,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private SWRLFactory swrlFactory;
     private Logger logger;
     private Negotiator negotiator;
-    private TaskManagement taskManagementWindow;
+    //  private TaskManagement taskManagementWindow;
 
     public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
@@ -67,7 +67,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
         this.selfHealingOwlModel = selfHealingOwlModel;
         protegeFactory = new ProtegeFactory(owlModel);
-        taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
+        // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
         /*
@@ -204,8 +204,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         }
 
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-        taskManagementWindow.setTasks(tasks);
-        taskManagementWindow.setVisible(true);
+        //taskManagementWindow.setTasks(tasks);
+        // taskManagementWindow.setVisible(true);
         resultsFrame.setVisible(true);
 
 
@@ -538,7 +538,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         //returns true if there were commands to execute
         //TODO: refresh after receiving new commands from it - > or sth
-
+        /*
         if (taskManagementWindow.executeCommands()) {
             taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
         }
@@ -548,7 +548,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             taskManagementWindow.setClearForAdding(true);
             notifyAll();
         }
-
+        */
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
@@ -612,7 +612,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
-            taskManagementWindow.setClearForAdding(false);
+            //taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
 
 
@@ -657,7 +657,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                 //refresh tasks list if context has been repaired
                 //TODO : check TM
-                taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
+                //   taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
             }
             //wait for effect to be noticeable on X3D
 
