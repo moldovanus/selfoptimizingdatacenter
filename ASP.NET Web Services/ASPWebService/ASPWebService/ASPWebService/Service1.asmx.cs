@@ -54,7 +54,7 @@ namespace ASPWebService
         public void DeployVirtualMachine(String from, String to, String vmName)
         {
             //just to make sure it is running
-            Process.Start("net start hvboot");
+            Process.Start("C:\\StartHVBoot.bat");
             operationCompleted = false;
             VMHandling.ImportVirtualSystemEx(from + "\\" + vmName, vmName, to);
             operationCompleted = true;
@@ -63,7 +63,7 @@ namespace ASPWebService
         public void StartVirtualMachine(String vmName)
         {
             //just to make sure it is running
-            Process.Start("net start hvboot");
+            Process.Start("C:\\StartHVBoot.bat");
             operationCompleted = false;
             VMHandling.RequestStateChange(vmName, "start");
             operationCompleted = true;

@@ -3,3 +3,8 @@ C:\Users\Administrator\Documents\Visual Studio 2008\Projects\ASPWebService\ASPWe
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\ASPWebService\ASPWebService\bin\ASPWebService.pdb
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
+C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.dll
+C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.pdb
+C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
+C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
