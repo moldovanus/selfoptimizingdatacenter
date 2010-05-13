@@ -37,18 +37,19 @@ namespace ASPWebService
         public void MoveDestinationActions(String path1, String path2, String vmName)
         {
             operationCompleted = false;
-            VMHandling.ImportVirtualSystemEx(path1 + "/" + vmName, vmName, path2);
+            VMHandling.ImportVirtualSystem(path1 + "\\" + vmName);
             VMHandling.RequestStateChange(vmName, "start");
             operationCompleted = true;
         }
         [WebMethod]
-        public void MoveSourceActions(String path, String vmName)
+        public bool MoveSourceActions(String path, String vmName)
         {
             operationCompleted = false;
             VMHandling.RequestStateChange(vmName, "stop");
             VMHandling.ExportVirtualSystemExSnapshots(vmName, path); // export existing snapshot of a virtual machine
             VMHandling.DestroyVirtualSystem(vmName);
             operationCompleted = true;
+            return true;
         }
         [WebMethod]
         public void DeployVirtualMachine(String from, String to, String vmName)
@@ -56,7 +57,7 @@ namespace ASPWebService
             //just to make sure it is running
             Process.Start("C:\\StartHVBoot.bat");
             operationCompleted = false;
-            VMHandling.ImportVirtualSystemEx(from + "\\" + vmName, vmName, to);
+            VMHandling.ImportVirtualSystem(from + "\\" + vmName);
             operationCompleted = true;
         }
         [WebMethod]

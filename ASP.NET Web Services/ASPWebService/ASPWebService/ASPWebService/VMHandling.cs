@@ -245,6 +245,42 @@ namespace ServerManagement
             return createdSwitch;
         }
 
+        public static void ImportVirtualSystem(string importDirectory)
+        {
+            ManagementScope scope = new ManagementScope(@"root\virtualization", null);
+            ManagementObject virtualSystemService = Utility.GetServiceObject(scope, "Msvm_VirtualSystemManagementService");
+
+            ManagementBaseObject inParams = virtualSystemService.GetMethodParameters("ImportVirtualSystem");
+            inParams["GenerateNewID"] = true;
+            inParams["ImportDirectory"] = importDirectory;
+
+            ManagementBaseObject outParams = virtualSystemService.InvokeMethod("ImportVirtualSystem", inParams, null);
+
+            if ((UInt32)outParams["ReturnValue"] == ReturnCode.Started)
+            {
+                if (Utility.JobCompleted(outParams, scope))
+                {
+                    Console.WriteLine("VM were imported successfully.");
+
+                }
+                else
+                {
+                    Console.WriteLine("Failed to import VM");
+                }
+            }
+            else if ((UInt32)outParams["ReturnValue"] == ReturnCode.Completed)
+            {
+                Console.WriteLine("VM were imported successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Import virtual system failed with error {0}", outParams["ReturnValue"]);
+            }
+
+            inParams.Dispose();
+            outParams.Dispose();
+            virtualSystemService.Dispose();
+        }
 
         public static ManagementBaseObject GetVirtualSystemImportSettingData(ManagementScope scope, string importDirectory,string vmName, string rootDirectoryToCopy)
         {
