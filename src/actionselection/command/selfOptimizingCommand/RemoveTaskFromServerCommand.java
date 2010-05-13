@@ -4,6 +4,7 @@ import actionselection.utils.X3DMessageSender;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -53,13 +54,15 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy proxy = server.getProxy();
+        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);
              proxy.deleteVirtualMachine(task.getName());
+        }else{
+            System.err.println("Proxy is null");
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+     //   throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public String[] toStringArray() {

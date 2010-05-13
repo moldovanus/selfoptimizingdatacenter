@@ -8,6 +8,7 @@ import actionselection.utils.X3DMessageSender;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import jade.core.Agent;
@@ -52,12 +53,14 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
-        ServerManagementProxy proxy = server.getProxy();
+        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
-            proxy.wakeUpServer(server.getServerMacAddress(),server.getServerIPAddress(),server.getServerWakeUpPort());
+            proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(), server.getServerWakeUpPort());
+        } else {
+            System.err.println("Proxy is null");
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+//        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

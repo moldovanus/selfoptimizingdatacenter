@@ -8,6 +8,7 @@ import actionselection.utils.X3DMessageSender;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -69,15 +70,18 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy oldServerProxy = oldServer.getProxy();
-        ServerManagementProxy newServerProxy = newServer.getProxy();
+        ServerManagementProxy oldServerProxy = new HyperVServerManagementProxy(oldServer.getServerIPAddress());
+        ServerManagementProxy newServerProxy = new HyperVServerManagementProxy(newServer.getServerIPAddress());
         if (oldServerProxy != null && newServerProxy != null) {
+                 String path =(String) newServer.getVirtualMachinesPath().iterator().next();
             oldServerProxy.moveSourceActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
                     task.getName());
             newServerProxy.moveDestinationActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
-                    "//" + newServer.getServerIPAddress() + "/" + newServer.getVirtualMachinesPath().iterator().next(),
+                    "//" + newServer.getServerIPAddress() + "/" +path.split(":")[1].substring(1),
                     task.getName());
 
+        }else{
+            System.err.println("Proxy is null");
         }
         // throw new UnsupportedOperationException("Not supported yet.");
     }

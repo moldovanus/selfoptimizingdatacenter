@@ -8,6 +8,7 @@ import actionselection.utils.X3DMessageSender;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -62,12 +63,15 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy proxy = server.getProxy();
+        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
+            String path = (String)server.getVirtualMachinesPath().iterator().next();
             proxy.deployVirtualMachine("//HOME-Z5VXXZDRPO/SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
-                    "//" + server.getServerIPAddress() + "/" + server.getVirtualMachinesPath().iterator().next(),
-                    task.getName());
+                    "//" + server.getServerIPAddress() + "/" +   path.split(":")[1].substring(1),
+                    task.getTaskName());
 
+        }else{
+            System.err.println("Proxy is null");
         }
         // throw new UnsupportedOperationException("Not supported yet.");
     }

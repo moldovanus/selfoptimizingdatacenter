@@ -26,15 +26,17 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     }
 
     public static void main(String[] args) {
-        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.123");
+        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
         ServerManagementProxy.DEBUG = true;
         //serverManagementProxy.getServerInfo();
-        serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
+       /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
         ServerManagementProxy serverManagementProxy1 = new HyperVServerManagementProxy("192.168.2.101");
         serverManagementProxy1.DEBUG = true;
         serverManagementProxy1.getServerInfo();
         serverManagementProxy1.moveDestinationActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "\\\\192.168.2.101\\VirtualMachines\\myVM", "TestMachine");
-        //serverManagementProxy.sendServerToSleep();
+       */
+        serverManagementProxy.deployVirtualMachine("\\\\HOME-Z5VXXZDRPO\\SharedStorage","\\\\192.168.2.101\\VirtualMachines\\VM_2","VM_2");
+         //serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 
     }
@@ -110,8 +112,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
-            wr.write(data);
-            wr.write("\r\n");
+
 
             wr.flush();
             if (DEBUG) {
@@ -145,10 +146,8 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("Host: " + hostName + "\r\n");
             wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
             wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
-            wr.write(data);
             wr.write("\r\n");
 
             wr.flush();
@@ -170,7 +169,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void deployVirtualMachine(String from, String to, String vmName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine ");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -182,13 +181,12 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("Host: " + hostName + "\r\n");
             wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
             wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
+           // wr.write("\r\n");
             wr.write(data);
             wr.write("\r\n");
-
-            wr.write(data);
             wr.write("\r\n");
 
+            
             wr.flush();
             if (DEBUG) {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));

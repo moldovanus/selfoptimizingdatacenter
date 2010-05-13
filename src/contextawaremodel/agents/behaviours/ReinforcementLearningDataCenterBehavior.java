@@ -624,7 +624,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 System.out.println(o.toString());
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
-
+                o.executeOnWebService();
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
