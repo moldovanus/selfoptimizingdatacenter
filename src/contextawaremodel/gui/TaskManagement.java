@@ -11,23 +11,16 @@
 
 package contextawaremodel.gui;
 
-import actionselection.command.Command;
-import actionselection.command.selfOptimizingCommand.RemoveTaskFromServerCommand;
-import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.TaskManagementAgent;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import greenContextOntology.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
+
 
 /**
  * @author Moldovanus
@@ -43,19 +36,14 @@ public class TaskManagement extends javax.swing.JFrame {
      * @param agent
      */
 
-    // private Collection<Command> commands;
     private int selectedIndex = 0;
     private boolean clearForAdding;
     private boolean addingTask;
 
     public TaskManagement(TaskManagementAgent agent) {
         super("Task Management");
-        // this.protegeFactory = protegeFactory;
-        //  this.swrlFactory = swrlFactory;
-        //  this.ontModel = ontModel;
         this.agent = agent;
         initComponents();
-        // commands = new ArrayList<Command>();
     }
 
     /**
@@ -99,9 +87,12 @@ public class TaskManagement extends javax.swing.JFrame {
         addTaskLabel = new javax.swing.JLabel();
         addTaskCoresNo = new javax.swing.JLabel();
         addTaskCoresField = new javax.swing.JTextField();
-        addTaskCpuField = new javax.swing.JTextField();
-        addTaskMemoryField = new javax.swing.JTextField();
-        addTaskStorageField = new javax.swing.JTextField();
+        addTaskCpuMaxField = new javax.swing.JTextField();
+        addTaskMemoryMaxField = new javax.swing.JTextField();
+        addTaskStorageMaxField = new javax.swing.JTextField();
+        addTaskCpuMinField = new javax.swing.JTextField();
+        addTaskMemoryMinField = new javax.swing.JTextField();
+        addTaskStorageMinField = new javax.swing.JTextField();
         addTaskCpuLabel = new javax.swing.JLabel();
         addTaskMemoryLabel = new javax.swing.JLabel();
         addTaskStorageLabel = new javax.swing.JLabel();
@@ -301,13 +292,14 @@ public class TaskManagement extends javax.swing.JFrame {
 
         addTaskCoresField.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        addTaskCpuField.setMinimumSize(new java.awt.Dimension(0, 0));
+        addTaskCpuMaxField.setMinimumSize(new java.awt.Dimension(0, 0));
+        addTaskCpuMinField.setMinimumSize(new java.awt.Dimension(0, 0));
+        addTaskMemoryMaxField.setMinimumSize(new java.awt.Dimension(0, 0));
+        addTaskMemoryMinField.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        addTaskMemoryField.setMinimumSize(new java.awt.Dimension(0, 0));
 
-
-        addTaskStorageField.setMinimumSize(new java.awt.Dimension(0, 0));
-
+        addTaskStorageMaxField.setMinimumSize(new java.awt.Dimension(0, 0));
+        addTaskStorageMinField.setMinimumSize(new java.awt.Dimension(0, 0));
         addTaskCpuLabel.setText("CPU");
 
         addTaskMemoryLabel.setText("Memory");
@@ -332,13 +324,19 @@ public class TaskManagement extends javax.swing.JFrame {
                                                 .addComponent(addTaskCpuLabel)
                                                 .addComponent(addTaskMemoryLabel)
                                                 .addComponent(addTaskStorageLabel))
-                                        .addGap(18, 18, 18)
+                                        .addGap(10, 10, 10)
                                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(addTaskNameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addTaskStorageField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addTaskMemoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addTaskCpuField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addTaskCoresField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addComponent(addTaskNameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(addTaskStorageMinField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(addTaskMemoryMinField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(addTaskCpuMinField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(addTaskCoresField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(10, 10, 10)
+                                        .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(addTaskStorageMaxField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(addTaskMemoryMaxField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(addTaskCpuMaxField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                )))
                                 .addComponent(addTaskButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
                         .addContainerGap())
         );
@@ -357,15 +355,18 @@ public class TaskManagement extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(addTaskCpuLabel)
-                                .addComponent(addTaskCpuField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addTaskCpuMinField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(addTaskCpuMaxField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(addTaskMemoryLabel)
-                                .addComponent(addTaskMemoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addTaskMemoryMinField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(addTaskMemoryMaxField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(13, 13, 13)
                         .addGroup(addTaskInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(addTaskStorageLabel)
-                                .addComponent(addTaskStorageField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addTaskStorageMinField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(addTaskStorageMaxField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(addTaskButton)
                         .addContainerGap(475, Short.MAX_VALUE))
@@ -507,12 +508,12 @@ public class TaskManagement extends javax.swing.JFrame {
                 TaskDto dtoTask = new TaskDto();
                 dtoTask.setTaskName(taskName);
                 dtoTask.setRequestedCores(Integer.parseInt(addTaskCoresField.getText().trim()));
-                dtoTask.setRequestedCPUMax(Integer.parseInt(addTaskCpuField.getText().trim()));
-                dtoTask.setRequestedCPUMin(Integer.parseInt(addTaskCpuField.getText().trim()));
-                dtoTask.setRequestedMemoryMax(Integer.parseInt(addTaskMemoryField.getText().trim()));
-                dtoTask.setRequestedMemoryMin(Integer.parseInt(addTaskMemoryField.getText().trim()));
-                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageField.getText().trim()));
-                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageField.getText().trim()));
+                dtoTask.setRequestedCPUMax(Integer.parseInt(addTaskCpuMaxField.getText().trim()));
+                dtoTask.setRequestedCPUMin(Integer.parseInt(addTaskCpuMinField.getText().trim()));
+                dtoTask.setRequestedMemoryMax(Integer.parseInt(addTaskMemoryMaxField.getText().trim()));
+                dtoTask.setRequestedMemoryMin(Integer.parseInt(addTaskMemoryMinField.getText().trim()));
+                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageMaxField.getText().trim()));
+                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageMinField.getText().trim()));
                 /*
                 Task task = protegeFactory.createTask(taskName);
                 QoSPolicy policy = protegeFactory.createQoSPolicy(taskName + "Policy");
@@ -730,14 +731,21 @@ public class TaskManagement extends javax.swing.JFrame {
     private javax.swing.JButton addTaskButton;
     private javax.swing.JTextField addTaskCoresField;
     private javax.swing.JLabel addTaskCoresNo;
-    private javax.swing.JTextField addTaskCpuField;
+    private javax.swing.JTextField addTaskCpuMaxField;
     private javax.swing.JLabel addTaskCpuLabel;
+    private javax.swing.JTextField addTaskCpuMinField;
+
+
     private javax.swing.JPanel addTaskInfoPanel1;
     private javax.swing.JLabel addTaskLabel;
-    private javax.swing.JTextField addTaskMemoryField;
+    private javax.swing.JTextField addTaskMemoryMaxField;
     private javax.swing.JLabel addTaskMemoryLabel;
+    private javax.swing.JTextField addTaskMemoryMinField;
+
     private javax.swing.JPanel addTaskPanel;
-    private javax.swing.JTextField addTaskStorageField;
+    private javax.swing.JTextField addTaskStorageMaxField;
+    private javax.swing.JTextField addTaskStorageMinField;
+
     private javax.swing.JLabel addTaskStorageLabel;
     private javax.swing.JButton applyTaskChanges;
     private javax.swing.JButton deleteTaskButton;
