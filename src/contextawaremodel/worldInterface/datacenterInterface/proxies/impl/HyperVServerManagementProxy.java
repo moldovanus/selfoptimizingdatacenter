@@ -29,14 +29,14 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
         ServerManagementProxy.DEBUG = true;
         //serverManagementProxy.getServerInfo();
-       /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
-        ServerManagementProxy serverManagementProxy1 = new HyperVServerManagementProxy("192.168.2.101");
-        serverManagementProxy1.DEBUG = true;
-        serverManagementProxy1.getServerInfo();
-        serverManagementProxy1.moveDestinationActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "\\\\192.168.2.101\\VirtualMachines\\myVM", "TestMachine");
-       */
-         serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage","\\\\192.168.2.101\\VirtualMachines","VM_2");
-         //serverManagementProxy.sendServerToSleep();
+        /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
+         ServerManagementProxy serverManagementProxy1 = new HyperVServerManagementProxy("192.168.2.101");
+         serverManagementProxy1.DEBUG = true;
+         serverManagementProxy1.getServerInfo();
+         serverManagementProxy1.moveDestinationActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "\\\\192.168.2.101\\VirtualMachines\\myVM", "TestMachine");
+        */
+        serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage", "\\\\192.168.2.101\\VirtualMachines", "VM_2");
+        //serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 
     }
@@ -48,7 +48,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-           /* connection.setDoOutput(true);
+            /* connection.setDoOutput(true);
             //Send header
             String data="a=f";
             BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
@@ -119,8 +119,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
 
             wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -155,8 +156,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
 
             wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -191,8 +193,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
 
             wr.flush();*/
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -227,8 +230,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
 
             wr.flush();*/
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -284,7 +288,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeleteVirtualMachine?vmName=" + vmName);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-           /* connection.setDoOutput(true);
+            /* connection.setDoOutput(true);
 
             //Send header
             String data = "vmName=" + vmName;
@@ -298,8 +302,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
 
             wr.flush();*/
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -322,7 +327,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                     + "mac=" + mac + "&ipAddress=" + ipAddress + "&port=" + port);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-           /* connection.setDoOutput(true);
+            /* connection.setDoOutput(true);
 
             //Send header
             String data = "";
@@ -339,8 +344,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.write("\r\n");
 
             wr.flush();*/
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -372,8 +378,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             wr.flush();*/
 
             //connection hangs until server wakes up. Good because this invokes Restart so it waiths until server goes to sleep :D 
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
