@@ -5,7 +5,6 @@
 package contextawaremodel.agents.behaviours;
 
 import actionselection.command.Command;
-import actionselection.command.selfHealingCommand.IncrementCommand;
 import actionselection.command.selfOptimizingCommand.DeployTaskCommand;
 import actionselection.command.selfOptimizingCommand.MoveTaskCommand;
 import actionselection.command.selfOptimizingCommand.SendServerToLowPowerStateCommand;
@@ -16,7 +15,11 @@ import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.gui.TaskManagement;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.IServerMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitorPiePlotter;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitorXYPlotter;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
@@ -32,8 +35,8 @@ import jade.core.behaviours.TickerBehaviour;
 import negotiator.Negotiator;
 import negotiator.impl.NegotiatorFactory;
 import org.apache.log4j.Logger;
-import selfHealingOntology.SelfHealingProtegeFactory;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -193,7 +196,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 storage.setTotal(storageSize);
                 storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
 
+
             }
+
+
             /* if (server.getIsInLowPowerState()) {
                 SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
                 sendServerToLowPowerStateCommand.executeOnX3D(agent);
@@ -203,7 +209,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }*/
         }
 
+        IServerMonitor serverMonitor = new FullServerMonitor(servers.iterator().next(), new HyperVServerManagementProxy(((Server) servers.toArray()[0]).getServerIPAddress()));
+        serverMonitor.executeStandaloneWindow();
+
+
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+
         //taskManagementWindow.setTasks(tasks);
         // taskManagementWindow.setVisible(true);
         resultsFrame.setVisible(true);
@@ -549,7 +560,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             notifyAll();
         }
         */
-        System.out.println("Datacenter behavior on Tick");
+        /*System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
         Pair<Double, Policy> entropyAndPolicy = computeEntropy();
@@ -567,13 +578,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
-            /*for (Server server : protegeFactory.getAllServerInstances()) {
+            *//*for (Server server : protegeFactory.getAllServerInstances()) {
                 server.collectPreviouslyDistributedResources(policyConversionModel);
             }
-*/
-            /**
-             * Gather data for logging purposes
-             */
+*//*
+            *//**
+         * Gather data for logging purposes
+         *//*
             ArrayList<String> brokenQoSPolicies = new ArrayList<String>();
             Collection<QoSPolicy> qoSPolicies = protegeFactory.getAllQoSPolicyInstances();
             for (Policy policy : qoSPolicies) {
@@ -606,9 +617,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
 
             agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
-            /**
-             * End of logging                                                                                           ew
-             */
+            *//**
+         * End of logging                                                                                           ew
+         *//*
 
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
@@ -636,9 +647,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             if (result.getContextEntropy() > 0) {
                 System.out.println("Distributing empty resources : This should not happen anymore");
-                /*for (Server server : servers) {
+                *//*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
-                }*/
+                }*//*
             }
 
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
@@ -687,7 +698,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
         }
 
-
+*/
     }
 
 }

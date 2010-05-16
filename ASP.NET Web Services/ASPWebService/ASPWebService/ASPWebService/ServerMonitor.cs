@@ -29,21 +29,27 @@ namespace ServerManagement
                 break;
             }
 
+
             //get free and total clock speed for each core
             mgmtObjects = new ManagementObjectSearcher("Select * from Win32_Processor");
 
             foreach (var item in mgmtObjects.Get())
             {
-
-                freeCPU.Add((int)((100 - Convert.ToDouble(item["LoadPercentage"])) / 100 * Convert.ToInt32(item["MaxClockSpeed"])));
                 serverInfo.TotalCPU = Convert.ToInt32(item["MaxClockSpeed"]);
                 break;
+            }
+
+            mgmtObjects = new ManagementObjectSearcher("Select * from Win32_PerfFormattedData_PerfOS_Processor where NOT Name = '_Total' ");
+
+            foreach (ManagementObject item in mgmtObjects.Get())
+            {
+                freeCPU.Add((int)((100 - Convert.ToDouble(item["PercentProcessorTime"])) / 100 * serverInfo.TotalCPU ));
             }
 
             serverInfo.FreeCPU = freeCPU;
 
             //get host computer RAM info
-            mgmtObjects = new ManagementObjectSearcher("Select * from Win32_OperatingSystem      ");
+            mgmtObjects = new ManagementObjectSearcher("Select * from Win32_OperatingSystem");
 
             foreach (ManagementObject item in mgmtObjects.Get())
             {
@@ -63,10 +69,11 @@ namespace ServerManagement
             {
 
                 int size = (int)(Convert.ToInt64(item["Size"]) / (1024 * 1024 * 1024));
-                if ( size == 0 ) {
+                if (size == 0)
+                {
                     continue;
                 }
-                Storage storage = 
+                Storage storage =
                     new Storage(item["Name"].ToString(),
                          size,
                         (int)(Convert.ToInt64(item["FreeSpace"]) / (1024 * 1024 * 1024)));
@@ -322,11 +329,11 @@ namespace ServerManagement
             //    Console.WriteLine("{0}", processor["CurrentClockSpeed"].ToString());
 
             //}
-           // ImportVirtualSystemEx("C:/xp/TestMachine");
+            // ImportVirtualSystemEx("C:/xp/TestMachine");
             Console.ReadLine();
 
         }
 
-       
+
     }
 }
