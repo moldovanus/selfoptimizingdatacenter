@@ -79,6 +79,12 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
     }
 
     protected void refreshData() {
+        //TODO: place if Server Is In SLEEP
+        System.err.println("After finishing with tests check if sever is in sleep and do not query if it is");
+        /*if ( server.getIsInLowPowerState()){
+            return;
+        }*/
+        
         ServerDto serverDto = proxy.getServerInfo();
         java.util.List<Integer> freeCPU = serverDto.getFreeCPU();
         int totalCPU = serverDto.getTotalCPU();
