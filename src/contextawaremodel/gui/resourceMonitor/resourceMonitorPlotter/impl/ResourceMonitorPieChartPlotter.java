@@ -5,6 +5,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
@@ -56,6 +57,7 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
     public void setCurrentValue(Object currentValue) {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
+
         Map<String, Integer> values = null;
 
         values = (Map<String, Integer>) currentValue;
@@ -66,6 +68,8 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setDataset(dataset);
+        plot.setSectionPaint(dataset.getIndex("Free"), Color.BLUE);
+        plot.setSectionPaint(dataset.getIndex("OS"), Color.BLACK);
     }
 
     @Override
@@ -78,10 +82,10 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
                 true,
                 false
         );
+
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelFont(LABEL_FONT);
         plot.setNoDataMessage("No data available");
-
         graphPanel = new ChartPanel(chart);
     }
 }
