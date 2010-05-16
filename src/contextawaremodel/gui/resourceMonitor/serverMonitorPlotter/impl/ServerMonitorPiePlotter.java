@@ -82,8 +82,8 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
         ServerDto serverDto = proxy.getServerInfo();
         java.util.List<Integer> freeCPU = serverDto.getFreeCPU();
         int totalCPU = serverDto.getTotalCPU();
-        int totalMemory = serverDto.getTotalMemory();
-        int totalStorage = 0;
+        int totalUsedMemory = serverDto.getTotalMemory() - serverDto.getFreeMemory();
+        int totalUsedStorage = 0;
 
         Collection<Task> runningTasks = server.getRunningTasks();
         java.util.List<Map<String, Integer>> coreInformation = new java.util.ArrayList<Map<String, Integer>>();
@@ -102,7 +102,7 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
             }
         }
 
-        totalStorage = targetStorage.getSize();
+        totalUsedStorage = targetStorage.getSize() - targetStorage.getFreeSpace();
 
         storageInformation.put("Free", targetStorage.getFreeSpace());
         memoryInformation.put("Free", serverDto.getFreeMemory());
@@ -146,14 +146,14 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
 
         for (int i = 0; i < coresCount; i++) {
             Map<String, Integer> map = coreInformation.get(i);
-            map.put("OS", totalCPU - totalCPUUsedByTasks[i]);
+            map.put("OS", totalCPU - freeCPU.get(i) - totalCPUUsedByTasks[i]);
             coresMonitors.get(i).setCurrentValue(map);
         }
 
-        memoryInformation.put("OS", totalMemory - totalMemoryUsedByTasks);
+        memoryInformation.put("OS", totalUsedMemory - totalMemoryUsedByTasks);
         memoryMonitor.setCurrentValue(memoryInformation);
 
-        storageInformation.put("OS", totalStorage - totalStorageUsedByTasks);
+        storageInformation.put("OS", totalUsedStorage - totalStorageUsedByTasks);
         storageMonitor.setCurrentValue(storageInformation);
 
     }

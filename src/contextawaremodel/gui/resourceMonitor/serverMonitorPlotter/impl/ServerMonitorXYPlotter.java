@@ -45,19 +45,12 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
         serverMonitorPanel = new JPanel();
         serverMonitorPanel.setLayout(new GridLayout(2, 1));
 
-        // JPanel coresPanel = new JPanel();
-        //JPanel storageAndMemoryPanel = new JPanel();
-
         Collection cores = server.getAssociatedCPU().getAssociatedCore();
         int coresCount = cores.size();
 
         coresMonitors = new ArrayList<ResourceMonitorPlotter>();
 
         serverMonitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, coresCount / (coresCount / 2) + 2));
-        //coresPanel.setSize(400, 150);
-        //JScrollPane coresScrollPanel = new JScrollPane(coresPanel);
-
-        // storageAndMemoryPanel.setLayout(new GridLayout(1,2));
 
         for (Object o : cores) {
             Core core = (Core) o;
@@ -69,8 +62,6 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
             coresMonitors.add(plotter);
         }
 
-        //serverMonitorPanel.add(coresPanel);
-
         Memory memory = server.getAssociatedMemory();
         memoryMonitor = new ResourceMonitorXYChartPlotter("Memory", 0, memory.getTotal());
         memoryMonitor.setSnapshotIncrement(refreshRate / 1000);
@@ -81,8 +72,6 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
         storageMonitor.setSnapshotIncrement(refreshRate / 1000);
         serverMonitorPanel.add(storageMonitor.getGraphPanel());
 
-        // serverMonitorPanel.add(storageAndMemoryPanel);
-
     }
 
     protected void refreshData() {
@@ -91,10 +80,7 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
         int totalCPU = serverDto.getTotalCPU();
         int coresCount = coresMonitors.size();
         for (int i = 0; i < coresCount; i++) {
-            //TODO :  after adding info for all cores in C# modify this
             coresMonitors.get(i).setCurrentValue(totalCPU - freeCPU.get(i));
-            //   System.out.println("Refreshing cpu to " + (totalCPU - freeCPU.get(0)));
-
         }
 
         Storage storage = server.getAssociatedStorage();
@@ -109,9 +95,9 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
         }
 
         storageMonitor.setCurrentValue(targetStorage.getSize() - targetStorage.getFreeSpace());
-        //System.out.println("Refreshing storage to " + (targetStorage.getSize() - targetStorage.getFreeSpace()));
+
         memoryMonitor.setCurrentValue(serverDto.getTotalMemory() - serverDto.getFreeMemory());
-        //System.out.println("Refreshing memory to " + (serverDto.getTotalMemory() - serverDto.getFreeMemory()));
+
     }
 
 

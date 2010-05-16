@@ -209,7 +209,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }*/
         }
 
-        IServerMonitor serverMonitor = new FullServerMonitor(servers.iterator().next(), new HyperVServerManagementProxy(((Server) servers.toArray()[0]).getServerIPAddress()));
+        IServerMonitor serverMonitor = new FullServerMonitor(servers.iterator().next(), new HyperVServerManagementProxy(((Server) servers.toArray()[1]).getServerIPAddress()));
         serverMonitor.executeStandaloneWindow();
 
 
