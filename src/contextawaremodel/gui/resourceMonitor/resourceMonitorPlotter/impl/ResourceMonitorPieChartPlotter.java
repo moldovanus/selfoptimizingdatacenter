@@ -5,13 +5,13 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,6 +23,7 @@ import java.util.Map;
 public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
     private JFreeChart chart;
+    private Random random;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -47,7 +48,9 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
     public ResourceMonitorPieChartPlotter(String resourceName, int minimumValue, int maximumValue) {
         super(resourceName);
+        random = new Random();
         setup(minimumValue, maximumValue);
+
     }
 
     /**
@@ -70,6 +73,12 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
         plot.setDataset(dataset);
         plot.setSectionPaint(dataset.getIndex("Free"), Color.BLUE);
         plot.setSectionPaint(dataset.getIndex("OS"), Color.BLACK);
+
+        for (Object key : dataset.getKeys()) {
+            if (!((String) key).equals("Free") && !((String) key).equals("OS")) {
+                plot.setSectionPaint(dataset.getIndex((String) key), new Color(random.nextInt(255), random.nextInt(255), 255));
+            }
+        }
     }
 
     @Override

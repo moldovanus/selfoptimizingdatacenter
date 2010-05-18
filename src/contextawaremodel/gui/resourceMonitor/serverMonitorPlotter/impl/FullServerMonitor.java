@@ -53,7 +53,7 @@ public class FullServerMonitor implements IServerMonitor {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(serverMonitorPanel, "Center");
-         frame.setSize(400,600);
+        frame.setSize(400, 600);
         frame.setVisible(true);
     }
 

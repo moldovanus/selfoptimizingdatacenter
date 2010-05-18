@@ -203,6 +203,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                     System.out.println(line);
                 }
             }
+            startVirtualMachine(vmName);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -66,8 +66,8 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             String path = (String)server.getVirtualMachinesPath().iterator().next();
-            proxy.deployVirtualMachine("//HOME-Z5VXXZDRPO/SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
-                    "//" + server.getServerIPAddress() + "/" +   path.split(":")[1].substring(1),
+            proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
+                    "\\\\" + server.getServerIPAddress() + "\\" +   path.split(":")[1].substring(1),
                     task.getTaskName());
 
         }else{
