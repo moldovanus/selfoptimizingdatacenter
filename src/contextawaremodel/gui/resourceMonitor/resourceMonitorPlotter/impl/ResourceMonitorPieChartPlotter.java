@@ -24,8 +24,9 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
     private JFreeChart chart;
     private Random random;
+    private int oldDatasetSize = 0;
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setBounds(300, 300, 200, 100);
         frame.setLayout(new BorderLayout());
@@ -33,18 +34,31 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
 
         Map<String, Integer> map = new HashMap<String, Integer>(3);
-        for (int i = 0; i < 3; i++) {
-            map.put("" + i, i);
-        }
-
-        //while (true) {
+        map.put("Free", 2);
+        map.put("OS", 2);
         resourceMonitorPlotter.setCurrentValue(map);
-        frame.add(resourceMonitorPlotter.getGraphPanel(), "Center");
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(resourceMonitorPlotter.getGraphPanel(), "Center");
         frame.pack();
         frame.setVisible(true);
-        // }
-    }
+
+        while (true) {
+            map.clear();
+            map.put("Free", 2);
+            map.put("OS", 2);
+            for (int j = 0; j < 5; j++) {
+                map.put("" + j, j);
+            }
+            resourceMonitorPlotter.setCurrentValue(map);
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+    }*/
 
     public ResourceMonitorPieChartPlotter(String resourceName, int minimumValue, int maximumValue) {
         super(resourceName);
@@ -60,23 +74,30 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
     public void setCurrentValue(Object currentValue) {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
-
-        Map<String, Integer> values = null;
-
-        values = (Map<String, Integer>) currentValue;
-
+        Map<String, Integer> values = (Map<String, Integer>) currentValue;
         for (Map.Entry<String, Integer> entry : values.entrySet()) {
             dataset.setValue(entry.getKey(), entry.getValue());
         }
 
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setDataset(dataset);
+
+        if (values.size() == oldDatasetSize) {
+            return;
+        }
+
+        oldDatasetSize = values.size();
+
         plot.setSectionPaint(dataset.getIndex("Free"), Color.BLUE);
         plot.setSectionPaint(dataset.getIndex("OS"), Color.BLACK);
 
+        for (int i = 0; i < values.size(); i++) {
+            plot.setExplodePercent(i, 0.025);
+        }
+
         for (Object key : dataset.getKeys()) {
             if (!((String) key).equals("Free") && !((String) key).equals("OS")) {
-                plot.setSectionPaint(dataset.getIndex((String) key), new Color(random.nextInt(255), random.nextInt(255), 255));
+                plot.setSectionPaint(dataset.getIndex((String) key), new Color(25 + random.nextInt(230), 25 + random.nextInt(230), 25));
             }
         }
     }
