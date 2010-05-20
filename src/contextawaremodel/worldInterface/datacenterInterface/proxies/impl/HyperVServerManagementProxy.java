@@ -35,7 +35,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
          serverManagementProxy1.getServerInfo();
          serverManagementProxy1.moveDestinationActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "\\\\192.168.2.101\\VirtualMachines\\myVM", "TestMachine");
         */
-        serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage", "\\\\192.168.2.101\\VirtualMachines", "VM_2");
+        // serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage", "\\\\192.168.2.101\\VirtualMachines", "VM_2");
         //serverManagementProxy.sendServerToSleep();
         System.out.println("End");
 

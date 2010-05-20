@@ -46,6 +46,7 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setMaxAcceptableValue(int newMaxAcceptableValue) {
+        //store old values
         if (hasMaxAcceptableValue()) {
             maxAcceptableValue = getMaxAcceptableValue();
         }

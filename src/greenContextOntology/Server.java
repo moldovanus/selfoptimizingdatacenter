@@ -16,13 +16,13 @@ import java.util.Iterator;
 public interface Server extends Resource {
     // Property http://www.owl-ontologies.com/Datacenter.owl#serverMacAddress
 
-       String getServerMacAddress();
+    String getServerMacAddress();
 
-       RDFProperty getServerMacAddressProperty();
+    RDFProperty getServerMacAddressProperty();
 
-       boolean hasServerMacAddress();
+    boolean hasServerMacAddress();
 
-       void setServerMacAddress(String newServerMacAddress);
+    void setServerMacAddress(String newServerMacAddress);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#serverWakeUpPort
@@ -34,7 +34,7 @@ public interface Server extends Resource {
     boolean hasServerWakeUpPort();
 
     void setServerWakeUpPort(int newServerWakeUpPort);
-    
+
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
 
@@ -119,7 +119,9 @@ public interface Server extends Resource {
     void setWebService(String newWebService);
 
     public boolean hasResourcesFor(Task task);
-     // Property http://www.owl-ontologies.com/Datacenter.owl#virtualMachinesPath
+
+    public boolean hasResourcesToBeNegotiatedFor(Task task);
+    // Property http://www.owl-ontologies.com/Datacenter.owl#virtualMachinesPath
 
     Collection getVirtualMachinesPath();
 
@@ -171,7 +173,6 @@ public interface Server extends Resource {
     public ServerManagementProxy getProxy();
 
     public void setProxy(ServerManagementProxy proxy);
-
 
 
 }

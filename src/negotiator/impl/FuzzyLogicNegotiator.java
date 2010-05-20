@@ -325,7 +325,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             System.out.println("Negotiated for " + storage.getLocalName() + " from " + storage.getMaxAcceptableValue() +
                     " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
-            memory.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+            storage.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
 
         }
 

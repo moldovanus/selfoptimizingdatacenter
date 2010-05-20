@@ -400,6 +400,45 @@ public class DefaultServer extends DefaultResource
         return true;
     }
 
+    public boolean hasResourcesToBeNegotiatedFor(Task task) {
+
+        RequestedTaskInfo requestedSLA = task.getRequestedInfo();
+
+
+        CPU cpu = this.getAssociatedCPU();
+        Collection cores = cpu.getAssociatedCore();
+        int requestedCores = requestedSLA.getCores();
+        if (cores.size() < requestedCores) {
+            return false;
+        }
+        for (Object coreInst : cores) {
+
+            Core core = (Core) coreInst;
+            if (core.getUsed() + requestedSLA.getCpuMinAcceptableValue() > core.getTotal()) {
+                continue;
+            } else {
+                requestedCores--;
+            }
+        }
+
+        if (requestedCores > 0) {
+            return false;
+        }
+
+        Memory memory = this.getAssociatedMemory();
+        if (memory.getUsed() + requestedSLA.getMemoryMinAcceptableValue() > memory.getTotal()) {
+            return false;
+        }
+
+        Storage storage = this.getAssociatedStorage();
+
+        if (storage.getUsed() + requestedSLA.getStorageMinAcceptableValue() > storage.getTotal()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public void setRunningTasks(Collection newRunningTasks, OntModel model) {
         setPropertyValues(getRunningTasksProperty(), newRunningTasks);
         for (Object task : newRunningTasks) {
@@ -653,6 +692,7 @@ public class DefaultServer extends DefaultResource
         getAssociatedStorage().restoreDefaultOptimumValues();
 
     }
+
 
     public ServerManagementProxy getProxy() {
         return proxy;

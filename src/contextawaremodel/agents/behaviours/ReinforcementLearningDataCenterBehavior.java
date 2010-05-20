@@ -26,6 +26,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import greenContextOntology.*;
 import greenContextOntology.Component;
+import greenContextOntology.impl.DefaultMemory;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
@@ -196,8 +197,8 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
             }
-              IServerMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
-              serverMonitor.executeStandaloneWindow();
+            IServerMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+            serverMonitor.executeStandaloneWindow();
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -212,8 +213,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 wakeUpServerCommand.executeOnX3D(agent);
             }*/
         }
-
-
 
 
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
@@ -547,6 +546,33 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         return newContext;
     }
 
+    protected Server getMinDistanceServer(Task task) {
+        Server retServer = null;
+        RequestedTaskInfo requestedTask = task.getRequestedInfo();
+        double difference;
+        double minDif = 1000000.0d;
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
+        for (Server server : servers) {
+            Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
+            difference = 0.0d;
+            for (Core core : cores) {
+                difference += Math.pow(core.getTotal() - core.getUsed() - requestedTask.getCpuMinAcceptableValue(), 2);
+            }
+            greenContextOntology.Memory mem = server.getAssociatedMemory();
+            difference += Math.pow(mem.getTotal() - mem.getUsed() - requestedTask.getMemoryMinAcceptableValue(), 2);
+            Storage storage = server.getAssociatedStorage();
+            difference += Math.pow(storage.getTotal() - storage.getUsed() - requestedTask.getStorageMinAcceptableValue(), 2);
+            difference = Math.sqrt(difference);
+            if (server.hasResourcesToBeNegotiatedFor(task))
+                if (difference < minDif) {
+                    minDif = difference;
+                    retServer = server;
+                }
+        }
+        return retServer;
+
+    }
+
     @Override
     protected void onTick() {
 
@@ -590,7 +616,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 server.collectPreviouslyDistributedResources(policyConversionModel);
             }*/
 
-         //Gather data for logging purposes
+            //Gather data for logging purposes
 
             ArrayList<String> brokenQoSPolicies = new ArrayList<String>();
             Collection<QoSPolicy> qoSPolicies = protegeFactory.getAllQoSPolicyInstances();
@@ -625,24 +651,21 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
 
-         // End of logging
+            // End of logging
 
 
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
             //taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
-
-
             Collection<Command> resultQueue = result.getActions();
-
             ArrayList<String> message = new ArrayList<String>();
             for (Command o : resultQueue) {
                 message.add(o.toString());
                 System.out.println(o.toString());
                 o.execute(policyConversionModel);
                 o.executeOnX3D(agent);
-                o.executeOnWebService();
+                // o.executeOnWebService();   ---> to be decommented when running on servers
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -650,10 +673,50 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }
 
             }
-
-
             if (result.getContextEntropy() > 0) {
-                System.out.println("Distributing empty resources : This should not happen anymore");
+                System.out.println("Negotiating....");
+                Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
+                for (Task task : allTasks) {
+                    if (!task.isRunning()) {
+
+                        Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+                        Server server = getMinDistanceServer(task);
+                        negotiator.negotiate(server, task);
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                        Command newAction = new DeployTaskCommand(protegeFactory, server.getName(), task.getName());
+                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
+                        Command wakeUp = null;
+                        if (server.getIsInLowPowerState()) {
+                            wakeUp = new WakeUpServerCommand(protegeFactory, server.getName());
+                            cs.getActions().add(wakeUp);
+                            wakeUp.execute(policyConversionModel);
+                        }
+                        cs.getActions().add(newAction);
+                        newAction.execute(policyConversionModel);
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(result, cs, newAction));
+                        if (cs.getContextEntropy() < result.getContextEntropy()) {
+                            result = cs;
+                            newAction.executeOnX3D(agent);
+                            //newAction.executeOnWebService();  // ---> to be decommented when running on servers
+                            if (wakeUp != null) {
+                                wakeUp.executeOnX3D(agent);
+                                //wakeUp.executeOnWebService();
+                            }
+                        } else {
+
+                            newAction.rewind(policyConversionModel);
+                            if (wakeUp != null)
+                                wakeUp.rewind(policyConversionModel);
+                        }
+
+                    }
+                }
+                //  System.out.println("Distributing empty resources : This should not happen anymore");
                 /*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
                 }*/
