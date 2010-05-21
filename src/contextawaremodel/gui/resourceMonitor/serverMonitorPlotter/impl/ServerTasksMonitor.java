@@ -7,10 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Collection;
-
-import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
-import contextawaremodel.gui.resourceMonitor.IMonitor;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,7 +15,7 @@ import contextawaremodel.gui.resourceMonitor.IMonitor;
  * Time: 12:49:25 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ServerTasksMonitor implements IMonitor {
+public class ServerTasksMonitor  {
     private JScrollPane tasksScrollPanel;
     private JPanel tasksPanel;
     private Server server;
@@ -73,11 +69,5 @@ public class ServerTasksMonitor implements IMonitor {
         return tasksScrollPanel;
     }
 
-    public void stopGatheringData() {
-        refreshInfoTimer.stop();
-    }
-
-    public void startGatheringData() {
-        refreshInfoTimer.start();
-    }
+    
 }

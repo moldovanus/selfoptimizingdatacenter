@@ -9,7 +9,7 @@ import javax.swing.*;
  * Time: 2:23:00 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface IServerMonitor extends IMonitor{
+public interface IServerMonitor{
 
     void executeStandaloneWindow();
 

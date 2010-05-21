@@ -35,99 +35,6 @@ public class FullServerMonitor implements IServerMonitor {
     private Server server;
     private ServerManagementProxyInterface proxy;
 
-    private InternalFrameListener closeTaskQueueListener = new InternalFrameListener() {
-
-        public void internalFrameOpened(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosing(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosed(InternalFrameEvent e) {
-            serverTasksMonitor.stopGatheringData();
-        }
-
-        public void internalFrameIconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeiconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameActivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeactivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-    };
-
-    private InternalFrameListener closeTotalResourcesListener = new InternalFrameListener() {
-        public void internalFrameOpened(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosing(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosed(InternalFrameEvent e) {
-            xyMonitor.stopGatheringData();
-        }
-
-        public void internalFrameIconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeiconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameActivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeactivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-    };
-
-    private InternalFrameListener closeTasksResourcesListener = new InternalFrameListener() {
-        public void internalFrameOpened(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosing(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameClosed(InternalFrameEvent e) {
-            pieMonitor.stopGatheringData();
-        }
-
-        public void internalFrameIconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeiconified(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameActivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public void internalFrameDeactivated(InternalFrameEvent e) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-
-    };
 
     public FullServerMonitor(Server server, ServerManagementProxyInterface proxy, int refreshRate) {
         this.refreshRate = refreshRate;
@@ -143,13 +50,25 @@ public class FullServerMonitor implements IServerMonitor {
     }
 
     private void setup() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         serverTasksMonitor = new ServerTasksMonitor(server);
         xyMonitor = new ServerMonitorXYPlotter(server, proxy, refreshRate);
         pieMonitor = new ServerMonitorPiePlotter(server, proxy, refreshRate);
 
         serverMonitorWindow = new JDesktopPane();
+        serverMonitorWindow.setBackground(new Color(100, 149, 237));
         serverMonitorPanel = new JPanel();
-        serverMonitorPanel.setSize(800,500);
+        serverMonitorPanel.setSize(800, 500);
         toolBar = new JToolBar();
 
         JInternalFrame taskQueueFrame = new JInternalFrame("Task queue");
@@ -160,23 +79,26 @@ public class FullServerMonitor implements IServerMonitor {
         showTotalResourcesUsageButton = new JButton("Total resources usage");
         showTasksResourcesUsageButton = new JButton("Tasks resources usage");
 
+        showTaskQueueButton.setBackground(new Color(140, 189, 255));
+        showTotalResourcesUsageButton.setBackground(new Color(140, 189, 255));
+        showTasksResourcesUsageButton.setBackground(new Color(140, 189, 255));
 
         taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        taskQueueFrame.addInternalFrameListener(closeTaskQueueListener);
+
         taskQueueFrame.setBounds(10, 50, 100, 500);
         taskQueueFrame.setClosable(true);
         taskQueueFrame.setMaximizable(true);
         taskQueueFrame.setResizable(true);
 
         totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        totalResourcesUsageFrame.addInternalFrameListener(closeTotalResourcesListener);
+
         totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
         totalResourcesUsageFrame.setClosable(true);
         totalResourcesUsageFrame.setMaximizable(true);
         totalResourcesUsageFrame.setResizable(true);
 
         taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        taskResourcesUsageFrame.addInternalFrameListener(closeTasksResourcesListener);
+
         taskResourcesUsageFrame.setBounds(620, 40, 500, 500);
         taskResourcesUsageFrame.setClosable(true);
         taskResourcesUsageFrame.setMaximizable(true);
@@ -208,13 +130,13 @@ public class FullServerMonitor implements IServerMonitor {
                 JInternalFrame taskQueueFrame = new JInternalFrame("Task queue");
                 taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
                 taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                taskQueueFrame.addInternalFrameListener(closeTaskQueueListener);
+
                 taskQueueFrame.setBounds(0, 50, 100, 500);
                 taskQueueFrame.setClosable(true);
                 taskQueueFrame.setMaximizable(true);
                 taskQueueFrame.setResizable(true);
                 taskQueueFrame.setVisible(true);
-                serverTasksMonitor.startGatheringData();
+  
                 serverMonitorWindow.add(taskQueueFrame);
             }
         });
@@ -225,7 +147,7 @@ public class FullServerMonitor implements IServerMonitor {
                 JInternalFrame totalResourcesUsageFrame = new JInternalFrame("Total resources usage");
                 totalResourcesUsageFrame.add(xyMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
                 totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                totalResourcesUsageFrame.addInternalFrameListener(closeTotalResourcesListener);
+
                 totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
                 totalResourcesUsageFrame.setClosable(true);
                 totalResourcesUsageFrame.setMaximizable(true);
@@ -242,7 +164,7 @@ public class FullServerMonitor implements IServerMonitor {
                 JInternalFrame taskResourcesUsageFrame = new JInternalFrame("Tasks resources usage");
                 taskResourcesUsageFrame.add(pieMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
                 taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                taskResourcesUsageFrame.addInternalFrameListener(closeTasksResourcesListener);
+
                 taskResourcesUsageFrame.setBounds(620, 50, 500, 500);
                 taskResourcesUsageFrame.setClosable(true);
                 taskResourcesUsageFrame.setMaximizable(true);
@@ -255,7 +177,9 @@ public class FullServerMonitor implements IServerMonitor {
         });
 
         toolBar.add(showTaskQueueButton);
+        toolBar.addSeparator();
         toolBar.add(showTotalResourcesUsageButton);
+        toolBar.addSeparator();
         toolBar.add(showTasksResourcesUsageButton);
 
     }
@@ -267,7 +191,7 @@ public class FullServerMonitor implements IServerMonitor {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(serverMonitorPanel, "Center");
-        frame.setSize(400, 600);
+        frame.setSize(1200, 700);
         frame.setVisible(true);
     }
 
@@ -275,15 +199,5 @@ public class FullServerMonitor implements IServerMonitor {
         return serverMonitorPanel;
     }
 
-    public void stopGatheringData() {
-        serverTasksMonitor.stopGatheringData();
-        xyMonitor.stopGatheringData();
-        pieMonitor.stopGatheringData();
-    }
-
-    public void startGatheringData() {
-        serverTasksMonitor.startGatheringData();
-        xyMonitor.startGatheringData();
-        pieMonitor.startGatheringData();
-    }
+  
 }
