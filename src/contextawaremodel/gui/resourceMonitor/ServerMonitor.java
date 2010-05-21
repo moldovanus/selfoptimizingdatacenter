@@ -40,9 +40,15 @@ public abstract class ServerMonitor implements IServerMonitor {
         refreshInfoTimer = new Timer(refreshRate, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                if (!s.getIsInLowPowerState()) {
-                    refreshData();
-                }
+                // if (!s.getIsInLowPowerState()) {
+                Thread thread = new Thread() {
+
+                    public void run() {
+                        refreshData();
+                    }
+                };
+                thread.start();
+                //}
             }
         });
         refreshInfoTimer.start();
@@ -58,9 +64,15 @@ public abstract class ServerMonitor implements IServerMonitor {
         refreshInfoTimer = new Timer(refreshRate, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                if (!s.getIsInLowPowerState()) {
-                    refreshData();
-                }
+                //     if (!s.getIsInLowPowerState()) {
+                Thread thread = new Thread() {
+
+                    public void run() {
+                        refreshData();
+                    }
+                };
+                thread.start();
+                //   }
             }
         });
         refreshInfoTimer.start();

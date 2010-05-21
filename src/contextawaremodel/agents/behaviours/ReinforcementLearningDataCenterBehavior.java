@@ -197,11 +197,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
             IServerMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
             serverMonitor.executeStandaloneWindow();
-            try {
+          /*  try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            }*/
 
             /* if (server.getIsInLowPowerState()) {
                 SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
@@ -578,10 +578,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        }/*
         //returns true if there were commands to execute
         //TODO: refresh after receiving new commands from it - > or sth
-        /*
+        *//*
         if (taskManagementWindow.executeCommands()) {
             taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
         }
@@ -591,7 +591,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             taskManagementWindow.setClearForAdding(true);
             notifyAll();
         }
-        */
+        *//*
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
@@ -610,9 +610,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
-            /*for (Server server : protegeFactory.getAllServerInstances()) {
+            *//*for (Server server : protegeFactory.getAllServerInstances()) {
                 server.collectPreviouslyDistributedResources(policyConversionModel);
-            }*/
+            }*//*
 
             //Gather data for logging purposes
 
@@ -715,9 +715,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     }
                 }
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
-                /*for (Server server : servers) {
+                *//*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
-                }*/
+                }*//*
             }
 
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
@@ -764,7 +764,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                 agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
             }
-        }
+        }*/
 
     }
 

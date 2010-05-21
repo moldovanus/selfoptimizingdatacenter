@@ -149,6 +149,7 @@ public class FullServerMonitor implements IServerMonitor {
 
         serverMonitorWindow = new JDesktopPane();
         serverMonitorPanel = new JPanel();
+        serverMonitorPanel.setSize(800,500);
         toolBar = new JToolBar();
 
         JInternalFrame taskQueueFrame = new JInternalFrame("Task queue");
@@ -159,28 +160,47 @@ public class FullServerMonitor implements IServerMonitor {
         showTotalResourcesUsageButton = new JButton("Total resources usage");
         showTasksResourcesUsageButton = new JButton("Tasks resources usage");
 
-        toolBar.add(showTaskQueueButton);
-        toolBar.add(showTotalResourcesUsageButton);
-        toolBar.add(showTasksResourcesUsageButton);
 
         taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         taskQueueFrame.addInternalFrameListener(closeTaskQueueListener);
+        taskQueueFrame.setBounds(10, 50, 100, 500);
+        taskQueueFrame.setClosable(true);
+        taskQueueFrame.setMaximizable(true);
+        taskQueueFrame.setResizable(true);
 
         totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         totalResourcesUsageFrame.addInternalFrameListener(closeTotalResourcesListener);
+        totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
+        totalResourcesUsageFrame.setClosable(true);
+        totalResourcesUsageFrame.setMaximizable(true);
+        totalResourcesUsageFrame.setResizable(true);
 
         taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         taskResourcesUsageFrame.addInternalFrameListener(closeTasksResourcesListener);
-
+        taskResourcesUsageFrame.setBounds(620, 40, 500, 500);
+        taskResourcesUsageFrame.setClosable(true);
+        taskResourcesUsageFrame.setMaximizable(true);
+        taskResourcesUsageFrame.setResizable(true);
 
         totalResourcesUsageFrame.add(xyMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
         taskResourcesUsageFrame.add(pieMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
         taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
 
+        serverMonitorWindow.setLayout(null);
+        serverMonitorPanel.setLayout(new BorderLayout());
+
+        taskQueueFrame.setVisible(true);
+        totalResourcesUsageFrame.setVisible(true);
+        taskResourcesUsageFrame.setVisible(true);
+
+
         serverMonitorWindow.add(taskQueueFrame);
         serverMonitorWindow.add(totalResourcesUsageFrame);
         serverMonitorWindow.add(taskResourcesUsageFrame);
-        serverMonitorWindow.add(toolBar, BorderLayout.SOUTH);
+
+        serverMonitorPanel.add(serverMonitorWindow, BorderLayout.CENTER);
+        serverMonitorPanel.add(toolBar, BorderLayout.SOUTH);
+
 
         showTaskQueueButton.addActionListener(new ActionListener() {
 
@@ -189,6 +209,11 @@ public class FullServerMonitor implements IServerMonitor {
                 taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
                 taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 taskQueueFrame.addInternalFrameListener(closeTaskQueueListener);
+                taskQueueFrame.setBounds(0, 50, 100, 500);
+                taskQueueFrame.setClosable(true);
+                taskQueueFrame.setMaximizable(true);
+                taskQueueFrame.setResizable(true);
+                taskQueueFrame.setVisible(true);
                 serverTasksMonitor.startGatheringData();
                 serverMonitorWindow.add(taskQueueFrame);
             }
@@ -201,6 +226,11 @@ public class FullServerMonitor implements IServerMonitor {
                 totalResourcesUsageFrame.add(xyMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
                 totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 totalResourcesUsageFrame.addInternalFrameListener(closeTotalResourcesListener);
+                totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
+                totalResourcesUsageFrame.setClosable(true);
+                totalResourcesUsageFrame.setMaximizable(true);
+                totalResourcesUsageFrame.setResizable(true);
+                totalResourcesUsageFrame.setVisible(true);
                 xyMonitor.startGatheringData();
                 serverMonitorWindow.add(totalResourcesUsageFrame);
             }
@@ -213,29 +243,32 @@ public class FullServerMonitor implements IServerMonitor {
                 taskResourcesUsageFrame.add(pieMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
                 taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 taskResourcesUsageFrame.addInternalFrameListener(closeTasksResourcesListener);
+                taskResourcesUsageFrame.setBounds(620, 50, 500, 500);
+                taskResourcesUsageFrame.setClosable(true);
+                taskResourcesUsageFrame.setMaximizable(true);
+                taskResourcesUsageFrame.setResizable(true);
+                taskResourcesUsageFrame.setVisible(true);
                 pieMonitor.startGatheringData();
                 serverMonitorWindow.add(taskResourcesUsageFrame);
 
             }
         });
 
-        totalResourcesUsageFrame.setVisible(true);
-        taskResourcesUsageFrame.setVisible(true);
-        taskQueueFrame.setVisible(true);
-
-        serverMonitorWindow.setVisible(true);
+        toolBar.add(showTaskQueueButton);
+        toolBar.add(showTotalResourcesUsageButton);
+        toolBar.add(showTasksResourcesUsageButton);
 
     }
     //TODO : add toolbar and coe stuff
 
 
     public void executeStandaloneWindow() {
-       /* JFrame frame = new JFrame(server.getLocalName() + " Monitor");
+        JFrame frame = new JFrame(server.getLocalName() + " Monitor");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(serverMonitorPanel, "Center");
         frame.setSize(400, 600);
-        frame.setVisible(true);*/
+        frame.setVisible(true);
     }
 
     public JPanel getServerMonitorPanel() {

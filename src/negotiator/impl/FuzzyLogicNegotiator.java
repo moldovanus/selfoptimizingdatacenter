@@ -191,6 +191,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
             }
         }
 
+
         int maxMemory = memory.getMaxAcceptableValue();
         int usedMemory = memory.getUsed();
         int totalMemory = memory.getTotal();

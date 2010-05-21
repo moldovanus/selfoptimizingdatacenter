@@ -52,7 +52,6 @@ public class ResourceMonitorXYChartPlotter extends ResourceMonitorPlotter {
         }
     }*/
 
-
     public ResourceMonitorXYChartPlotter(String resourceName, int minimumValue, int maximumValue) {
         super(resourceName);
         setup(minimumValue, maximumValue);

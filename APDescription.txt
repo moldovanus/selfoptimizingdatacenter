@@ -1,1 +1,1 @@
-( ap-description  :name "WIN-RUQHITH265R:1099/JADE" :ap-services (set ( ap-service  :name fipa.mts.mtp.http.std :type fipa.mts.mtp.http.std :addresses (sequence http://WIN-RUQHITH265R.selfoptimizingcluster.com:7778/acc))))
+( ap-description  :name "WIN-F03JPC6RABI:1099/JADE" :ap-services (set ( ap-service  :name fipa.mts.mtp.http.std :type fipa.mts.mtp.http.std :addresses (sequence http://WIN-F03JPC6RABI.selfoptimizingcluster.com:7778/acc))))
