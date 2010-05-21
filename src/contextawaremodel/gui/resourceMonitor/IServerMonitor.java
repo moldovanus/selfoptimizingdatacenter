@@ -1,4 +1,4 @@
-package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter;
+package contextawaremodel.gui.resourceMonitor;
 
 import javax.swing.*;
 
@@ -9,8 +9,7 @@ import javax.swing.*;
  * Time: 2:23:00 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface IServerMonitor {
-   
+public interface IServerMonitor extends IMonitor{
 
     void executeStandaloneWindow();
 

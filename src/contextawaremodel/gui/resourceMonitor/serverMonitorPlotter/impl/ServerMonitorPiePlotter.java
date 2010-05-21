@@ -2,17 +2,14 @@ package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.impl.ResourceMonitorPieChartPlotter;
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.ResourceMonitorPlotter;
-import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.ServerMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
 import greenContextOntology.*;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 
 /**

@@ -1,4 +1,4 @@
-package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter;
+package contextawaremodel.gui.resourceMonitor;
 
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.ResourceMonitorPlotter;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
@@ -36,10 +36,13 @@ public abstract class ServerMonitor implements IServerMonitor {
         this.server = server;
         this.proxy = proxy;
 
+        final Server s = server;
         refreshInfoTimer = new Timer(refreshRate, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                refreshData();
+                if (!s.getIsInLowPowerState()) {
+                    refreshData();
+                }
             }
         });
         refreshInfoTimer.start();
@@ -51,10 +54,13 @@ public abstract class ServerMonitor implements IServerMonitor {
         this.server = server;
         this.refreshRate = refreshRate;
 
+        final Server s = server;
         refreshInfoTimer = new Timer(refreshRate, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                refreshData();
+                if (!s.getIsInLowPowerState()) {
+                    refreshData();
+                }
             }
         });
         refreshInfoTimer.start();
@@ -64,6 +70,14 @@ public abstract class ServerMonitor implements IServerMonitor {
     protected abstract void setup();
 
     protected abstract void refreshData();
+
+    public void stopGatheringData() {
+        refreshInfoTimer.stop();
+    }
+
+    public void startGatheringData() {
+        refreshInfoTimer.start();
+    }
 
     public void executeStandaloneWindow() {
         JFrame frame = new JFrame(server.getLocalName() + " Monitor");

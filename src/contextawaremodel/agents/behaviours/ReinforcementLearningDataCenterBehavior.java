@@ -16,7 +16,7 @@ import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.IServerMonitor;
+import contextawaremodel.gui.resourceMonitor.IServerMonitor;
 import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.dtos.ServerDto;
@@ -194,8 +194,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 storage.setMaxAcceptableValue(storageSize);
                 storage.setTotal(storageSize);
                 storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
-
-
             }
             IServerMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
             serverMonitor.executeStandaloneWindow();
