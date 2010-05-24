@@ -24,6 +24,7 @@ public abstract class ResourceMonitorPlotter {
 
     protected ResourceMonitorPlotter(String resourceName) {
         this.resourceName = resourceName;
+        graphPanel = new JPanel();
     }
 
 

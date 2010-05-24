@@ -1,13 +1,11 @@
 package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
-import contextawaremodel.gui.resourceMonitor.IServerMonitor;
-import contextawaremodel.gui.resourceMonitor.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.IMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.Server;
 
 import javax.swing.*;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -19,7 +17,7 @@ import java.awt.event.*;
  * To change this template use File | Settings | File Templates.
  * This class created a tabbed panel containing on one tab a ServerMonitorXYPlotter and on the other a ServerMonitorPiePlotter
  */
-public class FullServerMonitor implements IServerMonitor {
+public class FullServerMonitor implements IMonitor {
 
     private int refreshRate = 1000;
     private JDesktopPane serverMonitorWindow;
@@ -104,8 +102,8 @@ public class FullServerMonitor implements IServerMonitor {
         taskResourcesUsageFrame.setMaximizable(true);
         taskResourcesUsageFrame.setResizable(true);
 
-        totalResourcesUsageFrame.add(xyMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
-        taskResourcesUsageFrame.add(pieMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
+        totalResourcesUsageFrame.add(xyMonitor.getMonitorPanel(), BorderLayout.CENTER);
+        taskResourcesUsageFrame.add(pieMonitor.getMonitorPanel(), BorderLayout.CENTER);
         taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
 
         serverMonitorWindow.setLayout(null);
@@ -145,7 +143,7 @@ public class FullServerMonitor implements IServerMonitor {
 
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame totalResourcesUsageFrame = new JInternalFrame("Total resources usage");
-                totalResourcesUsageFrame.add(xyMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
+                totalResourcesUsageFrame.add(xyMonitor.getMonitorPanel(), BorderLayout.CENTER);
                 totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
@@ -153,7 +151,6 @@ public class FullServerMonitor implements IServerMonitor {
                 totalResourcesUsageFrame.setMaximizable(true);
                 totalResourcesUsageFrame.setResizable(true);
                 totalResourcesUsageFrame.setVisible(true);
-                xyMonitor.startGatheringData();
                 serverMonitorWindow.add(totalResourcesUsageFrame);
             }
         });
@@ -162,7 +159,7 @@ public class FullServerMonitor implements IServerMonitor {
 
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame taskResourcesUsageFrame = new JInternalFrame("Tasks resources usage");
-                taskResourcesUsageFrame.add(pieMonitor.getServerMonitorPanel(), BorderLayout.CENTER);
+                taskResourcesUsageFrame.add(pieMonitor.getMonitorPanel(), BorderLayout.CENTER);
                 taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 taskResourcesUsageFrame.setBounds(620, 50, 500, 500);
@@ -170,7 +167,6 @@ public class FullServerMonitor implements IServerMonitor {
                 taskResourcesUsageFrame.setMaximizable(true);
                 taskResourcesUsageFrame.setResizable(true);
                 taskResourcesUsageFrame.setVisible(true);
-                pieMonitor.startGatheringData();
                 serverMonitorWindow.add(taskResourcesUsageFrame);
 
             }
@@ -195,7 +191,7 @@ public class FullServerMonitor implements IServerMonitor {
         frame.setVisible(true);
     }
 
-    public JPanel getServerMonitorPanel() {
+    public JPanel getMonitorPanel() {
         return serverMonitorPanel;
     }
 

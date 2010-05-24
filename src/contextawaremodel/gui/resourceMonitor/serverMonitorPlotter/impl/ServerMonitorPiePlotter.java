@@ -2,7 +2,7 @@ package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.impl.ResourceMonitorPieChartPlotter;
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.ResourceMonitorPlotter;
-import contextawaremodel.gui.resourceMonitor.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
@@ -35,8 +35,8 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
     @Override
     protected void setup() {
 
-        serverMonitorPanel = new JPanel();
-        // serverMonitorPanel.setLayout(new GridLayout(2, 1));
+        monitorPanel = new JPanel();
+        // monitorPanel.setLayout(new GridLayout(2, 1));
 
         // JPanel coresPanel = new JPanel();
         //JPanel storageAndMemoryPanel = new JPanel();
@@ -46,7 +46,7 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
 
         coresMonitors = new ArrayList<ResourceMonitorPlotter>();
 
-        serverMonitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, coresCount / (coresCount / 2) + 2));
+        monitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, coresCount / (coresCount / 2) + 2));
         //coresPanel.setSize(400, 150);
         //JScrollPane coresScrollPanel = new JScrollPane(coresPanel);
 
@@ -58,24 +58,25 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
             plotter.setSnapshotIncrement(refreshRate / 1000);
             JPanel graphPanel = plotter.getGraphPanel();
             graphPanel.setSize(250, 150);
-            serverMonitorPanel.add(graphPanel);
+            monitorPanel.add(graphPanel);
             coresMonitors.add(plotter);
         }
 
-        //serverMonitorPanel.add(coresPanel);
+        //monitorPanel.add(coresPanel);
 
         Memory memory = server.getAssociatedMemory();
         memoryMonitor = new ResourceMonitorPieChartPlotter("Memory", 0, memory.getTotal());
         memoryMonitor.setSnapshotIncrement(refreshRate / 1000);
-        serverMonitorPanel.add(memoryMonitor.getGraphPanel());
+        monitorPanel.add(memoryMonitor.getGraphPanel());
 
         Storage storage = server.getAssociatedStorage();
         storageMonitor = new ResourceMonitorPieChartPlotter("Storage", 0, storage.getTotal());
         storageMonitor.setSnapshotIncrement(refreshRate / 1000);
-        serverMonitorPanel.add(storageMonitor.getGraphPanel());
+        monitorPanel.add(storageMonitor.getGraphPanel());
     }
 
     protected void refreshData() {
+        super.refreshData();
         //TODO: place if Server Is In SLEEP
         //System.err.println("After finishing with tests check if sever is in sleep and do not query if it is");
         /*if ( server.getIsInLowPowerState()){

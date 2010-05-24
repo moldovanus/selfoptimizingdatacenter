@@ -16,8 +16,9 @@ import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.gui.resourceMonitor.IServerMonitor;
+import contextawaremodel.gui.resourceMonitor.IMonitor;
 import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
+import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
@@ -26,7 +27,6 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import greenContextOntology.*;
 import greenContextOntology.Component;
-import greenContextOntology.impl.DefaultMemory;
 import greenContextOntology.impl.DefaultServer;
 import greenContextOntology.impl.DefaultTask;
 import jade.core.Agent;
@@ -69,6 +69,31 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
         this.selfHealingOwlModel = selfHealingOwlModel;
         protegeFactory = new ProtegeFactory(owlModel);
+
+        /* Task task = protegeFactory.createTask("TestTask");
+                RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
+                ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
+                requestedTaskInfo.setCores(1);
+                requestedTaskInfo.setCpuMaxAcceptableValue(1750);
+                requestedTaskInfo.setCpuMinAcceptableValue(1650);
+                requestedTaskInfo.setMemoryMaxAcceptableValue(500);
+                requestedTaskInfo.setMemoryMinAcceptableValue(200);
+                requestedTaskInfo.setStorageMaxAcceptableValue(3);
+                requestedTaskInfo.setStorageMinAcceptableValue(1);
+
+                receivedTaskInfo.setCpuReceived(0);
+                receivedTaskInfo.setMemoryReceived(0);
+                receivedTaskInfo.setStorageReceived(0);
+
+                task.setReceivedInfo(receivedTaskInfo);
+                task.setRequestedInfo(requestedTaskInfo);
+
+                TaskMonitor monitor = new TaskMonitor(task);
+                monitor.executeStandaloneWindow();
+        */
+        TasksQueueMonitor tasksQueueMonitor = new TasksQueueMonitor(protegeFactory);
+        tasksQueueMonitor.executeStandaloneWindow();
+
         // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
@@ -195,9 +220,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 storage.setTotal(storageSize);
                 storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
             }
-            IServerMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+            IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
             serverMonitor.executeStandaloneWindow();
-          /*  try {
+            /*  try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -591,7 +616,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             taskManagementWindow.setClearForAdding(true);
             notifyAll();
         }
-        *//*
+        */
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
@@ -610,9 +635,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
-            *//*for (Server server : protegeFactory.getAllServerInstances()) {
+            /*for (Server server : protegeFactory.getAllServerInstances()) {
                 server.collectPreviouslyDistributedResources(policyConversionModel);
-            }*//*
+            }*/
 
             //Gather data for logging purposes
 
@@ -650,7 +675,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
 
             // End of logging
-
 
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
@@ -715,9 +739,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     }
                 }
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
-                *//*for (Server server : servers) {
+                /*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);
-                }*//*
+                }*/
             }
 
             agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
@@ -764,7 +788,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                 agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
             }
-        }*/
+        }
 
     }
 
