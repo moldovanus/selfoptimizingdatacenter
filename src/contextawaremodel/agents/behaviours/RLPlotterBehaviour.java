@@ -1,6 +1,5 @@
 package contextawaremodel.agents.behaviours;
 
-import contextawaremodel.agents.ReinforcementLearningAgent;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import org.LiveGraph.LiveGraph;

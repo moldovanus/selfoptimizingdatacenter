@@ -59,7 +59,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private Negotiator negotiator;
     //  private TaskManagement taskManagementWindow;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel, JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
+    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel,
+                                                   JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel,
+                                                   JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
         this.contextAwareModel = datacenterOwlModel;
