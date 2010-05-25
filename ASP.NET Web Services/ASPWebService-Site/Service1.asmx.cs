@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.IO;
 
 namespace ASPWebService
 {
@@ -37,33 +38,44 @@ namespace ASPWebService
         public void MoveDestinationActions(String path1, String path2, String vmName)
         {
             operationCompleted = false;
-            VMHandling.ImportVirtualSystemEx(path1 + "/" + vmName, vmName, path2);
-            VMHandling.RequestStateChange(vmName, "start");
+            DirectoryInfo dfrom = new DirectoryInfo(path1 + "\\" + vmName);
+            DirectoryInfo dto = new DirectoryInfo(path2 + "\\" + vmName);
+            VMHandling.CopyAll(dfrom, dto);
+            VMHandling.ImportVirtualSystem(path2 + "\\" + vmName);
+            VMHandling.ModifyVirtualSystem(vmName, vmName );
+            VMHandling.RequestStateChange(vmName , "start");
             operationCompleted = true;
         }
         [WebMethod]
-        public void MoveSourceActions(String path, String vmName)
+        public bool MoveSourceActions(String path, String vmName)
         {
             operationCompleted = false;
             VMHandling.RequestStateChange(vmName, "stop");
             VMHandling.ExportVirtualSystemExSnapshots(vmName, path); // export existing snapshot of a virtual machine
             VMHandling.DestroyVirtualSystem(vmName);
             operationCompleted = true;
+            return true;
         }
         [WebMethod]
-        public void DeployVirtualMachine(String from, String to, String vmName)
+        public void DeployVirtualMachine(String from, String to, String vmName, String vmCopyName)
         {
             //just to make sure it is running
-            Process.Start("net start hvboot");
+            Process.Start("C:\\StartHVBoot.bat");
             operationCompleted = false;
-            VMHandling.ImportVirtualSystemEx(from + "\\" + vmName, vmName, to);
+            DirectoryInfo dfrom = new DirectoryInfo(from + "\\"+vmName);
+            DirectoryInfo dto = new DirectoryInfo(to + "\\" + vmCopyName);
+            VMHandling.CopyAll(dfrom, dto);
+            VMHandling.ImportVirtualSystem(to + "\\" + vmCopyName);
+            VMHandling.ModifyVirtualSystem(vmName, vmCopyName);
             operationCompleted = true;
         }
+        
+
         [WebMethod]
         public void StartVirtualMachine(String vmName)
         {
             //just to make sure it is running
-            Process.Start("net start hvboot");
+            Process.Start("C:\\StartHVBoot.bat");
             operationCompleted = false;
             VMHandling.RequestStateChange(vmName, "start");
             operationCompleted = true;
