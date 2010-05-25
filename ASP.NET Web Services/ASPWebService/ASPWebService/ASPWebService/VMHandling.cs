@@ -244,6 +244,64 @@ namespace ServerManagement
             }
             return createdSwitch;
         }
+       public static void ModifyVirtualSystem(string vmName, string vmNewName)
+        {
+            ManagementScope scope = new ManagementScope(@"root\virtualization", null);
+            ManagementObject virtualSystemService = Utility.GetServiceObject(scope, "Msvm_VirtualSystemManagementService");
+
+            ManagementBaseObject inParams = virtualSystemService.GetMethodParameters("ModifyVirtualSystem");
+
+            ManagementObject vm = Utility.GetTargetComputer(vmName, scope);
+            inParams["ComputerSystem"] = vm.Path.Path;
+
+            ManagementObject settingData = null;
+            ManagementObjectCollection settingsData = vm.GetRelated("Msvm_VirtualSystemSettingData",
+                                                                     "Msvm_SettingsDefineState",
+                                                                     null,
+                                                                     null,
+                                                                     "SettingData",
+                                                                     "ManagedElement",
+                                                                     false,
+                                                                     null);
+
+            foreach (ManagementObject data in settingsData)
+            {
+                settingData = data;
+            }
+
+            settingData["ElementName"] = vmNewName;
+
+            inParams["SystemsettingData"] = settingData.GetText(TextFormat.CimDtd20);
+
+            ManagementBaseObject outParams = virtualSystemService.InvokeMethod("ModifyVirtualSystem", inParams, null);
+
+            if ((UInt32)outParams["ReturnValue"] == ReturnCode.Started)
+            {
+                if (Utility.JobCompleted(outParams, scope))
+                {
+                    Console.WriteLine("VM '{0}' was renamed successfully.", vm["ElementName"]);
+
+                }
+                else
+                {
+                    Console.WriteLine("Failed to Modify VM");
+                }
+            }
+            else if ((UInt32)outParams["ReturnValue"] == ReturnCode.Completed)
+            {
+                Console.WriteLine("VM '{0}' was renamed successfully.", vm["ElementName"]);
+            }
+            else
+            {
+                Console.WriteLine("Failed to modify VM. Error {0}", outParams["ReturnValue"]);
+            }
+
+            inParams.Dispose();
+            outParams.Dispose();
+            vm.Dispose();
+            virtualSystemService.Dispose();
+        }
+
 
         public static void ImportVirtualSystem(string importDirectory)
         {
@@ -355,7 +413,7 @@ namespace ServerManagement
 
             ManagementBaseObject inParams = virtualSystemService.GetMethodParameters("ImportVirtualSystemEx");
             inParams["ImportDirectory"] = importDirectory;
-            inParams["ImportSettingData"] = importSettingData.GetText(TextFormat.CimDtd20);
+              inParams["ImportSettingData"] = importSettingData.GetText(TextFormat.CimDtd20);
 
             ManagementBaseObject outParams = virtualSystemService.InvokeMethod("ImportVirtualSystemEx", inParams, null);
 
@@ -384,7 +442,30 @@ namespace ServerManagement
             outParams.Dispose();
             virtualSystemService.Dispose();
         }
+        /*copy the content of a directory into another directory*/
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            // Check if the target directory exists, if not, create it.
+            if (Directory.Exists(target.FullName) == false)
+            {
+                Directory.CreateDirectory(target.FullName);
+            }
+            FileInfo fileInfo;
+            // Copy each file into it’s new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+                fileInfo=fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
+            }
 
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
         /********************* Modify virtual machine *********************/
        public static void RequestStateChange(string vmName, string action)
         {
