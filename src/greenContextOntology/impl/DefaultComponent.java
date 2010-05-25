@@ -124,7 +124,7 @@ public class DefaultComponent extends DefaultResource
 
 
     public void setUsed(int newUsed) {
-        setPropertyValue(getUsedProperty(), new java.lang.Integer(newUsed), model);
+        setPropertyValue(getUsedProperty(), new java.lang.Integer(newUsed));
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#weight

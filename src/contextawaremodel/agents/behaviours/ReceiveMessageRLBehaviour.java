@@ -10,6 +10,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.ReinforcementLearningAgent;
 import contextawaremodel.worldInterface.dtos.TaskDto;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;

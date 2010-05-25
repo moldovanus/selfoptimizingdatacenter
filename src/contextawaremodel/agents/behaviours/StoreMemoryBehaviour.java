@@ -6,6 +6,7 @@ package contextawaremodel.agents.behaviours;
 
 import actionselection.context.Memory;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.ReinforcementLearningAgent;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 

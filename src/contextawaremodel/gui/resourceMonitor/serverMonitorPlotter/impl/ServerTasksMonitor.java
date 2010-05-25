@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -58,8 +59,9 @@ public class ServerTasksMonitor  {
 
     public void refreshData() {
         tasksPanel.removeAll();
-        for (Object o : server.getRunningTasks()) {
-            Task task = (Task) o;
+        Collection<Task> tasks = server.getRunningTasks();
+        tasksPanel.setLayout(new GridLayout(tasks.size(),1));
+        for (Task task :tasks ) {
             //JLabel label = new JLabel(task.getTaskName());
             //label.setToolTipText(task.toString());
             TaskMonitor taskMonitor = new TaskMonitor(task);
@@ -71,5 +73,5 @@ public class ServerTasksMonitor  {
         return tasksScrollPanel;
     }
 
-    
+
 }

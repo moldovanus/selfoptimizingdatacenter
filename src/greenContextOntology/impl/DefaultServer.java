@@ -571,6 +571,9 @@ public class DefaultServer extends DefaultResource
 
     public void distributeRemainingResources(OntModel model) {
         Collection runningTasks = getRunningTasks();
+        if (runningTasks.size() == 0) {
+            return;
+        }
         CPU cpu = getAssociatedCPU();
 
         for (Object task : runningTasks) {

@@ -62,8 +62,8 @@ public class GUIAgent extends Agent {
         enviromentLogger = new LoggerGUI("EnviromentManagementLog");
         datacenterLogger = new LoggerGUI("DatacenterManagementLog");
 
-        enviromentLogger.setLogPath("EnviromentManagementLogs/");
-        datacenterLogger.setLogPath("DatacenterManagementLogs/");
+        enviromentLogger.setLogPath("Logs/");
+        datacenterLogger.setLogPath("Logs/");
 
         JFrame frame = new JFrame("System Control Unit");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

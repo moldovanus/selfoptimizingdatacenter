@@ -70,7 +70,7 @@ public class FullServerMonitor implements IMonitor {
         serverMonitorPanel.setSize(800, 500);
         toolBar = new JToolBar();
 
-        JInternalFrame taskQueueFrame = new JInternalFrame("Task queue");
+        JInternalFrame taskQueueFrame = new JInternalFrame("Running tasks");
         JInternalFrame totalResourcesUsageFrame = new JInternalFrame("Total resources usage");
         JInternalFrame taskResourcesUsageFrame = new JInternalFrame("Tasks resources usage");
 
@@ -84,21 +84,21 @@ public class FullServerMonitor implements IMonitor {
 
         taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        taskQueueFrame.setBounds(10, 50, 100, 500);
+        taskQueueFrame.setBounds(10, 50, 200, 500);
         taskQueueFrame.setClosable(true);
         taskQueueFrame.setMaximizable(true);
         taskQueueFrame.setResizable(true);
 
         totalResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        totalResourcesUsageFrame.setBounds(120, 50, 500, 500);
+        totalResourcesUsageFrame.setBounds(220, 50, 500, 500);
         totalResourcesUsageFrame.setClosable(true);
         totalResourcesUsageFrame.setMaximizable(true);
         totalResourcesUsageFrame.setResizable(true);
 
         taskResourcesUsageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        taskResourcesUsageFrame.setBounds(620, 40, 500, 500);
+        taskResourcesUsageFrame.setBounds(720, 40, 500, 500);
         taskResourcesUsageFrame.setClosable(true);
         taskResourcesUsageFrame.setMaximizable(true);
         taskResourcesUsageFrame.setResizable(true);
@@ -188,7 +188,7 @@ public class FullServerMonitor implements IMonitor {
         standaloneWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         standaloneWindow.setLayout(new BorderLayout());
         standaloneWindow.add(serverMonitorPanel, "Center");
-        standaloneWindow.setSize(1200, 700);
+        standaloneWindow.setSize(1200, 800);
         standaloneWindow.setVisible(true);
     }
 
