@@ -17,7 +17,7 @@ public class GlobalVars {
     public static final String GUIAGENT_NAME = "GUIAgent";
     public static final String RLAGENT_NAME = "ReinforcementLearningAgent";
     public static final String X3DAGENT_NAME = "X3DAgent";
-    public static final String TMAGENT_NAME= "TaskManagementAgent";    
+    public static final String TMAGENT_NAME = "TaskManagementAgent";
     public static final String PHYSICAL_RESOURCE_VALUE_NAME = "valueOfService";
     public static final String PHYSICAL_RESOURCE_NAME_NAME = "nameOfService";
     public static final String AGENT_REQUEST = "request";
@@ -32,7 +32,8 @@ public class GlobalVars {
     public static final String ONTOLOGY_FILE = "ontology/contextOntology.owl";
     public static final String ONTOLOGY_DATACENTER_FILE = "ontology/Datacenter.owl";
     public static final String POLICIES_FILE = "ontology/TestPolicies.xml";
-    public static final String MEMORY_FILE = "memory/memory.dat";
+    public static final String MEMORY_FILE = "memory/memorySelfHealing.dat";
+    public static final String MEMORY_SELFOPTIMIZING_FILE = "memory/memorySelfOptimizing.dat";
     public static final String FUZZY_LOGIC_CONTROL_FILE = "fuzzy/negotiator.fcl";
 
     //public static final String MEMORY_DATACENTER_FILE = "memory/memory.dat";

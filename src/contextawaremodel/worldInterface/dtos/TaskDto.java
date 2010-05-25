@@ -1,4 +1,4 @@
-package contextawaremodel.gui;
+package contextawaremodel.worldInterface.dtos;
 
 import greenContextOntology.Task;
 

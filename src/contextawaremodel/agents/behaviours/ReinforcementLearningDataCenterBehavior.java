@@ -11,6 +11,8 @@ import actionselection.command.selfOptimizingCommand.MoveTaskCommand;
 import actionselection.command.selfOptimizingCommand.SendServerToLowPowerStateCommand;
 import actionselection.command.selfOptimizingCommand.WakeUpServerCommand;
 import actionselection.context.ContextSnapshot;
+import actionselection.context.DatacenterMemory;
+import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.gui.ActionsOutputFrame;
 import actionselection.utils.Pair;
@@ -52,6 +54,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private JenaOWLModel selfHealingOwlModel;
     private ContextSnapshot smallestEntropyContext;
     private Memory memory;
+    private DatacenterMemory datacenterMemory;
     private ActionsOutputFrame resultsFrame;
     private ReinforcementLearningAgent agent;
     private boolean contextBroken = false;
@@ -61,13 +64,15 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private Negotiator negotiator;
     //  private TaskManagement taskManagementWindow;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
+    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
         this.contextAwareModel = contextAwareModel;
         this.policyConversionModel = policyConversionModel;
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
         this.selfHealingOwlModel = selfHealingOwlModel;
+        this.datacenterMemory = datacenterMemory;
+        this.memory = memory;
         protegeFactory = new ProtegeFactory(owlModel);
 
         /* Task task = protegeFactory.createTask("TestTask");
@@ -152,7 +157,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         this.owlModel = owlModel;
         resultsFrame = new ActionsOutputFrame("Datacenter");
-        this.memory = memory;
+
         swrlFactory = new SWRLFactory(contextAwareModel);
 
         negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
@@ -222,6 +227,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }
             IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
             serverMonitor.executeStandaloneWindow();
+
             /*  try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -235,6 +241,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
                 wakeUpServerCommand.executeOnX3D(agent);
             }*/
+
         }
 
 
@@ -573,7 +580,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         Server retServer = null;
         RequestedTaskInfo requestedTask = task.getRequestedInfo();
         double difference;
-        double minDif = 1000000.0d;
+        double minDif = 10000000.0d;
         Collection<Server> servers = protegeFactory.getAllServerInstances();
         for (Server server : servers) {
             Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
@@ -603,20 +610,22 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }/*
+        }
         //returns true if there were commands to execute
         //TODO: refresh after receiving new commands from it - > or sth
-        *//*
+        /*
         if (taskManagementWindow.executeCommands()) {
             taskManagementWindow.setTasks(protegeFactory.getAllTaskInstances());
-        }
-
+        }*/
+        /*
         //TODO: check this !
         synchronized (this) {
             taskManagementWindow.setClearForAdding(true);
             notifyAll();
         }
         */
+        DatacenterMockupContext initialDataCenterContext = new DatacenterMockupContext();
+        initialDataCenterContext.createMockupContextFromOntology(protegeFactory);
         System.out.println("Datacenter behavior on Tick");
         PriorityQueue<ContextSnapshot> queue = new PriorityQueue<ContextSnapshot>();
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
@@ -738,6 +747,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                     }
                 }
+                datacenterMemory.memorize(initialDataCenterContext, result.getActions());
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
                 /*for (Server server : servers) {
                     server.distributeRemainingResources(policyConversionModel);

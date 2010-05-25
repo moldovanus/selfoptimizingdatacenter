@@ -13,6 +13,7 @@ package contextawaremodel.gui;
 
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.TaskManagementAgent;
+import contextawaremodel.worldInterface.dtos.TaskDto;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

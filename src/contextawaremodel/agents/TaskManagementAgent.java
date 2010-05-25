@@ -2,7 +2,7 @@ package contextawaremodel.agents;
 
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.ReceiveMessageTMBehaviour;
-import contextawaremodel.gui.TaskDto;
+import contextawaremodel.worldInterface.dtos.TaskDto;
 import contextawaremodel.gui.TaskManagement;
 
 import jade.core.AID;

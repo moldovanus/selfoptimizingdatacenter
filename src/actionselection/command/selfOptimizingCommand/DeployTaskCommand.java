@@ -15,6 +15,7 @@ import greenContextOntology.Task;
 import jade.core.Agent;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @author Me
@@ -65,12 +66,13 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
-            String path = (String)server.getVirtualMachinesPath().iterator().next();
+            String path = (String) server.getVirtualMachinesPath().iterator().next();
             proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
-                    "\\\\" + server.getServerIPAddress() + "\\" +   path.split(":")[1].substring(1),
-                    task.getTaskName());
+                    // "\\\\" + server.getServerIPAddress() + "\\" +   path.split(":")[1].substring(1),
+                    "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
+                    task.getTaskName(), task.getTaskName() + UUID.randomUUID());
 
-        }else{
+        } else {
             System.err.println("Proxy is null");
         }
         // throw new UnsupportedOperationException("Not supported yet.");

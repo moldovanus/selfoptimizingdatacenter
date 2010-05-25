@@ -1,8 +1,7 @@
 package contextawaremodel.agents.behaviours;
 
 import contextawaremodel.agents.TaskManagementAgent;
-import contextawaremodel.gui.TaskDto;
-import greenContextOntology.Task;
+import contextawaremodel.worldInterface.dtos.TaskDto;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;

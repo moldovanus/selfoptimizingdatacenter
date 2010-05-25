@@ -172,10 +172,10 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         }
     }
 
-    public void deployVirtualMachine(String from, String to, String vmName) {
+    public void deployVirtualMachine(String from, String to, String vmName, String newName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from=" + from + "&to=" + to + "&vmName=" + vmName + "");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from=" + from + "&to=" + to + "&vmName=" + vmName + "&vmCopyName" + newName + "");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             /*connection.setDoOutput(true);
