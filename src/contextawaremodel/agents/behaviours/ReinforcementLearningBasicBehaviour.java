@@ -11,7 +11,7 @@ import actionselection.command.selfHealingCommand.SetCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;
-import actionselection.gui.ActionsOutputFrame;
+import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -30,6 +30,7 @@ import java.awt.*;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Queue;
+import java.io.IOException;
 
 
 /**
@@ -40,7 +41,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
     private Memory memory;
     private NumberFormat integerNumberFormat = NumberFormat.getIntegerInstance();
     private double smallestEntropy = 10000;
-    private ActionsOutputFrame resultsFrame;
+    //private ActionsOutputFrame resultsFrame;
     private ReinforcementLearningAgent agent;
     private SelfHealingProtegeFactory protegeFactory;
     private boolean contextBroken = false;
@@ -54,7 +55,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         this.policyConversionModel = policyConversionModel;
         agent = (ReinforcementLearningAgent) a;
         this.memory = memory;
-        resultsFrame = new ActionsOutputFrame("Enviroment");
+        // resultsFrame = new ActionsOutputFrame("Enviroment");
         evaluatePolicyProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#EvaluatePolicyP");
         hasAcceptedValueProperty = policyConversionModel.getDatatypeProperty(GlobalVars.base + "#acceptableSensorValue");
         model = jenaOWLModel;
@@ -71,7 +72,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                     command.executeOnX3D(agent);
                     System.out.println(command);
                 }
-                resultsFrame.setVisible(true);
+                // resultsFrame.setVisible(true);
             }
         });
     }
@@ -283,7 +284,12 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             // }
         }
 
-        resultsFrame.setBrokenPoliciesList(brokenPoliciesNames);
+        try {
+            MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"SelfHealingMonitor", "brokenPoliciesList", brokenPoliciesNames});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        //resultsFrame.setBrokenPoliciesList(brokenPoliciesNames);
 
     }
 
@@ -296,9 +302,15 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         ContextSnapshot initialContext = new ContextSnapshot(new LinkedList<Command>());
         SensorValues currentValues = new SensorValues(protegeFactory);
         queue.add(initialContext);
+        try {
+            MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"SelfHealingMonitor", "brokenStatesList", currentValues.toArrayList()});
+            MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"SelfHealingMonitor", "actionsList", null});
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
-        resultsFrame.setActionsList(null);
-        resultsFrame.setBrokenStatesList(currentValues.toArrayList());
+//        resultsFrame.setActionsList(null);
+//        resultsFrame.setBrokenStatesList(currentValues.toArrayList());
 
         setBrokenResources(initialContext);
 
@@ -310,9 +322,14 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             ArrayList<String> list = new ArrayList<String>();
             String policyName = entropyState.getSecond().getName().split("#")[1];
             list.add(policyName);
-            agent.getSelfHealingLogger().log(Color.ORANGE, "Broken policy", list);
+            try {
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.ORANGE, "Broken policy", list});
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.red, "Current state", currentValues.toLogMessage()});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
 
-            agent.getSelfHealingLogger().log(Color.red, "Current state", currentValues.toLogMessage());
+            //agent.getSelfHealingLogger().log(Color.red, "Current state", currentValues.toLogMessage());
 
             Policy brokenPolicy = entropyState.getSecond();
             Object[] associatedResources = brokenPolicy.getAssociatedResources().toArray();
@@ -320,7 +337,6 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             ArrayList<String> brokenSensorsList = new ArrayList<String>();
             int associatedResourcesSize = associatedResources.length;
             for (int i = 0; i < associatedResourcesSize; i++) {
-
 
                 //get the resource as individual from the global model such that getPropertyValue can be called on it
                 Sensor sensor = (Sensor) associatedResources[i];
@@ -330,7 +346,12 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                     brokenSensorsList.add(sensor.getName().split("#")[1]);
                 }
             }
-            agent.getSelfHealingLogger().log(Color.ORANGE, "Sensors that break the policies", brokenSensorsList);
+            try {
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.ORANGE, "Sensors that break the policies", brokenSensorsList});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            // agent.getSelfHealingLogger().log(Color.ORANGE, "Sensors that break the policies", brokenSensorsList);
 
 
             try {
@@ -389,12 +410,22 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
 
             }
 
-            agent.getSelfHealingLogger().log(Color.BLUE, "Corrective actions", message);
+            try {
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.BLUE, "Corrective actions", message});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            //agent.getSelfHealingLogger().log(Color.BLUE, "Corrective actions", message);
 
             System.err.println("===============================================================");
             System.err.println();
+            try {
+                MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"SelfHealingMonitor", "actionsList", actions});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
 
-            resultsFrame.setActionsList(actions);
+            // resultsFrame.setActionsList(actions);
 
             memory.memorize(currentValues, bestActionsList);
             contextSnapshot.executeActionsOnOWL();
@@ -405,7 +436,12 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
         } else {
             if (contextBroken) {
                 contextBroken = false;
-                agent.getSelfHealingLogger().log(Color.green, "Current state", currentValues.toLogMessage());
+                try {
+                    MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"EnviromentLogger",Color.green, "Current state", currentValues.toLogMessage()});
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                //agent.getSelfHealingLogger().log(Color.green, "Current state", currentValues.toLogMessage());
             }
         }
 

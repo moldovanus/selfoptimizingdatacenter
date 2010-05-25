@@ -22,6 +22,8 @@ import java.util.Random;
 public class TaskMonitor implements IMonitor {
 
     private JPanel taskPanel;
+    private JFrame standaloneWindow;
+
     private TaskResourceMonitor taskCPUMonitor;
     private TaskResourceMonitor taskMemoryMonitor;
     private TaskResourceMonitor taskStorageMonitor;
@@ -61,7 +63,7 @@ public class TaskMonitor implements IMonitor {
 
     private void setup() {
         taskPanel = new JPanel();
-        taskPanel.setBackground(new Color(255,255,255));
+        taskPanel.setBackground(new Color(255, 255, 255));
 
         JPanel centerPanel = new JPanel();
 
@@ -82,7 +84,7 @@ public class TaskMonitor implements IMonitor {
         centerPanel.add(taskCPUMonitor.getGraphPanel());
         centerPanel.add(taskMemoryMonitor.getGraphPanel());
         centerPanel.add(taskStorageMonitor.getGraphPanel());
-        centerPanel.setBorder(BorderFactory.createLineBorder(Color.RED,2));
+        centerPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
         taskPanel.add(new JLabel(task.getTaskName()), BorderLayout.NORTH);
         taskPanel.add(centerPanel, BorderLayout.CENTER);
@@ -90,17 +92,21 @@ public class TaskMonitor implements IMonitor {
     }
 
     public void executeStandaloneWindow() {
-        JFrame frame = new JFrame(task.getTaskName() + " Monitor");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(taskPanel, "Center");
-        frame.setSize(300, 500);
-        frame.setVisible(true);
+        standaloneWindow = new JFrame(task.getTaskName() + " Monitor");
+        standaloneWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        standaloneWindow.setLayout(new BorderLayout());
+        standaloneWindow.add(taskPanel, "Center");
+        standaloneWindow.setSize(300, 500);
+        standaloneWindow.setVisible(true);
     }
 
     public JPanel getMonitorPanel() {
         return taskPanel;
     }
 
-
+    public void destroyStandaloneWindow() {
+        if (standaloneWindow != null) {
+            standaloneWindow.dispose();
+        }
+    }
 }

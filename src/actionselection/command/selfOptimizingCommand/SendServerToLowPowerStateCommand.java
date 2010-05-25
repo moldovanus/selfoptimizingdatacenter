@@ -4,11 +4,12 @@
  */
 package actionselection.command.selfOptimizingCommand;
 
-import actionselection.utils.X3DMessageSender;
+import actionselection.utils.MessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -88,7 +89,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     public void executeOnX3D(Agent agent) {
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
+            MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.SEND_SERVER_TO_LOW_POWER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -97,7 +98,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     public void rewindOnX3D(Agent agent) {
         try {
-            X3DMessageSender.sendX3DMessage(agent, new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
+            MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.WAKE_UP_SERVER_COMMAND, serverName.split("#")[1]});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

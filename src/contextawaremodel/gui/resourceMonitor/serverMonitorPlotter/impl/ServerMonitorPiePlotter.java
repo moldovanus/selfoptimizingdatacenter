@@ -43,7 +43,9 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
 
         Collection cores = server.getAssociatedCPU().getAssociatedCore();
         int coresCount = cores.size();
-
+        if (coresCount % 2 != 0) {
+            coresCount ++;
+        }
         coresMonitors = new ArrayList<ResourceMonitorPlotter>();
 
         monitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, coresCount / (coresCount / 2) + 2));
@@ -82,7 +84,7 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
         /*if ( server.getIsInLowPowerState()){
             return;
         }*/
-        
+
         ServerDto serverDto = proxy.getServerInfo();
         java.util.List<Integer> freeCPU = serverDto.getFreeCPU();
         int totalCPU = serverDto.getTotalCPU();

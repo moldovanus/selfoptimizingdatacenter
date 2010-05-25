@@ -35,7 +35,6 @@ public class LoggerGUI {
         init();
         setAllProperties();
         addComponents();
-        frame.setVisible(true);
         date = new java.util.Date().toString();
         date = date.replaceAll("[:]", "_");
     }
@@ -50,7 +49,7 @@ public class LoggerGUI {
 
     private void setAllProperties() {
         frame.setBounds(300, 300, 600, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         textArea.setWrapStyleWord(true);
     }
@@ -117,5 +116,9 @@ public class LoggerGUI {
 
     public void setLogPath(String logPath) {
         this.logPath = logPath;
+    }
+
+    public void setVisible(boolean visible){
+        frame.setVisible(visible);
     }
 }

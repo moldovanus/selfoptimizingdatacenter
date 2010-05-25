@@ -4,6 +4,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.InformCIACMAABehaviour;
+import contextawaremodel.gui.GUIAgent;
 import contextawaremodel.ontology.MyFactory;
 import edu.stanford.smi.protegex.owl.ProtegeOWL;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
@@ -24,9 +25,9 @@ public class CMAAgent extends Agent implements CMAAExternal {
     private JenaOWLModel owlModelDataCenter;
     private OntModel policyConversionModelDataCenter;
     private JenaOWLModel jenaOwlModelDataCenter;
-    private JenaOWLModel owlModel;
-    private OntModel policyConversionModel;
-    private JenaOWLModel jenaOwlModel;
+    private JenaOWLModel owlModeSelfHealing;
+    private OntModel policyConversionModelSelfHealing;
+    private JenaOWLModel jenaOwlModelSelfHealing;
 
     //the protege factory
     public MyFactory datacenterFactory;
@@ -57,16 +58,15 @@ public class CMAAgent extends Agent implements CMAAExternal {
         System.out.println("CMA Agent " + getLocalName() + " started.");
 
         try {
-            //create owlModel from Ontology
+            //create owlModeSelfHealing from Ontology
             File ontologyFile = new File(GlobalVars.ONTOLOGY_FILE);
-            this.owlModel = ProtegeOWL.createJenaOWLModelFromURI(ontologyFile.toURI().toString());
-            this.factory = new MyFactory(owlModel);
-
-
+            this.owlModeSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(ontologyFile.toURI().toString());
+            this.factory = new MyFactory(owlModeSelfHealing);
+            
             File file = new File(GlobalVars.ONTOLOGY_FILE);
-            jenaOwlModel = ProtegeOWL.createJenaOWLModelFromURI(file.toURI().toString());
+            jenaOwlModelSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(file.toURI().toString());
 
-            //create owlModel from Ontology
+            //create owlModeSelfHealing from Ontology
             File ontologyDataCenterFile = new File(GlobalVars.ONTOLOGY_DATACENTER_FILE);
             this.owlModelDataCenter = ProtegeOWL.createJenaOWLModelFromURI(ontologyDataCenterFile.toURI().toString());
             this.datacenterFactory = new MyFactory(owlModelDataCenter);
@@ -81,14 +81,14 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //List<String> swrlCode = policiesHandler.getPoliciesConverter().convertAllPolicies();
 
             // adaugare reguli in ontologie
-            /*SWRLFactory factory = new SWRLFactory(owlModel);
+            /*SWRLFactory factory = new SWRLFactory(owlModeSelfHealing);
             for (String s : swrlCode) {
             System.out.println("Adding rule: " + s);
             factory.createImp(s);
             }*/
 
-            policyConversionModel = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
-            policyConversionModel.add(jenaOwlModel.getJenaModel());
+            policyConversionModelSelfHealing = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
+            policyConversionModelSelfHealing.add(jenaOwlModelSelfHealing.getJenaModel());
 
 
             policyConversionModelDataCenter = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
@@ -101,27 +101,25 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //	}
             //};
 
-
             //initialize the simulator GUI
-            //this.smw = new SimulatorMainWindow( new SimulatedContext(this.owlModel, this) );
+            //this.smw = new SimulatorMainWindow( new SimulatedContext(this.owlModeSelfHealing, this) );
             //this.smw.setLocationRelativeTo(null);
             //this.smw.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
             //this.smw.setVisible(true);
             //refreshGui ();
 
-
             //star the Context Interpreting Agent
             AgentContainer container = (AgentContainer) getContainerController(); // get a container controller for creating new agents
             //createNewAgent(Name, Class name, arguments to the agent)
-            //cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModel});
+            //cia = container.createNewAgent(GlobalVars.CIAGENT_NAME, CIAgent.class.getName(), new Object[]{this.owlModeSelfHealing});
             //cia.start();
             //this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
 
-            //gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
-            //gui.start();
+            gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
+            gui.start();
 
-            rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModel, this.policyConversionModel, this.jenaOwlModel, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
-
+            rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModeSelfHealing, this.policyConversionModelSelfHealing, this.jenaOwlModelSelfHealing, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
+            rl.start();
 
             //tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
             //tm.start();
@@ -135,21 +133,17 @@ public class CMAAgent extends Agent implements CMAAExternal {
             //x3d = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
             //x3d.start();
 
-
-            rl.start();
-
             //star the Request Processing Agent
 
             //createNewAgent(Name, Class name, arguments to the agent)
-            //rpa = container.createNewAgent(GlobalVars.RPAGENT_NAME, RPAgent.class.getName(), new Object[] {this.owlModel});
+            //rpa = container.createNewAgent(GlobalVars.RPAGENT_NAME, RPAgent.class.getName(), new Object[] {this.owlModeSelfHealing});
             //rpa.start();
 
-
             //start the execution and monitoring agent
-            //ema = container.createNewAgent(GlobalVars.EMAGENT_NAME, EMAgent.class.getName(), new Object[] {this.owlModel});
+            //ema = container.createNewAgent(GlobalVars.EMAGENT_NAME, EMAgent.class.getName(), new Object[] {this.owlModeSelfHealing});
             //ema.start();
 
-            // addBehaviour(new BasicCMAABehaviour(this, this.owlModel));
+            // addBehaviour(new BasicCMAABehaviour(this, this.owlModeSelfHealing));
 
         } catch (Exception e) {
             e.printStackTrace();

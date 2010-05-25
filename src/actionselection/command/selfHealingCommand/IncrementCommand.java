@@ -4,8 +4,9 @@
  */
 package actionselection.command.selfHealingCommand;
 
-import actionselection.utils.X3DMessageSender;
+import actionselection.utils.MessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.GlobalVars;
 import jade.core.Agent;
 import selfHealingOntology.SelfHealingProtegeFactory;
 import selfHealingOntology.Sensor;
@@ -131,7 +132,7 @@ public class IncrementCommand extends SelfHealingCommand {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
         String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{ actionName, sensor.getValueOfService()});
+            MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{ actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -142,7 +143,7 @@ public class IncrementCommand extends SelfHealingCommand {
         Sensor sensor = protegeFactory.getSensor(targetSensor);
         String actionName = ( sensor.getName().contains("Temperature"))? "setTemperature" : "setHumidity" ;
         try {
-            X3DMessageSender.sendX3DMessage(agent,new Object[]{actionName, sensor.getValueOfService()});
+            MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{actionName, sensor.getValueOfService()});
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

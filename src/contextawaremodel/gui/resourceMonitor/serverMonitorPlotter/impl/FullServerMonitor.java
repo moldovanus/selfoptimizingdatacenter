@@ -33,6 +33,7 @@ public class FullServerMonitor implements IMonitor {
     private Server server;
     private ServerManagementProxyInterface proxy;
 
+    private JFrame standaloneWindow;
 
     public FullServerMonitor(Server server, ServerManagementProxyInterface proxy, int refreshRate) {
         this.refreshRate = refreshRate;
@@ -134,7 +135,7 @@ public class FullServerMonitor implements IMonitor {
                 taskQueueFrame.setMaximizable(true);
                 taskQueueFrame.setResizable(true);
                 taskQueueFrame.setVisible(true);
-  
+
                 serverMonitorWindow.add(taskQueueFrame);
             }
         });
@@ -183,17 +184,24 @@ public class FullServerMonitor implements IMonitor {
 
 
     public void executeStandaloneWindow() {
-        JFrame frame = new JFrame(server.getLocalName() + " Monitor");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(serverMonitorPanel, "Center");
-        frame.setSize(1200, 700);
-        frame.setVisible(true);
+        standaloneWindow = new JFrame(server.getLocalName() + " Monitor");
+        standaloneWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        standaloneWindow.setLayout(new BorderLayout());
+        standaloneWindow.add(serverMonitorPanel, "Center");
+        standaloneWindow.setSize(1200, 700);
+        standaloneWindow.setVisible(true);
     }
 
     public JPanel getMonitorPanel() {
         return serverMonitorPanel;
     }
 
-  
+
+    public void destroyStandaloneWindow() {
+        if (standaloneWindow != null) {
+            standaloneWindow.dispose();
+        }
+    }
+
+
 }

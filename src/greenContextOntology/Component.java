@@ -52,7 +52,7 @@ public interface Component extends Resource {
 
     boolean hasUsed();
 
-    void setUsed(int newUsed, OntModel model);
+    void setUsed(int newUsed);
     // Property http://www.owl-ontologies.com/Datacenter.owl#weight
 
     float getWeight();

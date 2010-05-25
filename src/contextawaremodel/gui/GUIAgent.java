@@ -1,54 +1,43 @@
 package contextawaremodel.gui;
 
+import actionselection.gui.ActionsOutputFrame;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.X3DAgent;
+import contextawaremodel.gui.resourceMonitor.IMonitor;
+import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
+import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFProperty;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
-import edu.stanford.smi.protegex.owl.model.event.PropertyValueAdapter;
-import edu.stanford.smi.protegex.owl.model.event.PropertyValueListener;
-import jade.gui.GuiAgent;
-import jade.gui.GuiEvent;
+import greenContextOntology.ProtegeFactory;
+import greenContextOntology.Server;
+import jade.core.Agent;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import logger.LoggerGUI;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
-public class GUIAgent extends GuiAgent implements GUIAgentExternal {
+public class GUIAgent extends Agent {
 
-    Boolean alternate = true;
-    Boolean broken = true;
-    Timer timer;
-    public static final int ADD_SENSOR = 1000;
-    public static final int SHUTDOWN_PLATFORM = 1001;
-    RDFProperty hasAcceptableValue;
-    private PropertyValueListener pvl = new PropertyValueAdapter() {
+    private ActionsOutputFrame enviromentMonitor;
+    private JMenuBar menuBar;
+    private LoggerGUI enviromentLogger;
+    private LoggerGUI datacenterLogger;
 
-        @Override
-        public synchronized void propertyValueChanged(final RDFResource resource, RDFProperty property, Collection oldValues) {
-            if (!resource.getProtegeType().getNamedSuperclasses(true).contains(owlModel.getRDFSNamedClass("sensor"))) {
-                return;
-            }
-            if (!property.getName().equals("has-value-of-service")) {
-                return;
-            }
-            Map<String, Map<String, String>> mapping = GlobalVars.valueMapping;
-            String tempValue = resource.getPropertyValue(property).toString();
-            final String newValue;
-            Map<String, String> valueMapping = mapping.get(resource.getName());
+    private AgentController x3DController;
+    private AgentContainer container;
 
-            if (valueMapping != null) {
-                newValue = valueMapping.get(tempValue);
-            } else {
-                newValue = tempValue;
-            }
-        }
-    };
-    private OWLModel owlModel;
-    private MainWindow mainWindow;
-    private JFrame memoryMonitor;
+    private OWLModel datacenterOwlModel;
+
+    private ProtegeFactory protegeFactory;
+    private List<IMonitor> serverMonitors;
+    private IMonitor tasksQueueMonitor;
 
     @Override
     protected void setup() {
@@ -58,69 +47,128 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-            owlModel = (OWLModel) args[0];
-            hasAcceptableValue = owlModel.getRDFProperty("AcceptableSensorValue");
+            datacenterOwlModel = (OWLModel) args[0];
+            protegeFactory = new ProtegeFactory(datacenterOwlModel);
         } else {
             System.out.println("[GUIAgent] No OWLModel provided.");
             this.doDelete();
             return;
         }
-        
-        try {
-            this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
-        } catch (StaleProxyException ex) {
-            Logger.getLogger(GUIAgent.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        serverMonitors = new ArrayList<IMonitor>();
+        tasksQueueMonitor = new TasksQueueMonitor(protegeFactory);
+        container = getContainerController();
 
-        // Start the Swing GUI
-        Runnable r = new Runnable() {
+        enviromentMonitor = new ActionsOutputFrame("Enviroment");
+        enviromentLogger = new LoggerGUI("EnviromentManagementLog");
+        datacenterLogger = new LoggerGUI("DatacenterManagementLog");
 
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(
-                            UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                }
+        enviromentLogger.setLogPath("EnviromentManagementLogs/");
+        datacenterLogger.setLogPath("DatacenterManagementLogs/");
+
+        JFrame frame = new JFrame("System Control Unit");
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        menuBar = new JMenuBar();
 
 
-                // Start the Main Window
-                GUIAgent.this.mainWindow = new MainWindow(GUIAgent.this, owlModel);
-                mainWindow.setLocationRelativeTo(null);
-                mainWindow.setState(JFrame.MAXIMIZED_BOTH);
-                mainWindow.setVisible(true);
+        frame.setJMenuBar(menuBar);
 
+        JMenu fileMenu = new JMenu("File");
+        JMenu windowMenu = new JMenu("Window");
 
-                // Start the Memory Monitor window, but keep it hidden
-                //final MemoryMonitor demo = new MemoryMonitor();
-                //memoryMonitor = new JFrame("Memory Monitor");
-                //memoryMonitor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                //memoryMonitor.getContentPane().add("Center", demo);
-                //memoryMonitor.pack();
-                //memoryMonitor.setSize(new Dimension(400, 500));
-                //memoryMonitor.setVisible(false);
-                /*WindowListener l = new WindowAdapter() {
+        JMenu enviromentalControlMenu = new JMenu("Enviromental Control");
+        JMenu datacenterControlMenu = new JMenu("Datacenter Control");
 
-                    public void windowClosing(WindowEvent e) {
-                        System.exit(0);
-                    }
+        AbstractAction exitAction = new AbstractAction("Exit") {
 
-                    public void windowDeiconified(WindowEvent e) {
-                        demo.surf.start();
-                    }
-
-                    public void windowIconified(WindowEvent e) {
-                        demo.surf.stop();
-                    }
-                };*/
-
-                //memoryMonitor.addWindowListener(l);
-                //demo.surf.start();
+            public void actionPerformed(ActionEvent e) {
+                shutdownPlatform();
             }
         };
-        SwingUtilities.invokeLater(r);
+
+        AbstractAction showSelfHealingLogMenuItem = new AbstractAction("Log") {
+
+            public void actionPerformed(ActionEvent e) {
+                enviromentLogger.setVisible(true);
+            }
+        };
+
+        AbstractAction showDatacenterLogMenuItem = new AbstractAction("Log") {
+
+            public void actionPerformed(ActionEvent e) {
+                datacenterLogger.setVisible(true);
+            }
+        };
+
+        AbstractAction showEnviromentMonitorWindowMenuItem = new AbstractAction("Context Monitor") {
+
+            public void actionPerformed(ActionEvent e) {
+                //  shutdownPlatform();
+                showEnviromentMonitor();
+            }
+        };
+
+        AbstractAction showServerMonitorsMenuItem = new AbstractAction("Server Monitors") {
+
+            public void actionPerformed(ActionEvent e) {
+
+                for (IMonitor monitor : serverMonitors) {
+                    monitor.destroyStandaloneWindow();
+                }
+
+                serverMonitors.clear();
+
+                Collection<Server> servers = protegeFactory.getAllServerInstances();
+                for (Server server : servers) {
+                    IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+                    serverMonitor.executeStandaloneWindow();
+                    serverMonitors.add(serverMonitor);
+                }
+            }
+        };
+
+        AbstractAction showTasksQueueMenuItem = new AbstractAction("Tasks Queue") {
+
+            public void actionPerformed(ActionEvent e) {
+
+                tasksQueueMonitor.destroyStandaloneWindow();
+                tasksQueueMonitor.executeStandaloneWindow();
+            }
+        };
+
+        AbstractAction showDatacenterSimulationWindowMenuItem = new AbstractAction("X3D  Representation") {
+
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    x3DController = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
+                    x3DController.start();
+                } catch (StaleProxyException e1) {
+                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+            }
+        };
+
+        fileMenu.add(exitAction);
+
+        windowMenu.add(enviromentalControlMenu);
+        windowMenu.add(datacenterControlMenu);
+
+        enviromentalControlMenu.add(showEnviromentMonitorWindowMenuItem);
+        enviromentalControlMenu.add(showSelfHealingLogMenuItem);
+
+        datacenterControlMenu.add(showDatacenterLogMenuItem);
+        datacenterControlMenu.add(showTasksQueueMenuItem);
+        datacenterControlMenu.add(showServerMonitorsMenuItem);
+        datacenterControlMenu.add(showDatacenterSimulationWindowMenuItem);
+
+        menuBar.add(fileMenu);
+        menuBar.add(windowMenu);
+
+        frame.pack();
+        frame.setVisible(true);
 
         this.addBehaviour(new ReceiveChangesGUIBehaviour(this));
-        owlModel.addPropertyValueListener(pvl);
 
     }
 
@@ -133,38 +181,29 @@ public class GUIAgent extends GuiAgent implements GUIAgentExternal {
         }
     }
 
-    @Override
-    protected void onGuiEvent(GuiEvent arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private void showEnviromentMonitor() {
+
+        enviromentMonitor.setVisible(true);
     }
 
-
-    public void showMemoryMonitor() {
-        System.out.println("[GUIAgent] Showing the Memory Monitor.");
-        this.memoryMonitor.setVisible(true);
+    public void setEnviromentMonitorActionsList(ArrayList<String[]> list) {
+        enviromentMonitor.setActionsList(list);
     }
 
-    public void startJADEGUI() {
-        System.out.println("[GUIAgent] Starting a new RMA agent/JADE GUI.");
-        try {
-            this.getContainerController().createNewAgent("RMA", "jade.tools.rma.rma", null).start();
-        } catch (Exception ex) {
-        }
-
+    public void setEnviromentMonitorBrokenStatesList(ArrayList<String[]> list) {
+        enviromentMonitor.setBrokenStatesList(list);
     }
 
-    public void addIndividual(final String name) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                mainWindow.addIndividual(name);
-
-            }
-        });
+    public void setEnviromentMonitorBrokenPoliciesList(ArrayList<String> list) {
+        enviromentMonitor.setBrokenPoliciesList(list);
     }
 
-    public void startRealTimePlot(long interval) {
-        this.addBehaviour(new LiveGraphGUIBehaviour(this, owlModel, interval));
-
+    public void logEnviromentManagementInformation(Color color, String header, ArrayList message) {
+        enviromentLogger.log(color, header, message);
     }
+
+    public void logDatacenterManagementInformation(Color color, String header, ArrayList message) {
+        datacenterLogger.log(color, header, message);
+    }
+
 }

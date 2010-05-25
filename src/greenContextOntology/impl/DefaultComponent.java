@@ -1,6 +1,5 @@
 package greenContextOntology.impl;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
@@ -124,7 +123,7 @@ public class DefaultComponent extends DefaultResource
     }
 
 
-    public void setUsed(int newUsed, OntModel model) {
+    public void setUsed(int newUsed) {
         setPropertyValue(getUsedProperty(), new java.lang.Integer(newUsed), model);
     }
 

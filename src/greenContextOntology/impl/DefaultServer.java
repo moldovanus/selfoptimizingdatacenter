@@ -209,7 +209,7 @@ public class DefaultServer extends DefaultResource
             //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
             coreCount--;
             receivedSLA.setCpuReceived(requestedCPU, model);
-            core.setUsed(core.getUsed() + requestedCPU, model);
+            core.setUsed(core.getUsed() + requestedCPU);
             receivedSLA.addReceivedCoreIndex(index);
             index++;
         }
@@ -221,14 +221,14 @@ public class DefaultServer extends DefaultResource
         int requestedMemory = requestedSLA.getMemoryMaxAcceptableValue();
         int receivedMemory = (requestedMemory < availableMemory) ? requestedMemory : availableMemory;
         receivedSLA.setMemoryReceived(receivedMemory, model);
-        memory.setUsed(memory.getUsed() + receivedMemory, model);
+        memory.setUsed(memory.getUsed() + receivedMemory);
 
         Storage storage = this.getAssociatedStorage();
         int availableStorage = storage.getTotal() - storage.getUsed();
         int requestedStorage = requestedSLA.getStorageMaxAcceptableValue();
         int receivedStorage = (requestedStorage < availableStorage) ? requestedStorage : availableStorage;
         receivedSLA.setStorageReceived(receivedStorage, model);
-        storage.setUsed(storage.getUsed() + receivedStorage, model);
+        storage.setUsed(storage.getUsed() + receivedStorage);
 
         //add task to ontology
         Collection tasks = getRunningTasks();
@@ -266,7 +266,7 @@ public class DefaultServer extends DefaultResource
             //TODO : to check the multicore modification if it's ok
             if (receivedCoresIndexes.contains(i)) {
                 int receivedCPU = receivedSLA.getCpuReceived();
-                core.setUsed(core.getUsed() - receivedCPU, model);
+                core.setUsed(core.getUsed() - receivedCPU);
                 receivedSLA.removeReceivedCoreIndex(i);
             }
 
@@ -275,12 +275,12 @@ public class DefaultServer extends DefaultResource
         receivedSLA.setCpuReceived(0, model);
 
         Memory memory = this.getAssociatedMemory();
-        memory.setUsed(memory.getUsed() - receivedSLA.getMemoryReceived(), model);
+        memory.setUsed(memory.getUsed() - receivedSLA.getMemoryReceived());
         receivedSLA.setMemoryReceived(0, model);
 
         Storage storage = this.getAssociatedStorage();
 
-        storage.setUsed(storage.getUsed() - receivedSLA.getStorageReceived(), model);
+        storage.setUsed(storage.getUsed() - receivedSLA.getStorageReceived());
         receivedSLA.setStorageReceived(0, model);
 
         //remove task from ontology
@@ -586,7 +586,7 @@ public class DefaultServer extends DefaultResource
                     ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
                     received.setCores(received.getCores() + 1, model);
                     //TODO: sinchronize used with given to task  - maybe finer control - CPU per core per task not just global cpu anr cor no
-                    core.setUsed(core.getMinAcceptableValue(), model);
+                    core.setUsed(core.getMinAcceptableValue());
 
                     //in order to continue and assign the next empty core to the next task
                     break;
@@ -609,7 +609,7 @@ public class DefaultServer extends DefaultResource
                 ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
                 received.setMemoryReceived(received.getMemoryReceived() + partition, model);
             }
-            memory.setUsed(remaining, model);
+            memory.setUsed(remaining);
         }
 
         Storage storage = getAssociatedStorage();
@@ -625,7 +625,7 @@ public class DefaultServer extends DefaultResource
                 ReceivedTaskInfo received = ((Task) task).getReceivedInfo();
                 received.setStorageReceived(received.getStorageReceived() + partition, model);
             }
-            storage.setUsed(remaining, model);
+            storage.setUsed(remaining);
         }
     }
 
@@ -637,18 +637,18 @@ public class DefaultServer extends DefaultResource
         Object[] cores = this.getAssociatedCPU().getAssociatedCore().toArray();
         for (Integer index : receivedCores) {
             Core core = (Core) cores[index];
-            core.setUsed(core.getUsed() + (int) resources[0], model);
+            core.setUsed(core.getUsed() + (int) resources[0]);
         }
         receivedTaskInfo.setCpuReceived(((Core) cores[0]).getUsed() + (int) resources[0], model);
 
         Memory memory = this.getAssociatedMemory();
         int newMemoryValue = (memory.getUsed() + (int) resources[1]);
-        memory.setUsed(newMemoryValue, model);
+        memory.setUsed(newMemoryValue);
         receivedTaskInfo.setMemoryReceived(newMemoryValue);
 
         Storage storage = this.getAssociatedStorage();
         int newStorageValue = (storage.getUsed() + (int) resources[2]);
-        storage.setUsed(newStorageValue, model);
+        storage.setUsed(newStorageValue);
         receivedTaskInfo.setStorageReceived(newStorageValue);
 
         //To change body of implemented methods use File | Settings | File Templates.

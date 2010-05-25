@@ -15,6 +15,6 @@ public interface IMonitor {
 
     JPanel getMonitorPanel();
 
-    
+    void destroyStandaloneWindow();
     
 }

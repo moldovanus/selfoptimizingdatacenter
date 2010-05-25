@@ -45,10 +45,13 @@ public class ServerMonitorXYPlotter extends ServerMonitor {
 
         Collection cores = server.getAssociatedCPU().getAssociatedCore();
         int coresCount = cores.size();
+        if ( coresCount % 2 != 0){
+            coresCount ++;
+        }
 
         coresMonitors = new ArrayList<ResourceMonitorPlotter>();
 
-        monitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, coresCount / (coresCount / 2) + 2));
+        monitorPanel.setLayout(new GridLayout(coresCount / 2 + 1, 2));
 
         for (Object o : cores) {
             Core core = (Core) o;

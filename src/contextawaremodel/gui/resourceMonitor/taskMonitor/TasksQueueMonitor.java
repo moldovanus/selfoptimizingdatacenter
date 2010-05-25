@@ -89,13 +89,15 @@ public class TasksQueueMonitor extends AbstractMonitor {
     }
 
     public void executeStandaloneWindow() {
-        JFrame frame = new JFrame("Tasks Queue Monitor");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(monitorPanel, "Center");
-        frame.setSize(400, 600);
-        frame.setVisible(true);
+        standaloneWindow = new JFrame("Tasks Queue Monitor");
+        standaloneWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        standaloneWindow.setLayout(new BorderLayout());
+        standaloneWindow.add(monitorPanel, "Center");
+        standaloneWindow.setSize(400, 600);
+        standaloneWindow.setVisible(true);
     }
+
+
 
 
 }

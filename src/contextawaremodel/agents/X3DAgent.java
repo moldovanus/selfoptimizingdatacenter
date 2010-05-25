@@ -120,7 +120,7 @@ public class X3DAgent extends Agent {
         // this.policyConversionModel = (OntModel) args[0];
         System.out.println("[X3DAgent] : Hellooo ! ");
         frame = new JFrame("X3D vizualization");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container contentPane = frame.getContentPane();
 
         // Setup browser parameters

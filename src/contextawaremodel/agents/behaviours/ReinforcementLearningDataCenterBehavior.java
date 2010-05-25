@@ -14,16 +14,12 @@ import actionselection.context.ContextSnapshot;
 import actionselection.context.DatacenterMemory;
 import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
-import actionselection.gui.ActionsOutputFrame;
+import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.gui.resourceMonitor.IMonitor;
-import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
-import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
-import contextawaremodel.worldInterface.dtos.ServerDto;
-import contextawaremodel.worldInterface.dtos.StorageDto;
+import contextawaremodel.sensorapi.SensorAPI;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -39,8 +35,8 @@ import org.apache.log4j.Logger;
 import selfHealingOntology.SelfHealingProtegeFactory;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author Administrator
@@ -55,7 +51,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private ContextSnapshot smallestEntropyContext;
     private Memory memory;
     private DatacenterMemory datacenterMemory;
-    private ActionsOutputFrame resultsFrame;
     private ReinforcementLearningAgent agent;
     private boolean contextBroken = false;
     private ProtegeFactory protegeFactory;
@@ -64,11 +59,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private Negotiator negotiator;
     //  private TaskManagement taskManagementWindow;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel contextAwareModel, OntModel policyConversionModel, JenaOWLModel owlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
+    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel, JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel, JenaOWLModel selfHealingOwlModel, Memory memory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
-        this.contextAwareModel = contextAwareModel;
-        this.policyConversionModel = policyConversionModel;
+        this.contextAwareModel = datacenterOwlModel;
+        this.policyConversionModel = datacenterPolicyConversionModel;
         this.selfHealingPolicyConversionModel = selfHealingPolicyConversionModel;
         this.selfHealingOwlModel = selfHealingOwlModel;
         this.datacenterMemory = datacenterMemory;
@@ -96,10 +91,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 TaskMonitor monitor = new TaskMonitor(task);
                 monitor.executeStandaloneWindow();
         */
-        TasksQueueMonitor tasksQueueMonitor = new TasksQueueMonitor(protegeFactory);
-        tasksQueueMonitor.executeStandaloneWindow();
+        //TasksQueueMonitor tasksQueueMonitor = new TasksQueueMonitor(protegeFactory);
+        //tasksQueueMonitor.executeStandaloneWindow();
 
-        // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, policyConversionModel, agent);
+        // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, datacenterPolicyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
         /*
@@ -126,16 +121,16 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 core_1.setMaxAcceptableValue(1500);
                 core_1.setMinAcceptableValue(1100);
                 core_1.setTotal(1655);
-                core_1.setUsed(1,policyConversionModel);
+                core_1.setUsed(1,datacenterPolicyConversionModel);
 
                 serverMemory.setMaxAcceptableValue(600);
                 serverMemory.setMinAcceptableValue(1);
-                serverMemory.setUsed(1,policyConversionModel);
+                serverMemory.setUsed(1,datacenterPolicyConversionModel);
                 serverMemory.setTotal(600);
 
                 storage.setMaxAcceptableValue(600);
                 storage.setMinAcceptableValue(1);
-                storage.setUsed(1,policyConversionModel);
+                storage.setUsed(1,datacenterPolicyConversionModel);
                 storage.setTotal(700);
 
                 cpu.addAssociatedCore(core_1);
@@ -155,10 +150,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 System.exit(1);
         */
 
-        this.owlModel = owlModel;
-        resultsFrame = new ActionsOutputFrame("Datacenter");
-
-        swrlFactory = new SWRLFactory(contextAwareModel);
+        this.owlModel = jenaDatacenterOwlModel;
+        // resultsFrame = new ActionsOutputFrame("Datacenter");
+        this.memory = memory;
+        swrlFactory = new SWRLFactory(datacenterOwlModel);
 
         negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
@@ -173,83 +168,83 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
        Simulate task 1 ending activity\
         */
 
-        //synchronize X3D display values with ontology values
+        //add server web service information pooling mechanism
         Collection<Server> servers = protegeFactory.getAllServerInstances();
-
-
         for (Server server : servers) {
-            if (server.hasServerIPAddress()) {
-                HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
-                server.setProxy(proxy);
-                ServerDto serverInfo = proxy.getServerInfo();
+            SensorAPI.addServerListener(server, protegeFactory);
+        }
 
-                CPU cpu = server.getAssociatedCPU();
-                int coreCount = serverInfo.getCoreCount();
-                Collection cores = new ArrayList(coreCount);
-                for (int i = 0; i < coreCount; i++) {
-                    cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
-                }
-                cpu.setAssociatedCore(cores);
+        /*  for (Server server : servers) {
+        if (server.hasServerIPAddress()) {
+            HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+            server.setProxy(proxy);
+            ServerDto serverInfo = proxy.getServerInfo();
 
-                int totalCPU = serverInfo.getTotalCPU();
-                Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
-                int index = 0;
-                int freeCPU = totalCPU - (Integer) freeCPUValues[0];
-                for (Object item : cores) {
-                    Core core = (Core) item;
-                    core.setMaxAcceptableValue(totalCPU);
-                    core.setMinAcceptableValue(1);
-                    core.setTotal(totalCPU);
-                    core.setUsed(freeCPU, policyConversionModel);
-                }
-
-                greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
-                int totalMemory = serverInfo.getTotalMemory();
-                serverMemory.setMaxAcceptableValue(totalMemory);
-                serverMemory.setTotal(totalMemory);
-                serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(), policyConversionModel);
-
-                Storage storage = server.getAssociatedStorage();
-                List<StorageDto> storageList = serverInfo.getStorage();
-                StorageDto targetStorage = null;
-                String storagePath = (String) server.getVirtualMachinesPath().iterator().next();
-                for (StorageDto storageDto : storageList) {
-                    if (storageDto.getName().charAt(0) == storagePath.charAt(0)) {
-                        targetStorage = storageDto;
-                        break;
-                    }
-                }
-
-                int storageSize = targetStorage.getSize();
-                storage.setMaxAcceptableValue(storageSize);
-                storage.setTotal(storageSize);
-                storage.setUsed(storageSize - targetStorage.getFreeSpace(), policyConversionModel);
+            CPU cpu = server.getAssociatedCPU();
+            int coreCount = serverInfo.getCoreCount();
+            Collection cores = new ArrayList(coreCount);
+            for (int i = 0; i < coreCount; i++) {
+                cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
             }
-            IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
-            serverMonitor.executeStandaloneWindow();
+            cpu.setAssociatedCore(cores);
 
-            /*  try {
+            int totalCPU = serverInfo.getTotalCPU();
+            Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
+            int index = 0;
+            int freeCPU = totalCPU - (Integer) freeCPUValues[0];
+            for (Object item : cores) {
+                Core core = (Core) item;
+                core.setMaxAcceptableValue(totalCPU);
+                core.setMinAcceptableValue(1);
+                core.setTotal(totalCPU);
+                core.setUsed(freeCPU, datacenterPolicyConversionModel);
+            }
+
+            greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
+            int totalMemory = serverInfo.getTotalMemory();
+            serverMemory.setMaxAcceptableValue(totalMemory);
+            serverMemory.setTotal(totalMemory);
+            serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(), datacenterPolicyConversionModel);
+
+            Storage storage = server.getAssociatedStorage();
+            List<StorageDto> storageList = serverInfo.getStorage();
+            StorageDto targetStorage = null;
+            String storagePath = (String) server.getVirtualMachinesPath().iterator().next();
+            for (StorageDto storageDto : storageList) {
+                if (storageDto.getName().charAt(0) == storagePath.charAt(0)) {
+                    targetStorage = storageDto;
+                    break;
+                }
+            }
+
+            int storageSize = targetStorage.getSize();
+            storage.setMaxAcceptableValue(storageSize);
+            storage.setTotal(storageSize);
+            storage.setUsed(storageSize - targetStorage.getFreeSpace(), datacenterPolicyConversionModel);
+        }
+        //IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+        //serverMonitor.executeStandaloneWindow();
+        *//*  try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }*/
+            }*//*
 
-            /* if (server.getIsInLowPowerState()) {
+            *//* if (server.getIsInLowPowerState()) {
                 SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
                 sendServerToLowPowerStateCommand.executeOnX3D(agent);
             } else {
                 WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
                 wakeUpServerCommand.executeOnX3D(agent);
-            }*/
-
-        }
+            }*//*
+        }*/
 
 
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
 
         //taskManagementWindow.setTasks(tasks);
         // taskManagementWindow.setVisible(true);
-        resultsFrame.setVisible(true);
+        // resultsFrame.setVisible(true);
 
 
         logger = Logger.getLogger(ReinforcementLearningDataCenterBehavior.class);
@@ -606,6 +601,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     @Override
     protected void onTick() {
 
+
         try {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
@@ -636,7 +632,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         initialContext.setContextEntropy(entropyAndPolicy.getFirst());
         initialContext.setRewardFunction(computeRewardFunction(null, initialContext, null));
         queue.add(initialContext);
-        resultsFrame.setActionsList(null);
+        //   resultsFrame.setActionsList(null);
 
         if (entropyAndPolicy.getSecond() != null) {
 
@@ -666,8 +662,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     brokenQoSPolicies.add(policy.getName().split("#")[1]);
                 }
             }
-
-            agent.getSelfOptimizingLogger().log(Color.ORANGE, "Broken policies", brokenQoSPolicies);
+            try {
+                MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.ORANGE, "Broken policies", brokenQoSPolicies});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            //agent.getSelfOptimizingLogger().log(Color.ORANGE, "Broken policies", brokenQoSPolicies);
 
             Collection<Server> servers = protegeFactory.getAllServerInstances();
             Collection<Task> tasks = protegeFactory.getAllTaskInstances();
@@ -680,8 +680,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             for (Task task : tasks) {
                 currentState.add(task.toString());
             }
-
-            agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
+            try {
+                MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.red, "Current state", currentState});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            // agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
 
             // End of logging
 
@@ -754,7 +758,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 }*/
             }
 
-            agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
+            try {
+                MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.BLUE, "Corrective actions", message});
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            // agent.getSelfOptimizingLogger().log(Color.BLUE, "Corrective actions", message);
 
             int resultsSize = resultQueue.size();
             if (resultsSize > 0) {
@@ -796,7 +805,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     currentState.add(task.toString());
                 }
 
-                agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
+                try {
+                    MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.GREEN, "Current state", currentState});
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                //agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
             }
         }
 

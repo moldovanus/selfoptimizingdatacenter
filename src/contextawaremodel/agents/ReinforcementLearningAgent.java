@@ -44,8 +44,8 @@ public class ReinforcementLearningAgent extends Agent {
     private int runCount = 0;
     private boolean contextIsOK = true;
     private boolean contextDirty = false;
-    private LoggerGUI selfHealingLogger;
-    private LoggerGUI selfOptimizingLogger;
+   // private LoggerGUI selfHealingLogger;
+   // private LoggerGUI selfOptimizingLogger;
 
     public boolean isContextDirty() {
         return contextDirty;
@@ -83,22 +83,6 @@ public class ReinforcementLearningAgent extends Agent {
         this.rlTime = rlTime;
         this.totalRunningTime += rlTime;
         runCount++;
-    }
-
-    public LoggerGUI getSelfHealingLogger() {
-        return selfHealingLogger;
-    }
-
-    public void setSelfHealingLogger(LoggerGUI selfHealingLogger) {
-        this.selfHealingLogger = selfHealingLogger;
-    }
-
-    public LoggerGUI getSelfOptimizingLogger() {
-        return selfOptimizingLogger;
-    }
-
-    public void setSelfOptimizingLogger(LoggerGUI selfOptimizingLogger) {
-        this.selfOptimizingLogger = selfOptimizingLogger;
     }
 
     public void sendRefuseMessage() {
@@ -171,11 +155,10 @@ public class ReinforcementLearningAgent extends Agent {
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {
-            selfHealingLogger = new LoggerGUI("selfHealingLog");
-            selfHealingLogger.setLogPath("logs/");
+          
 
-            selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
-            selfOptimizingLogger.setLogPath("logs/");
+            //selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
+            //selfOptimizingLogger.setLogPath("logs/");
 
             this.contextAwareModel = (JenaOWLModel) args[0];
             this.policyConversionModel = (OntModel) args[1];

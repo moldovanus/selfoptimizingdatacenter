@@ -1,12 +1,13 @@
 package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
+import contextawaremodel.gui.resourceMonitor.taskMonitor.TaskMonitor;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by IntelliJ IDEA.
@@ -59,9 +60,10 @@ public class ServerTasksMonitor  {
         tasksPanel.removeAll();
         for (Object o : server.getRunningTasks()) {
             Task task = (Task) o;
-            JLabel label = new JLabel(task.getTaskName());
-            label.setToolTipText(task.toString());
-            tasksPanel.add(label);
+            //JLabel label = new JLabel(task.getTaskName());
+            //label.setToolTipText(task.toString());
+            TaskMonitor taskMonitor = new TaskMonitor(task);
+            tasksPanel.add(taskMonitor.getMonitorPanel());
         }
     }
 
