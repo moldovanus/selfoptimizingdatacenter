@@ -12,7 +12,7 @@ import java.util.Iterator;
  *
  * @version generated on Thu Apr 15 14:24:33 EEST 2010
  */
-public interface ReceivedTaskInfo extends ContextElement {
+public interface ReceivedTaskInfo extends ContextElement ,CloneableOntologyElement{
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cores
     int getCores();

@@ -67,7 +67,7 @@ public class TasksQueueMonitor extends AbstractMonitor {
                 continue;
             }
 
-            JLabel label = new JLabel(task.getLocalName());
+            JLabel label = new JLabel(task.getTaskName());
             JPanel panel = new JPanel();
             panel.setLayout(new BorderLayout());
             if (generatedColors.containsKey(label.getText())) {

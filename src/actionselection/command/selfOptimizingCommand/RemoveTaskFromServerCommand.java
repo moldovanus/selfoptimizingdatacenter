@@ -13,6 +13,8 @@ import jade.core.Agent;
 
 import java.io.IOException;
 
+import benchmark.TaskLifeManager;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Moldovanus
@@ -37,6 +39,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(null);
         server.removeRunningTasks(task, model);
+        TaskLifeManager.stopTaskTimer(task);
     }
 
     public void rewind(OntModel model) {
@@ -59,11 +62,11 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);
-             proxy.deleteVirtualMachine(task.getName());
-        }else{
+            proxy.deleteVirtualMachine(task.getName());
+        } else {
             System.err.println("Proxy is null");
         }
-     //   throw new UnsupportedOperationException("Not supported yet.");
+        //   throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public String[] toStringArray() {

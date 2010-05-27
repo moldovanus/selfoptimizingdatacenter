@@ -16,6 +16,9 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
+import benchmark.WorkLoadSequence;
+import benchmark.TaskLifeManager;
+import benchmark.WorkLoadGenerator;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
@@ -71,6 +74,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.datacenterMemory = datacenterMemory;
         this.memory = memory;
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
+
+        WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
+        WorkLoadGenerator.generateWorkload(sequence, protegeFactory);
+
 
         /* Task task = protegeFactory.createTask("TestTask");
                 RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
@@ -242,6 +249,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
 
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+        for (Task task : tasks) {
+            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
+        }
 
         //taskManagementWindow.setTasks(tasks);
         // taskManagementWindow.setVisible(true);
@@ -704,7 +714,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
                 for (Task task : allTasks) {
                     if (!task.isRunning()) {
-
                         Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
                         Server server = getMinDistanceServer(task);
                         if (server == null) {

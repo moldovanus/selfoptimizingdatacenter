@@ -5,6 +5,7 @@
 package actionselection.command.selfOptimizingCommand;
 
 import actionselection.utils.MessageDispatcher;
+import benchmark.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
@@ -42,6 +43,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
         server.addRunningTasks(task, model);
+        TaskLifeManager.stopTaskTimer(task);
     }
 
     /**

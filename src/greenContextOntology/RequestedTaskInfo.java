@@ -9,7 +9,7 @@ import edu.stanford.smi.protegex.owl.model.RDFProperty;
  *
  * @version generated on Thu Apr 15 14:24:33 EEST 2010
  */
-public interface RequestedTaskInfo extends ContextElement {
+public interface RequestedTaskInfo extends ContextElement,CloneableOntologyElement {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cores
 

@@ -27,10 +27,10 @@ import jade.lang.acl.ACLMessage;
 import selfHealingOntology.*;
 
 import java.awt.*;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Queue;
-import java.io.IOException;
 
 
 /**
