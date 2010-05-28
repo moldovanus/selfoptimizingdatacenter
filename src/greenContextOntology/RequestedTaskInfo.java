@@ -9,7 +9,7 @@ import edu.stanford.smi.protegex.owl.model.RDFProperty;
  *
  * @version generated on Thu Apr 15 14:24:33 EEST 2010
  */
-public interface RequestedTaskInfo extends ContextElement,CloneableOntologyElement {
+public interface RequestedTaskInfo extends ContextElement, CloneableOntologyElement {
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cores
 
@@ -20,7 +20,8 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasCores();
 
     void setCores(int newCores, OntModel model);
-     void setCores(int newCores);
+
+    void setCores(int newCores);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cpuMaxAcceptableValue
@@ -32,6 +33,7 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasCpuMaxAcceptableValue();
 
     void setCpuMaxAcceptableValue(int newCpuMaxAcceptableValue, OntModel model);
+
     void setCpuMaxAcceptableValue(int newCpuMaxAcceptableValue);
 
 
@@ -44,7 +46,8 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasCpuMinAcceptableValue();
 
     void setCpuMinAcceptableValue(int newCpuMinAcceptableValue, OntModel model);
-     void setCpuMinAcceptableValue(int newCpuMinAcceptableValue);
+
+    void setCpuMinAcceptableValue(int newCpuMinAcceptableValue);
 
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#memoryMaxAcceptableValue
@@ -56,6 +59,7 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasMemoryMaxAcceptableValue();
 
     void setMemoryMaxAcceptableValue(int newMemoryMaxAcceptableValue, OntModel model);
+
     void setMemoryMaxAcceptableValue(int newMemoryMaxAcceptableValue);
 
 
@@ -68,6 +72,7 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasMemoryMinAcceptableValue();
 
     void setMemoryMinAcceptableValue(int newMemoryMinAcceptableValue, OntModel model);
+
     void setMemoryMinAcceptableValue(int newMemoryMinAcceptableValue);
 
 
@@ -91,5 +96,5 @@ public interface RequestedTaskInfo extends ContextElement,CloneableOntologyEleme
     boolean hasStorageMinAcceptableValue();
 
     void setStorageMinAcceptableValue(int newStorageMinAcceptableValue);
-  
+
 }

@@ -110,7 +110,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             //TODO: if needed on the else branch the requested values can be negotiated in order to give more resources than needed to the task
             //negotiate CPU max optimum value
-            if (maxCPU - usedCPU < minRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) {
+            if ((maxCPU - usedCPU < minRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) && (maxCPU < totalCPU)) {
 
                 int[] values;
                 int[] membership = new int[]{1, 0};
@@ -199,7 +199,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
         int minRequestedMemory = requestedTaskInfo.getMemoryMinAcceptableValue();
 
         //negotiate Memory max optimum value
-        if (maxMemory - usedMemory < minRequestedMemory && minRequestedMemory <= totalMemory - usedMemory) {
+        if ((maxMemory - usedMemory < minRequestedMemory && minRequestedMemory <= totalMemory - usedMemory) && (maxMemory < totalMemory)) {
 
             int[] values;
             int[] membership = new int[]{1, 0};
@@ -215,6 +215,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 serverValues[i] = new Value(values[i]);
                 membershipValues[i] = new Value(membership[i]);
             }
+
             //create a new membership function
             MembershipFunction serverMemoryMembershipFunction = new MembershipFunctionPieceWiseLinear(serverValues, membershipValues);
 
@@ -240,6 +241,9 @@ public class FuzzyLogicNegotiator implements Negotiator {
             try {
                 finalFuzzyInferenceSystem = FIS.createFromString(fis.toString(), true);
             } catch (RecognitionException e) {
+                for (int i = 0; i < count; i++) {
+                    System.out.println("Server " + serverValues[i] + ", Membership " + membershipValues[i]);
+                }
                 System.err.println(e.getMessage());
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 return;
@@ -271,7 +275,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
         //negotiate Storage max optimum value
 
-        if (maxStorage - usedStorage < minRequestedStorage && minRequestedStorage <= totalStorage - usedStorage) {
+        if ((maxStorage - usedStorage < minRequestedStorage && minRequestedStorage <= totalStorage - usedStorage) && (maxStorage < totalStorage)) {
 
             int[] values;
             int[] membership = new int[]{1, 0};

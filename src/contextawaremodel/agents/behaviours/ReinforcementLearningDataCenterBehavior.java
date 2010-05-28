@@ -16,10 +16,7 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.TaskLifeManager;
-import benchmark.WorkLoadFileIO;
-import benchmark.WorkLoadGenerator;
-import benchmark.WorkLoadSequence;
+import benchmark.*;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
@@ -75,12 +72,16 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.datacenterMemory = datacenterMemory;
         this.memory = memory;
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+        for (Task task : tasks) {
+            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
+        }
 
-        WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
-        WorkLoadGenerator generator = new WorkLoadGenerator();
-        generator.loadWorkLoad(sequence, protegeFactory);
+//        WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
+        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
+        //generator.loadWorkLoad(sequence, protegeFactory);
         try {
-            WorkLoadFileIO.writeWorkLoadToFile(generator,"WorkLoadFile");
+            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -253,11 +254,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             }*//*
         }*/
 
-
-        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-        for (Task task : tasks) {
-            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
-        }
 
         //taskManagementWindow.setTasks(tasks);
         // taskManagementWindow.setVisible(true);
@@ -520,6 +516,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
             for (Server serverInstance : servers) {
                 if (serverInstance.getIsInLowPowerState()) { //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
+                    System.out.println(serverInstance.getLocalName() + " " + serverInstance.getIsInLowPowerState() + " is waking up");
                     Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
                     ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
                     //if action is not already in the actions list
@@ -617,8 +614,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     @Override
     protected void onTick() {
+        smallestEntropyContext = null;
 
-
+        TaskLifeManager.kill(protegeFactory, datacenterPolicyConversionModel);
         /* try {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
@@ -707,7 +705,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 System.out.println(o.toString());
                 o.execute(datacenterPolicyConversionModel);
                 o.executeOnX3D(agent);
-                // o.executeOnWebService();   ---> to be decommented when running on servers
+                o.executeOnWebService();  // ---> to be decommented when running on servers
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -726,7 +724,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                             System.err.println("No good server was found for task " + task.getLocalName());
                             continue;
                         }
+                        System.out.println("Negotiating");
                         negotiator.negotiate(server, task);
+                        // System.out.println("Negotiated server to " + server.toString() + "and task " + task.toString());
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
@@ -736,6 +736,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
                         Command wakeUp = null;
                         if (server.getIsInLowPowerState()) {
+                            System.err.println("Wake up " + server.getLocalName());
                             wakeUp = new WakeUpServerCommand(protegeFactory, server.getName());
                             cs.getActions().add(wakeUp);
                             wakeUp.execute(datacenterPolicyConversionModel);
@@ -747,10 +748,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         if (cs.getContextEntropy() < result.getContextEntropy()) {
                             result = cs;
                             newAction.executeOnX3D(agent);
-                            //newAction.executeOnWebService();  // ---> to be decommented when running on servers
+                            newAction.executeOnWebService();  // ---> to be decommented when running on servers
                             if (wakeUp != null) {
                                 wakeUp.executeOnX3D(agent);
-                                //wakeUp.executeOnWebService();
+                                wakeUp.executeOnWebService();
                             }
                         } else {
 

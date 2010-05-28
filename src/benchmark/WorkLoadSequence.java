@@ -1,5 +1,6 @@
 package benchmark;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
 
@@ -19,13 +20,13 @@ import java.util.Random;
 public class WorkLoadSequence implements Serializable {
     private Map<String, Integer> sequence;
 
-    public WorkLoadSequence(ProtegeFactory factory, int totaltaskCount) {
+    public WorkLoadSequence(ProtegeFactory factory, int totalTaskCount, OntModel model) {
         this.sequence = new HashMap<String, Integer>();
         Collection<Task> tasks = factory.getAllTaskInstances();
         Random random = new Random();
         for (Task task : tasks) {
-            int count = random.nextInt(totaltaskCount);
-            totaltaskCount -= count;
+            int count = random.nextInt(totalTaskCount);
+            totalTaskCount -= count;
             sequence.put(task.getLocalName(), count);
         }
     }

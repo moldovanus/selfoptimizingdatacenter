@@ -43,7 +43,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
         server.addRunningTasks(task, model);
-        TaskLifeManager.stopTaskTimer(task);
+
     }
 
     /**
@@ -78,6 +78,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
+        TaskLifeManager.startTaskTimer(task);
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

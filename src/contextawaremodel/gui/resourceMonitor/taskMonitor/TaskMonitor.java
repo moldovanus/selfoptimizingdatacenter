@@ -35,7 +35,7 @@ public class TaskMonitor implements IMonitor {
 
     public TaskMonitor(Task task) {
         this.task = task;
-
+        setup();
         refreshInfoTimer = new Timer(refreshRate, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -50,15 +50,16 @@ public class TaskMonitor implements IMonitor {
             }
         });
         refreshInfoTimer.start();
-        setup();
+
     }
 
     private void refreshData() {
         ReceivedTaskInfo receivedTaskInfo = task.getReceivedInfo();
-        taskCPUMonitor.setCurrentValue(receivedTaskInfo.getCpuReceived());
-        taskMemoryMonitor.setCurrentValue(receivedTaskInfo.getMemoryReceived());
-        taskStorageMonitor.setCurrentValue(receivedTaskInfo.getStorageReceived());
-
+        if (receivedTaskInfo != null) {
+            taskCPUMonitor.setCurrentValue(receivedTaskInfo.getCpuReceived());
+            taskMemoryMonitor.setCurrentValue(receivedTaskInfo.getMemoryReceived());
+            taskStorageMonitor.setCurrentValue(receivedTaskInfo.getStorageReceived());
+        }
     }
 
     private void setup() {
@@ -86,13 +87,13 @@ public class TaskMonitor implements IMonitor {
         centerPanel.add(taskStorageMonitor.getGraphPanel());
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
-        taskPanel.add(new JLabel(task.getTaskName()), BorderLayout.NORTH);
+        taskPanel.add(new JLabel(task.getTaskName() + "(" + task.getLocalName() + ")"), BorderLayout.NORTH);
         taskPanel.add(centerPanel, BorderLayout.CENTER);
 
     }
 
     public void executeStandaloneWindow() {
-        standaloneWindow = new JFrame(task.getTaskName() + " Monitor");
+        standaloneWindow = new JFrame(task.getTaskName() + "(" + task.getLocalName() + ")" + " Monitor");
         standaloneWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         standaloneWindow.setLayout(new BorderLayout());
         standaloneWindow.add(taskPanel, "Center");

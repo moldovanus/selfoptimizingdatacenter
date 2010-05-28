@@ -14,11 +14,11 @@ import java.util.*;
  * Time: 11:03:45 AM
  * To change this template use File | Settings | File Templates.
  */
-public class WorkLoadGenerator implements Serializable {
+public class WorkLoadLoader implements Serializable {
     private Map<WorkLoadSequence, Long> workLoadSequenceMap;
     private Date currentDate;
 
-    public WorkLoadGenerator() {
+    public WorkLoadLoader() {
         this.currentDate = new java.util.Date();
         workLoadSequenceMap = new HashMap<WorkLoadSequence, Long>();
     }
@@ -30,9 +30,14 @@ public class WorkLoadGenerator implements Serializable {
             for (int i = 0; i < entry.getValue(); i++) {
                 for (Task task : tasks) {
                     if (task.getLocalName().equals(entry.getKey())) {
-                        task.clone(factory);
-                        QoSPolicy policy = factory.createQoSPolicy(task.getLocalName() + "_" + UUID.randomUUID());
-                        policy.setReferenced(task);
+                        Task clone = (Task) task.clone(factory);
+                        
+                        TaskLifeManager.addTask(factory, clone, new Random().nextInt(10),null);
+
+                        QoSPolicy policy = factory.createQoSPolicy("QoSPolicy_" + task.getLocalName() + "_" + UUID.randomUUID());
+                        policy.setReferenced(clone);
+                        policy.setRespected(false);
+                        policy.setPriority(1);
                         break;
                     }
                 }

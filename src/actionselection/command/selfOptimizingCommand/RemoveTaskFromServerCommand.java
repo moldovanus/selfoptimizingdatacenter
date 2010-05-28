@@ -39,7 +39,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(null);
         server.removeRunningTasks(task, model);
-        TaskLifeManager.stopTaskTimer(task);
+
     }
 
     public void rewind(OntModel model) {
@@ -66,6 +66,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
+        TaskLifeManager.stopTaskTimer(task);
         //   throw new UnsupportedOperationException("Not supported yet.");
     }
 

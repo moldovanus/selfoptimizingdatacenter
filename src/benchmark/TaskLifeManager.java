@@ -8,10 +8,10 @@ import greenContextOntology.QoSPolicy;
 import greenContextOntology.Task;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,29 +22,17 @@ import java.util.Map;
  */
 public class TaskLifeManager {
     private static Map<Task, Timer> tasksLifeTimer = new HashMap<Task, Timer>();
+    private static List<Task> toKill = new ArrayList<Task>();
 
     private TaskLifeManager() {
 
     }
 
     public static void addTask(final ProtegeFactory protegeFactory, final Task task, int lifeInMinutes, final OntModel model) {
-        Timer timer = new Timer(lifeInMinutes * 60, new ActionListener() {
+        Timer timer = new Timer(lifeInMinutes * 1000, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, task.getTaskName(), task.getAssociatedServer().getLocalName());
-                command.executeOnWebService();
-                command.execute(model);
-                tasksLifeTimer.remove(task);
-                for (QoSPolicy policy : protegeFactory.getAllQoSPolicyInstances()) {
-                    if (policy.getReferenced().equals(task)) {
-                        DeleteOWLIndividualCommand deleteTaskPolicyCommand = new DeleteOWLIndividualCommand(task);
-                        deleteTaskPolicyCommand.execute(model);
-                        break;
-                    }
-                }
-                DeleteOWLIndividualCommand deleteTaskCommand = new DeleteOWLIndividualCommand(task);
-                deleteTaskCommand.execute(model);
-                System.out.println(task.getLocalName() + " has been killed by task life simulator");
+                toKill.add(task);
             }
         });
         timer.setRepeats(false);
@@ -53,8 +41,35 @@ public class TaskLifeManager {
 
     }
 
+    public static void kill(final ProtegeFactory protegeFactory, final OntModel model) {
+        Task task;
+        while (toKill.size() > 0) {
+            task = toKill.remove(0);
+            System.out.println(task.getLocalName() + " running = " + task.isRunning() + " has been killed by task life simulator");
+            RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, task.getName(), task.getAssociatedServer().getLocalName());
+            command.executeOnWebService();
+            command.execute(model);
+            tasksLifeTimer.remove(task);
+            for (QoSPolicy policy : protegeFactory.getAllQoSPolicyInstances()) {
+                if (policy.getReferenced() != null && policy.getReferenced().equals(task)) {
+                    DeleteOWLIndividualCommand deleteTaskPolicyCommand = new DeleteOWLIndividualCommand(task);
+                    deleteTaskPolicyCommand.execute(model);
+                    break;
+                }
+            }
+            DeleteOWLIndividualCommand deleteTaskCommand = new DeleteOWLIndividualCommand(task);
+            deleteTaskCommand.execute(model);
+        }
+    }
+
     public static void startTaskTimer(Task task) {
+//        try {
         tasksLifeTimer.get(task).start();
+//        } catch (NullPointerException e) {
+//            System.err.println(task.getLocalName());
+//            System.err.println(e.getMessage());
+//            e.printStackTrace();
+//        }
     }
 
     public static void stopTaskTimer(Task task) {

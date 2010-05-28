@@ -67,7 +67,7 @@ public class TasksQueueMonitor extends AbstractMonitor {
                 continue;
             }
 
-            JLabel label = new JLabel(task.getTaskName());
+            JLabel label = new JLabel(task.getTaskName() + "(" + task.getLocalName() + ")");
             JPanel panel = new JPanel();
             panel.setLayout(new BorderLayout());
             if (generatedColors.containsKey(label.getText())) {
@@ -81,6 +81,7 @@ public class TasksQueueMonitor extends AbstractMonitor {
             panel.add(label, BorderLayout.CENTER);
             TaskMonitor monitor = new TaskMonitor(task);
             monitor.getMonitorPanel().setBackground(generatedColors.get(label.getText()));
+            monitor.getMonitorPanel().setBorder(BorderFactory.createLineBorder(Color.BLACK));
             taskNamesPanel.add(panel);
             taskDetailsPanel.add(monitor.getMonitorPanel());
         }

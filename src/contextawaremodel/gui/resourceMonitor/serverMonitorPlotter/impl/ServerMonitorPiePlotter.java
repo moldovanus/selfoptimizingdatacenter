@@ -132,7 +132,7 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
             ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
             Iterator<Integer> coresIterator = receivedInfo.listReceivedCoreIndex();
             int usedCPUByTask = receivedInfo.getCpuReceived();
-            String taskName = task.getTaskName();
+            String taskName = task.getLocalName();
             while (coresIterator.hasNext()) {
                 Integer index = coresIterator.next();
                 Map<String, Integer> map = coreInformation.get(index);

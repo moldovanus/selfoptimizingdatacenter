@@ -189,12 +189,16 @@ public class DefaultRequestedTaskInfo extends DefaultContextElement
     public Object clone(ProtegeFactory protegeFactory) {
         RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo(this.getLocalName() + "_" + UUID.randomUUID());
         requestedTaskInfo.setCores(this.getCores());
+
         requestedTaskInfo.setCpuMaxAcceptableValue(this.getCpuMaxAcceptableValue());
         requestedTaskInfo.setCpuMinAcceptableValue(this.getCpuMinAcceptableValue());
+
         requestedTaskInfo.setStorageMaxAcceptableValue(this.getStorageMaxAcceptableValue());
         requestedTaskInfo.setStorageMinAcceptableValue(this.getStorageMinAcceptableValue());
+
         requestedTaskInfo.setMemoryMaxAcceptableValue(this.getMemoryMaxAcceptableValue());
         requestedTaskInfo.setMemoryMinAcceptableValue(this.getMemoryMinAcceptableValue());
+
         return requestedTaskInfo;
     }
 }

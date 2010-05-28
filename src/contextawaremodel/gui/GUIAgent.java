@@ -68,7 +68,7 @@ public class GUIAgent extends Agent {
         JFrame frame = new JFrame("System Control Unit");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         menuBar = new JMenuBar();
-
+        frame.setSize(500,400);
 
         frame.setJMenuBar(menuBar);
 
@@ -165,7 +165,7 @@ public class GUIAgent extends Agent {
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
 
-        frame.pack();
+       // frame.pack();
         frame.setVisible(true);
 
         this.addBehaviour(new ReceiveChangesGUIBehaviour(this));
