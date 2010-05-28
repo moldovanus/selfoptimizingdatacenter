@@ -3,6 +3,7 @@ package benchmark;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Task;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Random;
  * Time: 11:10:19 AM
  * To change this template use File | Settings | File Templates.
  */
-public class WorkLoadSequence {
+public class WorkLoadSequence implements Serializable {
     private Map<String, Integer> sequence;
 
     public WorkLoadSequence(ProtegeFactory factory, int totaltaskCount) {

@@ -35,6 +35,8 @@ public class GlobalVars {
     public static final String MEMORY_FILE = "memory/memorySelfHealing.dat";
     public static final String MEMORY_SELFOPTIMIZING_FILE = "memory/memorySelfOptimizing.dat";
     public static final String FUZZY_LOGIC_CONTROL_FILE = "fuzzy/negotiator.fcl";
+    
+
 
     //public static final String MEMORY_DATACENTER_FILE = "memory/memory.dat";
     public static final int INDIVIDUAL_DELETED = 0;

@@ -16,9 +16,10 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.WorkLoadSequence;
 import benchmark.TaskLifeManager;
+import benchmark.WorkLoadFileIO;
 import benchmark.WorkLoadGenerator;
+import benchmark.WorkLoadSequence;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
@@ -76,8 +77,13 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
 
         WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
-        WorkLoadGenerator.generateWorkload(sequence, protegeFactory);
-
+        WorkLoadGenerator generator = new WorkLoadGenerator();
+        generator.loadWorkLoad(sequence, protegeFactory);
+        try {
+            WorkLoadFileIO.writeWorkLoadToFile(generator,"WorkLoadFile");
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         /* Task task = protegeFactory.createTask("TestTask");
                 RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
