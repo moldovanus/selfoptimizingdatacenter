@@ -6,6 +6,8 @@ import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -58,7 +60,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);

@@ -10,6 +10,8 @@ import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -71,17 +73,18 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy oldServerProxy = new HyperVServerManagementProxy(oldServer.getServerIPAddress());
-        ServerManagementProxy newServerProxy = new HyperVServerManagementProxy(newServer.getServerIPAddress());
+        ServerManagementProxyInterface oldServerProxy = ProxyFactory.createServerManagementProxy(oldServer.getServerIPAddress());
+        ServerManagementProxyInterface newServerProxy = ProxyFactory.createServerManagementProxy(newServer.getServerIPAddress());
+
         if (oldServerProxy != null && newServerProxy != null) {
-                 String path =(String) newServer.getVirtualMachinesPath().iterator().next();
+            String path = (String) newServer.getVirtualMachinesPath().iterator().next();
             oldServerProxy.moveSourceActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
                     task.getName());
             newServerProxy.moveDestinationActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
-                    "//" + newServer.getServerIPAddress() + "/" +path.split(":")[1].substring(1),
+                    "//" + newServer.getServerIPAddress() + "/" + path.split(":")[1].substring(1),
                     task.getName());
 
-        }else{
+        } else {
             System.err.println("Proxy is null");
         }
         // throw new UnsupportedOperationException("Not supported yet.");

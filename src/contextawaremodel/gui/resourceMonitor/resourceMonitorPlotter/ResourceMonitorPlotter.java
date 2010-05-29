@@ -24,6 +24,9 @@ public abstract class ResourceMonitorPlotter {
 
     protected ResourceMonitorPlotter(String resourceName) {
         this.resourceName = resourceName;
+        if ( this.resourceName.length() > 5){
+            this.resourceName = this.resourceName.substring(0,5) + "...";
+        }
         graphPanel = new JPanel();
     }
 

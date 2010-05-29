@@ -10,6 +10,8 @@ import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import jade.core.Agent;
@@ -54,7 +56,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
-        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
             proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(), server.getServerWakeUpPort());

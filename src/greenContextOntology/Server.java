@@ -1,6 +1,7 @@
 package greenContextOntology;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 
@@ -170,9 +171,9 @@ public interface Server extends Resource {
 
     void resetOptimumValues();
 
-    public ServerManagementProxy getProxy();
+    public ServerManagementProxyInterface getProxy();
 
-    public void setProxy(ServerManagementProxy proxy);
+    public void setProxy(ServerManagementProxyInterface proxy);
 
 
 }

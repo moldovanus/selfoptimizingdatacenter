@@ -1,6 +1,7 @@
 package greenContextOntology.impl;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -19,7 +20,7 @@ import java.util.Iterator;
 public class DefaultServer extends DefaultResource
         implements Server {
 
-    private ServerManagementProxy proxy;
+    private ServerManagementProxyInterface proxy;
 
     public DefaultServer(OWLModel owlModel, FrameID id) {
         super(owlModel, id);
@@ -697,11 +698,11 @@ public class DefaultServer extends DefaultResource
     }
 
 
-    public ServerManagementProxy getProxy() {
+    public ServerManagementProxyInterface getProxy() {
         return proxy;
     }
 
-    public void setProxy(ServerManagementProxy proxy) {
+    public void setProxy(ServerManagementProxyInterface proxy) {
         this.proxy = proxy;
     }
 }

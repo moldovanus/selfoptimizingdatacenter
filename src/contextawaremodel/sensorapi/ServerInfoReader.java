@@ -1,6 +1,8 @@
 package contextawaremodel.sensorapi;
 
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
 import greenContextOntology.*;
@@ -46,7 +48,7 @@ public class ServerInfoReader {
 
 
     private void refreshServerInfo() {
-        HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+       ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         server.setProxy(proxy);
         ServerDto serverInfo = proxy.getServerInfo();
 

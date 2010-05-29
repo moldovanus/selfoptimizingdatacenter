@@ -7,6 +7,8 @@ import contextawaremodel.gui.resourceMonitor.IMonitor;
 import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
 import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
@@ -118,8 +120,9 @@ public class GUIAgent extends Agent {
                 serverMonitors.clear();
 
                 Collection<Server> servers = protegeFactory.getAllServerInstances();
+                ;
                 for (Server server : servers) {
-                    IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+                    IMonitor serverMonitor = new FullServerMonitor(server, ProxyFactory.createServerManagementProxy(server.getServerIPAddress()));
                     serverMonitor.executeStandaloneWindow();
                     serverMonitors.add(serverMonitor);
                 }
