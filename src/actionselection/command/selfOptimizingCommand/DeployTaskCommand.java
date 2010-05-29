@@ -5,11 +5,12 @@
 package actionselection.command.selfOptimizingCommand;
 
 import actionselection.utils.MessageDispatcher;
+import benchmark.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -65,7 +66,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             String path = (String) server.getVirtualMachinesPath().iterator().next();
             proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
@@ -76,6 +77,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
+        TaskLifeManager.startTaskTimer(task);
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

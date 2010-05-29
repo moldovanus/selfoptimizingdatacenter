@@ -13,7 +13,7 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.TaskLifeManager;
+import benchmark.*;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
@@ -69,19 +69,18 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.datacenterMemory = datacenterMemory;
         this.memory = memory;
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
-        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-       /* for (Task task : tasks) {
-            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
-        }*/
-
-//        WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
-        //WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
-        //generator.loadWorkLoad(sequence, protegeFactory);
-        /*   try {
-           WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
-       } catch (IOException e) {
-           e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-       } */
+//        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+//
+//        for (Task task : tasks) {
+//            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
+//        }
+//
+//        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
+//        try {
+//            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
         /* Task task = protegeFactory.createTask("TestTask");
                 RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
@@ -401,7 +400,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
         ContextSnapshot newContext = queue.poll();
         if (newContext == null) {
+            Pair<Double, Policy> entropyAndPolicy = computeEntropy();
             System.out.println("Could not repair the context totally. Returning best solution.");
+            System.out.println("Broken " + entropyAndPolicy.getSecond().getLocalName() + "\n Referenced " + entropyAndPolicy.getSecond().getReferenced().toString());
             //agent.getSelfOptimizingLogger().log(Color.red, "No solution found", "Could not repair the context totally. Returning best solution.");
             return smallestEntropyContext;
         }
@@ -618,7 +619,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-      /*  try {
+        /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -626,13 +627,6 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         smallestEntropyContext = null;
 
         TaskLifeManager.kill(protegeFactory, datacenterPolicyConversionModel);
-        /* try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }*/
-        //returns true if there were commands to execute
-
 
         DatacenterMockupContext initialDataCenterContext = new DatacenterMockupContext();
         initialDataCenterContext.createMockupContextFromOntology(protegeFactory);
@@ -712,8 +706,25 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
             //TODO: check check check!  TM
             //taskManagementWindow.setClearForAdding(false);
             ContextSnapshot result = reinforcementLearning(queue);
-            Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+
+            Collection<Command> resultQueue = result.getActions();
+            ArrayList<String> message = new ArrayList<String>();
+            for (Command o : resultQueue) {
+                message.add(o.toString());
+                System.out.println(o.toString());
+                o.execute(datacenterPolicyConversionModel);
+                o.executeOnX3D(agent);
+                o.executeOnWebService();   //---> to be decommented when running on servers
+                 try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+            }
+
             if (result.getContextEntropy() > 0) {
+                Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
                 System.out.println("Negotiating....");
                 Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
                 for (Task task : allTasks) {
@@ -721,43 +732,24 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
 
                         Server server = getMinDistanceServer(task);
-
+                        if (server == null) {
+                            continue;
+                        }
                         NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
                         negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
-                        try {
+                        /*  try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        }
-                       // SelfOptimizingCommand newAction = new DeployTaskCommand(protegeFactory, server.getName(), task.getName());
+                        }*/
 
-                        SelfOptimizingCommand wakeUp = null;
-                        if (server.getIsInLowPowerState()) {
-                            System.err.println("Wake up " + server.getLocalName());
-                            wakeUp = new WakeUpServerCommand(protegeFactory, server.getName());
-                            cs.getActions().add(wakeUp);
-                            wakeUp.execute(datacenterPolicyConversionModel);
-                        }
                         cs.getActions().add(negotiateResourcesCommand);
-                       // cs.getActions().add(newAction);
-                       // newAction.execute(datacenterPolicyConversionModel);
                         cs.setContextEntropy(computeEntropy().getFirst());
-                      //  cs.setRewardFunction(computeRewardFunction(result, cs, newAction));
+
                         if (cs.getContextEntropy() < result.getContextEntropy()) {
                             result = cs;
-                            //    newAction.executeOnX3D(agent);
-                            //newAction.executeOnWebService();  // ---> to be decommented when running on servers
-                            if (wakeUp != null) {
-                                //     wakeUp.executeOnX3D(agent);
-                                //wakeUp.executeOnWebService();
-                            }
                         }
-                        negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
-                      // newAction.rewind(datacenterPolicyConversionModel);
-                        if (wakeUp != null) {
-                            wakeUp.rewind(datacenterPolicyConversionModel);
-                        }
-
+                        //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
                     }
                 }
                 datacenterMemory.memorize(initialDataCenterContext, result.getActions());
@@ -766,21 +758,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                     server.distributeRemainingResources(datacenterPolicyConversionModel);
                 }
             }
-            Collection<Command> resultQueue = result.getActions();
-            ArrayList<String> message = new ArrayList<String>();
-            for (Command o : resultQueue) {
-                message.add(o.toString());
-                System.out.println(o.toString());
-                o.execute(datacenterPolicyConversionModel);
-                o.executeOnX3D(agent);
-                // o.executeOnWebService();   ---> to be decommented when running on servers
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
 
-            }
             datacenterMemory.memorize(initialDataCenterContext, result.getActions());
 
 

@@ -69,6 +69,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
+         TaskLifeManager.stopTaskTimer(task);
         //   throw new UnsupportedOperationException("Not supported yet.");
     }
 

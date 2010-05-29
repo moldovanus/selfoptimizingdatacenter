@@ -12,8 +12,9 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
   xml:base="http://www.owl-ontologies.com/Datacenter.owl">
-  <owl:Ontology rdf:about="">    
-	</owl:Ontology>
+  <owl:Ontology rdf:about="">
+     
+  </owl:Ontology>
   <owl:Class rdf:ID="Task">
     <rdfs:subClassOf>
       <owl:Restriction>
@@ -2263,7 +2264,7 @@
             <maxAcceptableValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >1300</maxAcceptableValue>
             <minAcceptableValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >1500</minAcceptableValue>
+            >800</minAcceptableValue>
             <used rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >0</used>
             <total rdf:datatype="http://www.w3.org/2001/XMLSchema#int"

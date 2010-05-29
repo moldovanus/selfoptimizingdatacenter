@@ -444,7 +444,7 @@ public class DefaultServer extends DefaultResource
         for (Object coreInst : cores) {
 
             Core core = (Core) coreInst;
-            if (core.getUsed() + requestedSLA.getCpuMaxAcceptableValue() > core.getTotal()) {
+            if (core.getUsed() + requestedSLA.getCpuMaxAcceptableValue() > core.getMaxAcceptableValue()) {
                 continue;
             } else {
                 requestedCores--;
@@ -456,13 +456,13 @@ public class DefaultServer extends DefaultResource
         }
 
         Memory memory = this.getAssociatedMemory();
-        if (memory.getUsed() + requestedSLA.getMemoryMaxAcceptableValue() > memory.getTotal()) {
+        if (memory.getUsed() + requestedSLA.getMemoryMaxAcceptableValue() > memory.getMaxAcceptableValue()) {
             return false;
         }
 
         Storage storage = this.getAssociatedStorage();
 
-        if (storage.getUsed() + requestedSLA.getStorageMaxAcceptableValue() > storage.getTotal()) {
+        if (storage.getUsed() + requestedSLA.getStorageMaxAcceptableValue() > storage.getMaxAcceptableValue()) {
             return false;
         }
 
@@ -574,12 +574,13 @@ public class DefaultServer extends DefaultResource
 
         while (iterator.hasNext()) {
             Core core = (Core) iterator.next();
-            description += "CPU used " + core.getUsed() + " total " + core.getTotal() + "\n";
+            description += "CPU used " + core.getUsed() + " total " + core.getTotal() + " range [ " + core.getMinAcceptableValue() + ".." + core.getMaxAcceptableValue() + " ]\n";
         }
 
-        description += "Memory used " + this.getAssociatedMemory().getUsed() + " total " + this.getAssociatedMemory().getTotal() + "\n";
-        description += "Storage used " + this.getAssociatedStorage().getUsed() + " total " + this.getAssociatedStorage().getTotal() + "\n";
-
+        description += "Memory used " + this.getAssociatedMemory().getUsed() + " total " + this.getAssociatedMemory().getTotal()
+                + " range [ " + this.getAssociatedMemory().getMinAcceptableValue() + ".." + this.getAssociatedMemory().getMaxAcceptableValue() + " ]\n";
+        description += "Storage used " + this.getAssociatedStorage().getUsed() + " total " + this.getAssociatedStorage().getTotal()
+                + " range [ " + this.getAssociatedStorage().getMinAcceptableValue() + ".." + this.getAssociatedStorage().getMaxAcceptableValue() + " ]\n";
         return description;
     }
 

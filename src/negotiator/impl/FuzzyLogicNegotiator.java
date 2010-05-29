@@ -119,7 +119,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             //TODO: if needed on the else branch the requested values can be negotiated in order to give more resources than needed to the task
             //negotiate CPU max optimum value
-            if ((maxCPU - usedCPU < minRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) && (maxCPU < totalCPU)) {
+            if ((maxCPU - usedCPU < maxRequestedCPU && minRequestedCPU <= totalCPU - usedCPU) && (maxCPU < totalCPU)) {
 
                 int[] values;
                 int[] membership = new int[]{1, 0};
@@ -188,7 +188,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 //jDialogFis.repaint();
 
                 negotiatedCPU = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
-                negotiatedValues.put(NEGOTIATED_CPU, negotiatedCPU);
+                negotiatedValues.put(NEGOTIATED_CPU, negotiatedCPU - core.getUsed());
                 System.out.println("Negotiated for " + core.getLocalName() + " from " + core.getMaxAcceptableValue() +
                         " to " + negotiatedCPU);
 
@@ -210,7 +210,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
         int minRequestedMemory = requestedTaskInfo.getMemoryMinAcceptableValue();
 
         //negotiate Memory max optimum value
-        if ((maxMemory - usedMemory < minRequestedMemory && minRequestedMemory <= totalMemory - usedMemory) && (maxMemory < totalMemory)) {
+        if ((maxMemory - usedMemory < maxRequestedMemory && minRequestedMemory <= totalMemory - usedMemory) && (maxMemory < totalMemory)) {
 
             int[] values;
             int[] membership = new int[]{1, 0};
@@ -271,7 +271,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
             //finalFuzzyInferenceSystem.chart();
 
             negotiatedMemory = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
-            negotiatedValues.put(NEGOTIATED_MEMORY, negotiatedMemory);
+            negotiatedValues.put(NEGOTIATED_MEMORY, negotiatedMemory - memory.getUsed());
             System.out.println("Negotiated for " + memory.getLocalName() + " from " + memory.getMaxAcceptableValue() +
                     " to " + negotiatedMemory);
 
@@ -287,7 +287,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
         //negotiate Storage max optimum value
 
-        if ((maxStorage - usedStorage < minRequestedStorage && minRequestedStorage <= totalStorage - usedStorage) && (maxStorage < totalStorage)) {
+        if ((maxStorage - usedStorage < maxRequestedStorage && minRequestedStorage <= totalStorage - usedStorage) && (maxStorage < totalStorage)) {
 
             int[] values;
             int[] membership = new int[]{1, 0};
@@ -340,10 +340,10 @@ public class FuzzyLogicNegotiator implements Negotiator {
             //finalFuzzyInferenceSystem.chart();
 
             negotiatedStorage = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
-            negotiatedValues.put(NEGOTIATED_STORAGE, negotiatedStorage);
+            negotiatedValues.put(NEGOTIATED_STORAGE, negotiatedStorage - storage.getUsed());
             System.out.println("Negotiated for " + storage.getLocalName() + " from " + storage.getMaxAcceptableValue() +
                     " to " + negotiatedStorage);
-            storage.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());           
+            storage.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
         }
 
         return negotiatedValues;
