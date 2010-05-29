@@ -44,4 +44,14 @@ public class StorageDto {
     public void setFreeSpace(int freeSpace) {
         this.freeSpace = freeSpace;
     }
+
+    @Override
+    public boolean equals(Object storageDto) {
+        if (this == storageDto) return true;
+        if (storageDto instanceof StorageDto) {
+            if ((((StorageDto) storageDto).getSize() == size) && (((StorageDto) storageDto).getFreeSpace() == freeSpace))
+                return true;
+        }
+        return false;
+    }
 }

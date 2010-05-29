@@ -1,5 +1,12 @@
 package contextawaremodel.worldInterface.dtos;
 
+import greenContextOntology.CPU;
+import greenContextOntology.Core;
+import greenContextOntology.Server;
+import greenContextOntology.Storage;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,6 +23,60 @@ public class ServerDto {
     public List<StorageDto> storage;
     public int totalMemory;
     public int freeMemory;
+    private String serverName;
+
+    @Override
+    public boolean equals(Object sv) {
+        if (sv instanceof Server) {
+            Server server = (Server) sv;
+            CPU cpu = server.getAssociatedCPU();
+            Collection<Core> cores = cpu.getAssociatedCore();
+            ArrayList<Integer> freeCpus = new ArrayList(cores.size());
+            Storage s = server.getAssociatedStorage();
+            int st = 0;
+            for (int i = 0; i < storage.size(); i++) {
+                st += storage.get(i).getFreeSpace();
+            }
+            if (st != (s.getTotal() - s.getUsed())) {
+                return false;
+            }
+
+            int i = 0;
+            for (Core core : cores) {
+                if (freeCPU.get(i) != core.getTotal() - core.getUsed()) {
+                    i++;
+                    return false;
+                }
+                i++;
+                if (core.getTotal() != totalCPU)
+                    return false;
+            }
+
+            if (freeMemory != (server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed()))
+                return false;
+
+            if (totalMemory != server.getAssociatedMemory().getTotal()) return false;
+
+            if (coreCount != cores.size()) return false;
+        }
+        if (sv instanceof ServerDto) {
+            ServerDto sDto = (ServerDto) sv;
+            if (sDto.getCoreCount() != coreCount) return false;
+            List<Integer> freeCpus = sDto.getFreeCPU();
+            for (Integer freeCpu : freeCpus) {
+                if (!freeCPU.contains(freeCpu)) return false;
+            }
+            List<StorageDto> storages = sDto.getStorage();
+            for (StorageDto st : storages) {
+                if (!storage.contains(st)) return false;
+            }
+            if (totalMemory != sDto.getTotalMemory()) return false;
+            if (freeMemory != sDto.getFreeMemory()) return false;
+            if (totalCPU != sDto.getTotalCPU()) return false;
+        }
+
+        return true;
+    }
 
     public int getCoreCount() {
         return coreCount;
@@ -66,4 +127,11 @@ public class ServerDto {
     }
 
 
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
 }

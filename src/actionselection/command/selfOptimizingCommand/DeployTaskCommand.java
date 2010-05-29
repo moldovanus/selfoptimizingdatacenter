@@ -5,12 +5,11 @@
 package actionselection.command.selfOptimizingCommand;
 
 import actionselection.utils.MessageDispatcher;
-import benchmark.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -43,7 +42,6 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
         server.addRunningTasks(task, model);
-
     }
 
     /**
@@ -67,7 +65,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             String path = (String) server.getVirtualMachinesPath().iterator().next();
             proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
@@ -78,7 +76,6 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
-        TaskLifeManager.startTaskTimer(task);
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -95,6 +92,8 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         try {
             MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.ADD_TASK_COMMAND, taskName.split("#")[1], serverName.split("#")[1], server.getRunningTasks().size() + 1});
+
+
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -105,9 +104,27 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void rewindOnX3D(Agent agent) {
         try {
             MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
+
+
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

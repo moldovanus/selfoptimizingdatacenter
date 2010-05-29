@@ -8,6 +8,7 @@ import actionselection.command.Command;
 import actionselection.command.selfHealingCommand.DecrementCommand;
 import actionselection.command.selfHealingCommand.IncrementCommand;
 import actionselection.command.selfHealingCommand.SetCommand;
+import actionselection.command.selfOptimizingCommand.SelfOptimizingCommand;
 import actionselection.context.ContextSnapshot;
 import actionselection.context.Memory;
 import actionselection.context.SensorValues;
@@ -323,8 +324,8 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             String policyName = entropyState.getSecond().getName().split("#")[1];
             list.add(policyName);
             try {
-                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.ORANGE, "Broken policy", list});
-                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.red, "Current state", currentValues.toLogMessage()});
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger", Color.ORANGE, "Broken policy", list});
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger", Color.red, "Current state", currentValues.toLogMessage()});
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -347,7 +348,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
                 }
             }
             try {
-                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.ORANGE, "Sensors that break the policies", brokenSensorsList});
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger", Color.ORANGE, "Sensors that break the policies", brokenSensorsList});
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -411,7 +412,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             }
 
             try {
-                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger",Color.BLUE, "Corrective actions", message});
+                MessageDispatcher.sendMessage(agent, "EnviromentLogger", new Object[]{"EnviromentLogger", Color.BLUE, "Corrective actions", message});
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -437,7 +438,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
             if (contextBroken) {
                 contextBroken = false;
                 try {
-                    MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"EnviromentLogger",Color.green, "Current state", currentValues.toLogMessage()});
+                    MessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"EnviromentLogger", Color.green, "Current state", currentValues.toLogMessage()});
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }

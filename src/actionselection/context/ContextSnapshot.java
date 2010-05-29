@@ -5,6 +5,7 @@
 package actionselection.context;
 
 import actionselection.command.Command;
+import actionselection.command.selfOptimizingCommand.SelfOptimizingCommand;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.agents.ReinforcementLearningAgent;
 import jade.core.Agent;

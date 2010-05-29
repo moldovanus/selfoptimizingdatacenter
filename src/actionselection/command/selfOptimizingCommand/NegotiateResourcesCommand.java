@@ -2,6 +2,7 @@ package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import greenContextOntology.ProtegeFactory;
+import greenContextOntology.ReceivedTaskInfo;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 import jade.core.Agent;
@@ -19,32 +20,32 @@ import java.util.Collection;
 public class NegotiateResourcesCommand extends SelfOptimizingCommand {
     private Negotiator negotiator;
     private String serverName;
+    private String taskName;
 
-    public NegotiateResourcesCommand(ProtegeFactory protegeFactory, Negotiator negotiator, String serverName) {
+    public NegotiateResourcesCommand(ProtegeFactory protegeFactory, Negotiator negotiator, String serverName, String taskName) {
         super(protegeFactory);
-        cost = 5;
+        cost = 0;
         this.negotiator = negotiator;
         this.serverName = serverName;
+        this.taskName = taskName;
     }
 
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
+        Task task = protegeFactory.getTask(taskName);
+        negotiator.negotiate(server, task);
+        ReceivedTaskInfo rti = task.getReceivedInfo();
 
-        Collection<Task> tasks = server.getRunningTasks();
-        for (Task task : tasks) {
-            negotiator.negotiate(server, task);
-           /* server.changeOptimumCPURange((int) result[0]);
-            server.changeOptimumMemoryRange((int) result[1]);
-            server.changeOptimumStorageRange((int) result[2]);*/
-            //server.giveMoreResourcesToTask(result, task, model);
-
-        }
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         server.resetOptimumValues();
+
+        RemoveTaskFromServerCommand c = new RemoveTaskFromServerCommand(protegeFactory, taskName, serverName);
+        c.execute(model);
+
     }
 
     public String toString() {
@@ -71,5 +72,13 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
 
     public void rewindOnX3D(Agent agent) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

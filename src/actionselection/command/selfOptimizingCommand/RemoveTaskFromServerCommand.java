@@ -1,9 +1,11 @@
 package actionselection.command.selfOptimizingCommand;
 
 import actionselection.utils.MessageDispatcher;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
+import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
@@ -41,7 +43,6 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(null);
         server.removeRunningTasks(task, model);
-
     }
 
     public void rewind(OntModel model) {
@@ -60,7 +61,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);
@@ -68,7 +69,6 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         } else {
             System.err.println("Proxy is null");
         }
-        TaskLifeManager.stopTaskTimer(task);
         //   throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -99,5 +99,21 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
     }
 }

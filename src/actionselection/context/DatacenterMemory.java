@@ -2,15 +2,15 @@ package actionselection.context;
 
 import actionselection.command.Command;
 import actionselection.command.selfHealingCommand.SelfHealingCommand;
-import actionselection.command.selfOptimizingCommand.SelfOptimizingCommand;
+import actionselection.command.selfOptimizingCommand.*;
 import contextawaremodel.worldInterface.dtos.ServerDto;
+import contextawaremodel.worldInterface.dtos.TaskDto;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
+import greenContextOntology.Task;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -49,5 +49,80 @@ public class DatacenterMemory implements Serializable {
                 }
             }
         }
+    }
+
+    public Queue<Command> getActionsForTasks(ProtegeFactory protegeFactory) {
+        Queue<Command> commands = null;
+        DatacenterMockupContext context = new DatacenterMockupContext();
+        context.createMockupContextFromOntology(protegeFactory);
+
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+        if (map.containsKey(context)) {
+            System.out.println("Found tasks! existing learned things");
+            Map<ServerDto, Server> serverAssoc = new HashMap<ServerDto, Server>();
+            Queue<Command> actions = map.get(context);     ///Return commands for  current tasksssssssssssssssssssssssssssssss!!!!
+            List<ServerDto> serverDtos = context.getServers();
+            for (ServerDto serverDto : serverDtos) {
+                Collection<Server> servers = protegeFactory.getAllServerInstances();
+                for (Server server : servers) {
+                    if (serverDto.equals(server))
+                        serverAssoc.put(serverDto, server);
+                }
+            }
+            for (Command command : actions) {
+                if ((command instanceof DeployTaskCommand)) {
+                    DeployTaskCommand dtc = (DeployTaskCommand) command;
+                    String taskName = dtc.getTaskName();
+                    String serverName = dtc.getServerName();
+                    TaskDto taskDto = context.getTask(dtc.getTaskName());
+                    for (Task task : tasks) {
+                        if (taskDto.equals(task)) {
+                            ((DeployTaskCommand) command).setTaskName(taskName);
+                        }
+                    }
+                    dtc.setServerName(serverAssoc.get(context.getServer(serverName)).getServerName());
+
+                }
+                if (command instanceof MoveTaskCommand) {
+                    MoveTaskCommand dtc = (MoveTaskCommand) command;
+                    String taskName = dtc.getTaskName();
+
+                    TaskDto taskDto = context.getTask(dtc.getTaskName());
+                    for (Task task : tasks) {
+                        if (taskDto.equals(task)) {
+                            ((DeployTaskCommand) command).setTaskName(taskName);
+                        }
+                    }
+
+                }
+                if (command instanceof RemoveTaskFromServerCommand) {
+                    RemoveTaskFromServerCommand dtc = (RemoveTaskFromServerCommand) command;
+                    String taskName = dtc.getTaskName();
+                    String serverName = dtc.getServerName();
+                    TaskDto taskDto = context.getTask(dtc.getTaskName());
+                    for (Task task : tasks) {
+                        if (taskDto.equals(task)) {
+                            dtc.setTaskName(taskName);
+                        }
+                    }
+                    dtc.setServerName(serverAssoc.get(context.getServer(serverName)).getServerName());
+                }
+                if (command instanceof SendServerToLowPowerStateCommand) {
+                    RemoveTaskFromServerCommand dtc = (RemoveTaskFromServerCommand) command;
+                    String serverName = dtc.getServerName();
+                    dtc.setServerName(serverAssoc.get(context.getServer(serverName)).getServerName());
+
+                }
+                if (command instanceof WakeUpServerCommand) {
+                    RemoveTaskFromServerCommand dtc = (RemoveTaskFromServerCommand) command;
+                    String serverName = dtc.getServerName();
+                    dtc.setServerName(serverAssoc.get(context.getServer(serverName)).getServerName());
+                }
+                commands.add(command);
+            }
+        }
+
+
+        return commands;
     }
 }

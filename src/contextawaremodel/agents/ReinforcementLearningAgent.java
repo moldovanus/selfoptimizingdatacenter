@@ -44,8 +44,8 @@ public class ReinforcementLearningAgent extends Agent {
     private int runCount = 0;
     private boolean contextIsOK = true;
     private boolean contextDirty = false;
-   // private LoggerGUI selfHealingLogger;
-   // private LoggerGUI selfOptimizingLogger;
+    // private LoggerGUI selfHealingLogger;
+    // private LoggerGUI selfOptimizingLogger;
 
     public boolean isContextDirty() {
         return contextDirty;
@@ -121,12 +121,10 @@ public class ReinforcementLearningAgent extends Agent {
             t[i].setRequestedStorageMin(requestedInfo.getStorageMinAcceptableValue());
 
             t[i].setReceivedCores(receivedInfo.getCores());
-            t[i].setReceivedCPUMax(receivedInfo.getCpuReceived());
-            t[i].setReceivedCPUMin(receivedInfo.getCpuReceived());
-            t[i].setReceivedMemoryMax(receivedInfo.getMemoryReceived());
-            t[i].setReceivedMemoryMin(receivedInfo.getMemoryReceived());
-            t[i].setReceivedStorageMax(receivedInfo.getStorageReceived());
-            t[i].setReceivedStorageMin(receivedInfo.getStorageReceived());
+            t[i].setReceivedCPU(receivedInfo.getCpuReceived());
+            t[i].setReceivedMemory(receivedInfo.getMemoryReceived());
+            t[i].setReceivedStorage(receivedInfo.getStorageReceived());
+
             i++;
         }
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM_REF);
@@ -155,7 +153,7 @@ public class ReinforcementLearningAgent extends Agent {
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {
-          
+
 
             //selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
             //selfOptimizingLogger.setLogPath("logs/");

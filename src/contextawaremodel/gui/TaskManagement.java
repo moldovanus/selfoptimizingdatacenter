@@ -438,9 +438,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 requestedMemoryField.setText("" + selectedTaskDto.getRequestedMemoryMin());
 
                 receivedCoresField.setText("" + selectedTaskDto.getReceivedCores());
-                receivedCpuField.setText("" + selectedTaskDto.getReceivedCPUMin());
-                receivedStorageField.setText("" + selectedTaskDto.getReceivedStorageMin());
-                receivedMemoryField.setText("" + selectedTaskDto.getReceivedMemoryMin());
+
             }
         });
 

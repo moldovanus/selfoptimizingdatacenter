@@ -73,9 +73,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxyInterface oldServerProxy = ProxyFactory.createServerManagementProxy(oldServer.getServerIPAddress());
-        ServerManagementProxyInterface newServerProxy = ProxyFactory.createServerManagementProxy(newServer.getServerIPAddress());
-
+        ServerManagementProxy oldServerProxy = new HyperVServerManagementProxy(oldServer.getServerIPAddress());
+        ServerManagementProxy newServerProxy = new HyperVServerManagementProxy(newServer.getServerIPAddress());
         if (oldServerProxy != null && newServerProxy != null) {
             String path = (String) newServer.getVirtualMachinesPath().iterator().next();
             oldServerProxy.moveSourceActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
@@ -105,6 +104,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
 
         try {
             MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.MOVE_TASK_COMMAND, taskName.split("#")[1], newServerName.split("#")[1], server.getRunningTasks().size() + 1});
+
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -115,7 +115,9 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
     public void rewindOnX3D(Agent agent) {
 
         try {
+
             MessageDispatcher.sendMessage(agent, GlobalVars.X3DAGENT_NAME, new Object[]{X3DAgent.REMOVE_TASK_COMMAND, taskName.split("#")[1]});
+
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -129,5 +131,29 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         }
 
 
+    }
+
+    public String getOldServerName() {
+        return oldServerName;
+    }
+
+    public void setOldServerName(String oldServerName) {
+        this.oldServerName = oldServerName;
+    }
+
+    public String getNewServerName() {
+        return newServerName;
+    }
+
+    public void setNewServerName(String newServerName) {
+        this.newServerName = newServerName;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

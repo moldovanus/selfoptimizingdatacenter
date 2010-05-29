@@ -1,5 +1,7 @@
 package contextawaremodel.worldInterface.dtos;
 
+import greenContextOntology.ReceivedTaskInfo;
+import greenContextOntology.RequestedTaskInfo;
 import greenContextOntology.Task;
 
 import java.io.Serializable;
@@ -22,14 +24,53 @@ public class TaskDto implements Serializable {
     private int requestedStorageMin;
 
     private int receivedCores;
-    private int receivedCPUMax;
-    private int receivedCPUMin;
-    private int receivedMemoryMax;
-    private int receivedMemoryMin;
-    private int receivedStorageMax;
-    private int receivedStorageMin;
+    private int receivedCPU;
+    private int receivedMemory;
+    private int receivedStorage;
 
     private boolean isRunning;
+
+    @Override
+    public boolean equals(Object task) {
+        if (this == task) return true;
+        if (task instanceof Task) {
+            Task t = (Task) task;
+            RequestedTaskInfo rti = t.getRequestedInfo();
+            if (requestedCores != rti.getCores()) return false;
+            if (requestedCPUMax != rti.getCpuMaxAcceptableValue()) return false;
+            if (requestedCPUMin != rti.getCpuMinAcceptableValue()) return false;
+            if (requestedMemoryMax != rti.getMemoryMaxAcceptableValue()) return false;
+            if (requestedMemoryMin != rti.getMemoryMinAcceptableValue()) return false;
+            if (requestedStorageMax != rti.getStorageMaxAcceptableValue()) return false;
+            if (requestedStorageMin != rti.getStorageMinAcceptableValue()) return false;
+
+            ReceivedTaskInfo rci = t.getReceivedInfo();
+            if (receivedCores != rci.getCores()) return false;
+            if (receivedCPU != rci.getCpuReceived()) return false;
+            if (receivedMemory != rci.getMemoryReceived()) return false;
+            if (receivedStorage != rci.getStorageReceived()) return false;
+            if (t.isRunning() == isRunning()) return false;
+        }
+        if (task instanceof TaskDto) {
+            TaskDto taskDto = (TaskDto) task;
+            if (requestedCores != taskDto.getRequestedCores()) return false;
+            if (requestedCPUMax != taskDto.getRequestedCPUMax()) return false;
+            if (requestedCPUMin != taskDto.getRequestedCPUMin()) return false;
+            if (requestedMemoryMax != taskDto.getRequestedMemoryMax()) return false;
+            if (requestedMemoryMin != taskDto.getRequestedMemoryMin()) return false;
+            if (requestedStorageMax != taskDto.getRequestedStorageMax()) return false;
+            if (requestedStorageMin != taskDto.getRequestedMemoryMin()) return false;
+
+
+            if (receivedCores != taskDto.getReceivedCores()) return false;
+            if (receivedCPU != taskDto.getReceivedCPU()) return false;
+            if (receivedMemory != taskDto.getReceivedMemory()) return false;
+            if (receivedStorage != taskDto.getReceivedStorage()) return false;
+            if (taskDto.isRunning() == isRunning()) return false;
+        }
+
+        return true;
+    }
 
     public String getTaskName() {
         return taskName;
@@ -103,52 +144,28 @@ public class TaskDto implements Serializable {
         this.receivedCores = receivedCores;
     }
 
-    public int getReceivedCPUMax() {
-        return receivedCPUMax;
+    public int getReceivedCPU() {
+        return receivedCPU;
     }
 
-    public void setReceivedCPUMax(int receivedCPUMax) {
-        this.receivedCPUMax = receivedCPUMax;
+    public void setReceivedCPU(int receivedCPU) {
+        this.receivedCPU = receivedCPU;
     }
 
-    public int getReceivedCPUMin() {
-        return receivedCPUMin;
+    public int getReceivedMemory() {
+        return receivedMemory;
     }
 
-    public void setReceivedCPUMin(int receivedCPUMin) {
-        this.receivedCPUMin = receivedCPUMin;
+    public void setReceivedMemory(int receivedMemory) {
+        this.receivedMemory = receivedMemory;
     }
 
-    public int getReceivedMemoryMax() {
-        return receivedMemoryMax;
+    public int getReceivedStorage() {
+        return receivedStorage;
     }
 
-    public void setReceivedMemoryMax(int receivedMemoryMax) {
-        this.receivedMemoryMax = receivedMemoryMax;
-    }
-
-    public int getReceivedMemoryMin() {
-        return receivedMemoryMin;
-    }
-
-    public void setReceivedMemoryMin(int receivedMemoryMin) {
-        this.receivedMemoryMin = receivedMemoryMin;
-    }
-
-    public int getReceivedStorageMax() {
-        return receivedStorageMax;
-    }
-
-    public void setReceivedStorageMax(int receivedStorageMax) {
-        this.receivedStorageMax = receivedStorageMax;
-    }
-
-    public int getReceivedStorageMin() {
-        return receivedStorageMin;
-    }
-
-    public void setReceivedStorageMin(int receivedStorageMin) {
-        this.receivedStorageMin = receivedStorageMin;
+    public void setReceivedStorage(int receivedStorage) {
+        this.receivedStorage = receivedStorage;
     }
 
     public boolean isRunning() {
