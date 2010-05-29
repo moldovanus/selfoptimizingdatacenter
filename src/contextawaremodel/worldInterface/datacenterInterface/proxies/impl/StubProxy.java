@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Time: 10:19:26 AM
  * To change this template use File | Settings | File Templates.
  */
-public class StubProxy extends ServerManagementProxy{
+public class StubProxy extends ServerManagementProxy {
     public StubProxy(String hostName) {
         super(hostName);
     }
@@ -29,7 +29,7 @@ public class StubProxy extends ServerManagementProxy{
         dto.setFreeCPU(cpu);
         dto.setStorage(storageDtos);
         dto.setCoreCount(1);
-        
+
         return dto;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

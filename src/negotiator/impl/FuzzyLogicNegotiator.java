@@ -16,6 +16,8 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 import org.antlr.runtime.RecognitionException;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -43,6 +45,12 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
     private LinguisticTerm serverValue;
     private LinguisticTerm requestedValue;
+
+    private Map<String, Double> negotiatedValues;
+
+    private double negotiatedCPU = 0;
+    private double negotiatedMemory = 0;
+    private double negotiatedStorage = 0;
 
     protected FuzzyLogicNegotiator(String fuzzyControlLanguageFile) {
 
@@ -90,8 +98,9 @@ public class FuzzyLogicNegotiator implements Negotiator {
      * @return [negotiated CPU, negotiated Memory, negotiated Storage]
      */
 
-    public void negotiate(Server server, Task task) {
+    public Map<String,Double> negotiate(Server server, Task task) {
 
+        negotiatedValues = new HashMap<String, Double>();
         //TODO: eventually to reintroduce variables for each of the 3 elements in the file and evaluate all of them at the same time.
         Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
         Memory memory = server.getAssociatedMemory();
@@ -159,7 +168,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 } catch (RecognitionException e) {
                     System.err.println(e.getMessage());
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    return;
+                    return null;
                 }
 
 
@@ -178,8 +187,10 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 //finalFuzzyInferenceSystem.chart();
                 //jDialogFis.repaint();
 
+                negotiatedCPU = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
+                negotiatedValues.put(NEGOTIATED_CPU, negotiatedCPU);
                 System.out.println("Negotiated for " + core.getLocalName() + " from " + core.getMaxAcceptableValue() +
-                        " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+                        " to " + negotiatedCPU);
 
                 core.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
 
@@ -246,7 +257,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 }
                 System.err.println(e.getMessage());
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                return;
+                return null;
             }
 
 
@@ -259,9 +270,10 @@ public class FuzzyLogicNegotiator implements Negotiator {
             //System.out.println(finalFuzzyInferenceSystem);
             //finalFuzzyInferenceSystem.chart();
 
-
+            negotiatedMemory = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
+            negotiatedValues.put(NEGOTIATED_MEMORY, negotiatedMemory);
             System.out.println("Negotiated for " + memory.getLocalName() + " from " + memory.getMaxAcceptableValue() +
-                    " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
+                    " to " + negotiatedMemory);
 
             memory.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
 
@@ -315,7 +327,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
             } catch (RecognitionException e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                return;
+                return null;
             }
 
 
@@ -327,13 +339,14 @@ public class FuzzyLogicNegotiator implements Negotiator {
             //System.out.println(finalFuzzyInferenceSystem);
             //finalFuzzyInferenceSystem.chart();
 
-
+            negotiatedStorage = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
+            negotiatedValues.put(NEGOTIATED_STORAGE, negotiatedStorage);
             System.out.println("Negotiated for " + storage.getLocalName() + " from " + storage.getMaxAcceptableValue() +
-                    " to " + finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
-            storage.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());
-
+                    " to " + negotiatedStorage);
+            storage.setMaxAcceptableValue((int) finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue());           
         }
 
+        return negotiatedValues;
     }
 
 }

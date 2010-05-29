@@ -25,7 +25,6 @@ public interface Server extends Resource {
 
     void setServerMacAddress(String newServerMacAddress);
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#serverWakeUpPort
 
     int getServerWakeUpPort();
@@ -35,7 +34,6 @@ public interface Server extends Resource {
     boolean hasServerWakeUpPort();
 
     void setServerWakeUpPort(int newServerWakeUpPort);
-
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedCPU
 
@@ -67,7 +65,6 @@ public interface Server extends Resource {
 
     void setAssociatedStorage(Storage newAssociatedStorage);
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#isInLowPowerState
 
     boolean getIsInLowPowerState();
@@ -77,7 +74,6 @@ public interface Server extends Resource {
     boolean hasIsInLowPowerState();
 
     void setIsInLowPowerState(boolean newIsInLowPowerState, OntModel ontModel);
-
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks
 
@@ -90,6 +86,8 @@ public interface Server extends Resource {
     Iterator listRunningTasks();
 
     void addRunningTasks(Task newRunningTasks, OntModel model);
+
+    void addNegotiatedTasks(Task newRunningTasks, OntModel model, int negotiatedCPU, int negotiatedMemory, int negotiatedStorage);
     //void addRunningTasks(Task newRunningTasks);
 
     void removeRunningTasks(Task oldRunningTasks, OntModel model);

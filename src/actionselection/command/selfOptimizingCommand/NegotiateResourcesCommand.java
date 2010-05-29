@@ -2,13 +2,12 @@ package actionselection.command.selfOptimizingCommand;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import greenContextOntology.ProtegeFactory;
-import greenContextOntology.ReceivedTaskInfo;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 import jade.core.Agent;
 import negotiator.Negotiator;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,8 +32,12 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        negotiator.negotiate(server, task);
-        ReceivedTaskInfo rti = task.getReceivedInfo();
+        Map<String, Double> negotiatedValues = negotiator.negotiate(server, task);
+        int negotiatedCPU = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_CPU))? negotiatedValues.get(Negotiator.NEGOTIATED_CPU).intValue() : 0;
+        int negotiatedMemory = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_MEMORY))? negotiatedValues.get(Negotiator.NEGOTIATED_MEMORY).intValue() : 0;
+        int negotiatedStorage = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_STORAGE))? negotiatedValues.get(Negotiator.NEGOTIATED_STORAGE).intValue() : 0;
+
+        server.addNegotiatedTasks(task, null, (int) negotiatedCPU, (int) negotiatedMemory, (int) negotiatedStorage);
 
         //To change body of implemented methods use File | Settings | File Templates.
     }

@@ -13,11 +13,10 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.*;
+import benchmark.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.sensorapi.SensorAPI;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -35,6 +34,7 @@ import selfHealingOntology.SelfHealingProtegeFactory;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.Queue;
 
 /**
  * @author Administrator
@@ -70,9 +70,9 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.memory = memory;
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-        for (Task task : tasks) {
+       /* for (Task task : tasks) {
             TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
-        }
+        }*/
 
 //        WorkLoadSequence sequence = new WorkLoadSequence(protegeFactory, 3);
         //WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
@@ -181,76 +181,75 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         */
 
         //add server web service information pooling mechanism
-        Collection<Server> servers = protegeFactory.getAllServerInstances();
-        for (Server server : servers) {
-            SensorAPI.addServerListener(server, protegeFactory);
-        }
-
-        /*  for (Server server : servers) {
-        if (server.hasServerIPAddress()) {
-            HyperVServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
-            server.setProxy(proxy);
-            ServerDto serverInfo = proxy.getServerInfo();
-
-            CPU cpu = server.getAssociatedCPU();
-            int coreCount = serverInfo.getCoreCount();
-            Collection cores = new ArrayList(coreCount);
-            for (int i = 0; i < coreCount; i++) {
-                cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
-            }
-            cpu.setAssociatedCore(cores);
-
-            int totalCPU = serverInfo.getTotalCPU();
-            Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
-            int index = 0;
-            int freeCPU = totalCPU - (Integer) freeCPUValues[0];
-            for (Object item : cores) {
-                Core core = (Core) item;
-                core.setMaxAcceptableValue(totalCPU);
-                core.setMinAcceptableValue(1);
-                core.setTotal(totalCPU);
-                core.setUsed(freeCPU, datacenterPolicyConversionModel);
-            }
-
-            greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
-            int totalMemory = serverInfo.getTotalMemory();
-            serverMemory.setMaxAcceptableValue(totalMemory);
-            serverMemory.setTotal(totalMemory);
-            serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory(), datacenterPolicyConversionModel);
-
-            Storage storage = server.getAssociatedStorage();
-            List<StorageDto> storageList = serverInfo.getStorage();
-            StorageDto targetStorage = null;
-            String storagePath = (String) server.getVirtualMachinesPath().iterator().next();
-            for (StorageDto storageDto : storageList) {
-                if (storageDto.getName().charAt(0) == storagePath.charAt(0)) {
-                    targetStorage = storageDto;
-                    break;
-                }
-            }
-
-            int storageSize = targetStorage.getSize();
-            storage.setMaxAcceptableValue(storageSize);
-            storage.setTotal(storageSize);
-            storage.setUsed(storageSize - targetStorage.getFreeSpace(), datacenterPolicyConversionModel);
-        }
-        //IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
-        //serverMonitor.executeStandaloneWindow();
-        *//*  try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }*//*
-
-            *//* if (server.getIsInLowPowerState()) {
-                SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
-                sendServerToLowPowerStateCommand.executeOnX3D(agent);
-            } else {
-                WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
-                wakeUpServerCommand.executeOnX3D(agent);
-            }*//*
-        }*/
-
+//        Collection<Server> servers = protegeFactory.getAllServerInstances();
+//        for (Server server : servers) {
+//            SensorAPI.addServerListener(server, protegeFactory);
+//        }
+//
+//        for (Server server : servers) {
+//            if (server.hasServerIPAddress()) {
+//                ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+//                server.setProxy(proxy);
+//                ServerDto serverInfo = proxy.getServerInfo();
+//
+//                CPU cpu = server.getAssociatedCPU();
+//                int coreCount = serverInfo.getCoreCount();
+//                Collection cores = new ArrayList(coreCount);
+//                for (int i = 0; i < coreCount; i++) {
+//                    cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
+//                }
+//                cpu.setAssociatedCore(cores);
+//
+//                int totalCPU = serverInfo.getTotalCPU();
+//                Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
+//                int index = 0;
+//                int freeCPU = totalCPU - (Integer) freeCPUValues[0];
+//                for (Object item : cores) {
+//                    Core core = (Core) item;
+//                    core.setMaxAcceptableValue(totalCPU);
+//                    core.setMinAcceptableValue(1);
+//                    core.setTotal(totalCPU);
+//                    core.setUsed(freeCPU);
+//                }
+//
+//                greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
+//                int totalMemory = serverInfo.getTotalMemory();
+//                serverMemory.setMaxAcceptableValue(totalMemory);
+//                serverMemory.setTotal(totalMemory);
+//                serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory());
+//
+//                Storage storage = server.getAssociatedStorage();
+//                List<StorageDto> storageList = serverInfo.getStorage();
+//                StorageDto targetStorage = null;
+//                String storagePath = (String) server.getVirtualMachinesPath().iterator().next();
+//                for (StorageDto storageDto : storageList) {
+//                    if (storageDto.getName().charAt(0) == storagePath.charAt(0)) {
+//                        targetStorage = storageDto;
+//                        break;
+//                    }
+//                }
+//
+//                int storageSize = targetStorage.getSize();
+//                storage.setMaxAcceptableValue(storageSize);
+//                storage.setTotal(storageSize);
+//                storage.setUsed(storageSize - targetStorage.getFreeSpace());
+//            }
+//            //IMonitor serverMonitor = new FullServerMonitor(server, new HyperVServerManagementProxy(server.getServerIPAddress()));
+//            //serverMonitor.executeStandaloneWindow();
+//            /*  try {
+//                Thread.sleep(10000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//            }*/
+//
+//            /* if (server.getIsInLowPowerState()) {
+//                SendServerToLowPowerStateCommand sendServerToLowPowerStateCommand = new SendServerToLowPowerStateCommand(protegeFactory, server.getName());
+//                sendServerToLowPowerStateCommand.executeOnX3D(agent);
+//            } else {
+//                WakeUpServerCommand wakeUpServerCommand = new WakeUpServerCommand(protegeFactory, server.getName());
+//                wakeUpServerCommand.executeOnX3D(agent);
+//            }*/
+//        }
 
         //taskManagementWindow.setTasks(tasks);
         // taskManagementWindow.setVisible(true);
@@ -618,6 +617,12 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
     @Override
     protected void onTick() {
+
+      /*  try {
+            Thread.sleep(1000000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }*/
         smallestEntropyContext = null;
 
         TaskLifeManager.kill(protegeFactory, datacenterPolicyConversionModel);
@@ -717,14 +722,14 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
 
                         Server server = getMinDistanceServer(task);
 
-                        NegotiateResourcesCommand nrc = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
-                        nrc.execute(datacenterPolicyConversionModel);
+                        NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
+                        negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
-                        SelfOptimizingCommand newAction = new DeployTaskCommand(protegeFactory, server.getName(), task.getName());
+                       // SelfOptimizingCommand newAction = new DeployTaskCommand(protegeFactory, server.getName(), task.getName());
 
                         SelfOptimizingCommand wakeUp = null;
                         if (server.getIsInLowPowerState()) {
@@ -733,11 +738,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                             cs.getActions().add(wakeUp);
                             wakeUp.execute(datacenterPolicyConversionModel);
                         }
-                        cs.getActions().add(nrc);
-                        cs.getActions().add(newAction);
-                        newAction.execute(datacenterPolicyConversionModel);
+                        cs.getActions().add(negotiateResourcesCommand);
+                       // cs.getActions().add(newAction);
+                       // newAction.execute(datacenterPolicyConversionModel);
                         cs.setContextEntropy(computeEntropy().getFirst());
-                        cs.setRewardFunction(computeRewardFunction(result, cs, newAction));
+                      //  cs.setRewardFunction(computeRewardFunction(result, cs, newAction));
                         if (cs.getContextEntropy() < result.getContextEntropy()) {
                             result = cs;
                             //    newAction.executeOnX3D(agent);
@@ -747,11 +752,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                                 //wakeUp.executeOnWebService();
                             }
                         }
-                        nrc.rewind(datacenterPolicyConversionModel);
-                        newAction.rewind(datacenterPolicyConversionModel);
-                        if (wakeUp != null)
+                        negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
+                      // newAction.rewind(datacenterPolicyConversionModel);
+                        if (wakeUp != null) {
                             wakeUp.rewind(datacenterPolicyConversionModel);
-
+                        }
 
                     }
                 }

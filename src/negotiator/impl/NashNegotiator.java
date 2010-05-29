@@ -5,6 +5,9 @@ import greenContextOntology.Server;
 import greenContextOntology.Task;
 import negotiator.Negotiator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -29,7 +32,7 @@ public class NashNegotiator implements Negotiator {
             int pos = 0;
             for (int j = 0; j < quality; j++) {
                 int currentValue2 = j * increment2 + minValue2;
-                
+
                 double penalty1 = (currentValue2 - currentValue1) / increment1;
                 double penalty2 = (currentValue2 - currentValue1) / increment2;
                 if (penalty1 < 0) {
@@ -38,11 +41,11 @@ public class NashNegotiator implements Negotiator {
                 if (penalty2 < 0) {
                     penalty2 *= (-1);
                 }
-                double reward1 = ( currentValue1 - optimalValue1 ) / increment1;
-                double reward2 = ( currentValue2 - optimalValue2 ) / increment2;
-                utilities1[i][j] = reward1 - penalty1 ;
+                double reward1 = (currentValue1 - optimalValue1) / increment1;
+                double reward2 = (currentValue2 - optimalValue2) / increment2;
+                utilities1[i][j] = reward1 - penalty1;
                 utilities2[i][j] = reward2 - penalty2;
-                System.out.print(utilities1[i][j]+" ");
+                System.out.print(utilities1[i][j] + " ");
                 if (j == 0) {
                     max = utilities1[i][j];
                 }
@@ -59,7 +62,7 @@ public class NashNegotiator implements Negotiator {
             double max = 0;
             int pos = 0;
             for (int i = 0; i < quality; i++) {
-                System.out.print(utilities2[i][j]+" ");
+                System.out.print(utilities2[i][j] + " ");
                 if (i == 0) {
                     max = utilities2[i][j];
                 }
@@ -72,7 +75,7 @@ public class NashNegotiator implements Negotiator {
             maxUtilities2[pos][j] = true;
 
         }
-     
+
         for (int i = 0; i < quality; i++) {
             for (int j = 0; j < quality; j++) {
                 if (maxUtilities1[i][j] && maxUtilities2[i][j]) {
@@ -80,21 +83,27 @@ public class NashNegotiator implements Negotiator {
                     int currentValue2 = j * increment2 + minValue2;
                     //TODO : if not equal, optimize function :D
 
-                    System.out.println("Equilibrium Found!!!" + "("+i+ ","+j+") negotiatedValue: " + (currentValue1+currentValue2)/2 );
+                    System.out.println("Equilibrium Found!!!" + "(" + i + "," + j + ") negotiatedValue: " + (currentValue1 + currentValue2) / 2);
                 }
             }
         }
     }
 
-    public void negotiate(Server server, Task task) {
+    public Map<String, Double> negotiate(Server server, Task task) {
         RequestedTaskInfo reqTask = task.getRequestedInfo();
         if (server.getAssociatedMemory().getMaxAcceptableValue() - (server.getAssociatedMemory().getUsed() + reqTask.getMemoryMinAcceptableValue()) < 0) {
             int optimalValueForServer = server.getAssociatedMemory().getMaxAcceptableValue() - server.getAssociatedMemory().getUsed();
-            if (optimalValueForServer==0)
-            {
+            if (optimalValueForServer == 0) {
                 optimalValueForServer++;
             }
-            negotiateGivenRanges(reqTask.getMemoryMinAcceptableValue(), reqTask.getMemoryMaxAcceptableValue(), 0, server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed(), reqTask.getMemoryMinAcceptableValue(), optimalValueForServer);
+            negotiateGivenRanges(reqTask.getMemoryMinAcceptableValue(), reqTask.getMemoryMaxAcceptableValue(), 0,
+                    server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed(),
+                    reqTask.getMemoryMinAcceptableValue(), optimalValueForServer);
         }
+        Map<String, Double> negotiatedValues = new HashMap<String, Double>();
+        negotiatedValues.put(NEGOTIATED_CPU, 0d);
+        negotiatedValues.put(NEGOTIATED_STORAGE, 0d);
+        negotiatedValues.put(NEGOTIATED_MEMORY, 0d);
+        return negotiatedValues;
     }
 }

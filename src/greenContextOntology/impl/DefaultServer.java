@@ -241,6 +241,74 @@ public class DefaultServer extends DefaultResource
 
     }
 
+    public void addNegotiatedTasks(Task newRunningTasks, OntModel model, int negotiatedCPU, int negotiatedMemory, int negotiatedStorage) {
+        RequestedTaskInfo requestedSLA = newRunningTasks.getRequestedInfo();
+        ReceivedTaskInfo receivedSLA = newRunningTasks.getReceivedInfo();
+
+        if (negotiatedCPU == 0) {
+            negotiatedCPU = requestedSLA.getCpuMaxAcceptableValue();
+        }
+        if (negotiatedMemory == 0) {
+            negotiatedMemory = requestedSLA.getMemoryMaxAcceptableValue();
+        }
+        if (negotiatedStorage == 0) {
+            negotiatedStorage = requestedSLA.getStorageMaxAcceptableValue();
+        }
+
+        //System.out.println("-----------\n before" + newRunningTasks.toString() + "\n");
+
+        CPU cpu = this.getAssociatedCPU();
+        Collection<Core> cores = cpu.getAssociatedCore();
+        Iterator<Core> coresIterator = cores.iterator();
+        int coreCount = requestedSLA.getCores();
+        int availableCores = cores.size();
+
+        coreCount = (coreCount > availableCores) ? availableCores : coreCount;
+        int index = 0;
+        while (coresIterator.hasNext() && coreCount > 0) {
+            Core core = coresIterator.next();
+            //TODO : to be modified for more core flexibility
+            int availableCore = core.getTotal() - core.getUsed();
+            // int requestedCPU = requestedSLA.getCpuMaxAcceptableValue();
+            //TODO : remove size checks if performance needed
+            if (negotiatedCPU > availableCore) {
+                //    i--;
+                index++;
+                continue;
+            }
+            //int receivedCPU = (requestedCPU < availableCore) ? requestedCPU : availableCore;
+            coreCount--;
+            receivedSLA.setCpuReceived(negotiatedCPU, model);
+            core.setUsed(core.getUsed() + negotiatedCPU);
+            receivedSLA.addReceivedCoreIndex(index);
+            index++;
+        }
+
+        receivedSLA.setCores(receivedSLA.getReceivedCoreIndex().size(), model);
+
+        Memory memory = this.getAssociatedMemory();
+        int availableMemory = memory.getTotal() - memory.getUsed();
+        // int requestedMemory = requestedSLA.getMemoryMaxAcceptableValue();
+        int receivedMemory = (negotiatedMemory < availableMemory) ? negotiatedMemory : availableMemory;
+        receivedSLA.setMemoryReceived(receivedMemory, model);
+        memory.setUsed(memory.getUsed() + receivedMemory);
+
+        Storage storage = this.getAssociatedStorage();
+        int availableStorage = storage.getTotal() - storage.getUsed();
+        //int requestedStorage = requestedSLA.getStorageMaxAcceptableValue();
+        int receivedStorage = (negotiatedStorage < availableStorage) ? negotiatedStorage : availableStorage;
+        receivedSLA.setStorageReceived(receivedStorage, model);
+        storage.setUsed(storage.getUsed() + receivedStorage);
+
+        //add task to ontology
+        Collection tasks = getRunningTasks();
+        removePropertyValue(getRunningTasksProperty(), tasks);
+        tasks.add(newRunningTasks);
+
+        //setPropertyValue(getRunningTasksProperty(), newRunningTasks);
+        addPropertyValue(getRunningTasksProperty(), newRunningTasks);
+    }
+
     public void addRunningTasks(Task newRunningTasks) {
 
 

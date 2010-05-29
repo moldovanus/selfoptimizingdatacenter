@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 11:16:47
  * To change this template use File | Settings | File Templates.
  */
-public class ServerTask {
+public class ServerTaskList {
     private ServerDto server;
     private List<TaskDto> tasks;
 
@@ -35,8 +35,8 @@ public class ServerTask {
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
-        if (object instanceof ServerTask) {
-            ServerTask serverTask = (ServerTask) object;
+        if (object instanceof ServerTaskList) {
+            ServerTaskList serverTask = (ServerTaskList) object;
             if (!server.equals(serverTask.getServer())) return false;
             List<TaskDto> tasksList = serverTask.getTasks();
             for (TaskDto tdto : tasksList) {

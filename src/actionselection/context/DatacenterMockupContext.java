@@ -5,7 +5,6 @@ import contextawaremodel.worldInterface.dtos.StorageDto;
 import contextawaremodel.worldInterface.dtos.TaskDto;
 import greenContextOntology.*;
 
-import javax.swing.*;
 import java.io.Serializable;
 import java.util.*;
 
@@ -17,16 +16,16 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class DatacenterMockupContext implements Serializable {
-    private List<ServerTask> context;
+    private List<ServerTaskList> context;
 
     public DatacenterMockupContext() {
-        context = new ArrayList<ServerTask>();
+        context = new ArrayList<ServerTaskList>();
     }
 
     public List<TaskDto> getTasks() {
         List<TaskDto> myList = new ArrayList<TaskDto>();
         int i = 0;
-        for (ServerTask st : context) {
+        for (ServerTaskList st : context) {
             List<TaskDto> list = st.getTasks();
             for (TaskDto td : list) {
                 if (!myList.contains(td)) {
@@ -50,7 +49,7 @@ public class DatacenterMockupContext implements Serializable {
     public List<ServerDto> getServers() {
         List<ServerDto> myList = new ArrayList<ServerDto>();
         int i = 0;
-        for (ServerTask st : context) {
+        for (ServerTaskList st : context) {
             myList.add(i, st.getServer());
             i++;
         }
@@ -112,7 +111,7 @@ public class DatacenterMockupContext implements Serializable {
             serverDto.setFreeMemory(server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed());
             serverDto.setTotalMemory(server.getAssociatedMemory().getTotal());
             serverDto.setCoreCount(cores.size());
-            ServerTask st = new ServerTask();
+            ServerTaskList st = new ServerTaskList();
             st.setServer(serverDto);
             st.setTasks(taskDtos);
             context.add(st);
@@ -125,7 +124,7 @@ public class DatacenterMockupContext implements Serializable {
         if (object == this) return true;
         if (object instanceof DatacenterMockupContext) {
             DatacenterMockupContext newContext = (DatacenterMockupContext) object;
-            for (ServerTask st : context) {
+            for (ServerTaskList st : context) {
                 if (!newContext.getContext().contains(st)) return false;
             }
         }
@@ -156,7 +155,7 @@ public class DatacenterMockupContext implements Serializable {
                 serverDto.setCoreCount(cores.size());
 
 
-                for (ServerTask st : context)
+                for (ServerTaskList st : context)
                     if (st.getServer().equals(serverDto)) {
                         List<TaskDto> tasksList = st.getTasks();
                         Collection<Task> tasks = server.getRunningTasks();
@@ -190,11 +189,11 @@ public class DatacenterMockupContext implements Serializable {
         //TODO: restore context
     }
 
-    public List<ServerTask> getContext() {
+    public List<ServerTaskList> getContext() {
         return context;
     }
 
-    public void setContext(List<ServerTask> context) {
+    public void setContext(List<ServerTaskList> context) {
         this.context = context;
     }
 }
