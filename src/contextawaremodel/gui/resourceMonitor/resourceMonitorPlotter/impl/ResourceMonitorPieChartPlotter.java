@@ -26,6 +26,7 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
     private Random random;
     private int oldDatasetSize = 0;
 
+
    /* public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setBounds(300, 300, 200, 100);

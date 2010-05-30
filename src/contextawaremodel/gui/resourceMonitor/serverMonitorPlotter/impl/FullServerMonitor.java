@@ -1,13 +1,20 @@
 package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
+import contextawaremodel.GlobalVars;
 import contextawaremodel.gui.resourceMonitor.IMonitor;
-import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
+import edu.stanford.smi.protege.exception.OntologyLoadException;
+import edu.stanford.smi.protegex.owl.ProtegeOWL;
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,6 +81,8 @@ public class FullServerMonitor implements IMonitor {
         JInternalFrame totalResourcesUsageFrame = new JInternalFrame("Total resources usage");
         JInternalFrame taskResourcesUsageFrame = new JInternalFrame("Tasks resources usage");
 
+        /*8888888888888888888888888*/
+
         showTaskQueueButton = new JButton("Task queue");
         showTotalResourcesUsageButton = new JButton("Total resources usage");
         showTasksResourcesUsageButton = new JButton("Tasks resources usage");
@@ -105,7 +114,7 @@ public class FullServerMonitor implements IMonitor {
 
         totalResourcesUsageFrame.add(xyMonitor.getMonitorPanel(), BorderLayout.CENTER);
         taskResourcesUsageFrame.add(pieMonitor.getMonitorPanel(), BorderLayout.CENTER);
-        taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
+        taskQueueFrame.add(serverTasksMonitor.getMonitorPanel(), BorderLayout.CENTER);
 
         serverMonitorWindow.setLayout(null);
         serverMonitorPanel.setLayout(new BorderLayout());
@@ -114,7 +123,6 @@ public class FullServerMonitor implements IMonitor {
         totalResourcesUsageFrame.setVisible(true);
         taskResourcesUsageFrame.setVisible(true);
 
-
         serverMonitorWindow.add(taskQueueFrame);
         serverMonitorWindow.add(totalResourcesUsageFrame);
         serverMonitorWindow.add(taskResourcesUsageFrame);
@@ -122,12 +130,11 @@ public class FullServerMonitor implements IMonitor {
         serverMonitorPanel.add(serverMonitorWindow, BorderLayout.CENTER);
         serverMonitorPanel.add(toolBar, BorderLayout.SOUTH);
 
-
         showTaskQueueButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame taskQueueFrame = new JInternalFrame("Task queue");
-                taskQueueFrame.add(serverTasksMonitor.getTasksScrollPanel(), BorderLayout.CENTER);
+                taskQueueFrame.add(serverTasksMonitor.getMonitorPanel(), BorderLayout.CENTER);
                 taskQueueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 taskQueueFrame.setBounds(0, 50, 100, 500);

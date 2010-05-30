@@ -61,7 +61,7 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy proxy = new HyperVServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);

@@ -73,8 +73,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server oldServer = protegeFactory.getServer(oldServerName);
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
-        ServerManagementProxy oldServerProxy = new HyperVServerManagementProxy(oldServer.getServerIPAddress());
-        ServerManagementProxy newServerProxy = new HyperVServerManagementProxy(newServer.getServerIPAddress());
+        ServerManagementProxyInterface oldServerProxy = ProxyFactory.createServerManagementProxy(oldServer.getServerIPAddress());
+        ServerManagementProxyInterface newServerProxy =  ProxyFactory.createServerManagementProxy(newServer.getServerIPAddress());
         if (oldServerProxy != null && newServerProxy != null) {
             String path = (String) newServer.getVirtualMachinesPath().iterator().next();
             oldServerProxy.moveSourceActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),

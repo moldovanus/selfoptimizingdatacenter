@@ -59,11 +59,11 @@ public class CMAAgent extends Agent implements CMAAExternal {
 
         try {
             //create owlModeSelfHealing from Ontology
-            File ontologyFile = new File(GlobalVars.ONTOLOGY_FILE);
+            File ontologyFile = new File(GlobalVars.ONTOLOGY_ENVIROMENT_FILE);
             this.owlModeSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(ontologyFile.toURI().toString());
             this.factory = new MyFactory(owlModeSelfHealing);
             
-            File file = new File(GlobalVars.ONTOLOGY_FILE);
+            File file = new File(GlobalVars.ONTOLOGY_ENVIROMENT_FILE);
             jenaOwlModelSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(file.toURI().toString());
 
             //create owlModeSelfHealing from Ontology

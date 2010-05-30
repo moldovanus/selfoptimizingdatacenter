@@ -21,10 +21,10 @@ import java.util.Random;
 public class TasksQueueMonitor extends AbstractMonitor {
 
     private ProtegeFactory protegeFactory;
-    private JPanel taskNamesPanel;
-    private JPanel taskDetailsPanel;
+    protected JPanel taskNamesPanel;
+    protected JPanel taskDetailsPanel;
 
-    private Map<String, Color> generatedColors;
+    protected Map<String, Color> generatedColors;
 
     public TasksQueueMonitor(ProtegeFactory protegeFactory) {
         this.protegeFactory = protegeFactory;

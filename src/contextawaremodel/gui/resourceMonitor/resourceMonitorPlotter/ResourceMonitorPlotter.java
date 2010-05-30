@@ -11,6 +11,8 @@ import java.awt.*;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class ResourceMonitorPlotter {
+
+
     protected String resourceName;
 
     protected int snapshotCount = 0;
@@ -24,9 +26,6 @@ public abstract class ResourceMonitorPlotter {
 
     protected ResourceMonitorPlotter(String resourceName) {
         this.resourceName = resourceName;
-        if ( this.resourceName.length() > 5){
-            this.resourceName = this.resourceName.substring(0,5) + "...";
-        }
         graphPanel = new JPanel();
     }
 

@@ -68,7 +68,7 @@ public class TaskMonitor implements IMonitor {
 
         JPanel centerPanel = new JPanel();
 
-        centerPanel.setLayout(new GridLayout(4, 1));
+        centerPanel.setLayout(new GridLayout(3, 1));
         taskPanel.setLayout(new BorderLayout());
 
         RequestedTaskInfo requestedTaskInfo = task.getRequestedInfo();
@@ -82,8 +82,12 @@ public class TaskMonitor implements IMonitor {
         taskMemoryMonitor.setCurrentValue(receivedTaskInfo.getMemoryReceived());
         taskStorageMonitor.setCurrentValue(receivedTaskInfo.getStorageReceived());
 
-        centerPanel.add(new JLabel("Cores " +  task.getRequestedInfo().getCores()));
-        centerPanel.add(taskCPUMonitor.getGraphPanel());
+        JPanel cpuPanel = new JPanel();
+                         cpuPanel.setLayout(new BorderLayout());
+        cpuPanel.add(new JLabel("Cores " +  task.getRequestedInfo().getCores()), BorderLayout.NORTH);
+        cpuPanel.add(taskCPUMonitor.getGraphPanel(),BorderLayout.CENTER);
+
+        centerPanel.add(cpuPanel);
         centerPanel.add(taskMemoryMonitor.getGraphPanel());
         centerPanel.add(taskStorageMonitor.getGraphPanel());
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));

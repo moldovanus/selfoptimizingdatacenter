@@ -1,8 +1,8 @@
 package contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl;
 
-import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.impl.ResourceMonitorPieChartPlotter;
+import contextawaremodel.GlobalVars;
 import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.ResourceMonitorPlotter;
-import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.ServerMonitor;
+import contextawaremodel.gui.resourceMonitor.resourceMonitorPlotter.impl.ResourceMonitorPieChartPlotter;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
@@ -44,7 +44,7 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
         Collection cores = server.getAssociatedCPU().getAssociatedCore();
         int coresCount = cores.size();
         if (coresCount % 2 != 0) {
-            coresCount ++;
+            coresCount++;
         }
         coresMonitors = new ArrayList<ResourceMonitorPlotter>();
 
@@ -130,21 +130,23 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
 
         for (Task task : runningTasks) {
             ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
-            Iterator<Integer> coresIterator = receivedInfo.listReceivedCoreIndex();
+            Iterator<Integer> receivedCoresIndexIterator = receivedInfo.listReceivedCoreIndex();
             int usedCPUByTask = receivedInfo.getCpuReceived();
             String taskName = task.getLocalName();
-            while (coresIterator.hasNext()) {
-                Integer index = coresIterator.next();
+            String newTaskName = (taskName.length() > GlobalVars.MAX_NAME_LENGTH) ? taskName.substring(0, GlobalVars.MAX_NAME_LENGTH) + "..." : taskName;
+
+            while (receivedCoresIndexIterator.hasNext()) {
+                Integer index = receivedCoresIndexIterator.next();
                 Map<String, Integer> map = coreInformation.get(index);
-                map.put(taskName, usedCPUByTask);
+                map.put(newTaskName, usedCPUByTask);
                 totalCPUUsedByTasks[index] += usedCPUByTask;
             }
             int usedMemory = receivedInfo.getMemoryReceived();
-            memoryInformation.put(taskName, usedMemory);
+            memoryInformation.put(newTaskName, usedMemory);
             totalMemoryUsedByTasks += usedMemory;
 
             int usedStorage = receivedInfo.getStorageReceived();
-            storageInformation.put(taskName, usedStorage);
+            storageInformation.put(newTaskName, usedStorage);
             totalStorageUsedByTasks += usedStorage;
 
         }

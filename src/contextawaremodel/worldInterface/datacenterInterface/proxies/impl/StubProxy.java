@@ -23,7 +23,12 @@ public class StubProxy extends ServerManagementProxy {
         ArrayList<Integer> cpu = new ArrayList<Integer>();
         ArrayList<StorageDto> storageDtos = new ArrayList<StorageDto>();
 
-        cpu.add(1);
+        cpu.add(3000);
+        cpu.add(3000);
+        cpu.add(3000);
+        storageDto.setName("C:");
+
+        cpu.add(3000);
         storageDtos.add(storageDto);
 
         dto.setFreeCPU(cpu);

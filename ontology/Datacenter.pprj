@@ -1,4 +1,4 @@
-; Sat May 29 17:33:30 EEST 2010
+; Sun May 30 14:00:44 EEST 2010
 ; 
 ;+ (version "3.4.2")
 ;+ (build "Build 562")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class30393]
-		[Datacenter_ProjectKB_Class30394]
-		[Datacenter_ProjectKB_Class30395]
-		[Datacenter_ProjectKB_Class30396]
-		[Datacenter_ProjectKB_Class30397]))
+		[Datacenter_ProjectKB_Class10182]
+		[Datacenter_ProjectKB_Class10183]
+		[Datacenter_ProjectKB_Class10184]
+		[Datacenter_ProjectKB_Class10185]
+		[Datacenter_ProjectKB_Class10186]))
 
 ([CLSES_TAB] of  Widget
 
@@ -31,23 +31,309 @@
 	(name "vertical_stretcher")
 	(string_value "http://www.w3.org/2003/11/swrl#body"))
 
-([Datacenter_ProjectKB_Class10001] of  Widget
+([Datacenter_ProjectKB_Class10004] of  Widget
 
-	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled")
-	(property_list [Datacenter_ProjectKB_Class10002]))
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10005])
+	(widget_class_name "se.liu.ida.JessTab.JessTab"))
 
-([Datacenter_ProjectKB_Class10002] of  Property_List
+([Datacenter_ProjectKB_Class10005] of  Property_List
 )
 
-([Datacenter_ProjectKB_Class10003] of  Widget
+([Datacenter_ProjectKB_Class10006] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10007])
+	(widget_class_name "edu.stanford.smi.protege.widget.ProtegePropertiesTab"))
+
+([Datacenter_ProjectKB_Class10007] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10008] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10009])
+	(widget_class_name "ezpal.EZPalTab"))
+
+([Datacenter_ProjectKB_Class10009] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10010] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10011])
+	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
+
+([Datacenter_ProjectKB_Class10011] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10012] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10013])
+	(widget_class_name "ca.uvic.csr.shrimp.jambalaya.JambalayaTab"))
+
+([Datacenter_ProjectKB_Class10013] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10014] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10015])
+	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.InstanceTreeTab"))
+
+([Datacenter_ProjectKB_Class10015] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10016] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10017])
+	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalConstraintsTab"))
+
+([Datacenter_ProjectKB_Class10017] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10018] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10019])
+	(widget_class_name "edu.stanford.smi.RemoteKBTab.WordNetTab"))
+
+([Datacenter_ProjectKB_Class10019] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10020] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10021])
+	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
+
+([Datacenter_ProjectKB_Class10021] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10022] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10023])
+	(widget_class_name "uk.ac.man.cs.mig.coode.owlviz.ui.OWLVizTab"))
+
+([Datacenter_ProjectKB_Class10023] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10024] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10025])
+	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
+
+([Datacenter_ProjectKB_Class10025] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10026] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10027])
+	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
+
+([Datacenter_ProjectKB_Class10027] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10028] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10029])
+	(widget_class_name "org.protege.owl.mm.ssm.ui.SpreadSheetMasterTab"))
+
+([Datacenter_ProjectKB_Class10029] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10030] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10031])
+	(widget_class_name "TGViztab.TGVizTab"))
+
+([Datacenter_ProjectKB_Class10031] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10032] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10033])
+	(widget_class_name "org.algernon.kb.okbc.protege.plugins.AlgernonTab"))
+
+([Datacenter_ProjectKB_Class10033] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10034] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10035])
+	(widget_class_name "edu.stanford.smi.protegex.changes.changesKBViewTab.ChangesKBViewTab"))
+
+([Datacenter_ProjectKB_Class10035] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10036] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10037])
+	(widget_class_name "edu.stanford.smi.protegex.xml.tab.XMLTab"))
+
+([Datacenter_ProjectKB_Class10037] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10038] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10039])
+	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalQueriesTab"))
+
+([Datacenter_ProjectKB_Class10039] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10040] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10041])
+	(widget_class_name "edu.stanford.smi.protegex.chatPlugin.ChatTab"))
+
+([Datacenter_ProjectKB_Class10041] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10042] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10043])
+	(widget_class_name "org.protege.owl.axiome.ui.AxiomeTab"))
+
+([Datacenter_ProjectKB_Class10043] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10044] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10045])
+	(widget_class_name "edu.stanford.smi.protege.keywordsearch.StringSearch"))
+
+([Datacenter_ProjectKB_Class10045] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10046] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10047])
+	(widget_class_name "script.ProtegeScriptTab"))
+
+([Datacenter_ProjectKB_Class10047] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10048] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10049])
+	(widget_class_name "edu.stanford.smi.protegex.changes.ChangesTab"))
+
+([Datacenter_ProjectKB_Class10049] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10050] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10051])
+	(widget_class_name "edu.stanford.smi.protegex.fctab.FacetConstraintsTab"))
+
+([Datacenter_ProjectKB_Class10051] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10052] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10053])
+	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.KnowledgeTreeTab"))
+
+([Datacenter_ProjectKB_Class10053] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10054] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10055])
+	(widget_class_name "edu.stanford.smi.protegex.datamaster.DataMasterTab"))
+
+([Datacenter_ProjectKB_Class10055] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10056] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10057])
+	(widget_class_name "dfki.protege.ontoviz_tab.OntovizTab"))
+
+([Datacenter_ProjectKB_Class10057] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10058] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10059])
+	(widget_class_name "edu.stanford.smi.protegex.changes.stats.ChangeStatisticsTab"))
+
+([Datacenter_ProjectKB_Class10059] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10060] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [Datacenter_ProjectKB_Class10061])
+	(widget_class_name "edu.stanford.smi.protegex.prompt.PromptTab"))
+
+([Datacenter_ProjectKB_Class10061] of  Property_List
+)
+
+([Datacenter_ProjectKB_Class10062] of  Widget
 
 	(is_hidden FALSE)
-	(name "http://swrl.stanford.edu/ontologies/3.3/swrla.owl#hasRuleGroup")
-	(property_list [Datacenter_ProjectKB_Class10004]))
+	(label "Name")
+	(name ":NAME")
+	(property_list [Datacenter_ProjectKB_Class10064])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
-([Datacenter_ProjectKB_Class10004] of  Property_List
+([Datacenter_ProjectKB_Class10063] of  Widget
+
+	(is_hidden FALSE)
+	(label "Comment")
+	(name "http://www.w3.org/2000/01/rdf-schema#comment")
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([Datacenter_ProjectKB_Class10064] of  Property_List
 )
+
+([Datacenter_ProjectKB_Class10182] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Datacenter_ProjectKB_Class10183] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class10184] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Datacenter_ProjectKB_Class10185] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([Datacenter_ProjectKB_Class10186] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
 
 ([Datacenter_ProjectKB_Class11] of  Widget
 
@@ -95,285 +381,6 @@
 	(name "http://www.w3.org/2000/01/rdf-schema#seeAlso")
 	(property_list [Datacenter_ProjectKB_Class21]))
 
-([Datacenter_ProjectKB_Class20004] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20005])
-	(widget_class_name "se.liu.ida.JessTab.JessTab"))
-
-([Datacenter_ProjectKB_Class20005] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20006] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20007])
-	(widget_class_name "edu.stanford.smi.protege.widget.ProtegePropertiesTab"))
-
-([Datacenter_ProjectKB_Class20007] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20008] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20009])
-	(widget_class_name "ezpal.EZPalTab"))
-
-([Datacenter_ProjectKB_Class20009] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20010] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20011])
-	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
-
-([Datacenter_ProjectKB_Class20011] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20012] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20013])
-	(widget_class_name "ca.uvic.csr.shrimp.jambalaya.JambalayaTab"))
-
-([Datacenter_ProjectKB_Class20013] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20014] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20015])
-	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.InstanceTreeTab"))
-
-([Datacenter_ProjectKB_Class20015] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20016] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20017])
-	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalConstraintsTab"))
-
-([Datacenter_ProjectKB_Class20017] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20018] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20019])
-	(widget_class_name "edu.stanford.smi.RemoteKBTab.WordNetTab"))
-
-([Datacenter_ProjectKB_Class20019] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20020] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20021])
-	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
-
-([Datacenter_ProjectKB_Class20021] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20022] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20023])
-	(widget_class_name "uk.ac.man.cs.mig.coode.owlviz.ui.OWLVizTab"))
-
-([Datacenter_ProjectKB_Class20023] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20024] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20025])
-	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
-
-([Datacenter_ProjectKB_Class20025] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20026] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20027])
-	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
-
-([Datacenter_ProjectKB_Class20027] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20028] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20029])
-	(widget_class_name "org.protege.owl.mm.ssm.ui.SpreadSheetMasterTab"))
-
-([Datacenter_ProjectKB_Class20029] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20030] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20031])
-	(widget_class_name "TGViztab.TGVizTab"))
-
-([Datacenter_ProjectKB_Class20031] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20032] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20033])
-	(widget_class_name "org.algernon.kb.okbc.protege.plugins.AlgernonTab"))
-
-([Datacenter_ProjectKB_Class20033] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20034] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20035])
-	(widget_class_name "edu.stanford.smi.protegex.changes.changesKBViewTab.ChangesKBViewTab"))
-
-([Datacenter_ProjectKB_Class20035] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20036] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20037])
-	(widget_class_name "edu.stanford.smi.protegex.xml.tab.XMLTab"))
-
-([Datacenter_ProjectKB_Class20037] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20038] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20039])
-	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalQueriesTab"))
-
-([Datacenter_ProjectKB_Class20039] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20040] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20041])
-	(widget_class_name "edu.stanford.smi.protegex.chatPlugin.ChatTab"))
-
-([Datacenter_ProjectKB_Class20041] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20042] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20043])
-	(widget_class_name "org.protege.owl.axiome.ui.AxiomeTab"))
-
-([Datacenter_ProjectKB_Class20043] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20044] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20045])
-	(widget_class_name "edu.stanford.smi.protege.keywordsearch.StringSearch"))
-
-([Datacenter_ProjectKB_Class20045] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20046] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20047])
-	(widget_class_name "script.ProtegeScriptTab"))
-
-([Datacenter_ProjectKB_Class20047] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20048] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20049])
-	(widget_class_name "edu.stanford.smi.protegex.changes.ChangesTab"))
-
-([Datacenter_ProjectKB_Class20049] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20050] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20051])
-	(widget_class_name "edu.stanford.smi.protegex.fctab.FacetConstraintsTab"))
-
-([Datacenter_ProjectKB_Class20051] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20052] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20053])
-	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.KnowledgeTreeTab"))
-
-([Datacenter_ProjectKB_Class20053] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20054] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20055])
-	(widget_class_name "edu.stanford.smi.protegex.datamaster.DataMasterTab"))
-
-([Datacenter_ProjectKB_Class20055] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20056] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20057])
-	(widget_class_name "dfki.protege.ontoviz_tab.OntovizTab"))
-
-([Datacenter_ProjectKB_Class20057] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20058] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20059])
-	(widget_class_name "edu.stanford.smi.protegex.changes.stats.ChangeStatisticsTab"))
-
-([Datacenter_ProjectKB_Class20059] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20060] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [Datacenter_ProjectKB_Class20061])
-	(widget_class_name "edu.stanford.smi.protegex.prompt.PromptTab"))
-
-([Datacenter_ProjectKB_Class20061] of  Property_List
-)
-
-([Datacenter_ProjectKB_Class20062] of  Widget
-
-	(is_hidden FALSE)
-	(label "Name")
-	(name ":NAME")
-	(property_list [Datacenter_ProjectKB_Class20064])
-	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
-
-([Datacenter_ProjectKB_Class20063] of  Widget
-
-	(is_hidden FALSE)
-	(label "Comment")
-	(name "http://www.w3.org/2000/01/rdf-schema#comment")
-	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
-
-([Datacenter_ProjectKB_Class20064] of  Property_List
-)
-
 ([Datacenter_ProjectKB_Class21] of  Property_List
 )
 
@@ -400,31 +407,6 @@
 ([Datacenter_ProjectKB_Class28] of  Property_List
 )
 
-([Datacenter_ProjectKB_Class30393] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Datacenter_ProjectKB_Class30394] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class30395] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Datacenter_ProjectKB_Class30396] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([Datacenter_ProjectKB_Class30397] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
 ([Datacenter_ProjectKB_Class4] of  Property_List
 
 	(properties
@@ -436,9 +418,7 @@
 		[Datacenter_ProjectKB_Class18]
 		[Datacenter_ProjectKB_Class20]
 		[Datacenter_ProjectKB_Class22]
-		[Datacenter_ProjectKB_Class27]
-		[Datacenter_ProjectKB_Class10001]
-		[Datacenter_ProjectKB_Class10003]))
+		[Datacenter_ProjectKB_Class27]))
 
 ([Datacenter_ProjectKB_Class5] of  Widget
 
@@ -455,8 +435,8 @@
 ([Datacenter_ProjectKB_Class6] of  Property_List
 
 	(properties
-		[Datacenter_ProjectKB_Class20062]
-		[Datacenter_ProjectKB_Class20063]))
+		[Datacenter_ProjectKB_Class10062]
+		[Datacenter_ProjectKB_Class10063]))
 
 ([Datacenter_ProjectKB_Class8] of  Property_List
 
@@ -932,9 +912,6 @@
 	(property_list [KB_140180_Instance_9]))
 
 ([KB_140180_Instance_9] of  Property_List
-)
-
-([KB_187304_Class0] of  Map
 )
 
 ([KB_221055_Instance_10] of  Widget
@@ -3460,6 +3437,9 @@
 ([KB_713803_Instance_981] of  Property_List
 )
 
+([KB_751612_Class0] of  Map
+)
+
 ([KB_764103_Instance_545] of  Widget
 
 	(is_hidden FALSE)
@@ -5864,9 +5844,9 @@
 		":SLOT-CONSTRAINTS"
 		"http://www.w3.org/2003/11/swrl#BuiltinAtom"
 		"http://www.w3.org/2003/11/swrlb#unaryMinus"
+		"http://www.w3.org/2002/07/owl#Ontology"
 		":PAL-RANGE"
 		":OWL-ONTOLOGY-POINTER-CLASS"
-		"http://www.w3.org/2002/07/owl#Ontology"
 		"http://www.w3.org/2003/11/swrlb#stringEqualIgnoreCase"
 		"http://www.w3.org/2001/XMLSchema#dateTime"
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#object"
@@ -5954,8 +5934,8 @@
 		"http://www.w3.org/2001/XMLSchema#normalizedString"
 		"http://www.w3.org/2001/XMLSchema#nonPositiveInteger"
 		"http://www.w3.org/2003/11/swrlb#time"
-		"http://www.w3.org/2002/07/owl#someValuesFrom"
 		"http://protege.stanford.edu/plugins/owl/protege#classificationStatus"
+		"http://www.w3.org/2002/07/owl#someValuesFrom"
 		"http://protege.stanford.edu/plugins/owl/protege#inferredSuperclassOf"
 		"http://www.w3.org/2003/11/swrlb#notEqual"
 		"http://www.w3.org/2000/01/rdf-schema#subPropertyOf"

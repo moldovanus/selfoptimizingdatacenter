@@ -13,10 +13,14 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.*;
+import benchmark.RandomWorkLoadGenerator;
+import benchmark.TaskLifeManager;
+import benchmark.WorkLoadFileIO;
+import benchmark.WorkLoadLoader;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
+import contextawaremodel.sensorapi.SensorAPI;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -69,18 +73,18 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         this.datacenterMemory = datacenterMemory;
         this.memory = memory;
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
-//        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-//
-//        for (Task task : tasks) {
-//            TaskLifeManager.addTask(protegeFactory, task, 60, datacenterPolicyConversionModel);
-//        }
-//
-//        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
-//        try {
-//            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
-//        } catch (IOException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+
+        for (Task task : tasks) {
+            TaskLifeManager.addTask(protegeFactory, task, 10, datacenterPolicyConversionModel);
+        }
+
+        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
+        try {
+            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         /* Task task = protegeFactory.createTask("TestTask");
                 RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
@@ -180,10 +184,10 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         */
 
         //add server web service information pooling mechanism
-//        Collection<Server> servers = protegeFactory.getAllServerInstances();
-//        for (Server server : servers) {
-//            SensorAPI.addServerListener(server, protegeFactory);
-//        }
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
+        for (Server server : servers) {
+            SensorAPI.addServerListener(server, protegeFactory);
+        }
 //
 //        for (Server server : servers) {
 //            if (server.hasServerIPAddress()) {

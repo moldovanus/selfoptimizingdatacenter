@@ -48,17 +48,17 @@ public class ServerInfoReader {
 
 
     private void refreshServerInfo() {
-       ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         server.setProxy(proxy);
         ServerDto serverInfo = proxy.getServerInfo();
 
         CPU cpu = server.getAssociatedCPU();
         int coreCount = serverInfo.getCoreCount();
-        Collection cores = new ArrayList(coreCount);
-        for (int i = 0; i < coreCount; i++) {
+        Collection cores = cpu.getAssociatedCore();
+        /*for (int i = 0; i < coreCount; i++) {
             cores.add(protegeFactory.createCore(server.getLocalName() + "_Core_" + i));
-        }
-        cpu.setAssociatedCore(cores);
+        }*/
+        //cpu.setAssociatedCore(cores);
 
         int totalCPU = serverInfo.getTotalCPU();
         Object[] freeCPUValues = serverInfo.getFreeCPU().toArray();
@@ -66,15 +66,15 @@ public class ServerInfoReader {
         int freeCPU = totalCPU - (Integer) freeCPUValues[0];
         for (Object item : cores) {
             Core core = (Core) item;
-            core.setMaxAcceptableValue(totalCPU);
-            core.setMinAcceptableValue(1);
+            // core.setMaxAcceptableValue(totalCPU);
+            //core.setMinAcceptableValue(1);
             core.setTotal(totalCPU);
             core.setUsed(freeCPU);
         }
 
         greenContextOntology.Memory serverMemory = server.getAssociatedMemory();
         int totalMemory = serverInfo.getTotalMemory();
-        serverMemory.setMaxAcceptableValue(totalMemory);
+        //serverMemory.setMaxAcceptableValue(totalMemory);
         serverMemory.setTotal(totalMemory);
         serverMemory.setUsed(totalMemory - serverInfo.getFreeMemory());
 
@@ -90,7 +90,7 @@ public class ServerInfoReader {
         }
 
         int storageSize = targetStorage.getSize();
-        storage.setMaxAcceptableValue(storageSize);
+        // storage.setMaxAcceptableValue(storageSize);
         storage.setTotal(storageSize);
         storage.setUsed(storageSize - targetStorage.getFreeSpace());
     }
