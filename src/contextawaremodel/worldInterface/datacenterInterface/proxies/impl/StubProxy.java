@@ -18,7 +18,7 @@ public class StubProxy extends ServerManagementProxy {
     }
 
     public ServerDto getServerInfo() {
-        ServerDto dto = new ServerDto();
+        /*ServerDto dto = new ServerDto();
         StorageDto storageDto = new StorageDto();
         ArrayList<Integer> cpu = new ArrayList<Integer>();
         ArrayList<StorageDto> storageDtos = new ArrayList<StorageDto>();
@@ -35,7 +35,8 @@ public class StubProxy extends ServerManagementProxy {
         dto.setStorage(storageDtos);
         dto.setCoreCount(1);
 
-        return dto;  //To change body of implemented methods use File | Settings | File Templates.
+        return dto;*/  //To change body of implemented methods use File | Settings | File Templates.
+        return new HyperVServerManagementProxy(hostName).getServerInfo();
     }
 
     public void moveDestinationActions(String path1, String path2, String vmName) {
@@ -63,7 +64,7 @@ public class StubProxy extends ServerManagementProxy {
     }
 
     public void wakeUpServer(String mac, String ipAddress, int port) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        new HyperVServerManagementProxy(hostName).wakeUpServer(mac,ipAddress,port);
     }
 
     public void sendServerToSleep() {

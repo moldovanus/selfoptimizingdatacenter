@@ -29,7 +29,8 @@ public class TaskLifeManager {
     }
 
     public static void addTask(final ProtegeFactory protegeFactory, final Task task, int lifeInMinutes, final OntModel model) {
-        Timer timer = new Timer(lifeInMinutes * 1000, new ActionListener() {
+        //TODO: place minutes. acuma i in seconds
+        Timer timer = new Timer(lifeInMinutes * 60000, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 toKill.add(task);

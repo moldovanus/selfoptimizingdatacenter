@@ -75,6 +75,11 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
 
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         for (Task task : tasks) {
             TaskLifeManager.addTask(protegeFactory, task, 10, datacenterPolicyConversionModel);
         }
@@ -719,7 +724,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                 o.execute(datacenterPolicyConversionModel);
                 o.executeOnX3D(agent);
                 o.executeOnWebService();   //---> to be decommented when running on servers
-                 try {
+                try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -741,6 +746,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         }
                         NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
                         negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
+                        negotiateResourcesCommand.executeOnWebService();
                         /*  try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
@@ -756,6 +762,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
                         //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
                     }
                 }
+
                 datacenterMemory.memorize(initialDataCenterContext, result.getActions());
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
                 for (Server server : servers) {

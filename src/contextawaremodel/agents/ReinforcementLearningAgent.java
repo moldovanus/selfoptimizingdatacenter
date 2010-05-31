@@ -149,7 +149,6 @@ public class ReinforcementLearningAgent extends Agent {
     @Override
     protected void setup() {
         System.out.println("[RL agent] Hello!");
-
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {

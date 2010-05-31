@@ -51,7 +51,7 @@ public abstract class ServerMonitor extends AbstractMonitor {
 
     protected void refreshData() {
         if (server.getIsInLowPowerState()) {
-           // return;
+            return;
         }
     }
 }

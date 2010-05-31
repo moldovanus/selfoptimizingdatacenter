@@ -7,10 +7,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.net.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,6 +24,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public static void main(String[] args) {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
+        serverManagementProxy.wakeUpServer("00-1d-7d-05-63-ff","192.168.2.123",9);
         ServerManagementProxy.DEBUG = true;
         //serverManagementProxy.getServerInfo();
         /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
@@ -37,8 +35,37 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         */
         // serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage", "\\\\192.168.2.101\\VirtualMachines", "VM_2");
         //serverManagementProxy.sendServerToSleep();
-        System.out.println("End");
 
+
+    }
+
+    private void waitUntilTargetIsAlive(String ip) {
+        String pingCmd = "ping " + ip;
+        boolean ok = false;
+        while (!ok) {
+            try {
+                Runtime r = Runtime.getRuntime();
+                Process p = r.exec(pingCmd);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
+
+                    if (!inputLine.contains("unreachable") && !inputLine.equals("") &&
+                            inputLine.contains("Reply")) {
+                        ok = true;
+                        break;
+                    }
+
+                }
+                in.close();
+
+            }
+            catch (IOException e) {
+                System.out.println(e);
+            }
+        }
     }
 
     public ServerDto getServerInfo() {
@@ -175,7 +202,8 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void deployVirtualMachine(String from, String to, String vmName, String newName) {
         try {
             //Socket sock = new Socket(hostName, 80);
-            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from=" + from + "&to=" + to + "&vmName=" + vmName + "&vmCopyName" + newName + "");
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from="
+                    + from + "&to=" + to + "&vmName=" + vmName + "&vmCopyName=" + newName + "");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
             /*connection.setDoOutput(true);
@@ -203,7 +231,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                     System.out.println(line);
                 }
             }
-            startVirtualMachine(vmName);
+            startVirtualMachine(newName);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -355,6 +383,8 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                     System.out.println(line);
                 }
             }
+            waitUntilTargetIsAlive(ipAddress);
+            Thread.sleep(60000);
 
         } catch (Exception e) {
             e.printStackTrace();
