@@ -65,7 +65,8 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
 
         if (proxy != null) {
             //TODO:proxy.deleteVirtualMachine(vmName);
-            proxy.deleteVirtualMachine(task.getName());
+            proxy.stopVirtualMachine(task.getLocalName());
+            proxy.deleteVirtualMachine(task.getLocalName());
         } else {
             System.err.println("Proxy is null");
         }

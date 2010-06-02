@@ -71,13 +71,13 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
-        Server server = protegeFactory.getServer(serverName);
+      /*  Server server = protegeFactory.getServer(serverName);
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             proxy.sendServerToSleep();
         } else {
             System.err.println("Proxy is null");
-        }
+        }*/
     }
 
     @Override

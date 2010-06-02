@@ -23,6 +23,7 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
 
     private boolean wasSleeping;
 
+
     public NegotiateResourcesCommand(ProtegeFactory protegeFactory, Negotiator negotiator, String serverName, String taskName) {
         super(protegeFactory);
         cost = 0;
@@ -45,11 +46,14 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
         int negotiatedStorage = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_STORAGE)) ? negotiatedValues.get(Negotiator.NEGOTIATED_STORAGE).intValue() : 0;
 
 
-        server.addNegotiatedTasks(task, model, negotiatedCPU, negotiatedMemory, negotiatedStorage);
-
+        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, serverName, taskName,
+                negotiatedCPU, negotiatedMemory, negotiatedStorage);
+        deployNegotiatedTaskCommand.execute(model);
+        System.out.println(deployNegotiatedTaskCommand.toString());
         if (server.getIsInLowPowerState()) {
             SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, serverName);
             wakeUp.execute(model);
+            System.out.println(wakeUp.toString());
             wasSleeping = true;
         }
 
@@ -60,13 +64,13 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
 //        Server server = protegeFactory.getServer(serverName);
 //        server.resetOptimumValues();
 
-        RemoveTaskFromServerCommand c = new RemoveTaskFromServerCommand(protegeFactory, taskName, serverName);
+        /* RemoveTaskFromServerCommand c = new RemoveTaskFromServerCommand(protegeFactory, taskName, serverName);
         c.execute(model);
         if (wasSleeping) {
             wasSleeping = false;
             SelfOptimizingCommand wakeUp = new SendServerToLowPowerStateCommand(protegeFactory, serverName);
             wakeUp.execute(model);
-        }
+        }*/
 
     }
 
@@ -77,7 +81,30 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
     }
 
     public void executeOnWebService() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Server server = protegeFactory.getServer(serverName);
+        Task task = protegeFactory.getTask(taskName);
+        Map<String, Double> negotiatedValues = negotiator.negotiate(server, task);
+
+        if (negotiatedValues.size() == 0) {
+            //System.err.println("Nothing found after negotiation");
+            return;
+        }
+        int negotiatedCPU = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_CPU)) ? negotiatedValues.get(Negotiator.NEGOTIATED_CPU).intValue() : 0;
+        int negotiatedMemory = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_MEMORY)) ? negotiatedValues.get(Negotiator.NEGOTIATED_MEMORY).intValue() : 0;
+        int negotiatedStorage = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_STORAGE)) ? negotiatedValues.get(Negotiator.NEGOTIATED_STORAGE).intValue() : 0;
+
+
+        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, serverName, taskName,
+                negotiatedCPU, negotiatedMemory, negotiatedStorage);
+        deployNegotiatedTaskCommand.executeOnWebService();
+        System.out.println(deployNegotiatedTaskCommand.toString());
+
+        if (server.getIsInLowPowerState()) {
+            SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, serverName);
+            wakeUp.executeOnWebService();
+            System.out.println(wakeUp);
+            wasSleeping = true;
+        }
     }
 
     public String[] toStringArray() {

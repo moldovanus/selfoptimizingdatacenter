@@ -56,10 +56,11 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
-        ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+        //TODO : move this hardcoded monitor
+        ServerManagementProxyInterface proxy = new HyperVServerManagementProxy("192.168.2.101");
 
         if (proxy != null) {
-            proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(), server.getServerWakeUpPort());
+            proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(),  9);
         } else {
             System.err.println("Proxy is null");
         }

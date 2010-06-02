@@ -69,10 +69,9 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             String path = (String) server.getVirtualMachinesPath().iterator().next();
-            proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",//+server.getServerName(),//USING SAME LOCATION FOR TASK QUEUE
-                    // "\\\\" + server.getServerIPAddress() + "\\" +   path.split(":")[1].substring(1),
+            proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",
                     "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
-                    task.getTaskName(), task.getTaskName() + UUID.randomUUID());
+                    task.getTaskName(), task.getLocalName());
 
         } else {
             System.err.println("Proxy is null");
