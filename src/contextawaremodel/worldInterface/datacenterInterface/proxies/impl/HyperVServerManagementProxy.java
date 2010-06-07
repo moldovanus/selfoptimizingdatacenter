@@ -24,8 +24,39 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public static void main(String[] args) {
         ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
-        serverManagementProxy.wakeUpServer("00-1d-7d-05-63-ff","192.168.2.123",9);
+        serverManagementProxy.wakeUpServer("00-1d-7d-05-63-ff", "192.168.2.123", 9);
         ServerManagementProxy.DEBUG = true;
+
+        String ip = "192.168.2.120";
+        String pingResult = "";
+
+        String pingCmd = "ping " + ip;
+        boolean ok = false;
+        while (!ok) {
+            try {
+                Runtime r = Runtime.getRuntime();
+                Process p = r.exec(pingCmd);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
+
+
+                    if (!inputLine.contains("unreachable") && !inputLine.equals("") && !inputLine.contains("Ping") && !inputLine.contains("Packets")) {
+                        ok = true;
+                        break;
+                    }
+
+                    pingResult += inputLine;
+                }
+                in.close();
+
+            }//try
+            catch (IOException e) {
+                System.out.println(e);
+            }
+        }
         //serverManagementProxy.getServerInfo();
         /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
          ServerManagementProxy serverManagementProxy1 = new HyperVServerManagementProxy("192.168.2.101");

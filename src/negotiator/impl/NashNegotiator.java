@@ -1,12 +1,16 @@
 package negotiator.impl;
 
+import greenContextOntology.Core;
 import greenContextOntology.RequestedTaskInfo;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
 import negotiator.Negotiator;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import negotiator.Negotiator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,7 +23,7 @@ public class NashNegotiator implements Negotiator {
 
     private int quality = 10;
 
-    public void negotiateGivenRanges(int minValue1, int maxValue1, int minValue2, int maxValue2, int optimalValue1, int optimalValue2) {
+    public double negotiateGivenRanges(int minValue1, int maxValue1, int minValue2, int maxValue2, int optimalValue1, int optimalValue2) {
         int increment1 = (maxValue1 - minValue1) / quality;   //task
         int increment2 = (maxValue2 - minValue2) / quality;        //server
         boolean[][] maxUtilities1 = new boolean[quality][quality];
@@ -82,28 +86,56 @@ public class NashNegotiator implements Negotiator {
                     int currentValue1 = i * increment1 + minValue1;
                     int currentValue2 = j * increment2 + minValue2;
                     //TODO : if not equal, optimize function :D
-
                     System.out.println("Equilibrium Found!!!" + "(" + i + "," + j + ") negotiatedValue: " + (currentValue1 + currentValue2) / 2);
+
+                    return ((double) (currentValue1 + currentValue2) / 2);
                 }
             }
         }
+        return 0;
     }
 
     public Map<String, Double> negotiate(Server server, Task task) {
         RequestedTaskInfo reqTask = task.getRequestedInfo();
+        double negotiatedCpu = 0.0d;
+        double negotiatedStorage = 0.0d;
+        double negotiatedMemory = 0.0d;
+        /***Memory*********************************/
         if (server.getAssociatedMemory().getMaxAcceptableValue() - (server.getAssociatedMemory().getUsed() + reqTask.getMemoryMinAcceptableValue()) < 0) {
             int optimalValueForServer = server.getAssociatedMemory().getMaxAcceptableValue() - server.getAssociatedMemory().getUsed();
             if (optimalValueForServer == 0) {
                 optimalValueForServer++;
             }
-            negotiateGivenRanges(reqTask.getMemoryMinAcceptableValue(), reqTask.getMemoryMaxAcceptableValue(), 0,
+            negotiatedMemory = negotiateGivenRanges(reqTask.getMemoryMinAcceptableValue(), reqTask.getMemoryMaxAcceptableValue(), 0,
                     server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed(),
                     reqTask.getMemoryMinAcceptableValue(), optimalValueForServer);
         }
+        /***Storage*******************************/
+        if (server.getAssociatedStorage().getMaxAcceptableValue() - (server.getAssociatedStorage().getUsed() + reqTask.getStorageMinAcceptableValue()) < 0) {
+            int optimalValueForServer = server.getAssociatedStorage().getMaxAcceptableValue() - server.getAssociatedStorage().getUsed();
+            if (optimalValueForServer == 0) {
+                optimalValueForServer++;
+            }
+            negotiatedStorage = negotiateGivenRanges(reqTask.getStorageMinAcceptableValue(), reqTask.getStorageMaxAcceptableValue(), 0,
+                    server.getAssociatedStorage().getTotal() - server.getAssociatedStorage().getUsed(),
+                    reqTask.getStorageMinAcceptableValue(), optimalValueForServer);
+        }
+        /***Cpu*******************************/
+        Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
+        Core core = cores.iterator().next();
+        if (core.getMaxAcceptableValue() - (core.getUsed() + reqTask.getCpuMinAcceptableValue()) < 0) {
+            int optimalValueForServer = core.getMaxAcceptableValue() - core.getUsed();
+            if (optimalValueForServer == 0) {
+                optimalValueForServer++;
+            }
+            negotiatedCpu = negotiateGivenRanges(reqTask.getCpuMinAcceptableValue(), reqTask.getCpuMaxAcceptableValue(), 0,
+                    core.getTotal() - core.getUsed(),
+                    reqTask.getCpuMinAcceptableValue(), optimalValueForServer);
+        }
         Map<String, Double> negotiatedValues = new HashMap<String, Double>();
-        negotiatedValues.put(NEGOTIATED_CPU, 0d);
-        negotiatedValues.put(NEGOTIATED_STORAGE, 0d);
-        negotiatedValues.put(NEGOTIATED_MEMORY, 0d);
+        negotiatedValues.put(NEGOTIATED_CPU, negotiatedCpu);
+        negotiatedValues.put(NEGOTIATED_STORAGE, negotiatedStorage);
+        negotiatedValues.put(NEGOTIATED_MEMORY, negotiatedMemory);
         return negotiatedValues;
     }
 }
