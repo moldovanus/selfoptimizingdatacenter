@@ -9,8 +9,8 @@ import actionselection.context.Memory;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.behaviours.ReceiveMessageRLBehaviour;
-import contextawaremodel.agents.behaviours.ReinforcementLearningBasicBehaviour;
-import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterBehavior;
+import contextawaremodel.agents.behaviours.ReinforcementLearningEnvironmentManagementBehaviour;
+import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterManagementBehavior;
 import contextawaremodel.worldInterface.dtos.TaskDto;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -21,7 +21,6 @@ import greenContextOntology.Task;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
-import logger.LoggerGUI;
 
 import java.io.*;
 import java.util.Collection;
@@ -217,8 +216,8 @@ public class ReinforcementLearningAgent extends Agent {
                 faceRecognition.put("2.00", "UNKNOWN");
                 valueMapping.put("FaceRecognitionSensorI", faceRecognition);
                 */
-                addBehaviour(new ReinforcementLearningBasicBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memorySelfHealing));
-                addBehaviour(new ReinforcementLearningDataCenterBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter,
+                addBehaviour(new ReinforcementLearningEnvironmentManagementBehaviour(this, 1000, policyConversionModel, jenaOwlModel, memorySelfHealing));
+                addBehaviour(new ReinforcementLearningDataCenterManagementBehavior(this, 2000, owlModelDataCenter, policyConversionModelDataCenter,
                         jenaOwlModelDataCenter, policyConversionModel,
                         jenaOwlModel, memorySelfHealing, memorySelfOptimizing));
                 //addBehaviour(new ContextDisturbingBehaviour(this,5000, policyConversionModel));

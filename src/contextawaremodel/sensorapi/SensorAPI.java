@@ -6,7 +6,7 @@ import java.util.Hashtable;
 
 public class SensorAPI {
 
-    private static Hashtable<String, SensorWSReader> readerThreads = new Hashtable<String, SensorWSReader>();
+    private static Hashtable<String, SensorWSReader> sensorReaders = new Hashtable<String, SensorWSReader>();
     private static Hashtable<String, ServerInfoReader> serverReaders = new Hashtable<String, ServerInfoReader>();
 
     public static double getSensorValue(String wsURL) {
@@ -14,9 +14,9 @@ public class SensorAPI {
         return wsrb.getSensorValue();
     }
 
-    public static void addSensorListener(String url, SensorListener listener, long timeInterval) {
-        if (readerThreads.containsKey(url)) {
-            SensorWSReader reader = readerThreads.get(url);
+    public static void addSensorListener(String url, SensorListener listener, int timeInterval) {
+        if (sensorReaders.containsKey(url)) {
+            SensorWSReader reader = sensorReaders.get(url);
             reader.setInterval(Math.min(timeInterval, reader.getInterval()));
             reader.addListener(listener);
         } else {
@@ -25,13 +25,13 @@ public class SensorAPI {
         }
     }
 
-    public static void addSensorListener(String url, SensorListener listener) {
-        addSensorListener(url, listener, 3000);
-    }
-
     public static void addServerListener(Server server, ProtegeFactory protegeFactory, int interval) {
         ServerInfoReader reader = new ServerInfoReader(server, protegeFactory, interval);
         serverReaders.put(server.getServerIPAddress(), reader);
+    }
+
+    public static void addSensorListener(String url, SensorListener listener) {
+        addSensorListener(url, listener, 3000);
     }
 
     public static void addServerListener(Server server, ProtegeFactory protegeFactory) {

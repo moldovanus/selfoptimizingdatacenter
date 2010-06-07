@@ -47,7 +47,7 @@ public class TaskLifeManager {
         while (toKill.size() > 0) {
             task = toKill.remove(0);
             System.out.println(task.getLocalName() + " running = " + task.isRunning() + " has been killed by task life simulator");
-            RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, task.getName(), task.getAssociatedServer().getLocalName());
+            RemoveTaskFromServerCommand command = new RemoveTaskFromServerCommand(protegeFactory, task.getName(), task.getAssociatedServer().getName());
             command.executeOnWebService();
             command.execute(model);
             tasksLifeTimer.remove(task);

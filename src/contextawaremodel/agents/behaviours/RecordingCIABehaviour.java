@@ -25,7 +25,7 @@ public class RecordingCIABehaviour extends TickerBehaviour {
         // Save the file to the correct path
         String fileName = pathName + "/ontology.owl";
         ArrayList errors = new ArrayList();
-        ((JenaOWLModel) this.ag.getOwlModel()).save(new File(fileName).toURI(), FileUtils.langXMLAbbrev, errors);
+        ((JenaOWLModel) this.ag.getEnvironmentOwlModel()).save(new File(fileName).toURI(), FileUtils.langXMLAbbrev, errors);
         */
      //   System.out.println("[CIA] A new log was saved to \"" + pathName + "\".");
     }

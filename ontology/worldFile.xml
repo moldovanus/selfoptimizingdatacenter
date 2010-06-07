@@ -14,7 +14,7 @@
 		<data-property data-name="has-position-Y" data-value="2 m"/>
 		<data-property data-name="has-position-Z" data-value="2.5 m"/>
 		<data-property data-name="has-influence-Radius" data-value="5 m"/>
-		<data-property data-name="has-type-of-service" data-value="Alarm state"/>
+		<data-property data-name="has-type-of-service" data-value="Humidity Detection"/>
 		<data-property data-name="webServiceURI" data-value="http://localhost:2591/HumiditySensor.asmx/GetSensorValue"/>
 	</ContextElement>
 	

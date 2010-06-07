@@ -11,7 +11,7 @@ public class GlobalVars {
     public static final String baseDataCenter = "http://www.owl-ontologies.com/Ontology1230214892.owl";
     public static final String base = "http://www.owl-ontologies.com/Ontology1230214892.owl";
     public static final String CIAGENT_NAME = "CIAgent";
-    public static final String CMAGENT_NAME = "CMAgent";
+    public static final String CMAGENT_NAME = "CMAAgent";
     public static final String RPAGENT_NAME = "RPAgent";
     public static final String EMAGENT_NAME = "EMAgent";
     public static final String GUIAGENT_NAME = "GUIAgent";

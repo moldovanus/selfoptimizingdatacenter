@@ -46,12 +46,12 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
         int negotiatedStorage = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_STORAGE)) ? negotiatedValues.get(Negotiator.NEGOTIATED_STORAGE).intValue() : 0;
 
 
-        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, serverName, taskName,
+        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, server.getName(), task.getName(),
                 negotiatedCPU, negotiatedMemory, negotiatedStorage);
         deployNegotiatedTaskCommand.execute(model);
         System.out.println(deployNegotiatedTaskCommand.toString());
         if (server.getIsInLowPowerState()) {
-            SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, serverName);
+            SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, server.getName());
             wakeUp.execute(model);
             System.out.println(wakeUp.toString());
             wasSleeping = true;
@@ -94,13 +94,13 @@ public class NegotiateResourcesCommand extends SelfOptimizingCommand {
         int negotiatedStorage = (negotiatedValues.containsKey(Negotiator.NEGOTIATED_STORAGE)) ? negotiatedValues.get(Negotiator.NEGOTIATED_STORAGE).intValue() : 0;
 
 
-        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, serverName, taskName,
+        DeployNegotiatedTaskCommand deployNegotiatedTaskCommand = new DeployNegotiatedTaskCommand(protegeFactory, server.getName(), task.getName(),
                 negotiatedCPU, negotiatedMemory, negotiatedStorage);
         deployNegotiatedTaskCommand.executeOnWebService();
         System.out.println(deployNegotiatedTaskCommand.toString());
 
         if (server.getIsInLowPowerState()) {
-            SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, serverName);
+            SelfOptimizingCommand wakeUp = new WakeUpServerCommand(protegeFactory, server.getName());
             wakeUp.executeOnWebService();
             System.out.println(wakeUp);
             wasSleeping = true;

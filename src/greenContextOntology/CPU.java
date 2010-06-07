@@ -28,8 +28,7 @@ public interface CPU extends Component {
 
     void setAssociatedCore(Collection newAssociatedCore);
 
-
-
+    
     // Property http://www.owl-ontologies.com/Datacenter.owl#numberOfCores
     int getNumberOfCores();
 
@@ -38,5 +37,5 @@ public interface CPU extends Component {
     boolean hasNumberOfCores();
 
     void setNumberOfCores(int newNumberOfCores);
-  
+
 }

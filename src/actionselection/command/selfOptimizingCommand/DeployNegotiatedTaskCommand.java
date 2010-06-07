@@ -46,6 +46,7 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
     public void execute(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
+        task.setAssociatedServer(server);
         server.addNegotiatedTasks(task, model, negotiatedCPU, negotiatedMemory, negotiatedStorage);
     }
 

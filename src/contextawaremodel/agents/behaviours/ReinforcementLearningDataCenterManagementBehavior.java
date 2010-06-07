@@ -20,7 +20,6 @@ import benchmark.WorkLoadLoader;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
-import contextawaremodel.sensorapi.SensorAPI;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
@@ -43,7 +42,7 @@ import java.util.Queue;
 /**
  * @author Administrator
  */
-public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
+public class ReinforcementLearningDataCenterManagementBehavior extends TickerBehaviour {
 
     private OWLModel datacenterOwlModel;
     private OntModel datacenterPolicyConversionModel;
@@ -61,7 +60,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
     private Negotiator negotiator;
     //  private TaskManagement taskManagementWindow;
 
-    public ReinforcementLearningDataCenterBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel,
+    public ReinforcementLearningDataCenterManagementBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel,
                                                    JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel,
                                                    JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
         super(a, interval);
@@ -189,10 +188,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         */
 
         //add server web service information pooling mechanism
-        Collection<Server> servers = protegeFactory.getAllServerInstances();
-        for (Server server : servers) {
-            SensorAPI.addServerListener(server, protegeFactory);
-        }
+        
 //
 //        for (Server server : servers) {
 //            if (server.hasServerIPAddress()) {
@@ -264,7 +260,7 @@ public class ReinforcementLearningDataCenterBehavior extends TickerBehaviour {
         // resultsFrame.setVisible(true);
 
 
-        logger = Logger.getLogger(ReinforcementLearningDataCenterBehavior.class);
+        logger = Logger.getLogger(ReinforcementLearningDataCenterManagementBehavior.class);
     }
 
     // function for computing the contribution to the entropy of task @param task

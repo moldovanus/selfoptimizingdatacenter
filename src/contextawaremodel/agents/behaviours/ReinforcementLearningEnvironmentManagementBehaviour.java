@@ -37,7 +37,7 @@ import java.util.Queue;
 /**
  * @author Administrator
  */
-public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
+public class ReinforcementLearningEnvironmentManagementBehaviour extends TickerBehaviour {
 
     private Memory memory;
     private NumberFormat integerNumberFormat = NumberFormat.getIntegerInstance();
@@ -51,7 +51,7 @@ public class ReinforcementLearningBasicBehaviour extends TickerBehaviour {
     private Property hasAcceptedValueProperty;
     private OntModel policyConversionModel;
 
-    public ReinforcementLearningBasicBehaviour(Agent a, int interval, OntModel policyConversionModel, JenaOWLModel jenaOWLModel, Memory memory) {
+    public ReinforcementLearningEnvironmentManagementBehaviour(Agent a, int interval, OntModel policyConversionModel, JenaOWLModel jenaOWLModel, Memory memory) {
         super(a, interval);
         this.policyConversionModel = policyConversionModel;
         agent = (ReinforcementLearningAgent) a;
