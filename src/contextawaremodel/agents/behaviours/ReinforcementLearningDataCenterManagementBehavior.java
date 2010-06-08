@@ -61,8 +61,8 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
     //  private TaskManagement taskManagementWindow;
 
     public ReinforcementLearningDataCenterManagementBehavior(Agent a, int interval, OWLModel datacenterOwlModel, OntModel datacenterPolicyConversionModel,
-                                                   JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel,
-                                                   JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
+                                                             JenaOWLModel jenaDatacenterOwlModel, OntModel selfHealingPolicyConversionModel,
+                                                             JenaOWLModel selfHealingOwlModel, Memory memory, DatacenterMemory datacenterMemory) {
         super(a, interval);
         agent = (ReinforcementLearningAgent) a;
         this.datacenterOwlModel = datacenterOwlModel;
@@ -117,58 +117,58 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, datacenterPolicyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
-        /*
-                Task task = protegeFactory.createTask("TestTask");
-                RequestedTaskInfo  requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
-                ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
-                requestedTaskInfo.setCores(1);
-                requestedTaskInfo.setCpuMaxAcceptableValue(1750);
-                requestedTaskInfo.setCpuMinAcceptableValue(1650);
-                requestedTaskInfo.setMemoryMaxAcceptableValue(500);
-                requestedTaskInfo.setMemoryMinAcceptableValue(200);
-                requestedTaskInfo.setStorageMaxAcceptableValue(3);
-                requestedTaskInfo.setStorageMinAcceptableValue(1);
+
+        Task task = protegeFactory.createTask("TestTask");
+        RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
+        ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
+        requestedTaskInfo.setCores(1);
+        requestedTaskInfo.setCpuMaxAcceptableValue(1950);
+        requestedTaskInfo.setCpuMinAcceptableValue(1650);
+        requestedTaskInfo.setMemoryMaxAcceptableValue(500);
+        requestedTaskInfo.setMemoryMinAcceptableValue(200);
+        requestedTaskInfo.setStorageMaxAcceptableValue(3);
+        requestedTaskInfo.setStorageMinAcceptableValue(1);
 
 
-                task.setReceivedInfo(receivedTaskInfo);
-                task.setRequestedInfo(requestedTaskInfo);
+        task.setReceivedInfo(receivedTaskInfo);
+        task.setRequestedInfo(requestedTaskInfo);
 
-                Server server = protegeFactory.createServer("TestServer_1");
-                CPU cpu = protegeFactory.createCPU("TestCPU_1");
-                greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
-                Storage storage = protegeFactory.createStorage("TestStorage_1");
-                Core core_1 = protegeFactory.createCore("TestCore_1");
-                core_1.setMaxAcceptableValue(1500);
-                core_1.setMinAcceptableValue(1100);
-                core_1.setTotal(1655);
-                core_1.setUsed(1,datacenterPolicyConversionModel);
+        Server server = protegeFactory.createServer("TestServer_1");
+        CPU cpu = protegeFactory.createCPU("TestCPU_1");
+        greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
+        Storage storage = protegeFactory.createStorage("TestStorage_1");
+        Core core_1 = protegeFactory.createCore("TestCore_1");
+        core_1.setMaxAcceptableValue(1200);
+        core_1.setMinAcceptableValue(1100);
+        core_1.setTotal(2200);
+        core_1.setUsed(1);
 
-                serverMemory.setMaxAcceptableValue(600);
-                serverMemory.setMinAcceptableValue(1);
-                serverMemory.setUsed(1,datacenterPolicyConversionModel);
-                serverMemory.setTotal(600);
+        serverMemory.setMaxAcceptableValue(600);
+        serverMemory.setMinAcceptableValue(1);
+        serverMemory.setUsed(1);
+        serverMemory.setTotal(600);
 
-                storage.setMaxAcceptableValue(600);
-                storage.setMinAcceptableValue(1);
-                storage.setUsed(1,datacenterPolicyConversionModel);
-                storage.setTotal(700);
+        storage.setMaxAcceptableValue(600);
+        storage.setMinAcceptableValue(1);
+        storage.setUsed(1);
+        storage.setTotal(700);
 
-                cpu.addAssociatedCore(core_1);
-                server.setAssociatedCPU(cpu);
-                server.setAssociatedMemory(serverMemory);
-                server.setAssociatedStorage(storage);
+        cpu.addAssociatedCore(core_1);
+        server.setAssociatedCPU(cpu);
+        server.setAssociatedMemory(serverMemory);
+        server.setAssociatedStorage(storage);
 
-                Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+        Negotiator negotiator = NegotiatorFactory.getNashNegotiator();
 
 
-                negotiator.negotiate(server,task);
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                System.exit(1);
-        */
+        negotiator.negotiate(server, task);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        System.exit(1);
+
 
         // resultsFrame = new ActionsOutputFrame("Datacenter");
         this.memory = memory;
@@ -188,7 +188,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         */
 
         //add server web service information pooling mechanism
-        
+
 //
 //        for (Server server : servers) {
 //            if (server.hasServerIPAddress()) {

@@ -8,3 +8,8 @@ C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebServic
 C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
 C:\Users\Administrator\Desktop\InteliJ-project\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
+D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.dll
+D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.pdb
+D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
+D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
+D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
