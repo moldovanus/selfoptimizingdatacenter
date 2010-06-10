@@ -46,11 +46,11 @@ public class CMAAgent extends Agent implements CMAAExternal {
     private AgentController ema = null;
     //Controller for the EMAgent which is created by the CMMA agent
     private AgentController gui = null;
-    //rl agent
+    //Controller for the RLAgent which is created by the CMAA agent
     private AgentController rl = null;
-    //x3d agent
+    //Controller for the X3DAgent which is created by the CMAA agent
     private AgentController x3d = null;
-    //task management agent
+    //Controller for the TMAgent which is created by the CMAA agent
     private AgentController tm = null;
 
     @Override
@@ -62,11 +62,11 @@ public class CMAAgent extends Agent implements CMAAExternal {
             File ontologyFile = new File(GlobalVars.ONTOLOGY_ENVIROMENT_FILE);
             this.owlModeSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(ontologyFile.toURI().toString());
             this.factory = new MyFactory(owlModeSelfHealing);
-            
+
             File file = new File(GlobalVars.ONTOLOGY_ENVIROMENT_FILE);
             jenaOwlModelSelfHealing = ProtegeOWL.createJenaOWLModelFromURI(file.toURI().toString());
 
-            //create owlModeSelfHealing from Ontology
+            //create owlModeSelfAdapting from Ontology
             File ontologyDataCenterFile = new File(GlobalVars.ONTOLOGY_DATACENTER_FILE);
             this.owlModelDataCenter = ProtegeOWL.createJenaOWLModelFromURI(ontologyDataCenterFile.toURI().toString());
             this.datacenterFactory = new MyFactory(owlModelDataCenter);
