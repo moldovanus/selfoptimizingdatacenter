@@ -170,8 +170,12 @@ public class ReinforcementLearningAgent extends Agent {
                 try {
                     FileInputStream fileInputStream = new FileInputStream(memoryFile);
                     ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-                    //memory = (Memory) inputStream.readObject();
-                    //memory.restoreOwlModel(policyConversionModel);
+                    //memorySelfHealing = (Memory) inputStream.readObject();
+                    //memorySelfHealing.restoreOwlModel(policyConversionModel);
+                    FileInputStream fileInputStreamDatacenter = new FileInputStream(memoryDatacenterFile);
+                    ObjectInputStream inputStreamDatacenter = new ObjectInputStream(fileInputStreamDatacenter);
+                    memorySelfOptimizing = (DatacenterMemory) inputStreamDatacenter.readObject();
+                    memorySelfOptimizing.restoreProtegeFactory(new ProtegeFactory(owlModelDataCenter));
                     memorySelfHealing = new Memory();
                     memorySelfOptimizing = new DatacenterMemory();
                 } catch (FileNotFoundException ex) {

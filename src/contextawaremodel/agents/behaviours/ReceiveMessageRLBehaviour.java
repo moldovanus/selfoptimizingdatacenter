@@ -49,8 +49,6 @@ public class ReceiveMessageRLBehaviour extends CyclicBehaviour {
             return;
         }
 
-        //System.out.println(message);
-        //System.exit(1);
 
         try {
             switch (message.getPerformative()) {

@@ -71,13 +71,7 @@ public class TaskManagementAgent extends Agent {
 
         if (msg != null) {
             msg.addReceiver(new AID(GlobalVars.RLAGENT_NAME + "@" + this.getContainerController().getPlatformName()));
-            /*
-            try {
-                msg.setContentObject(indvName);
-                msg.setLanguage("JavaSerialization");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }   */
+
             System.out.println("Sending" + msg);
             this.send(msg);
         }

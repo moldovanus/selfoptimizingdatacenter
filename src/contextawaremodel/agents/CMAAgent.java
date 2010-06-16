@@ -121,8 +121,8 @@ public class CMAAgent extends Agent implements CMAAExternal {
             rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModeSelfHealing, this.policyConversionModelSelfHealing, this.jenaOwlModelSelfHealing, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
 
-            //tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
-            //tm.start();
+            tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});
+            tm.start();
 
             //todo : change when running X3DAgent remotely
             /* String platformName = this.getContainerController().getPlatformName();

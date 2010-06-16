@@ -41,7 +41,7 @@ public class NashNegotiator implements Negotiator {
             for (int j = 0; j < quality; j++) {
                 int currentValue2 = j * increment2 + minValue2;
 
-                double penalty1 = 1 / (currentValue2 - currentValue1 + 0.00001);
+                double penalty1 = (currentValue2 - currentValue1 + 0.00001);
                 double penalty2 = (currentValue2 - currentValue1);
                 if (penalty1 < 0) {
                     penalty1 *= (-1);
@@ -49,11 +49,14 @@ public class NashNegotiator implements Negotiator {
                 if (penalty2 < 0) {
                     penalty2 *= (-1);
                 }
-
-                double reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
+                double reward1;
+                if (currentValue2 - currentValue1 == 0)
+                    reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
+                else
+                    reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
                 double reward2 = (currentValue2 - maxValue2) / (maxValue2 - minValue2 + 1.00001);
-                utilities1[i][j] = reward1 * penalty1;
-                utilities2[i][j] = reward2 * penalty2;
+                utilities1[i][j] = reward1 - penalty2;
+                utilities2[i][j] = reward2 - penalty2;
                 /*
               double penalty1 = 1/(currentValue2 - currentValue1+0.00001);
               double penalty2 = (currentValue2 - currentValue1) ;
@@ -113,7 +116,7 @@ public class NashNegotiator implements Negotiator {
                         maxutility = (utilities1[i][j] + utilities2[i][j]) / 2.0;
                     }
                     //TODO : if not equal, optimize function :D
-                    System.out.println("Equilibrium Found!!!" + "(" + i + "," + j + ") negotiatedValue: " + (currentValue1 + currentValue2) / 2);
+                    System.out.println("Equilibrium Found!!!" + "(" + i + "," + j + ") negotiatedValue: " + (currentValue1 + currentValue2) / 2 + " utility1 " + utilities1[i][j] + "utility2  " + utilities2[i][j]);
 
                     if ((i == 0) && (j == 0) && (x < currentValue1)) x = currentValue1;
 
