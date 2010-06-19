@@ -8,10 +8,12 @@ import greenContextOntology.QoSPolicy;
 import greenContextOntology.Task;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +31,7 @@ public class TaskLifeManager {
     }
 
     public static void addTask(final ProtegeFactory protegeFactory, final Task task, int lifeInMinutes, final OntModel model) {
-        //TODO: place minutes. acuma i in seconds
+ 
         Timer timer = new Timer(lifeInMinutes * 60000, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -65,7 +67,9 @@ public class TaskLifeManager {
 
     public static void startTaskTimer(Task task) {
 //        try {
-        tasksLifeTimer.get(task).start();
+        if (tasksLifeTimer.containsKey(task)) {
+            tasksLifeTimer.get(task).start();
+        }
 //        } catch (NullPointerException e) {
 //            System.err.println(task.getLocalName());
 //            System.err.println(e.getMessage());
@@ -74,7 +78,9 @@ public class TaskLifeManager {
     }
 
     public static void stopTaskTimer(Task task) {
-        tasksLifeTimer.get(task).stop();
+        if (tasksLifeTimer.containsKey(task)) {
+            tasksLifeTimer.get(task).stop();
+        }
     }
 
 }

@@ -7,59 +7,19 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Administrator
- * Date: May 16, 2010
- * Time: 12:33:19 PM
- * To change this template use File | Settings | File Templates.
+ * Pie chart used for displaying the resources used by each task
+ * on a server toghether with the OS used and Free amount under the form of pie slices
  */
 public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
 
     private JFreeChart chart;
     private Random random;
     private int oldDatasetSize = 0;
-
-
-   /* public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setBounds(300, 300, 200, 100);
-        frame.setLayout(new BorderLayout());
-        ResourceMonitorPlotter resourceMonitorPlotter = new ResourceMonitorPieChartPlotter("CPU 0", 0, 100);
-
-
-        Map<String, Integer> map = new HashMap<String, Integer>(3);
-        map.put("Free", 2);
-        map.put("OS", 2);
-        resourceMonitorPlotter.setCurrentValue(map);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(resourceMonitorPlotter.getGraphPanel(), "Center");
-        frame.pack();
-        frame.setVisible(true);
-
-        while (true) {
-            map.clear();
-            map.put("Free", 2);
-            map.put("OS", 2);
-            for (int j = 0; j < 5; j++) {
-                map.put("" + j, j);
-            }
-            resourceMonitorPlotter.setCurrentValue(map);
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
-    }*/
 
     public ResourceMonitorPieChartPlotter(String resourceName, int minimumValue, int maximumValue) {
         super(resourceName);
@@ -96,9 +56,14 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
             plot.setExplodePercent(i, 0.025);
         }
 
+        /**
+         * Find the representation pie slices different than OS and Free
+         * and assign random colours
+         */
         for (Object key : dataset.getKeys()) {
-            if (!((String) key).equals("Free") && !((String) key).equals("OS")) {
-                plot.setSectionPaint(dataset.getIndex((String) key), new Color(25 + random.nextInt(230), 25 + random.nextInt(230), 25));
+            if (!key.equals("Free") && !key.equals("OS")) {
+                plot.setSectionPaint(dataset.getIndex((String) key),
+                        new Color(25 + random.nextInt(230), 25 + random.nextInt(230), 25));
             }
         }
     }
@@ -107,7 +72,7 @@ public class ResourceMonitorPieChartPlotter extends ResourceMonitorPlotter {
     protected void setup(int minimumValue, int maximumValue) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         chart = ChartFactory.createPieChart(
-                resourceName,  // chart title
+                resourceName,        // chart title
                 dataset,             // data
                 false,               // include legend
                 true,

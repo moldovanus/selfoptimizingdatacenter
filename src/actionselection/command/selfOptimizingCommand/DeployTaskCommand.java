@@ -17,7 +17,6 @@ import greenContextOntology.Task;
 import jade.core.Agent;
 
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * @author Me
@@ -42,7 +41,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
-        server.addRunningTasks(task, model);
+        server.addRunningTask(task, model);
     }
 
     /**
@@ -52,7 +51,7 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        server.removeRunningTasks(task, model);
+        server.removeRunningTask(task, model);
     }
 
     @Override

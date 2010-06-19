@@ -57,7 +57,7 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
-        server.removeRunningTasks(task, model);
+        server.removeRunningTask(task, model);
     }
 
     @Override

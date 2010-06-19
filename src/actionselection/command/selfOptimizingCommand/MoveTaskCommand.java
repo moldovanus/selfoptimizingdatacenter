@@ -8,8 +8,6 @@ import actionselection.utils.MessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
@@ -45,8 +43,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(newServer);
-        oldServer.removeRunningTasks(task, model);
-        newServer.addRunningTasks(task, model);
+        oldServer.removeRunningTask(task, model);
+        newServer.addRunningTask(task, model);
     }
 
     @Override
@@ -55,8 +53,8 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(oldServer);
-        newServer.removeRunningTasks(task, model);
-        oldServer.addRunningTasks(task, model);
+        newServer.removeRunningTask(task, model);
+        oldServer.addRunningTask(task, model);
 
     }
 

@@ -2,7 +2,6 @@ package greenContextOntology;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 
 import java.util.Collection;
@@ -85,12 +84,12 @@ public interface Server extends Resource {
 
     Iterator listRunningTasks();
 
-    void addRunningTasks(Task newRunningTasks, OntModel model);
+    void addRunningTask(Task newRunningTasks, OntModel model);
 
     void addNegotiatedTasks(Task newRunningTasks, OntModel model, int negotiatedCPU, int negotiatedMemory, int negotiatedStorage);
-    //void addRunningTasks(Task newRunningTasks);
+    //void addRunningTask(Task newRunningTasks);
 
-    void removeRunningTasks(Task oldRunningTasks, OntModel model);
+    void removeRunningTask(Task oldRunningTasks, OntModel model);
 
     void removeRunningTasks(Task oldRunningTasks);
 
@@ -151,7 +150,7 @@ public interface Server extends Resource {
 
     public boolean containsTask(Task task);
 
-    boolean optimumValuesRespected();
+    boolean areOptimumValuesRespected();
 
     void distributeRemainingResources(OntModel model);
 

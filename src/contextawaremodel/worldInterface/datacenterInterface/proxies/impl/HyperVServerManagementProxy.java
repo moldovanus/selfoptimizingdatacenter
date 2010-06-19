@@ -22,54 +22,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         super(hostName);
     }
 
-    public static void main(String[] args) {
-        ServerManagementProxy serverManagementProxy = new HyperVServerManagementProxy("192.168.2.101");
-        serverManagementProxy.wakeUpServer("00-1d-7d-05-63-ff", "192.168.2.123", 9);
-        ServerManagementProxy.DEBUG = true;
-
-        String ip = "192.168.2.120";
-        String pingResult = "";
-
-        String pingCmd = "ping " + ip;
-        boolean ok = false;
-        while (!ok) {
-            try {
-                Runtime r = Runtime.getRuntime();
-                Process p = r.exec(pingCmd);
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    System.out.println(inputLine);
-
-
-                    if (!inputLine.contains("unreachable") && !inputLine.equals("") && !inputLine.contains("Ping") && !inputLine.contains("Packets")) {
-                        ok = true;
-                        break;
-                    }
-
-                    pingResult += inputLine;
-                }
-                in.close();
-
-            }//try
-            catch (IOException e) {
-                System.out.println(e);
-            }
-        }
-        //serverManagementProxy.getServerInfo();
-        /* serverManagementProxy.moveSourceActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "TestMachine");
-         ServerManagementProxy serverManagementProxy1 = new HyperVServerManagementProxy("192.168.2.101");
-         serverManagementProxy1.DEBUG = true;
-         serverManagementProxy1.getServerInfo();
-         serverManagementProxy1.moveDestinationActions("\\\\192.168.2.123\\VirtualMachines\\myVM", "\\\\192.168.2.101\\VirtualMachines\\myVM", "TestMachine");
-        */
-        // serverManagementProxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage", "\\\\192.168.2.101\\VirtualMachines", "VM_2");
-        //serverManagementProxy.sendServerToSleep();
-
-
-    }
-
     private void waitUntilTargetIsAlive(String ip) {
         String pingCmd = "ping " + ip;
         boolean ok = false;
@@ -106,20 +58,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /* connection.setDoOutput(true);
-            //Send header
-            String data="a=f";
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/GetServerInfo HTTP/1.1\n");
-            wr.write("Host: " + hostName + "\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\n");
-            wr.write("Content-Length: " + data.length() + "\n");
-           wr.write("\n");
-            wr.write(data);
-            wr.write("\r\n");
-            wr.write("\r\n");
-
-            wr.flush();*/
 
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String content = "";
@@ -232,26 +170,12 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public void deployVirtualMachine(String from, String to, String vmName, String newName) {
         try {
-            //Socket sock = new Socket(hostName, 80);
+            //TODO: remove the hardcoded vmName when multiple reference vm's can be defined
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from="
-                    + from + "&to=" + to + "&vmName=" + vmName + "&vmCopyName=" + newName + "");
+                    + from + "&to=" + to + "&vmName=" + "VM_1" + "&vmCopyName=" + newName + "");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /*connection.setDoOutput(true);
 
-            //Send header
-            String data = "from=" + from + "&to=" + to + "&vmName=" + vmName + "\r\n";
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/DeployVirtualMachine HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + data.length() + "\r\n");
-           // wr.write("\r\n");
-            wr.write(data);
-           // wr.write("\r\n");
-            wr.write("\r\n");
-
-            wr.flush();*/
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
 
@@ -272,24 +196,10 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public void startVirtualMachine(String vmName) {
         try {
-            //Socket sock = new Socket(hostName, 80);
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/StartVirtualMachine?vmName=" + vmName);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /*connection.setDoOutput(true);
 
-            //Send header
-            String data = "vmName=" + vmName;
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/StartVirtualMachine HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
-            wr.write(data);
-            wr.write("\r\n");
-
-            wr.flush();*/
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
 
@@ -308,25 +218,10 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public void stopVirtualMachine(String vmName) {
         try {
-            //Socket sock = new Socket(hostName, 80);
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/StopVirtualMachine?vmName=" + vmName);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /*connection.setDoOutput(true);
 
-            //Send header
-            String data = "vmName=" + vmName;
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/StopVirtualMachine HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
-
-            wr.write(data);
-            wr.write("\r\n");
-
-            wr.flush();*/
             if (DEBUG) {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 // Response
@@ -344,24 +239,10 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
 
     public void deleteVirtualMachine(String vmName) {
         try {
-            //Socket sock = new Socket(hostName, 80);
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeleteVirtualMachine?vmName=" + vmName);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /* connection.setDoOutput(true);
 
-            //Send header
-            String data = "vmName=" + vmName;
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/DeleteVirtualMachine HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
-            wr.write(data);
-            wr.write("\r\n");
-
-            wr.flush();*/
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
 
@@ -378,32 +259,13 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         }
     }
 
-
     public void wakeUpServer(String mac, String ipAddress, int port) {
 
         try {
-            //Socket sock = new Socket(hostName, 80);
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/WakeUpServer?"
                     + "mac=" + mac + "&ipAddress=" + ipAddress + "&port=" + port);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /* connection.setDoOutput(true);
-
-            //Send header
-            String data = "";
-            data += "mac=" + mac + "&ipAddress=" + ipAddress + "&port=" + port;
-
-            System.out.println(data);
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/WakeUpServer HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + data.length() + "\r\n");
-            wr.write("\r\n");
-            wr.write(data);
-            wr.write("\r\n");
-
-            wr.flush();*/
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
 
@@ -425,24 +287,12 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
     public void sendServerToSleep() {
 
         try {
-            //Socket sock = new Socket(hostName, 80);
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/SendServerToSleep");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            /*connection.setDoOutput(true);
-            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-            wr.write("POST /ServerManagement/Service1.asmx/SendServerToSleep HTTP/1.1\r\n");
-            wr.write("Host: " + hostName + "\r\n");
-            wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-            wr.write("Content-Length: " + 0 + "\r\n");
-            wr.write("\r\n");
-
-            wr.flush();*/
-
-            //connection hangs until server wakes up. Good because this invokes Restart so it waiths until server goes to sleep :D 
+            
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -455,4 +305,5 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             e.printStackTrace();
         }
     }
+
 }

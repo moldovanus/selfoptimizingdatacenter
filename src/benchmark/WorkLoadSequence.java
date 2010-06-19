@@ -31,12 +31,29 @@ public class WorkLoadSequence implements Serializable {
         }
     }
 
+    public WorkLoadSequence() {
+        this.sequence = new HashMap<String, Integer>();
+    }
+
     public Map<String, Integer> getSequence() {
         return sequence;
     }
 
+    public void addTask(String name) {
+        if (sequence.containsKey(name)) {
+            sequence.put(name, sequence.get(name) + 1);
+        } else {
+            sequence.put(name, 1);
+        }
+    }
+
+    public void removeTask(String name) {
+        sequence.remove(name);
+    }
+
     /**
      * Assigns new Random values to the Integer element in the map
+     *
      * @param totalTaskNo - total number of tasks
      */
     public void regenerate(int totalTaskNo) {

@@ -176,7 +176,7 @@ public class DefaultTask extends DefaultContextElement
 
     public boolean isRunning() {
         ReceivedTaskInfo received = this.getReceivedInfo();
-        if (received.hasCores() && received.getCores() > 0) {
+        if (received != null && received.hasCores() && received.getCores() > 0) {
             return true;
         } else {
             return false;  //To change body of implemented methods use File | Settings | File Templates.
@@ -247,4 +247,6 @@ public class DefaultTask extends DefaultContextElement
         task.setTaskName(this.getTaskName());
         return task;
     }
+
+    
 }

@@ -4,12 +4,12 @@ import contextawaremodel.GlobalVars;
 import negotiator.Negotiator;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Administrator
- * Date: Apr 17, 2010
- * Time: 11:35:04 AM
- * To change this template use File | Settings | File Templates.
- */
+ * Class which implements Factory Method design pattern.
+ * Used to create diferent Negotiator instances.
+ * The creator methods are synchronized because only one instance of each negotiator is
+ * allowed. There is no need to be more negotiators of the same type because they are generic
+ * utility classes.
+ **/
 public final class NegotiatorFactory {
     private static FuzzyLogicNegotiator fuzzyLogicNegotiator;
     private static NashNegotiator nashNegotiator;

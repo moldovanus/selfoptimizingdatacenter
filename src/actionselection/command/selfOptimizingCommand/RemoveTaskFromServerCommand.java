@@ -5,9 +5,6 @@ import actionselection.utils.MessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
@@ -42,14 +39,14 @@ public class RemoveTaskFromServerCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(null);
-        server.removeRunningTasks(task, model);
+        server.removeRunningTask(task, model);
     }
 
     public void rewind(OntModel model) {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
         task.setAssociatedServer(server);
-        server.addRunningTasks(task, model);
+        server.addRunningTask(task, model);
     }
 
     public String toString() {

@@ -1,14 +1,13 @@
 package contextawaremodel.gui;
 
 import actionselection.gui.ActionsOutputFrame;
+import benchmark.gui.impl.ConfigurationGUI;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
 import contextawaremodel.gui.resourceMonitor.IMonitor;
 import contextawaremodel.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
 import contextawaremodel.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
 import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
@@ -41,6 +40,8 @@ public class GUIAgent extends Agent {
     private List<IMonitor> serverMonitors;
     private IMonitor tasksQueueMonitor;
 
+    private JFrame frame;
+
     @Override
     protected void setup() {
 
@@ -67,10 +68,10 @@ public class GUIAgent extends Agent {
         enviromentLogger.setLogPath("Logs/");
         datacenterLogger.setLogPath("Logs/");
 
-        JFrame frame = new JFrame("System Control Unit");
+        frame = new JFrame("System Control Unit");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         menuBar = new JMenuBar();
-        frame.setSize(500,400);
+        frame.setSize(500, 400);
 
         frame.setJMenuBar(menuBar);
 
@@ -128,12 +129,19 @@ public class GUIAgent extends Agent {
             }
         };
 
-        AbstractAction showTasksQueueMenuItem = new AbstractAction("Tasks Queue") {
+        AbstractAction showTasksQueueMenuItem = new AbstractAction("Pending Tasks Queue") {
 
             public void actionPerformed(ActionEvent e) {
 
                 tasksQueueMonitor.destroyStandaloneWindow();
                 tasksQueueMonitor.executeStandaloneWindow();
+            }
+        };
+
+        AbstractAction showDatacenterConfigurationWindow = new AbstractAction("Datacenter Configuration Window") {
+
+            public void actionPerformed(ActionEvent e) {
+                new ConfigurationGUI(protegeFactory).setVisible(true);
             }
         };
 
@@ -159,6 +167,7 @@ public class GUIAgent extends Agent {
         enviromentalControlMenu.add(showEnviromentMonitorWindowMenuItem);
         enviromentalControlMenu.add(showSelfHealingLogMenuItem);
 
+        datacenterControlMenu.add(showDatacenterConfigurationWindow);
         datacenterControlMenu.add(showDatacenterLogMenuItem);
         datacenterControlMenu.add(showTasksQueueMenuItem);
         datacenterControlMenu.add(showServerMonitorsMenuItem);
@@ -167,7 +176,7 @@ public class GUIAgent extends Agent {
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
 
-       // frame.pack();
+        // frame.pack();
         frame.setVisible(true);
 
         this.addBehaviour(new ReceiveChangesGUIBehaviour(this));

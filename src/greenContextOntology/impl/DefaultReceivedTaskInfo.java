@@ -29,7 +29,11 @@ public class DefaultReceivedTaskInfo extends DefaultContextElement
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cores
     public int getCores() {
-        return getPropertyValueLiteral(getCoresProperty()).getInt();
+        if (hasCores()) {
+            return getPropertyValueLiteral(getCoresProperty()).getInt();
+        } else {
+            return 0;
+        }
     }
 
     public RDFProperty getCoresProperty() {
@@ -52,7 +56,11 @@ public class DefaultReceivedTaskInfo extends DefaultContextElement
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cpuReceived
     public int getCpuReceived() {
-        return getPropertyValueLiteral(getCpuReceivedProperty()).getInt();
+        if (hasCpuReceived()) {
+            return getPropertyValueLiteral(getCpuReceivedProperty()).getInt();
+        } else {
+            return 0;
+        }
     }
 
     public RDFProperty getCpuReceivedProperty() {
@@ -75,7 +83,11 @@ public class DefaultReceivedTaskInfo extends DefaultContextElement
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#memoryReceived
     public int getMemoryReceived() {
-        return getPropertyValueLiteral(getMemoryReceivedProperty()).getInt();
+        if (hasMemoryReceived()) {
+            return getPropertyValueLiteral(getMemoryReceivedProperty()).getInt();
+        } else {
+            return 0;
+        }
     }
 
     public RDFProperty getMemoryReceivedProperty() {
@@ -98,7 +110,11 @@ public class DefaultReceivedTaskInfo extends DefaultContextElement
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#storageReceived
     public int getStorageReceived() {
-        return getPropertyValueLiteral(getStorageReceivedProperty()).getInt();
+        if (hasMemoryReceived()) {
+            return getPropertyValueLiteral(getStorageReceivedProperty()).getInt();
+        } else {
+            return 0;
+        }
     }
 
     public RDFProperty getStorageReceivedProperty() {

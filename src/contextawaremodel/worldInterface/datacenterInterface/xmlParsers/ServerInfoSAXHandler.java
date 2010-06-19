@@ -2,6 +2,7 @@ package contextawaremodel.worldInterface.datacenterInterface.xmlParsers;
 
 import contextawaremodel.worldInterface.dtos.ServerDto;
 import contextawaremodel.worldInterface.dtos.StorageDto;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -11,38 +12,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Administrator
- * Date: May 8, 2010
- * Time: 12:32:52 PM
- * To change this template use File | Settings | File Templates.
+ * Class used to parse the XML returned by the Server Monitor C# endpoint
+ * and construct a ServerDto object from that information
  */
 public class ServerInfoSAXHandler extends DefaultHandler {
     /*
+   XML  Example 
    <ServerInfo xmlns="http://www.SelfOptimizingDatacenter.edu/">
-<TotalCPU>int</TotalCPU>
-<CoreCount>int</CoreCount>
-<FreeCPU>
-<int>int</int>
-<int>int</int>
-</FreeCPU>
-<Storage>
-<Storage>
-<Name>string</Name>
-<Size>int</Size>
-<FreeSpace>int</FreeSpace>
-</Storage>
-<Storage>
-<Name>string</Name>
-<Size>int</Size>
-<FreeSpace>int</FreeSpace>
-</Storage>
-</Storage>
-<TotalMemory>int</TotalMemory>
-<FreeMemory>int</FreeMemory>
-</ServerInfo>
+        <TotalCPU>int</TotalCPU>
+        <CoreCount>int</CoreCount>
+        <FreeCPU>
+            <int>int</int>
+            <int>int</int>
+        </FreeCPU>
+        <Storage>
+            <Storage>
+                <Name>string</Name>
+                <Size>int</Size>
+                <FreeSpace>int</FreeSpace>
+            </Storage>
+            <Storage>
+                <Name>string</Name>
+                <Size>int</Size>
+                <FreeSpace>int</FreeSpace>
+            </Storage>
+        </Storage>
+        <TotalMemory>int</TotalMemory>
+        <FreeMemory>int</FreeMemory>
+    </ServerInfo>
     */
-    // private static final String  SERVER_INFO = "ServerInfo";
     private static final String TOTAL_CPU = "TotalCPU";
     private static final String CORE_COUNT = "CoreCount";
 
@@ -59,17 +57,14 @@ public class ServerInfoSAXHandler extends DefaultHandler {
 
     private boolean inTotalCPU = false;
     private boolean inCoreCount = false;
-    private boolean inFreeCPU = false;
     private boolean inFreeCPUVal = false;
 
-    private boolean inStorage = false;
     private boolean inStorageName = false;
     private boolean inStorageSize = false;
     private boolean inStorageFreeSpace = false;
 
     private boolean inTotalMemory = false;
     private boolean inFreeMemory = false;
-    private boolean inStorageList = false;
 
     private String text;
 
@@ -93,16 +88,15 @@ public class ServerInfoSAXHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, org.xml.sax.Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes)
+            throws SAXException {
 
         if (localName.equals(TOTAL_CPU)) {
             inTotalCPU = true;
         } else if (localName.equals(CORE_COUNT)) {
             inCoreCount = true;
         } else if (localName.equals(FREE_CPU)) {
-            inFreeCPU = true;
         } else if (localName.equals(STORAGE)) {
-            inStorage = true;
             currentStorage = new StorageDto();
         } else if (localName.equals(TOTAL_MEMORY)) {
             inTotalMemory = true;
@@ -119,47 +113,46 @@ public class ServerInfoSAXHandler extends DefaultHandler {
         }
     }
 
-    public void endElement(String namespaceURI, String localName, String qualifiedName) throws SAXException {
+    public void endElement(String namespaceURI, String localName, String qualifiedName)
+            throws SAXException {
 
         if (localName.equals(TOTAL_CPU)) {
             try {
                 serverDto.setTotalCPU(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inTotalCPU = false;
         } else if (localName.equals(CORE_COUNT)) {
             try {
                 serverDto.setCoreCount(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inCoreCount = false;
         } else if (localName.equals(FREE_CPU)) {
-            inFreeCPU = false;
             serverDto.setFreeCPU(freeCPUValues);
         } else if (localName.equals(FREE_CPU_VAL)) {
             try {
                 freeCPUValues.add(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inFreeCPUVal = false;
         } else if (localName.equals(STORAGE)) {
-            inStorage = false;
             storageInfo.add(currentStorage);
         } else if (localName.equals(TOTAL_MEMORY)) {
             try {
                 serverDto.setTotalMemory(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inTotalMemory = false;
         } else if (localName.equals(FREE_MEMORY)) {
             try {
                 serverDto.setFreeMemory(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inFreeMemory = false;
         } else if (localName.equals(STORAGE_NAME)) {
@@ -170,14 +163,14 @@ public class ServerInfoSAXHandler extends DefaultHandler {
             try {
                 currentStorage.setSize(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inStorageSize = false;
         } else if (localName.equals(STORAGE_FREE_SPACE)) {
             try {
                 currentStorage.setFreeSpace(numberFormat.parse(text).intValue());
             } catch (ParseException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             inStorageFreeSpace = false;
         }

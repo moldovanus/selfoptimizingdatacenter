@@ -25,32 +25,11 @@ import java.util.Random;
  */
 public class ResourceMonitorXYChartPlotter extends ResourceMonitorPlotter {
 
+    private int minTimeRange = 0;
+    private int maxTimeRange = 60;
 
     private XYSeries series = new XYSeries("Used");
     private XYPlot plot;
-
-   /* public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setBounds(300, 300, 300, 200);
-        frame.setLayout(new BorderLayout());
-        ResourceMonitorXYChartPlotter resourceMonitorPlotter = new ResourceMonitorXYChartPlotter("CPU 0", 0, 100);
-        JPanel panel = resourceMonitorPlotter.getGraphPanel();
-
-        frame.add(panel, "Center");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.pack();
-        frame.setVisible(true);
-
-
-        while (true) {
-            resourceMonitorPlotter.setCurrentValue(new Random().nextInt(100));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
-    }*/
 
     public ResourceMonitorXYChartPlotter(String resourceName, int minimumValue, int maximumValue) {
         super(resourceName);

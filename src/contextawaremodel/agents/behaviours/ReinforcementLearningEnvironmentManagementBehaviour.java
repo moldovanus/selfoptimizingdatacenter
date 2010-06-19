@@ -375,9 +375,9 @@ public class ReinforcementLearningEnvironmentManagementBehaviour extends TickerB
 
                 int value = (int) ((endMinutes - startMinutes) / 1000);
 
-                agent.setRlTime(value);
+//                agent.setRlTime(value);
 
-                System.err.println("Reinforcement alg running time: " + value + " seconds");
+                System.err.println("Environment alg running time: " + value + " seconds");
 
             } catch (Exception ex) {
                 ex.printStackTrace();

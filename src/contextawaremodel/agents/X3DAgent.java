@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Agent used for creating 3D context representations
  */
 package contextawaremodel.agents;
 
@@ -17,10 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Administrator
- */
-
 public class X3DAgent extends Agent {
 
     public static final String ADD_TASK_COMMAND = "addTask";
@@ -30,7 +25,6 @@ public class X3DAgent extends Agent {
     public static final String WAKE_UP_SERVER_COMMAND = "wakeUpServer";
     public static final String SET_TEMPERATURE_COMMAND = "setTemperature";
     public static final String SET_HUMIDITY_COMMAND = "setHumidity";
-
 
     public static final float POWER_METER_LABEL_TRANSLATION = 0.7f;
     public static final float SENSOR_LABEL_TRANSLATION = 0.4f;
@@ -46,13 +40,11 @@ public class X3DAgent extends Agent {
     private JFrame frame;
 
     private X3DScene mainScene;
-    private final Agent selfReference = this;
     private ArrayList<X3DNode> taskLabels;
     private Map<String, X3DNode> tasks;
     private Map<String, MFString> objectLabels;
     private ArrayList<String> wiresIndexes;
-    static int server = 1;
-
+    
     private Timer changeWiresBackTimer;
     private Timer fanAnimationTimer;
     private Timer sensorAnimationTimer;
@@ -96,28 +88,22 @@ public class X3DAgent extends Agent {
 
     public void setFanSpeed(float speed) {
         fanIncrement = speed;
-        //fanAnimationTimer = new Timer(50,sensorsAnimationListener);
-        //fanAnimationTimer.start();
     }
 
 
     @Override
     protected void takeDown() {
-        super.takeDown();    //To change body of overridden methods use File | Settings | File Templates.
+        super.takeDown();
         frame.setVisible(false);
-        System.exit(1);
+        frame.dispose();
     }
 
+    /**
+     * Method called when the agent is created.
+     */
     @Override
     protected void setup() {
 
-        /*Object[] args = getArguments();
-        if (args == null) {
-            System.out.println("[X3D] X3D Agent failed, owlModel arguments are null!");
-            //return;
-        }*/
-
-        // this.policyConversionModel = (OntModel) args[0];
         System.out.println("[X3DAgent] : Hellooo ! ");
         frame = new JFrame("X3D vizualization");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -172,8 +158,8 @@ public class X3DAgent extends Agent {
 
         attentionArow = mainScene.getNamedNode("AttentionArrow_XFORM");
         inverseAttentionArow = mainScene.getNamedNode("InverseAttentionArrow_XFORM");
-        //mainScene.removeRootNode(attentionArow);
 
+        //spin the UTCN crest
         ActionListener actionListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -197,89 +183,20 @@ public class X3DAgent extends Agent {
         timer.start();
 
         for (int i = 1; i <= 5; i++) {
-            addObjectLabel("Watts: " + 1 * 10, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
+            addObjectLabel("Watts: " + 1 * 10, "PowerMeterGroup_0" + i,
+                    POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
         }
 
 
         fanAnimationTimer = new Timer(100, fanAnimationListener);
-        //fanAnimationTimer.start();
 
         sensorAnimationTimer = new Timer(50, sensorsAnimationListener);
         sensorAnimationTimer.start();
 
-        ActionListener simulationListener = new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                /*for (X3DNode entry : taskLabels) {
-                    mainScene.removeRootNode(entry);
-                }
-
-                for (Map.Entry<String, X3DNode> entry : objectLabels.entrySet()) {
-                    mainScene.removeRootNode(entry.getValue());
-                }
-
-                if (server == 5) {
-                    server = 1;
-                }
-
-                Random random = new Random();
-                int index_1 = random.nextInt(5) + 1;
-                int index_2 = random.nextInt(5) + 1;
-                int index_3 = random.nextInt(5) + 1;
-
-                addTask("Task_1", "Server_" + index_1, 1);
-
-                mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
-                mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                if (index_2 == index_1) {
-                    addTask("Task_2", "Server_" + index_1, 0);
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-
-                    if (index_3 == index_1) {
-                        mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1));
-                        mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_1 + "_Inverse"));
-                        addObjectLabel("Watts: 30", "PowerMeterGroup_0" + index_1, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                        addTask("Task_3", "Server_" + index_1, 2);
-                    }
-                } else {
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                    addTask("Task_2", "Server_" + index_2, 1);
-                }
-
-                if (index_3 == index_2) {
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2));
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_2 + "_Inverse"));
-                    addObjectLabel("Watts: 20", "PowerMeterGroup_0" + index_2, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                    addTask("Task_3", "Server_" + index_2, 2);
-                } else {
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3));
-                    mainScene.removeRootNode(objectLabels.get("PowerMeterGroup_0" + index_3 + "_Inverse"));
-                    addObjectLabel("Watts: 10", "PowerMeterGroup_0" + index_3, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                    addTask("Task_3", "Server_" + index_3, 1);
-                }
-
-                for (int i = 1; i <= 5; i++) {
-                    if (i == index_1 || i == index_2 || i == index_3) {
-                        continue;
-                    }
-                    addObjectLabel("Watts: " + 0, "PowerMeterGroup_0" + i, POWER_LABEL_COLOR, POWER_METER_LABEL_TRANSLATION);
-                }
-
-                //x3dBrowser.replaceWorld(mainScene);
-               */
-            }
-        };
-        Timer simulationTimer = new Timer(1000, simulationListener);
-
-        //simulationTimer.start();
-        //addLabelToPowerMeters();
-        addObjectLabel("Temperature : 32", "SensorSphere_01", SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
-        addObjectLabel("Humidity : 21", "SensorSphere_02", SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
+        addObjectLabel("Temperature : 32", "SensorSphere_01",
+                SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
+        addObjectLabel("Humidity : 21", "SensorSphere_02",
+                SENSOR_LABEL_COLOR, SENSOR_LABEL_TRANSLATION);
 
         final float[] initialWireColor = new float[]{0.8784f, 0.5608f, 0.3412f};
 
@@ -299,15 +216,30 @@ public class X3DAgent extends Agent {
 
     }
 
-
+    /**
+     * Sets the color of the wire associated to server serverName to
+     * the specified color
+     * @param serverName the server the wire is connected to
+     * @param color the new color of the wire
+     */
     private void setWireColor(String serverName, float[] color) {
         String[] elements = serverName.split("_");
-        X3DNode material = mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
+        X3DNode material =
+                mainScene.getNamedNode("Wire_0" + Integer.parseInt(elements[1]) + "_MAT");
         SFColor diffuseColor = (SFColor) material.getField("diffuseColor");
         diffuseColor.setValue(color);
     }
 
-    private void addInverseObjectLabel(String textLabel, String objectName, float[] color, float translation) {
+    /**
+     * Adds a text label to the other side of the object. The side initially not visible
+     * when the scene is loaded. 
+     * @param textLabel the label of the object
+     * @param objectName the name of the X3D node to which the label is applied
+     * @param color the color of the label
+     * @param translation the translation of the text relative to the object
+     */
+    private void addInverseObjectLabel(String textLabel, String objectName,
+                                       float[] color, float translation) {
 
         if (!objectLabels.containsKey(objectName + "_Inverse")) {
 
@@ -377,11 +309,17 @@ public class X3DAgent extends Agent {
         }
     }
 
+   /**
+     * Adds a text label to the visible side of the object. The side initially visible
+     * when the scene is loaded.
+     * @param textLabel the label of the object
+     * @param objectName the name of the X3D node to which the label is applied
+     * @param color the color of the label
+     * @param translation the translation of the text relative to the object
+     */
+    public void addObjectLabel(String textLabel, String objectName,
+                               float[] color, float translation) {
 
-    public void addObjectLabel(String textLabel, String objectName, float[] color, float translation) {
-
-
-//        removeObjectLabel(objectName);
         if (!objectLabels.containsKey(objectName)) {
             X3DNode transform = mainScene.createNode("Transform");
             X3DNode shape = mainScene.createNode("Shape");
@@ -441,7 +379,6 @@ public class X3DAgent extends Agent {
             addInverseObjectLabel(textLabel, objectName, color, translation);
         } else {
             MFString string = objectLabels.get(objectName);
-            //string.clear();
             if (string.size() == 0) {
                 string.insertValue(0, textLabel);
             } else {
@@ -452,24 +389,13 @@ public class X3DAgent extends Agent {
         }
     }
 
-    /*public void removeObjectLabel(String objectName) {
-
-        //X3DNode label = objectLabels.remove(objectName);
-        MFString label = objectLabels.remove(objectName);
-        if (label == null) {
-            return;
-        }
-               label.clear();
-        label.insertValue(0,"SSSSSSSSSSSS");
-        //X3DNode inverseLabel = objectLabels.remove(objectName + "_Inverse");
-        MFString inverseLabel = objectLabels.remove(objectName + "_Inverse");
-        inverseLabel.clear();
-        inverseLabel.insertValue(0,"FFFFF");
-        //mainScene.removeRootNode(label);
-       // mainScene.removeRootNode(inverseLabel);
-    }*/
-
-
+    /**
+     *
+     * @param taskName the name of the task to be used as label
+     * @param taskTransform the transform of the task. Each task is placed above the
+     * previous task so it is necesary to know the transform off the target task
+     * @param color the color of the label
+     */
     private void addLabelToTask(String taskName, X3DNode taskTransform, float[] color) {
 
         X3DNode transform = mainScene.createNode("Transform");
@@ -518,9 +444,6 @@ public class X3DAgent extends Agent {
         SFVec3f serverTranslation = (SFVec3f) transform.getField("translation");
         float[] translationValues = new float[3];
 
-        //SFVec3f powerMeterTranslation = (SFVec3f) taskTransform.getField("translation");
-        //powerMeterTranslation.getValue(translationValues);
-        //translationValues[1] += 0.2;
         translationValues[1] += 0.1;
         translationValues[0] += 0.15;
         translationValues[2] -= 0.15;
@@ -529,10 +452,15 @@ public class X3DAgent extends Agent {
         MFNode taskTransformChildren = (MFNode) taskTransform.getField("children");
         taskTransformChildren.append(transform);
         mainScene.addRootNode(taskTransform);
-        //addInverseObjectLabel(taskName, taskTransform.getNodeName(), color);
         taskLabels.add(taskTransform);
     }
 
+    /**
+     * Creates a new task representation and adds it to the 3D scene
+     * @param taskName  the name of the new task to be used as label
+     * @param serverName
+     * @param taskNumber
+     */
     public void addTask(String taskName, String serverName, int taskNumber) {
 
         wiresIndexes.add(serverName);
@@ -592,17 +520,21 @@ public class X3DAgent extends Agent {
         addAttentionArrow(planeTransform);
     }
 
-    //TODO: Change wires color also on Remove Task
+    /**
+     * Removes the representation for task taskName from the scene
+     * @param taskName the name of the task to be removed from the scene
+     */
     public void removeTask(String taskName) {
         X3DNode task = tasks.remove(taskName);
         addInverseAttentionArrow(task);
-        /*wiresIndexes.add(serverName);
-        setWireColor(serverName, ACTIVE_WIRE_COLOR);
-        changeWiresBackTimer.restart();*/
         mainScene.removeRootNode(task);
-
     }
 
+    /**
+     * Places an attention arow above the server and changes the color of the server
+     * platform to gray
+     * @param serverName the name of the target server
+     */
     public void sendServerToLowPower(String serverName) {
         String[] elements = serverName.split("_");
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
@@ -618,6 +550,11 @@ public class X3DAgent extends Agent {
 
     }
 
+     /**
+     * Places an attention arow above the server and changes the color of the server
+     * platform to blue
+     * @param serverName the name of the target server
+     */
     public void wakeUpServer(String serverName) {
         String[] elements = serverName.split("_");
         X3DNode material = mainScene.getNamedNode("ServerPlane_0" + elements[1] + "_MAT");
@@ -627,12 +564,15 @@ public class X3DAgent extends Agent {
         fanAnimationTimer.setDelay(100 / activeServersNo);
         fanAnimationTimer.restart();
 
-
         //place attention arrow
         X3DNode planeTransform = mainScene.getNamedNode("Server_" + elements[1] + "_XFORM");
         addAttentionArrow(planeTransform);
     }
 
+    /**
+     * Adds an attention arow pointing down for a certain time above the specified node
+     * @param targetNode the node above which an attention arrow will appear
+     */
     private void addAttentionArrow(X3DNode targetNode) {
         //place attention arrow
         SFRotation planeRotation = (SFRotation) targetNode.getField("rotation");
@@ -649,12 +589,9 @@ public class X3DAgent extends Agent {
         arrowRotation.setValue(arrowRotationValues);
         arrowTranslation.setValue(arrowTranslationValues);
 
-        //mainScene.addRootNode(attentionArow);
-
         Timer timer = new Timer(2000, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                //mainScene.removeRootNode(attentionArow);
                 SFVec3f arrowScale = (SFVec3f) attentionArow.getField("scale");
                 arrowScale.setValue(new float[]{0, 0, 0});
             }
@@ -664,6 +601,10 @@ public class X3DAgent extends Agent {
         timer.start();
     }
 
+    /**
+     * Adds an attention arow pointing up for a certain time above the specified node
+     * @param targetNode the node above which an attention arrow will appear
+     */
     private void addInverseAttentionArrow(X3DNode targetNode) {
         //place attention arrow
         SFRotation planeRotation = (SFRotation) targetNode.getField("rotation");
@@ -680,12 +621,9 @@ public class X3DAgent extends Agent {
         arrowRotation.setValue(arrowRotationValues);
         arrowTranslation.setValue(arrowTranslationValues);
 
-        //mainScene.addRootNode(attentionArow);
-
         Timer timer = new Timer(2000, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                //mainScene.removeRootNode(attentionArow);
                 SFVec3f arrowScale = (SFVec3f) inverseAttentionArow.getField("scale");
                 arrowScale.setValue(new float[]{0, 0, 0});
             }
@@ -695,6 +633,10 @@ public class X3DAgent extends Agent {
         timer.start();
     }
 
+    /**
+     * Rotates the circle located around of the sensor sphere representation
+     * @param sensorTubeName name of the sensor to be animated
+     */
     public void animateSensor(String sensorTubeName) {
         X3DNode node = mainScene.getNamedNode(sensorTubeName);
         final SFRotation arrowRotation = (SFRotation) node.getField("rotation");
@@ -715,7 +657,6 @@ public class X3DAgent extends Agent {
 
         timer.setRepeats(false);
         timer.start();
-
 
     }
 

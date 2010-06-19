@@ -8,10 +8,6 @@ import actionselection.utils.MessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.X3DAgent;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.HyperVServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ServerManagementProxy;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
-import contextawaremodel.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import greenContextOntology.ProtegeFactory;
 import greenContextOntology.Server;
 import greenContextOntology.Task;
@@ -44,7 +40,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         oldTasks = server.getRunningTasks();
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.removeRunningTasks((Task) iterator.next(), model);
+            server.removeRunningTask((Task) iterator.next(), model);
         }
         server.setIsInLowPowerState(true, model);
 
@@ -56,7 +52,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
         Server server = protegeFactory.getServer(serverName);
         Iterator iterator = oldTasks.iterator();
         while (iterator.hasNext()) {
-            server.addRunningTasks((Task) iterator.next(), model);
+            server.addRunningTask((Task) iterator.next(), model);
         }
         server.setIsInLowPowerState(false, model);
     }
