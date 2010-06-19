@@ -20,11 +20,63 @@ import logger.LoggerGUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class GUIAgent extends Agent {
+    private final String EXIT_TOOLTIP = "Shuts down the system gracefully.";
+
+    private final String LOG_TOOLTIP = "<html>Opens a window where are logged:" +
+            "<br>" +
+            "<ul>" +
+            "<li>The value of each sensor</li>" +
+            "<li>The broken policies</li>" +
+            "<li>The context-repairing actions policies</li>" +
+            "</ul>" +
+            "</br>" +
+            "</html>";
+
+    private final String ENVIRONMENT_CONTEXT_MONITOR_TOOLTIP = "<html>Opens a window which contains:" +
+            "<br> " +
+            "<ul>" +
+            "<li>The value of each of the environment sensors</li>" +
+            "<li>A list of all the broken policies at a given time</li>" +
+            "<li>The actions the system takes in order to bring itself in an accepted state</li>" +
+            "</br>" +
+            "<br>Different from the Log because it shows instand data, it does not list previous values.</br>" +
+            "</html>";
+
+    private final String DATACENTER_CONFIGURATION_TOOLTIP = "<html>Opens a window used for configuring the system by:" +
+            "<br> " +
+            "<ul>" +
+            "<li>Defining servers, their associated resources and optimum load indicators</li>" +
+            "<li>Defining tasks and their resources requirements used as datacenter workload</li>" +
+            "</br>" +
+            "</html>";
+
+    private final String DATACENTER_PENDING_TASKS_QUEUE_TOOLTIP = "<html>Opens a window which displays information about tasks that are waiting to be deployed:" +
+            "<br> " +
+            "<ul>" +
+            "<li>A list of waiting tasks names</li>" +
+            "<li>The requested resources ranges for each waiting task</li>" +
+            "</br>" +
+            "</html>";
+
+    private final String DATACENTER_SERVER_MONITORS_TOOLTIP = "<html>Opens a window which displays a server monitor for each server in the datacenter." +
+            "<br>Each server monitor displays:</br>" +
+            "<br> " +
+            "<ul>" +
+            "<li>A task monitor similar to Pending tasks Queue monitor for tasks that are running on the server</li>" +
+            "<li>Server total resources usage</li>" +
+            "<li>The server resources used by each of the running tasks, by the Operating System and the unused amount</li>" +
+            "</br>" +
+            "</html>";
+
+
+    private final String X3D_REPRESENTATION_TOOLTIP = "<html>Opens a window which displays a 3D context representation for a simulated datacenter scenario.</html>";
+
 
     private ActionsOutputFrame enviromentMonitor;
     private JMenuBar menuBar;
@@ -44,7 +96,17 @@ public class GUIAgent extends Agent {
 
     @Override
     protected void setup() {
-
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (UnsupportedLookAndFeelException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
         System.out.println("[GUIAgent] Hello!");
 
@@ -73,13 +135,21 @@ public class GUIAgent extends Agent {
         menuBar = new JMenuBar();
         frame.setSize(500, 400);
 
+        frame.setLayout(new BorderLayout());
+      
+        
+        ImageIcon icon = new ImageIcon("./src/images/main_image.png");
+
+        JLabel label = new JLabel("",icon, JLabel.CENTER);
+        frame.add(label, BorderLayout.CENTER);
+        
         frame.setJMenuBar(menuBar);
 
         JMenu fileMenu = new JMenu("File");
         JMenu windowMenu = new JMenu("Window");
 
-        JMenu enviromentalControlMenu = new JMenu("Enviromental Control");
-        JMenu datacenterControlMenu = new JMenu("Datacenter Control");
+        JMenu enviromentalControlMenu = new JMenu("Enviromental Information");
+        JMenu datacenterControlMenu = new JMenu("Datacenter Information");
 
         AbstractAction exitAction = new AbstractAction("Exit") {
 
@@ -95,6 +165,7 @@ public class GUIAgent extends Agent {
             }
         };
 
+
         AbstractAction showDatacenterLogMenuItem = new AbstractAction("Log") {
 
             public void actionPerformed(ActionEvent e) {
@@ -105,7 +176,6 @@ public class GUIAgent extends Agent {
         AbstractAction showEnviromentMonitorWindowMenuItem = new AbstractAction("Context Monitor") {
 
             public void actionPerformed(ActionEvent e) {
-                //  shutdownPlatform();
                 showEnviromentMonitor();
             }
         };
@@ -159,6 +229,15 @@ public class GUIAgent extends Agent {
             }
         };
 
+        showSelfHealingLogMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, LOG_TOOLTIP);
+        showDatacenterLogMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, LOG_TOOLTIP);
+        showEnviromentMonitorWindowMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, ENVIRONMENT_CONTEXT_MONITOR_TOOLTIP);
+        showTasksQueueMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, DATACENTER_PENDING_TASKS_QUEUE_TOOLTIP);
+        showDatacenterConfigurationWindow.putValue(AbstractAction.SHORT_DESCRIPTION, DATACENTER_CONFIGURATION_TOOLTIP);
+        showDatacenterSimulationWindowMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, X3D_REPRESENTATION_TOOLTIP);
+        showServerMonitorsMenuItem.putValue(AbstractAction.SHORT_DESCRIPTION, DATACENTER_SERVER_MONITORS_TOOLTIP);
+        exitAction.putValue(AbstractAction.SHORT_DESCRIPTION, EXIT_TOOLTIP);
+
         fileMenu.add(exitAction);
 
         windowMenu.add(enviromentalControlMenu);
@@ -176,7 +255,6 @@ public class GUIAgent extends Agent {
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
 
-        // frame.pack();
         frame.setVisible(true);
 
         this.addBehaviour(new ReceiveChangesGUIBehaviour(this));
@@ -189,6 +267,7 @@ public class GUIAgent extends Agent {
             this.getContainerController().getPlatformController().kill();
             System.exit(0);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

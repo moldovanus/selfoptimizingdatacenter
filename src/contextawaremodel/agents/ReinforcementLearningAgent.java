@@ -8,9 +8,10 @@ import actionselection.context.DatacenterMemory;
 import actionselection.context.Memory;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
+import contextawaremodel.agents.behaviours.RLPlotterBehaviour;
 import contextawaremodel.agents.behaviours.ReceiveMessageRLBehaviour;
-import contextawaremodel.agents.behaviours.ReinforcementLearningEnvironmentManagementBehaviour;
 import contextawaremodel.agents.behaviours.ReinforcementLearningDataCenterManagementBehavior;
+import contextawaremodel.agents.behaviours.ReinforcementLearningEnvironmentManagementBehaviour;
 import contextawaremodel.worldInterface.dtos.TaskDto;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -151,7 +152,6 @@ public class ReinforcementLearningAgent extends Agent {
         //the owl model is passed as an argument by the Administrator Agent
         Object[] args = getArguments();
         if (args != null) {
-
 
             //selfOptimizingLogger = new LoggerGUI("selfOptimizingLog");
             //selfOptimizingLogger.setLogPath("logs/");

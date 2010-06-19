@@ -142,7 +142,12 @@ public class TaskConfigurator extends AbstractConfigurator {
             }
 
             for (Task task : factory.getAllTaskInstances()) {
+                RequestedTaskInfo requestedTaskInfo = task.getRequestedInfo();
+                ReceivedTaskInfo receivedTaskInfo = task.getReceivedInfo();
                 task.delete();
+                task.getAssociatedServer().removeRunningTasks(task);
+                requestedTaskInfo.delete();
+                receivedTaskInfo.delete();
             }
 
             for (QoSPolicy policy : factory.getAllQoSPolicyInstances()) {
@@ -174,7 +179,11 @@ public class TaskConfigurator extends AbstractConfigurator {
                 receivedInfo.setStorageReceived(0);
                 receivedInfo.setMemoryReceived(0);
 
+                task.setRequestedInfo(requestedInfo);
+                task.setReceivedInfo(receivedInfo);
+
                 QoSPolicy policy = factory.createQoSPolicy(task.getLocalName() + "_QoSPolicy");
+                policy.setPriority(1);
                 policy.setReferenced(task);
             }
         }

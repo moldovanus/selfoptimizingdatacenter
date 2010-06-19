@@ -144,9 +144,9 @@ public class ConfigurationGUI {
                 if (userOption == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     try {
-                        ConfigurationFileIO.saveConfiguration(taskConfigurator.getTableData(), new File(file.getPath()+".tasks_config"));
+                        ConfigurationFileIO.saveConfiguration(taskConfigurator.getTableData(), new File(file.getPath() + ".tasks_config"));
                     } catch (IOException e1) {
-                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        JOptionPane.showMessageDialog(null, "File save error", "Save error", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -159,9 +159,9 @@ public class ConfigurationGUI {
                 if (userOption == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     try {
-                        ConfigurationFileIO.saveConfiguration(serverConfigurator.getTableData(), new File(file.getPath()+".servers_config"));
+                        ConfigurationFileIO.saveConfiguration(serverConfigurator.getTableData(), new File(file.getPath() + ".servers_config"));
                     } catch (IOException e1) {
-                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        JOptionPane.showMessageDialog(null, "File save error", "Save error", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -173,11 +173,12 @@ public class ConfigurationGUI {
                 int userOption = fileChooser.showOpenDialog(null);
                 if (userOption == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
+                    taskConfigurationPanel.repaint();
                     try {
                         java.util.List<String[]> data = ConfigurationFileIO.loadConfiguration(file);
                         taskConfigurator.setTableData(data);
                     } catch (Exception e1) {
-                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        JOptionPane.showMessageDialog(null, "Invalid file", "Load error", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -189,11 +190,12 @@ public class ConfigurationGUI {
                 int userOption = fileChooser.showOpenDialog(null);
                 if (userOption == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
+                    serverConfigurationPanel.repaint();
                     try {
                         java.util.List<String[]> data = ConfigurationFileIO.loadConfiguration(file);
                         serverConfigurator.setTableData(data);
                     } catch (Exception e1) {
-                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        JOptionPane.showMessageDialog(null, "Invalid file", "Load error", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -223,7 +225,7 @@ public class ConfigurationGUI {
         taskConfigurator = new TaskConfigurator();
         serverConfigurator = new ServerConfigurator();
 
-        configurationFrame.setSize(1000, 700);
+        configurationFrame.setSize(1200, 700);
         configurationFrame.setLayout(new BorderLayout());
 
 

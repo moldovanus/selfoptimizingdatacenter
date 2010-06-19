@@ -6,8 +6,10 @@ import java.util.Hashtable;
 
 public class SensorAPI {
 
-    private static Hashtable<String, SensorWSReader> sensorReaders = new Hashtable<String, SensorWSReader>();
-    private static Hashtable<String, ServerInfoReader> serverReaders = new Hashtable<String, ServerInfoReader>();
+    private static Hashtable<String, SensorWSReader> sensorReaders =
+            new Hashtable<String, SensorWSReader>();
+    private static Hashtable<String, ServerInfoReader> serverReaders =
+            new Hashtable<String, ServerInfoReader>();
 
     public static double getSensorValue(String wsURL) {
         WSRequestBuilder wsrb = new WSRequestBuilder(wsURL);

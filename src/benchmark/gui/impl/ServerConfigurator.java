@@ -68,9 +68,10 @@ public class ServerConfigurator extends AbstractConfigurator {
 
             TableCellValueValidator storagePathValidator = new TableCellValueValidator() {
                 public boolean validateValue(String value) {
-                    return value.length() != 0 && value.matches("[0-9]+");
+                    return value.length() != 0;
                 }
             };
+
 
             cellValueValidators.put(IServerTableModel.SERVER_NAME, stringValuesValidator);
             cellValueValidators.put(IServerTableModel.SERVER_IP_ADDR, ipAddressValidator);
@@ -152,6 +153,21 @@ public class ServerConfigurator extends AbstractConfigurator {
             }
 
             for (Server server : factory.getAllServerInstances()) {
+                CPU cpu = server.getAssociatedCPU();
+                Memory memory = server.getAssociatedMemory();
+                Storage storage = server.getAssociatedStorage();
+                Collection cores = cpu.getAssociatedCore();
+                for (Object o : cores) {
+                    Core core = (Core) o;
+                    core.delete();
+                }
+                cpu.delete();
+                memory.delete();
+                storage.delete();
+                Collection tasks = server.getRunningTasks();
+                for (Object task : tasks) {
+                    server.removeRunningTasks((Task) task);
+                }
                 server.delete();
             }
 
@@ -167,7 +183,7 @@ public class ServerConfigurator extends AbstractConfigurator {
                 Collection virtualMachinesPath = new ArrayList();
                 virtualMachinesPath.add(data[3].trim());
                 server.setVirtualMachinesPath(virtualMachinesPath);
-
+                server.setIsInLowPowerState(true, null);
 
                 CPU cpu = factory.createCPU(serverName + "_CPU");
                 int coreCount = Integer.parseInt(data[4].trim());

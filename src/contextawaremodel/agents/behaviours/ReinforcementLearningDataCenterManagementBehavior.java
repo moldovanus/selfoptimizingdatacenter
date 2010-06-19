@@ -13,10 +13,7 @@ import actionselection.context.DatacenterMockupContext;
 import actionselection.context.Memory;
 import actionselection.utils.MessageDispatcher;
 import actionselection.utils.Pair;
-import benchmark.RandomWorkLoadGenerator;
 import benchmark.TaskLifeManager;
-import benchmark.WorkLoadFileIO;
-import benchmark.WorkLoadLoader;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextawaremodel.GlobalVars;
 import contextawaremodel.agents.ReinforcementLearningAgent;
@@ -74,21 +71,21 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         protegeFactory = new ProtegeFactory(datacenterOwlModel);
         Collection<Task> tasks = protegeFactory.getAllTaskInstances();
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        for (Task task : tasks) {
-            TaskLifeManager.addTask(protegeFactory, task, 10, datacenterPolicyConversionModel);
-        }
-
-        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(3, 3, 1000, protegeFactory, datacenterPolicyConversionModel);
-        try {
-            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+//        for (Task task : tasks) {
+//            TaskLifeManager.addTask(protegeFactory, task, 10, datacenterPolicyConversionModel);
+//        }
+//
+//        WorkLoadLoader generator = RandomWorkLoadGenerator.generateRandomWorkLoad(10, 5, 300000, protegeFactory, datacenterPolicyConversionModel);
+//        try {
+//            WorkLoadFileIO.writeWorkLoadToFile(generator, "WorkLoadFile");
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
         /* Task task = protegeFactory.createTask("TestTask");
                 RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
@@ -117,58 +114,57 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         // taskManagementWindow = new TaskManagement(protegeFactory, swrlFactory, datacenterPolicyConversionModel, agent);
 
         // FuzzyLogicNegotiator test
-        /*
-  Task task = protegeFactory.createTask("TestTask");
-  RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
-  ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
-  requestedTaskInfo.setCores(1);
-  requestedTaskInfo.setCpuMaxAcceptableValue(2300);
-  requestedTaskInfo.setCpuMinAcceptableValue(1650);
-  requestedTaskInfo.setMemoryMaxAcceptableValue(500);
-  requestedTaskInfo.setMemoryMinAcceptableValue(200);
-  requestedTaskInfo.setStorageMaxAcceptableValue(3);
-  requestedTaskInfo.setStorageMinAcceptableValue(1);
 
-
-  task.setReceivedInfo(receivedTaskInfo);
-  task.setRequestedInfo(requestedTaskInfo);
-
-  Server server = protegeFactory.createServer("TestServer_1");
-  CPU cpu = protegeFactory.createCPU("TestCPU_1");
-  greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
-  Storage storage = protegeFactory.createStorage("TestStorage_1");
-  Core core_1 = protegeFactory.createCore("TestCore_1");
-  core_1.setMaxAcceptableValue(1100);
-  core_1.setMinAcceptableValue(1100);
-  core_1.setTotal(2800);
-  core_1.setUsed(1);
-
-  serverMemory.setMaxAcceptableValue(600);
-  serverMemory.setMinAcceptableValue(1);
-  serverMemory.setUsed(1);
-  serverMemory.setTotal(600);
-
-  storage.setMaxAcceptableValue(600);
-  storage.setMinAcceptableValue(1);
-  storage.setUsed(1);
-  storage.setTotal(700);
-
-  cpu.addAssociatedCore(core_1);
-  server.setAssociatedCPU(cpu);
-  server.setAssociatedMemory(serverMemory);
-  server.setAssociatedStorage(storage);
-
-  Negotiator negotiator = NegotiatorFactory.getNashNegotiator();
-
-
-  negotiator.negotiate(server, task);
-  try {
-      Thread.sleep(5000);
-  } catch (InterruptedException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-  }
-  System.exit(1);
-        */
+//        Task task = protegeFactory.createTask("TestTask");
+//        RequestedTaskInfo requestedTaskInfo = protegeFactory.createRequestedTaskInfo("TestRequested_1");
+//        ReceivedTaskInfo receivedTaskInfo = protegeFactory.createReceivedTaskInfo("TestReceived_1");
+//        requestedTaskInfo.setCores(1);
+//        requestedTaskInfo.setCpuMaxAcceptableValue(1950);
+//        requestedTaskInfo.setCpuMinAcceptableValue(1650);
+//        requestedTaskInfo.setMemoryMaxAcceptableValue(500);
+//        requestedTaskInfo.setMemoryMinAcceptableValue(200);
+//        requestedTaskInfo.setStorageMaxAcceptableValue(3);
+//        requestedTaskInfo.setStorageMinAcceptableValue(1);
+//
+//
+//        task.setReceivedInfo(receivedTaskInfo);
+//        task.setRequestedInfo(requestedTaskInfo);
+//
+//        Server server = protegeFactory.createServer("TestServer_1");
+//        CPU cpu = protegeFactory.createCPU("TestCPU_1");
+//        greenContextOntology.Memory serverMemory = protegeFactory.createMemory("TestMemory_1");
+//        Storage storage = protegeFactory.createStorage("TestStorage_1");
+//        Core core_1 = protegeFactory.createCore("TestCore_1");
+//        core_1.setMaxAcceptableValue(1200);
+//        core_1.setMinAcceptableValue(1100);
+//        core_1.setTotal(2200);
+//        core_1.setUsed(1);
+//
+//        serverMemory.setMaxAcceptableValue(600);
+//        serverMemory.setMinAcceptableValue(1);
+//        serverMemory.setUsed(1);
+//        serverMemory.setTotal(600);
+//
+//        storage.setMaxAcceptableValue(600);
+//        storage.setMinAcceptableValue(1);
+//        storage.setUsed(1);
+//        storage.setTotal(700);
+//
+//        cpu.addAssociatedCore(core_1);
+//        server.setAssociatedCPU(cpu);
+//        server.setAssociatedMemory(serverMemory);
+//        server.setAssociatedStorage(storage);
+//
+//        Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+//
+//
+//        negotiator.negotiate(server, task);
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+        // System.exit(1);
 
         // resultsFrame = new ActionsOutputFrame("Datacenter");
         this.memory = memory;
@@ -290,11 +286,12 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             diff = 0.0;
             int usedCore = core.getUsed();
             int coreMaxAcceptableValue = core.getMaxAcceptableValue();
-            int coreMinAcceptableValue = core.getMinAcceptableValue();
+
             if (usedCore > coreMaxAcceptableValue) {
                 diff = usedCore - coreMaxAcceptableValue;
-            } else if (usedCore < coreMinAcceptableValue) {
-                diff = coreMinAcceptableValue - usedCore;
+            } else if (usedCore < coreMaxAcceptableValue) {
+                //TODO:changed din usedCore - coreMaxAcceptableValue pentru ca dadea entropie negativa
+                diff = coreMaxAcceptableValue - usedCore;
             }
             cpuCores += diff;
         }
@@ -309,7 +306,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         if (usedMemory > memoryMaxAcceptableValue) {
             diff = usedMemory - memoryMaxAcceptableValue;
         } else if (usedMemory < memoryMinAcceptableValue) {
-            diff = memoryMinAcceptableValue - usedMemory;
+            diff = usedMemory - memoryMinAcceptableValue;
         }
         respectance += serverMemory.getWeight() * diff;
         diff = 0.0;
@@ -321,6 +318,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         if (usedStorage > storageMaxAcceptableValue) {
             diff = usedStorage - storageMaxAcceptableValue;
         } else if (usedStorage < storageMinAcceptableValue) {
+            //TODO:changed din usedStorage - storageMinAcceptableValue pentru ca dadea entropie negativa
             diff = storageMinAcceptableValue - usedStorage;
         }
 
@@ -621,7 +619,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
     @Override
     protected void onTick() {
-
+        agent.sendAllTasksToClient();
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
@@ -708,7 +706,14 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             //avoid addin new tasks when querying ontology
             //TODO: check check check!  TM
             //taskManagementWindow.setClearForAdding(false);
+            long startSeconds = new java.util.Date().getTime();
             ContextSnapshot result = reinforcementLearning(queue);
+            long endSeconds = new java.util.Date().getTime();
+
+            int value = (int) ((endSeconds - startSeconds) / 1000);
+
+            agent.setRlTime(value);
+            System.err.println("Datacenter alg running time: " + value + " seconds");
 
             Collection<Command> resultQueue = result.getActions();
             ArrayList<String> message = new ArrayList<String>();
@@ -790,11 +795,11 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             }
             //wait for effect to be noticeable on X3D
 
-            try {
+           /* try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            }*/
 
 
         } else {

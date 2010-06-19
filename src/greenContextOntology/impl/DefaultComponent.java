@@ -52,7 +52,6 @@ public class DefaultComponent extends DefaultResource
         setPropertyValue(getMaxAcceptableValueProperty(), new java.lang.Integer(newMaxAcceptableValue));
     }
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#minAcceptableValue
 
     public int getMinAcceptableValue() {
@@ -79,7 +78,6 @@ public class DefaultComponent extends DefaultResource
         setPropertyValue(getMinAcceptableValueProperty(), new java.lang.Integer(newMinAcceptableValue));
     }
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#total
 
     public int getTotal() {
@@ -103,11 +101,14 @@ public class DefaultComponent extends DefaultResource
         setPropertyValue(getTotalProperty(), new java.lang.Integer(newTotal));
     }
 
-
     // Property http://www.owl-ontologies.com/Datacenter.owl#used
 
     public int getUsed() {
-        return getPropertyValueLiteral(getUsedProperty()).getInt();
+        if (hasUsed()) {
+            return getPropertyValueLiteral(getUsedProperty()).getInt();
+        }else{
+            return 0;
+        }
     }
 
 
