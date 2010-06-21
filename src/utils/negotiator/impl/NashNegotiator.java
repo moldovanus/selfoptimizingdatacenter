@@ -39,7 +39,7 @@ public class NashNegotiator implements Negotiator {
             for (int j = 0; j < quality; j++) {
                 int currentValue2 = j * increment2 + minValue2;
 
-                double penalty1 = (currentValue2 - currentValue1 + 0.00001);
+                double penalty1 = 1/(currentValue2 - currentValue1 + 0.00001);
                 double penalty2 = (currentValue2 - currentValue1);
                 if (penalty1 < 0) {
                     penalty1 *= (-1);
@@ -47,14 +47,10 @@ public class NashNegotiator implements Negotiator {
                 if (penalty2 < 0) {
                     penalty2 *= (-1);
                 }
-                double reward1;
-                if (currentValue2 - currentValue1 == 0)
-                    reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
-                else
-                    reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
+                double reward1 = (currentValue1 - minValue1) / (maxValue1 - minValue1 + 1.00001);
                 double reward2 = (currentValue2 - maxValue2) / (maxValue2 - minValue2 + 1.00001);
-                utilities1[i][j] = reward1 - penalty2;
-                utilities2[i][j] = reward2 - penalty2;
+                utilities1[i][j] = reward1 * penalty1;
+                utilities2[i][j] = reward2 * penalty2;
                 /*
               double penalty1 = 1/(currentValue2 - currentValue1+0.00001);
               double penalty2 = (currentValue2 - currentValue1) ;
@@ -121,6 +117,7 @@ public class NashNegotiator implements Negotiator {
                 }
             }
         }
+        if (x>maxValue2) return maxValue2;
         System.out.println("Returned " + p + " " + q + "   value:" + x);
         return (x);
 
@@ -133,6 +130,7 @@ public class NashNegotiator implements Negotiator {
         double negotiatedMemory = 0.0d;
         Map<String, Double> negotiatedValues = new HashMap<String, Double>();
         /***Memory*********************************/
+        if (reqTask.getMemoryMinAcceptableValue()>task.getReceivedInfo().getMemoryReceived())
         if (server.getAssociatedMemory().getMaxAcceptableValue() - (server.getAssociatedMemory().getUsed() + reqTask.getMemoryMinAcceptableValue()) < 0) {
             int optimalValueForServer = server.getAssociatedMemory().getMaxAcceptableValue() - server.getAssociatedMemory().getUsed();
             if (optimalValueForServer == 0) {
@@ -140,9 +138,13 @@ public class NashNegotiator implements Negotiator {
             }
             negotiatedMemory = negotiateGivenRanges(reqTask.getMemoryMinAcceptableValue(), reqTask.getMemoryMaxAcceptableValue(), 0,
                     reqTask.getMemoryMinAcceptableValue(), server.getAssociatedMemory().getTotal() - server.getAssociatedMemory().getUsed(), optimalValueForServer);
-            negotiatedValues.put(NEGOTIATED_MEMORY, negotiatedMemory + optimalValueForServer);
+            if ((negotiatedCpu + optimalValueForServer)> (server.getAssociatedMemory().getTotal()-server.getAssociatedMemory().getUsed()))
+            negotiatedValues.put(NEGOTIATED_MEMORY,(double)(server.getAssociatedMemory().getTotal()-server.getAssociatedMemory().getUsed())) ;
+            else
+            negotiatedValues.put(NEGOTIATED_MEMORY, (negotiatedMemory + optimalValueForServer));
         }
         /***Storage*******************************/
+        if (reqTask.getStorageMinAcceptableValue()>task.getReceivedInfo().getStorageReceived())
         if (server.getAssociatedStorage().getMaxAcceptableValue() - (server.getAssociatedStorage().getUsed() + reqTask.getStorageMinAcceptableValue()) < 0) {
             int optimalValueForServer = server.getAssociatedStorage().getMaxAcceptableValue() - server.getAssociatedStorage().getUsed();
             if (optimalValueForServer == 0) {
@@ -151,11 +153,15 @@ public class NashNegotiator implements Negotiator {
             negotiatedStorage = negotiateGivenRanges(reqTask.getStorageMinAcceptableValue(), reqTask.getStorageMaxAcceptableValue(), 0,
                     server.getAssociatedStorage().getTotal() - server.getAssociatedStorage().getUsed(),
                     reqTask.getStorageMinAcceptableValue(), optimalValueForServer);
-            negotiatedValues.put(NEGOTIATED_STORAGE, negotiatedStorage + optimalValueForServer);
+            if ((negotiatedCpu + optimalValueForServer)> (server.getAssociatedStorage().getTotal()-server.getAssociatedStorage().getUsed()))
+            negotiatedValues.put(NEGOTIATED_STORAGE,(double)(server.getAssociatedStorage().getTotal()-server.getAssociatedStorage().getUsed())) ;
+            else
+            negotiatedValues.put(NEGOTIATED_STORAGE, (negotiatedStorage + optimalValueForServer));
         }
         /***Cpu*******************************/
         Collection<Core> cores = server.getAssociatedCPU().getAssociatedCore();
         Core core = cores.iterator().next();
+       if (reqTask.getCpuMinAcceptableValue()>task.getReceivedInfo().getCpuReceived())
         if (core.getMaxAcceptableValue() - (core.getUsed() + reqTask.getCpuMinAcceptableValue()) < 0) {
             int optimalValueForServer = core.getMaxAcceptableValue() - core.getUsed();
             if (optimalValueForServer == 0) {
@@ -164,7 +170,10 @@ public class NashNegotiator implements Negotiator {
             negotiatedCpu = negotiateGivenRanges(reqTask.getCpuMinAcceptableValue() - optimalValueForServer, reqTask.getCpuMaxAcceptableValue() - optimalValueForServer,
                     0, core.getTotal() - core.getUsed() - optimalValueForServer, 0, 0);
             System.out.println("Negotiated value " + (negotiatedCpu + optimalValueForServer));
-            negotiatedValues.put(NEGOTIATED_CPU, negotiatedCpu + optimalValueForServer);
+            if ((negotiatedCpu + optimalValueForServer)> (core.getTotal()-core.getUsed()))
+            negotiatedValues.put(NEGOTIATED_CPU,(double)(core.getTotal()-core.getUsed())) ;
+            else
+            negotiatedValues.put(NEGOTIATED_CPU, (negotiatedCpu + optimalValueForServer));
         }
 
 
