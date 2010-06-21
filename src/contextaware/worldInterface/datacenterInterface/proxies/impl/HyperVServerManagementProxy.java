@@ -7,7 +7,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.*;
-import java.net.*;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,7 +57,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         ServerDto serverDto = null;
         try {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
-            
+
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
 
@@ -260,6 +261,55 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         }
     }
 
+    public void modifyVirtualMachine(String vmName, int memory, int processorPercentage, int cores) {
+        try {
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/WakeUpServer?"
+                    + "vmName=" + vmName + "&memory=" + memory + "&procSpeed=" + processorPercentage +
+                    "&cores=" + cores);
+            URLConnection connection = url.openConnection();
+            connection.setDoInput(true);
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            if (DEBUG) {
+                // Response
+                String line;
+                while ((line = rd.readLine()) != null) {
+
+                    System.out.println(line);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deployVirtualMachineWithCustomResources(String from, String to,
+                                                        String vmName, String vmCopyName,
+                                                        int memory, int processorPercentage, int nrCores) {
+        try {
+            //TODO: remove the hardcoded vmName when multiple reference vm's can be defined
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from="
+                    + from + "&to=" + to + "&vmName=" + "VM_1" + "&vmCopyName=" + vmCopyName
+                    + "&memory=" + memory + "&procSpeed=" + processorPercentage + "&cores=" + nrCores);
+            URLConnection connection = url.openConnection();
+            connection.setDoInput(true);
+
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            if (DEBUG) {
+                // Response
+                String line;
+                while ((line = rd.readLine()) != null) {
+
+                    System.out.println(line);
+                }
+            }
+            startVirtualMachine(vmCopyName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void wakeUpServer(String mac, String ipAddress, int port) {
 
         try {
@@ -269,7 +319,6 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             connection.setDoInput(true);
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -291,7 +340,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/SendServerToSleep");
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
-            
+
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
                 // Response

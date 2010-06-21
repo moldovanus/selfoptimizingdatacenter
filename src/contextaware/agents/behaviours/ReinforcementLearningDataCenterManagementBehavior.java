@@ -170,7 +170,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         this.memory = memory;
         swrlFactory = new SWRLFactory(datacenterOwlModel);
 
-        negotiator = NegotiatorFactory.getNashNegotiator();
+        negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
         /*for (SWRLImp imp : swrlFactory.getEnabledImps()) {
             System.out.println(imp.toString());
@@ -402,8 +402,15 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         ContextSnapshot newContext = queue.poll();
         if (newContext == null) {
             Pair<Double, Policy> entropyAndPolicy = computeEntropy();
-            System.out.println("Could not repair the context totally. Returning best solution.");
+
+            System.out.println("Could not repair the context totally. Returning best solution:");
+            Queue<Command> commands = smallestEntropyContext.getActions();
+            for (Command command : commands) {
+                System.out.println(command.toString());
+            }
+
             System.out.println("Broken " + entropyAndPolicy.getSecond().getLocalName() + "\n Referenced " + entropyAndPolicy.getSecond().getReferenced().toString());
+
             //agent.getSelfOptimizingLogger().log(Color.red, "No solution found", "Could not repair the context totally. Returning best solution.");
             return smallestEntropyContext;
         }

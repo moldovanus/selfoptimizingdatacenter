@@ -4,17 +4,15 @@
  */
 package actionEnforcement.command.selfOptimizingCommand;
 
-import utils.X3DMessageDispatcher;
-import utils.workLoadGenerator.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
 import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
-import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
-import ontologyRepresentations.greenContextOntology.Server;
-import ontologyRepresentations.greenContextOntology.Task;
 import jade.core.Agent;
+import ontologyRepresentations.greenContextOntology.*;
+import utils.X3DMessageDispatcher;
+import utils.workLoadGenerator.TaskLifeManager;
 
 import java.io.IOException;
 
@@ -65,12 +63,15 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
         Task task = protegeFactory.getTask(taskName);
+        RequestedTaskInfo requested = task.getRequestedInfo();
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
+            int procTime = (requested.getCpuMaxAcceptableValue() * 100) / ((Core) server.getAssociatedCPU().getAssociatedCore().iterator().next()).getTotal();
             String path = (String) server.getVirtualMachinesPath().iterator().next();
-            proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",
+            proxy.deployVirtualMachineWithCustomResources("\\\\192.168.2.110\\SharedStorage",
                     "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
-                    task.getTaskName(), task.getLocalName());
+                    task.getTaskName(), task.getLocalName(),requested.getMemoryMaxAcceptableValue(),
+                    procTime, requested.getStorageMaxAcceptableValue() );
 
         } else {
             System.err.println("Proxy is null");

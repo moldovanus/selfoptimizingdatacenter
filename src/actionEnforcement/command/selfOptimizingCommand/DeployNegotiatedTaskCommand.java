@@ -1,16 +1,17 @@
 package actionEnforcement.command.selfOptimizingCommand;
 
-import utils.X3DMessageDispatcher;
-import utils.workLoadGenerator.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
 import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import jade.core.Agent;
+import ontologyRepresentations.greenContextOntology.Core;
 import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
 import ontologyRepresentations.greenContextOntology.Server;
 import ontologyRepresentations.greenContextOntology.Task;
-import jade.core.Agent;
+import utils.X3DMessageDispatcher;
+import utils.workLoadGenerator.TaskLifeManager;
 
 import java.io.IOException;
 
@@ -63,7 +64,8 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
     @Override
     public String toString() {
         String description;
-        description = "Deploy task \"" + taskName.split("#")[1] + "\" to server \"" + serverName.split("#")[1] + "\"";
+        description = "Negotiated: memory " + negotiatedMemory + " cpu " + negotiatedCPU + " storage " + negotiatedStorage;
+        description += "Deploy task \"" + taskName.split("#")[1] + "\" to server \"" + serverName.split("#")[1] + "\"";
         return description;
     }
 
@@ -73,10 +75,11 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
         Task task = protegeFactory.getTask(taskName);
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
+            int procTime = (negotiatedCPU * 100) / ((Core) server.getAssociatedCPU().getAssociatedCore().iterator().next()).getTotal();
             String path = (String) server.getVirtualMachinesPath().iterator().next();
-            proxy.deployVirtualMachine("\\\\192.168.2.110\\SharedStorage",
+            proxy.deployVirtualMachineWithCustomResources("\\\\192.168.2.110\\SharedStorage",
                     "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
-                    task.getTaskName(), task.getLocalName());
+                    task.getTaskName(), task.getLocalName(), negotiatedMemory, procTime, negotiatedStorage);
 
         } else {
             System.err.println("Proxy is null");

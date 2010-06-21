@@ -132,6 +132,18 @@ public class ServerMonitorPiePlotter extends ServerMonitor {
         int totalStorageUsedByTasks = 0;
 
         for (Task task : runningTasks) {
+            if ( task.getTaskName().equals("Task_3")){
+                System.out.println("Task_3");
+                System.out.println("Cores:" + task.getReceivedInfo().getCores());
+                System.out.println("CPU:" + task.getReceivedInfo().getCpuReceived());
+                Collection<Integer> cores = task.getReceivedInfo().getReceivedCoreIndex();
+                for (Integer core : cores){
+                      System.out.println("core_index:" + core);
+                }
+                System.out.println("Memory:" + task.getReceivedInfo().getMemoryReceived());
+                System.out.println("Storage:" + task.getReceivedInfo().getStorageReceived());
+
+            }
             ReceivedTaskInfo receivedInfo = task.getReceivedInfo();
             Iterator<Integer> receivedCoresIndexIterator = receivedInfo.listReceivedCoreIndex();
             int usedCPUByTask = receivedInfo.getCpuReceived();

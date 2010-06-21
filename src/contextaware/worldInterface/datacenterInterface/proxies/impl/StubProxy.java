@@ -1,9 +1,7 @@
 package contextaware.worldInterface.datacenterInterface.proxies.impl;
 
 import contextaware.worldInterface.dtos.ServerDto;
-import contextaware.worldInterface.dtos.StorageDto;
-
-import java.util.ArrayList;
+import ontologyRepresentations.greenContextOntology.Task;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,25 +16,25 @@ public class StubProxy extends ServerManagementProxy {
     }
 
     public ServerDto getServerInfo() {
-        ServerDto dto = new ServerDto();
-        StorageDto storageDto = new StorageDto();
-        ArrayList<Integer> cpu = new ArrayList<Integer>();
-        ArrayList<StorageDto> storageDtos = new ArrayList<StorageDto>();
-
-        cpu.add(3000);
-        cpu.add(3000);
-        cpu.add(3000);
-        storageDto.setName("C:");
-
-        cpu.add(3000);
-        storageDtos.add(storageDto);
-
-        dto.setFreeCPU(cpu);
-        dto.setStorage(storageDtos);
-        dto.setCoreCount(1);
-
-        return dto;  //To change body of implemented methods use File | Settings | File Templates.
-       // return new HyperVServerManagementProxy(hostName).getServerInfo();
+//        ServerDto dto = new ServerDto();
+//        StorageDto storageDto = new StorageDto();
+//        ArrayList<Integer> cpu = new ArrayList<Integer>();
+//        ArrayList<StorageDto> storageDtos = new ArrayList<StorageDto>();
+//
+//        cpu.add(3000);
+//        cpu.add(3000);
+//        cpu.add(3000);
+//        storageDto.setName("C:");
+//
+//        cpu.add(3000);
+//        storageDtos.add(storageDto);
+//
+//        dto.setFreeCPU(cpu);
+//        dto.setStorage(storageDtos);
+//        dto.setCoreCount(1);
+//
+//        return dto;  //To change body of implemented methods use File | Settings | File Templates.
+        return new HyperVServerManagementProxy(hostName).getServerInfo();
     }
 
     public void moveDestinationActions(String path1, String path2, String vmName) {
@@ -60,6 +58,14 @@ public class StubProxy extends ServerManagementProxy {
     }
 
     public void deleteVirtualMachine(String vmName) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void modifyVirtualMachine(String vmName, int memory, int procPercentage, int cores) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void deployVirtualMachineWithCustomResources(String from, String to, String vmName, String vmCopyName, int memory, int processorPercentage, int nrCores) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

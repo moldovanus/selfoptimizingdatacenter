@@ -296,6 +296,19 @@ public class DefaultServer extends DefaultResource
         tasks.add(newRunningTasks);
 
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
+
+         if ( newRunningTasks.getTaskName().equals("Task_3")){
+                System.out.println("Task_3");
+                System.out.println("Cores:" + newRunningTasks.getReceivedInfo().getCores());
+                System.out.println("CPU:" + newRunningTasks.getReceivedInfo().getCpuReceived());
+                Collection<Integer> c = newRunningTasks.getReceivedInfo().getReceivedCoreIndex();
+                for (Integer core : c){
+                      System.out.println("core_index:" + core);
+                }
+                System.out.println("Memory:" + newRunningTasks.getReceivedInfo().getMemoryReceived());
+                System.out.println("Storage:" + newRunningTasks.getReceivedInfo().getStorageReceived());
+
+            }
     }
 
     public void addRunningTask(Task newRunningTasks) {
