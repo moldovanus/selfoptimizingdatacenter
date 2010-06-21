@@ -26,6 +26,8 @@ public interface ServerManagementProxyInterface {
 
     void deleteVirtualMachine(String vmName);
 
+    void modifyVirtualMachine(String vmName, int memory, int procPercentage, int cores);
+
     /**
      * @param mac       - mac address of the server to be woken up
      * @param ipAddress - ip of router
