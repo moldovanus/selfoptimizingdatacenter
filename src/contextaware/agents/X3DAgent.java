@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class X3DAgent extends Agent {
     public static final float[] ACTIVE_SERVER_COLOR = new float[]{0.3451f, 0.7804f, 0.8824f};
     public static final float[] INACTIVE_SERVER_COLOR = new float[]{0.5f, 0.5f, 0.5f};
 
+    private X3DAgent selfReference;
 
     private JFrame frame;
 
@@ -44,7 +47,7 @@ public class X3DAgent extends Agent {
     private Map<String, X3DNode> tasks;
     private Map<String, MFString> objectLabels;
     private ArrayList<String> wiresIndexes;
-    
+
     private Timer changeWiresBackTimer;
     private Timer fanAnimationTimer;
     private Timer sensorAnimationTimer;
@@ -54,6 +57,7 @@ public class X3DAgent extends Agent {
 
     private X3DNode attentionArow;
     private X3DNode inverseAttentionArow;
+    private boolean frameClosed = true;
 
     private ActionListener sensorsAnimationListener = new ActionListener() {
 
@@ -93,9 +97,9 @@ public class X3DAgent extends Agent {
 
     @Override
     protected void takeDown() {
-        super.takeDown();
         frame.setVisible(false);
         frame.dispose();
+        super.takeDown();
     }
 
     /**
@@ -103,10 +107,43 @@ public class X3DAgent extends Agent {
      */
     @Override
     protected void setup() {
+        selfReference = this;
+        frameClosed = false;
 
         System.out.println("[X3DAgent] : Hellooo ! ");
         frame = new JFrame("X3D vizualization");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.addWindowListener(new WindowListener() {
+
+            public void windowOpened(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void windowClosing(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void windowClosed(WindowEvent e) {
+               selfReference.takeDown();
+               selfReference.doDelete();
+               frameClosed= true;
+            }
+
+            public void windowIconified(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void windowDeiconified(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void windowActivated(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void windowDeactivated(WindowEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
         Container contentPane = frame.getContentPane();
 
         // Setup browser parameters
@@ -139,7 +176,6 @@ public class X3DAgent extends Agent {
             System.out.println("Not running on Xj3D, extended functions disabled");
             useXj3D = false;
         }
-
 
         // Create an X3D scene by loading a file
         mainScene = x3dBrowser.createX3DFromURL(new String[]{GlobalVars.X3D_SCENE_FILE});
@@ -219,8 +255,9 @@ public class X3DAgent extends Agent {
     /**
      * Sets the color of the wire associated to server serverName to
      * the specified color
+     *
      * @param serverName the server the wire is connected to
-     * @param color the new color of the wire
+     * @param color      the new color of the wire
      */
     private void setWireColor(String serverName, float[] color) {
         String[] elements = serverName.split("_");
@@ -232,10 +269,11 @@ public class X3DAgent extends Agent {
 
     /**
      * Adds a text label to the other side of the object. The side initially not visible
-     * when the scene is loaded. 
-     * @param textLabel the label of the object
-     * @param objectName the name of the X3D node to which the label is applied
-     * @param color the color of the label
+     * when the scene is loaded.
+     *
+     * @param textLabel   the label of the object
+     * @param objectName  the name of the X3D node to which the label is applied
+     * @param color       the color of the label
      * @param translation the translation of the text relative to the object
      */
     private void addInverseObjectLabel(String textLabel, String objectName,
@@ -309,12 +347,13 @@ public class X3DAgent extends Agent {
         }
     }
 
-   /**
+    /**
      * Adds a text label to the visible side of the object. The side initially visible
      * when the scene is loaded.
-     * @param textLabel the label of the object
-     * @param objectName the name of the X3D node to which the label is applied
-     * @param color the color of the label
+     *
+     * @param textLabel   the label of the object
+     * @param objectName  the name of the X3D node to which the label is applied
+     * @param color       the color of the label
      * @param translation the translation of the text relative to the object
      */
     public void addObjectLabel(String textLabel, String objectName,
@@ -390,11 +429,10 @@ public class X3DAgent extends Agent {
     }
 
     /**
-     *
-     * @param taskName the name of the task to be used as label
+     * @param taskName      the name of the task to be used as label
      * @param taskTransform the transform of the task. Each task is placed above the
-     * previous task so it is necesary to know the transform off the target task
-     * @param color the color of the label
+     *                      previous task so it is necesary to know the transform off the target task
+     * @param color         the color of the label
      */
     private void addLabelToTask(String taskName, X3DNode taskTransform, float[] color) {
 
@@ -457,7 +495,8 @@ public class X3DAgent extends Agent {
 
     /**
      * Creates a new task representation and adds it to the 3D scene
-     * @param taskName  the name of the new task to be used as label
+     *
+     * @param taskName   the name of the new task to be used as label
      * @param serverName
      * @param taskNumber
      */
@@ -522,6 +561,7 @@ public class X3DAgent extends Agent {
 
     /**
      * Removes the representation for task taskName from the scene
+     *
      * @param taskName the name of the task to be removed from the scene
      */
     public void removeTask(String taskName) {
@@ -533,6 +573,7 @@ public class X3DAgent extends Agent {
     /**
      * Places an attention arow above the server and changes the color of the server
      * platform to gray
+     *
      * @param serverName the name of the target server
      */
     public void sendServerToLowPower(String serverName) {
@@ -550,9 +591,10 @@ public class X3DAgent extends Agent {
 
     }
 
-     /**
+    /**
      * Places an attention arow above the server and changes the color of the server
      * platform to blue
+     *
      * @param serverName the name of the target server
      */
     public void wakeUpServer(String serverName) {
@@ -571,6 +613,7 @@ public class X3DAgent extends Agent {
 
     /**
      * Adds an attention arow pointing down for a certain time above the specified node
+     *
      * @param targetNode the node above which an attention arrow will appear
      */
     private void addAttentionArrow(X3DNode targetNode) {
@@ -603,6 +646,7 @@ public class X3DAgent extends Agent {
 
     /**
      * Adds an attention arow pointing up for a certain time above the specified node
+     *
      * @param targetNode the node above which an attention arrow will appear
      */
     private void addInverseAttentionArrow(X3DNode targetNode) {
@@ -635,6 +679,7 @@ public class X3DAgent extends Agent {
 
     /**
      * Rotates the circle located around of the sensor sphere representation
+     *
      * @param sensorTubeName name of the sensor to be animated
      */
     public void animateSensor(String sensorTubeName) {
@@ -660,4 +705,7 @@ public class X3DAgent extends Agent {
 
     }
 
+    public boolean isFrameClosed() {
+        return frameClosed;
+    }
 }

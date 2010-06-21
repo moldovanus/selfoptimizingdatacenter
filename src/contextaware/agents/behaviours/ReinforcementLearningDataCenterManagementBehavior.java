@@ -656,9 +656,9 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
-            for (Server server : protegeFactory.getAllServerInstances()) {
-                server.collectPreviouslyDistributedResources(datacenterPolicyConversionModel);
-            }
+//            for (Server server : protegeFactory.getAllServerInstances()) {
+//                server.collectPreviouslyDistributedResources(datacenterPolicyConversionModel);
+//            }
 
             //Gather data for logging purposes
 
@@ -770,9 +770,9 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
                 datacenterMemory.memorize(initialDataCenterContext, result.getActions());
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
-                for (Server server : servers) {
-                    server.distributeRemainingResources(datacenterPolicyConversionModel);
-                }
+//                for (Server server : servers) {
+//                    server.distributeRemainingResources(datacenterPolicyConversionModel);
+//                }
             }
 
             datacenterMemory.memorize(initialDataCenterContext, result.getActions());

@@ -23,7 +23,7 @@ public class BasicX3DBehaviour extends CyclicBehaviour {
     @Override
     public void action() {
         ACLMessage message = agent.receive();
-        if (message == null) {
+        if (message == null || agent.isFrameClosed()) {
             return;
         }
 

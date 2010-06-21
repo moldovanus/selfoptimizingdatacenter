@@ -298,7 +298,7 @@ public class DefaultServer extends DefaultResource
         addPropertyValue(getRunningTasksProperty(), newRunningTasks);
 
          if ( newRunningTasks.getTaskName().equals("Task_3")){
-                System.out.println("Task_3");
+                System.out.println("NEGOTIATEEEDD Task_3");
                 System.out.println("Cores:" + newRunningTasks.getReceivedInfo().getCores());
                 System.out.println("CPU:" + newRunningTasks.getReceivedInfo().getCpuReceived());
                 Collection<Integer> c = newRunningTasks.getReceivedInfo().getReceivedCoreIndex();
