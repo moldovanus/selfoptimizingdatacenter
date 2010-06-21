@@ -28,6 +28,9 @@ public interface ServerManagementProxyInterface {
 
     void modifyVirtualMachine(String vmName, int memory, int procPercentage, int cores);
 
+    void deployVirtualMachineWithCustomResources(String from, String to, String vmName, String vmCopyName,
+                                                 int memory, int processorPercentage, int nrCores);
+
     /**
      * @param mac       - mac address of the server to be woken up
      * @param ipAddress - ip of router
