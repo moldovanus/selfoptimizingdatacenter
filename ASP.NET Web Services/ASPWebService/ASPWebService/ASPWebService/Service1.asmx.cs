@@ -70,6 +70,20 @@ namespace ASPWebService
             operationCompleted = true;
         }
         [WebMethod]
+        public void DeployVirtualMachineWithModify(String from, String to, String vmName, String vmCopyName, int memory, int procSpeed, int nrCores)
+        {
+            //just to make sure it is running
+            Process.Start("C:\\StartHVBoot.bat");
+            operationCompleted = false;
+            DirectoryInfo dfrom = new DirectoryInfo(from + "\\" + vmName);
+            DirectoryInfo dto = new DirectoryInfo(to + "\\" + vmCopyName);
+            VMHandling.CopyAll(dfrom, dto);
+            VMHandling.ImportVirtualSystem(to + "\\" + vmCopyName);
+            VMHandling.ModifyVirtualSystemName(vmName, vmCopyName);
+            VMHandling.ModifyVirtualSystemProperties(vmCopyName, memory, procSpeed, nrCores);
+            operationCompleted = true;
+        }
+        [WebMethod]
         public void ModifyVirtualMachine(String vmName, int memory, int procSpeed, int cores)
         {
             operationCompleted = false;
