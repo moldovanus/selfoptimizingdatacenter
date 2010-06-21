@@ -244,7 +244,7 @@ namespace ServerManagement
             }
             return createdSwitch;
         }
-       public static void ModifyVirtualSystem(string vmName, string vmNewName)
+       public static void ModifyVirtualSystemName(string vmName, string vmNewName)
         {
             ManagementScope scope = new ManagementScope(@"root\virtualization", null);
             ManagementObject virtualSystemService = Utility.GetServiceObject(scope, "Msvm_VirtualSystemManagementService");
@@ -514,8 +514,102 @@ namespace ServerManagement
 
         }
 
+       public static void ModifyVirtualSystemProperties(string vmName,int memory, int procSpeed, int nrCores)
+       {
+           string virtualMachineName = vmName;
+           string[] resourceSettingData = new string[2];
 
+           ManagementPath path = new ManagementPath(@"root\virtualization");
+           ManagementScope scope = new ManagementScope(path, new ConnectionOptions());
+           scope.Connect();
 
+           ManagementObject objMachine = Utility.GetTargetComputer(virtualMachineName, scope);
+
+           // prepare settings datas.
+           ManagementObject memorySetting = null;
+           ManagementObject processorSetting = null;
+           ManagementObject storageSetting = null;
+
+           ManagementObjectCollection settingDatas = objMachine.GetRelated("Msvm_VirtualSystemsettingData");
+           foreach (ManagementObject settingData in settingDatas)
+           {
+               foreach (ManagementObject memorySettingData in settingData.GetRelated("Msvm_MemorySettingData"))
+               {
+                   memorySetting = memorySettingData;
+                   break;
+               }
+               foreach (ManagementObject proccessSettingData in settingData.GetRelated("Msvm_ProcessorSettingData"))
+               {
+                   processorSetting = proccessSettingData;
+                   break;
+               }
+             /*  foreach (ManagementObject storageSettingData in settingData.GetRelated("Msvm_VirtualHardDiskInfo"))
+               {
+                   storageSetting = storageSettingData;
+                   break;
+               }*/
+           }
+
+           memorySetting["Limit"] = memory;
+           memorySetting["Reservation"] = memory;
+           memorySetting["VirtualQuantity"] = memory;
+           resourceSettingData[0] = memorySetting.GetText(TextFormat.CimDtd20);
+
+           processorSetting["Limit"] = procSpeed *1000;
+           processorSetting["Reservation"] = procSpeed * 1000;
+           processorSetting["VirtualQuantity"] = nrCores;
+           resourceSettingData[1] = processorSetting.GetText(TextFormat.CimDtd20);
+
+           processorSetting["Weight"] = 5000;
+
+           /*
+               storageSetting["FileSize"] = 2;
+               storageSetting["MaxInternalSize"] = 2;
+               resourceSettingData[2] = storageSetting.GetText(TextFormat.CimDtd20);
+            */
+           // get Msvm_VirtualSystemManagementService instance.
+           ManagementObject virtualSystem = null;
+           ManagementClass systemManagementServiceClass = new ManagementClass(
+               scope,
+               new ManagementPath("Msvm_VirtualSystemManagementService"),
+               null);
+
+           ManagementObjectCollection systemManagementServices = systemManagementServiceClass.GetInstances();
+           foreach (ManagementObject service in systemManagementServices)
+           {
+               virtualSystem = service;
+           }
+
+           ManagementBaseObject inParams = virtualSystem.GetMethodParameters("ModifyVirtualSystemResources");
+           inParams["ComputerSystem"] = objMachine.Path.Path;
+           inParams["ResourcesettingData"] = resourceSettingData;
+           ManagementBaseObject outParams = virtualSystem.InvokeMethod("ModifyVirtualSystemResources", inParams, null);
+           if ((UInt32)outParams["ReturnValue"] == ReturnCode.Started)
+           {
+               if (Utility.JobCompleted(outParams, scope))
+               {
+                   Console.WriteLine("Virtual machine was modified successfully.");
+               }
+               else
+               {
+                   Console.WriteLine("Failed to modify virtual machine.");
+               }
+           }
+           else if ((UInt32)outParams["ReturnValue"] == ReturnCode.Completed)
+           {
+               Console.WriteLine("Virtual machine was modified successfully.");
+           }
+           else
+           {
+               Console.WriteLine("Modify virtual machine failed with error : {0}", outParams["ReturnValue"]);
+           }
+
+           inParams.Dispose();
+           outParams.Dispose();
+           memorySetting.Dispose();
+           processorSetting.Dispose();
+           objMachine.Dispose();
+       }
 
         /************************* Delete virtual machine *************************/
        public static void DestroyVirtualSystem(string vmName)
@@ -557,5 +651,8 @@ namespace ServerManagement
             vm.Dispose();
             virtualSystemService.Dispose();
         }
+
+
+
     }
 }

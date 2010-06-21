@@ -42,7 +42,7 @@ namespace ASPWebService
             DirectoryInfo dto = new DirectoryInfo(path2 + "\\" + vmName);
             VMHandling.CopyAll(dfrom, dto);
             VMHandling.ImportVirtualSystem(path2 + "\\" + vmName);
-            VMHandling.ModifyVirtualSystem(vmName, vmName );
+            VMHandling.ModifyVirtualSystemName(vmName, vmName );
             VMHandling.RequestStateChange(vmName , "start");
             operationCompleted = true;
         }
@@ -66,10 +66,17 @@ namespace ASPWebService
             DirectoryInfo dto = new DirectoryInfo(to + "\\" + vmCopyName);
             VMHandling.CopyAll(dfrom, dto);
             VMHandling.ImportVirtualSystem(to + "\\" + vmCopyName);
-            VMHandling.ModifyVirtualSystem(vmName, vmCopyName);
+            VMHandling.ModifyVirtualSystemName(vmName, vmCopyName);
             operationCompleted = true;
         }
-        
+        [WebMethod]
+        public void ModifyVirtualMachine(String vmName, int memory, int procSpeed, int cores)
+        {
+            operationCompleted = false;
+            VMHandling.RequestStateChange(vmName, "stop");
+            VMHandling.ModifyVirtualSystemProperties(vmName, memory, procSpeed, cores);
+            operationCompleted = true;
+        }
 
         [WebMethod]
         public void StartVirtualMachine(String vmName)

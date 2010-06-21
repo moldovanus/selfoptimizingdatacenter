@@ -13,3 +13,8 @@ D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\
 D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
 D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
 D:\licentaImplem\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
+D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.dll
+D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.pdb
+D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
+D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
+D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
