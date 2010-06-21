@@ -145,6 +145,7 @@ public class DefaultServer extends DefaultResource
 
     public void setIsInLowPowerState(boolean newIsInLowPowerState, OntModel ontModel) {
         setPropertyValue(getIsInLowPowerStateProperty(), new java.lang.Boolean(newIsInLowPowerState), ontModel);
+       
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#runningTasks

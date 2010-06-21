@@ -5,6 +5,7 @@ import ontologyRepresentations.greenContextOntology.Core;
 import ontologyRepresentations.greenContextOntology.Server;
 import ontologyRepresentations.greenContextOntology.Storage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * Time: 10:51:15 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ServerDto {
+public class ServerDto implements Serializable {
     public int coreCount;
     public int totalCPU;
     public List<Integer> freeCPU;

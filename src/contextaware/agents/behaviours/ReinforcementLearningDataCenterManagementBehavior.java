@@ -7,29 +7,29 @@ package contextaware.agents.behaviours;
 import actionEnforcement.command.Command;
 import actionEnforcement.command.selfHealingCommand.IncrementCommand;
 import actionEnforcement.command.selfOptimizingCommand.*;
-import utils.context.ContextSnapshot;
-import utils.context.DatacenterMemory;
-import utils.context.DatacenterMockupContext;
-import utils.context.EnvironmentMemory;
-import utils.X3DMessageDispatcher;
-import utils.Pair;
-import utils.workLoadGenerator.TaskLifeManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.ReinforcementLearningAgent;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
 import ontologyRepresentations.greenContextOntology.*;
 import ontologyRepresentations.greenContextOntology.Component;
 import ontologyRepresentations.greenContextOntology.impl.DefaultServer;
 import ontologyRepresentations.greenContextOntology.impl.DefaultTask;
-import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import ontologyRepresentations.selfHealingOntology.SelfHealingProtegeFactory;
+import org.apache.log4j.Logger;
+import utils.Pair;
+import utils.X3DMessageDispatcher;
+import utils.context.ContextSnapshot;
+import utils.context.DatacenterMemory;
+import utils.context.DatacenterMockupContext;
+import utils.context.EnvironmentMemory;
 import utils.negotiator.Negotiator;
 import utils.negotiator.impl.NegotiatorFactory;
-import org.apache.log4j.Logger;
-import ontologyRepresentations.selfHealingOntology.SelfHealingProtegeFactory;
+import utils.workLoadGenerator.TaskLifeManager;
 
 import java.awt.*;
 import java.io.IOException;
@@ -170,7 +170,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         this.memory = memory;
         swrlFactory = new SWRLFactory(datacenterOwlModel);
 
-        negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+        negotiator = NegotiatorFactory.getNashNegotiator();
 
         /*for (SWRLImp imp : swrlFactory.getEnabledImps()) {
             System.out.println(imp.toString());
@@ -720,9 +720,9 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             for (Command o : resultQueue) {
                 message.add(o.toString());
                 System.out.println(o.toString());
-                o.execute(datacenterPolicyConversionModel);
                 o.executeOnX3D(agent);
                 o.executeOnWebService();   //---> to be decommented when running on servers
+                o.execute(datacenterPolicyConversionModel);
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -732,7 +732,6 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             }
 
             if (result.getContextEntropy() > 0) {
-                Negotiator negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
                 System.out.println("Negotiating....");
                 Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
                 for (Task task : allTasks) {
@@ -795,7 +794,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             }
             //wait for effect to be noticeable on X3D
 
-           /* try {
+            /* try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

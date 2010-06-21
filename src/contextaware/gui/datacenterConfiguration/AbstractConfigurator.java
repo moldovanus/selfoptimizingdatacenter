@@ -17,18 +17,21 @@ public abstract class AbstractConfigurator {
     protected Map<String, String> columnsToolTips;
     protected JScrollPane tablePane;
     protected JTable configurationTable;
-  
+
 
     public abstract void createEntities(DatacenterProtegeFactory factory);
 
     public abstract void insertEmptyRow();
+
+    public abstract void duplicateSelectedRow();
+
 
     public abstract void removeRow();
 
     public abstract List<String[]> getTableData();
 
     public abstract void setTableData(List<String[]> data);
-     
+
     public JScrollPane getTablePane() {
         return tablePane;
     }

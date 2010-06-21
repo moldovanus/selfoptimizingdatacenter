@@ -120,6 +120,17 @@ public class TaskConfigurator extends AbstractConfigurator {
 
         }
 
+        public void duplicateSelectedRow() {
+            int selectedRow = configurationTable.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+            String[] data = new String[columnNames.length];
+            System.arraycopy(rowsData.get(selectedRow), 0, data, 0, columnNames.length);
+            rowsData.add(data);
+            configurationTable.repaint();
+        }
+
         public void removeRow() {
             int selectedRow = configurationTable.getSelectedRow();
             if (selectedRow != -1 && selectedRow < rowsData.size()) {
@@ -245,6 +256,10 @@ public class TaskConfigurator extends AbstractConfigurator {
 
     public void insertEmptyRow() {
         tableModel.insertEmptyRow();
+    }
+
+    public void duplicateSelectedRow() {
+          tableModel.duplicateSelectedRow();
     }
 
     public void removeRow() {

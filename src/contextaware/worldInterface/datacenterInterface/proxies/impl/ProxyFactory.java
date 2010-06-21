@@ -14,7 +14,7 @@ public class ProxyFactory {
     }
 
     public static ServerManagementProxyInterface createServerManagementProxy(String hostName) {
-        return new StubProxy(hostName);
+        return new HyperVServerManagementProxy(hostName);
     }
 }
     

@@ -56,6 +56,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
         ServerDto serverDto = null;
         try {
             URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/GetServerInfo");
+            
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
 

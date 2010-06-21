@@ -47,9 +47,5 @@ public abstract class ServerMonitor extends AbstractMonitor {
         frame.setVisible(true);
     }
 
-    protected void refreshData() {
-        if (server.getIsInLowPowerState()) {
-            return;
-        }
-    }
+    protected abstract void refreshData();
 }

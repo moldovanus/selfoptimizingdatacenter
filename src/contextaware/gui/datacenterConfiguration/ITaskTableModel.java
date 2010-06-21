@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 4:11:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ITaskTableModel {
+public interface ITaskTableModel extends ITableModel{
     String TASK_NAME = "Task Name";
     String TASK_REQUESTED_CORES_NO = "Requested Cores";
     String TASK_CPU_WEIGHT = "CPU Weight";

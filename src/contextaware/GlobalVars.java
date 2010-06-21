@@ -34,7 +34,7 @@ public class GlobalVars {
     public static final String POLICIES_FILE = "ontology/TestPolicies.xml";
     public static final String MEMORY_SELFHEALING_FILE = "memory/memorySelfHealing.dat";
     public static final String MEMORY_SELFOPTIMIZING_FILE = "memory/memorySelfOptimizing.dat";
-    public static final String FUZZY_LOGIC_CONTROL_FILE = "fuzzy/utils.negotiator.fcl";
+    public static final String FUZZY_LOGIC_CONTROL_FILE = "fuzzy/negotiator.fcl";
 
     public static final int MAX_NAME_LENGTH = 10;
     public static final int MAX_TASK_LIFE_IN_MINUTES = 5;

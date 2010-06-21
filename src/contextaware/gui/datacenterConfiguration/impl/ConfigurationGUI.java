@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class ConfigurationGUI {
     private final String ADD_ROW_TOOLTIP = "Inserts an empty row in the table";
+    private final String DUPLICATE_ROW_TOOLTIP = "Creates an identical row with the selected row";
     private final String SAVE_TASKS_CONFIGURATION_TOOLTIP = "Saves the tasks configuration information from the tasks table in a user specified file";
     private final String SAVE_SERVES_CONFIGURATION_TOOLTIP = "Saves the servers configuration information from the servers table in a user specified file";
     private final String LOAD_TASKS_CONFIGURATION_TOOLTIP = "<html>Loads a previousely saved tasks configuration.<br><b>WARNING:</b>Replaces the existing configuration</br></html>";
@@ -42,10 +43,12 @@ public class ConfigurationGUI {
     private AbstractConfigurator serverConfigurator;
 
     private JButton addTaskRowButton;
+    private JButton duplicateTaskRowButton;
     private JButton removeTaskRowButton;
     private JButton generateVirtualMachinesButton;
 
     private JButton addServerRowButton;
+    private JButton duplicateServerRowButton;
     private JButton removeServerRowButton;
     private JButton generateServersButton;
 
@@ -92,15 +95,20 @@ public class ConfigurationGUI {
         menu = new JMenu("File");
 
         addTaskRowButton = new JButton("Add row");
+        duplicateTaskRowButton = new JButton("Duplicate row");
         removeTaskRowButton = new JButton("Remove selected");
         generateVirtualMachinesButton = new JButton("Create Virtual Machines");
 
         addServerRowButton = new JButton("Add row");
+        duplicateServerRowButton = new JButton("Duplicate row");
         removeServerRowButton = new JButton("Remove selected");
         generateServersButton = new JButton("Create Server Instances");
 
         addTaskRowButton.setToolTipText(ADD_ROW_TOOLTIP);
         addServerRowButton.setToolTipText(ADD_ROW_TOOLTIP);
+
+        duplicateTaskRowButton.setToolTipText(DUPLICATE_ROW_TOOLTIP);
+        duplicateServerRowButton.setToolTipText(DUPLICATE_ROW_TOOLTIP);
 
         removeTaskRowButton.setToolTipText(REMOVE_ROW_TOOLTIP);
         removeServerRowButton.setToolTipText(REMOVE_ROW_TOOLTIP);
@@ -119,6 +127,20 @@ public class ConfigurationGUI {
 
             public void actionPerformed(ActionEvent e) {
                 serverConfigurator.insertEmptyRow();
+            }
+        });
+
+        duplicateTaskRowButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                taskConfigurator.duplicateSelectedRow();
+            }
+        });
+
+        duplicateServerRowButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                serverConfigurator.duplicateSelectedRow();
             }
         });
 
@@ -162,10 +184,10 @@ public class ConfigurationGUI {
                 if (userOption == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     try {
-                        if (file.getPath().endsWith(".servers_config")) {
-                            ConfigurationFileIO.saveConfiguration(serverConfigurator.getTableData(), file);
+                        if (file.getPath().endsWith(".tasks_config")) {
+                            ConfigurationFileIO.saveConfiguration(taskConfigurator.getTableData(), file);
                         } else {
-                            ConfigurationFileIO.saveConfiguration(serverConfigurator.getTableData(), new File(file.getPath() + ".tasks_config"));
+                            ConfigurationFileIO.saveConfiguration(taskConfigurator.getTableData(), new File(file.getPath() + ".tasks_config"));
                         }
                     } catch (IOException e1) {
                         JOptionPane.showMessageDialog(null, "File save error", "Save error", JOptionPane.WARNING_MESSAGE);
@@ -305,11 +327,18 @@ public class ConfigurationGUI {
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
 
+        taskConfigurationButtonsPanel.add(duplicateTaskRowButton, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+
         taskConfigurationButtonsPanel.add(removeTaskRowButton, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 3;
         constraints.gridheight = 1;
 
         taskConfigurationButtonsPanel.add(generateVirtualMachinesButton, constraints);
@@ -326,11 +355,18 @@ public class ConfigurationGUI {
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
 
+        serverConfigurationButtonsPanel.add(duplicateServerRowButton, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+
         serverConfigurationButtonsPanel.add(removeServerRowButton, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 3;
         constraints.gridheight = 1;
 
         serverConfigurationButtonsPanel.add(generateServersButton, constraints);

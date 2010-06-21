@@ -1,5 +1,7 @@
 package contextaware.worldInterface.dtos;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -7,7 +9,7 @@ package contextaware.worldInterface.dtos;
  * Time: 10:52:26 AM
  * To change this template use File | Settings | File Templates.
  */
-public class StorageDto {
+public class StorageDto implements Serializable {
     public String name;
     public int size;
     public int freeSpace;

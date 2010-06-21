@@ -1,20 +1,21 @@
 package contextaware.gui;
 
-import contextaware.gui.ActionsOutputFrame;
-import contextaware.gui.datacenterConfiguration.impl.ConfigurationGUI;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
+import contextaware.gui.datacenterConfiguration.impl.ConfigurationGUI;
 import contextaware.gui.resourceMonitor.IMonitor;
 import contextaware.gui.resourceMonitor.serverMonitorPlotter.impl.FullServerMonitor;
 import contextaware.gui.resourceMonitor.taskMonitor.TasksQueueMonitor;
+import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
-import ontologyRepresentations.greenContextOntology.Server;
 import jade.core.Agent;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
+import ontologyRepresentations.greenContextOntology.Server;
+import ontologyRepresentations.greenContextOntology.Task;
 import utils.logger.LoggerGUI;
 
 import javax.swing.*;
@@ -135,13 +136,13 @@ public class GUIAgent extends Agent {
         frame.setSize(500, 400);
 
         frame.setLayout(new BorderLayout());
-      
-        
+
+
         ImageIcon icon = new ImageIcon("./src/images/main_image.png");
 
-        JLabel label = new JLabel("",icon, JLabel.CENTER);
+        JLabel label = new JLabel("", icon, JLabel.CENTER);
         frame.add(label, BorderLayout.CENTER);
-        
+
         frame.setJMenuBar(menuBar);
 
         JMenu fileMenu = new JMenu("File");
@@ -153,6 +154,16 @@ public class GUIAgent extends Agent {
         AbstractAction exitAction = new AbstractAction("Exit") {
 
             public void actionPerformed(ActionEvent e) {
+                Collection<Server> servers = protegeFactory.getAllServerInstances();
+                for (Server server : servers) {
+                    ServerManagementProxyInterface serverManagementProxyInterface =
+                            ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
+                    Collection<Task> runningTasks = server.getRunningTasks();
+                    for (Task task : runningTasks) {
+                        serverManagementProxyInterface.stopVirtualMachine(task.getTaskName());
+                        serverManagementProxyInterface.deleteVirtualMachine(task.getTaskName());
+                    }
+                }
                 shutdownPlatform();
             }
         };
@@ -222,7 +233,7 @@ public class GUIAgent extends Agent {
                     x3DController = container.createNewAgent(GlobalVars.X3DAGENT_NAME, X3DAgent.class.getName(), null);
                     x3DController.start();
                 } catch (StaleProxyException e1) {
-                    e1.printStackTrace(); 
+                    e1.printStackTrace();
                 }
 
             }

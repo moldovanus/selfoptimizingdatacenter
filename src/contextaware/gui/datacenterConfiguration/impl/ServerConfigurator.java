@@ -1,5 +1,7 @@
 package contextaware.gui.datacenterConfiguration.impl;
 
+import contextaware.gui.datacenterConfiguration.AbstractConfigurator;
+import contextaware.gui.datacenterConfiguration.IServerTableModel;
 import contextaware.gui.datacenterConfiguration.TableCellValueValidator;
 import ontologyRepresentations.greenContextOntology.*;
 
@@ -9,9 +11,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.util.*;
-
-import contextaware.gui.datacenterConfiguration.AbstractConfigurator;
-import contextaware.gui.datacenterConfiguration.IServerTableModel;
 
 /**
  * Created by IntelliJ IDEA.
@@ -63,7 +62,7 @@ public class ServerConfigurator extends AbstractConfigurator {
             };
             TableCellValueValidator macAddressValidator = new TableCellValueValidator() {
                 public boolean validateValue(String value) {
-                    return value.length() != 0 && value.matches("[0-9a-fA-F]+\\.[0-9a-fA-F]+\\.[0-9a-fA-F]+\\.[0-9a-fA-F]+");
+                    return value.length() != 0 && value.matches("[0-9a-fA-F]+\\-[0-9a-fA-F]+\\-[0-9a-fA-F]+\\-[0-9a-fA-F]+\\-[0-9a-fA-F]+\\-[0-9a-fA-F]+");
                 }
             };
 
@@ -72,7 +71,6 @@ public class ServerConfigurator extends AbstractConfigurator {
                     return value.length() != 0;
                 }
             };
-
 
             cellValueValidators.put(IServerTableModel.SERVER_NAME, stringValuesValidator);
             cellValueValidators.put(IServerTableModel.SERVER_IP_ADDR, ipAddressValidator);
@@ -131,6 +129,17 @@ public class ServerConfigurator extends AbstractConfigurator {
 
         }
 
+        public void duplicateSelectedRow() {
+            int selectedRow = configurationTable.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+            String[] data = new String[columnNames.length];
+            System.arraycopy(rowsData.get(selectedRow), 0, data, 0, columnNames.length);
+            rowsData.add(data);
+            configurationTable.repaint();
+        }
+
         public void removeRow() {
             int selectedRow = configurationTable.getSelectedRow();
             if (selectedRow != -1 && selectedRow < rowsData.size()) {
@@ -179,6 +188,7 @@ public class ServerConfigurator extends AbstractConfigurator {
             for (String[] data : rowsData) {
                 String serverName = data[0].trim();
                 Server server = factory.createServer(serverName);
+                server.setServerName(serverName);
                 server.setServerIPAddress(data[1].trim());
                 server.setServerMacAddress(data[2].trim());
                 Collection virtualMachinesPath = new ArrayList();
@@ -271,11 +281,14 @@ public class ServerConfigurator extends AbstractConfigurator {
         tablePane = new JScrollPane(configurationTable);
         configurationTable.setFillsViewportHeight(true);
 
-
     }
 
     public void insertEmptyRow() {
         tableModel.insertEmptyRow();
+    }
+
+    public void duplicateSelectedRow() {
+        tableModel.duplicateSelectedRow();
     }
 
     public void removeRow() {

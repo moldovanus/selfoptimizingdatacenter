@@ -10,5 +10,7 @@ package contextaware.gui.datacenterConfiguration;
 public interface ITableModel {
     void insertEmptyRow();
 
+    void duplicateSelectedRow();
+
     void removeRow();
 }

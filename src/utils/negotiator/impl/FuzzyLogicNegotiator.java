@@ -4,8 +4,6 @@
  */
 package utils.negotiator.impl;
 
-import ontologyRepresentations.greenContextOntology.*;
-import utils.negotiator.Negotiator;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunction;
@@ -13,7 +11,9 @@ import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionPieceWiseLinear;
 import net.sourceforge.jFuzzyLogic.membership.Value;
 import net.sourceforge.jFuzzyLogic.rule.LinguisticTerm;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
+import ontologyRepresentations.greenContextOntology.*;
 import org.antlr.runtime.RecognitionException;
+import utils.negotiator.Negotiator;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,26 +24,24 @@ import java.util.Map;
  */
 public class FuzzyLogicNegotiator implements Negotiator {
 
-    private FIS fis;
-    private FunctionBlock functionBlock;
-
-    private MembershipFunction requestedRangeMembershipFunction;
-
-    private Variable serverRange;
-    private Variable requestedRange;
-    private Variable negotiatedRange;
-
-    private Variable serverAndRequested;
-
-    private LinguisticTerm serverRangeValue;
-    private LinguisticTerm requestedRangeValue;
-    private LinguisticTerm negotiatedRangeValue;
-
-    private LinguisticTerm serverValue;
-    private LinguisticTerm requestedValue;
+    private String fuzzyControlLanguageFile;
 
     protected FuzzyLogicNegotiator(String fuzzyControlLanguageFile) {
+        this.fuzzyControlLanguageFile = fuzzyControlLanguageFile;
+    }
 
+    /**
+     * Uses JFuzzyLogic to compute the tradeoff between what a server is willing to offer and what a task needs
+     *
+     * @param server
+     * @param task
+     * @return [negotiated CPU, negotiated Memory, negotiated Storage]  -  map containing the negotiated values for the
+     *         CPU, memory and storage
+     */
+
+    public synchronized Map<String, Double> negotiate(Server server, Task task) {
+
+        FIS fis = null;
         try {
             fis = FIS.load(fuzzyControlLanguageFile, true);
         } catch (RuntimeException e) {
@@ -51,46 +49,32 @@ public class FuzzyLogicNegotiator implements Negotiator {
             System.err.println("FuzzyLogicNegotiator creation failed : Can't load file: '"
                     + fuzzyControlLanguageFile + "'.");
             e.printStackTrace();
-            return;
         }
         // Error while loading?
         if (fis == null) {
             System.err.println("FuzzyLogicNegotiator creation failed : Can't load file: '"
                     + fuzzyControlLanguageFile + "'.");
-            return;
         }
 
-        functionBlock = fis.getFunctionBlock("negotiator");
+        FunctionBlock functionBlock = fis.getFunctionBlock("negotiator");
 
 
-        requestedRangeMembershipFunction = functionBlock.getVariable("requested_range").getLinguisticTerm("requested_range_value").getMembershipFunction();
+        MembershipFunction requestedRangeMembershipFunction = functionBlock.getVariable("requested_range").getLinguisticTerm("requested_range_value").getMembershipFunction();
         // serverRangeMembershipFunction = functionBlock.getVariable("server_range").getLinguisticTerm("server_range_value").getMembershipFunction();
         // negotiatedRangeMembershipFunction = functionBlock.getVariable("negotiated_range").getLinguisticTerm("negotiated_range_value").getMembershipFunction();*/
 
-        serverRange = functionBlock.getVariable("server_range");
-        requestedRange = functionBlock.getVariable("requested_range");
-        negotiatedRange = functionBlock.getVariable("negotiated_range");
-        serverAndRequested = functionBlock.getVariable("server_and_requested");
+        Variable serverRange = functionBlock.getVariable("server_range");
+        Variable requestedRange = functionBlock.getVariable("requested_range");
+        Variable negotiatedRange = functionBlock.getVariable("negotiated_range");
+        Variable serverAndRequested = functionBlock.getVariable("server_and_requested");
 
-        serverRangeValue = serverRange.getLinguisticTerm("server_range_value");
-        requestedRangeValue = requestedRange.getLinguisticTerm("requested_range_value");
-        negotiatedRangeValue = negotiatedRange.getLinguisticTerm("negotiated_range_value");
-        serverValue = serverAndRequested.getLinguisticTerm("server_value");
-        requestedValue = serverAndRequested.getLinguisticTerm("requested_value");
+        LinguisticTerm serverRangeValue = serverRange.getLinguisticTerm("server_range_value");
+        LinguisticTerm requestedRangeValue = requestedRange.getLinguisticTerm("requested_range_value");
+        LinguisticTerm negotiatedRangeValue = negotiatedRange.getLinguisticTerm("negotiated_range_value");
+        LinguisticTerm serverValue = serverAndRequested.getLinguisticTerm("server_value");
+        LinguisticTerm requestedValue = serverAndRequested.getLinguisticTerm("requested_value");
 
         requestedRangeMembershipFunction = requestedRangeValue.getMembershipFunction();
-
-    }
-
-    /**
-     * Uses JFuzzyLogic to compute the tradeoff between what a server is willing to offer and what a task needs
-     * @param server
-     * @param task
-     * @return [negotiated CPU, negotiated Memory, negotiated Storage]  -  map containing the negotiated values for the
-     * CPU, memory and storage
-     */
-
-    public synchronized Map<String, Double> negotiate(Server server, Task task) {
 
         Map<String, Double> negotiatedValues = new HashMap<String, Double>();
         //TODO: eventually to reintroduce variables for each of the 3 elements in the file and evaluate all of them at the same time.
