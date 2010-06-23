@@ -195,7 +195,7 @@ public class ReinforcementLearningAgent extends Agent {
                 addBehaviour(new ReinforcementLearningDataCenterManagementBehavior(this, 10000, datacenterOwlModel, datacenterOntModel,
                         datacenterJenaOwlModel, environmentOntModel,
                         environmentJenaOwlModel, memorySelfHealing, memorySelfOptimizing));
-                addBehaviour(new ReceiveMessageRLBehaviour(this, environmentJenaOwlModel, environmentOntModel, datacenterJenaOwlModel, datacenterOntModel));
+                addBehaviour(new ReceiveMessageRLBehaviour(this, environmentJenaOwlModel, environmentOntModel, datacenterOwlModel, datacenterOntModel));
                 addBehaviour(new StoreMemoryBehaviour(this, 5000, memorySelfHealing,memorySelfOptimizing));
                 //addBehaviour(new RLPlotterBehaviour(this, 1000));
 

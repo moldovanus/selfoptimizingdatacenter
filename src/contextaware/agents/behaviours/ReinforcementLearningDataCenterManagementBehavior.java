@@ -626,7 +626,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
     @Override
     protected void onTick() {
-        agent.sendAllTasksToClient();
+
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
@@ -829,9 +829,10 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
                 //agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
+
             }
         }
-
+       agent.sendAllTasksToClient();  
     }
 
 }
