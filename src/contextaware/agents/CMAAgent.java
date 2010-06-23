@@ -95,7 +95,10 @@ public class CMAAgent extends Agent{
             gui = container.createNewAgent(GlobalVars.GUIAGENT_NAME, GUIAgent.class.getName(), new Object[]{this.owlModelDataCenter});
             gui.start();
 
-            rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{this.owlModeSelfHealing, this.policyConversionModelSelfHealing, this.jenaOwlModelSelfHealing, this.owlModelDataCenter, this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
+            rl = container.createNewAgent(GlobalVars.RLAGENT_NAME, ReinforcementLearningAgent.class.getName(), new Object[]{
+                    this.owlModeSelfHealing, this.policyConversionModelSelfHealing,
+                    this.jenaOwlModelSelfHealing, this.owlModelDataCenter,
+                    this.policyConversionModelDataCenter, this.jenaOwlModelDataCenter});
             rl.start();
 
             tm = container.createNewAgent(GlobalVars.TMAGENT_NAME, TaskManagementAgent.class.getName(), new Object[]{});

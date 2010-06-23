@@ -33,7 +33,8 @@ public class ReceiveMessageRLBehaviour extends CyclicBehaviour {
     private DatacenterProtegeFactory protegeFactory;
     private OntModel ontModelDataCenter;
 
-    public ReceiveMessageRLBehaviour(Agent agent, OWLModel owlModel, OntModel jenaModel, OWLModel owlModelDataCenter, OntModel ontModelDataCenter) {
+    public ReceiveMessageRLBehaviour(Agent agent, OWLModel owlModel, OntModel jenaModel, OWLModel owlModelDataCenter,
+                                     OntModel ontModelDataCenter) {
         super(agent);
         this.protegeFactory = new DatacenterProtegeFactory(owlModelDataCenter);
         this.agent = (ReinforcementLearningAgent) agent;
@@ -105,6 +106,7 @@ public class ReceiveMessageRLBehaviour extends CyclicBehaviour {
                         task.setCpuWeight(0.33f);
                         task.setStorageWeight(0.33f);
                         task.setMemoryWeight(0.33f);
+                        task.setTaskName(taskDto.getTaskName());
 
                         policy.setReferenced(task);
                         policy.setRespected(false);
