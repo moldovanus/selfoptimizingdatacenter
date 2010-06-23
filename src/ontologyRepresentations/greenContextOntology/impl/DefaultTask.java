@@ -169,7 +169,7 @@ public class DefaultTask extends DefaultContextElement
         description += "\n Requested Cores = " + requested.getCores();
         description += "\n Requested CPU =[ " + requested.getCpuMinAcceptableValue() + " , " + requested.getCpuMaxAcceptableValue() + "]";
         description += "\n Requested Memory =[ " + requested.getMemoryMinAcceptableValue() + " , " + requested.getMemoryMaxAcceptableValue() + "]";
-        description += "\n Requested Storage =[ " + requested.getMemoryMinAcceptableValue() + " , " + requested.getMemoryMaxAcceptableValue() + "]";
+        description += "\n Requested Storage =[ " + requested.getStorageMinAcceptableValue() + " , " + requested.getStorageMaxAcceptableValue() + "]";
 
         return description;
     }
