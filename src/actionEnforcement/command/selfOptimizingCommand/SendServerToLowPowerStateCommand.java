@@ -4,14 +4,14 @@
  */
 package actionEnforcement.command.selfOptimizingCommand;
 
-import utils.X3DMessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
+import jade.core.Agent;
 import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
 import ontologyRepresentations.greenContextOntology.Server;
 import ontologyRepresentations.greenContextOntology.Task;
-import jade.core.Agent;
+import utils.X3DMessageDispatcher;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     public SendServerToLowPowerStateCommand(DatacenterProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 400;
+        cost = 100;
     }
 
     /**
@@ -67,7 +67,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
-      /*  Server server = protegeFactory.getServer(serverName);
+        /*  Server server = protegeFactory.getServer(serverName);
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             proxy.sendServerToSleep();

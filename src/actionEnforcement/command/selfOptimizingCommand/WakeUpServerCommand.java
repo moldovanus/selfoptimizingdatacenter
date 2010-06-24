@@ -4,15 +4,15 @@
  */
 package actionEnforcement.command.selfOptimizingCommand;
 
-import utils.X3DMessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
-import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
+import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import jade.core.Agent;
 import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
 import ontologyRepresentations.greenContextOntology.Server;
-import jade.core.Agent;
+import utils.X3DMessageDispatcher;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     public WakeUpServerCommand(DatacenterProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 700;
+        cost = 12000;
     }
 
     /**
@@ -58,7 +58,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy("192.168.2.101");
 
         if (proxy != null) {
-            proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(),  9);
+            proxy.wakeUpServer(server.getServerMacAddress(), server.getServerIPAddress(), 9);
         } else {
             System.err.println("Proxy is null");
         }

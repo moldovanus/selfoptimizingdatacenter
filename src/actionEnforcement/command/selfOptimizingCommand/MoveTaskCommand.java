@@ -4,16 +4,16 @@
  */
 package actionEnforcement.command.selfOptimizingCommand;
 
-import utils.X3DMessageDispatcher;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
-import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
+import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
+import jade.core.Agent;
 import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
 import ontologyRepresentations.greenContextOntology.Server;
 import ontologyRepresentations.greenContextOntology.Task;
-import jade.core.Agent;
+import utils.X3DMessageDispatcher;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         this.oldServerName = oldServerName;
         this.newServerName = newServerName;
         this.taskName = taskName;
-        cost = 10000;
+        cost = 1000;
     }
 
     /**
@@ -72,7 +72,7 @@ public class MoveTaskCommand extends SelfOptimizingCommand {
         Server newServer = protegeFactory.getServer(newServerName);
         Task task = protegeFactory.getTask(taskName);
         ServerManagementProxyInterface oldServerProxy = ProxyFactory.createServerManagementProxy(oldServer.getServerIPAddress());
-        ServerManagementProxyInterface newServerProxy =  ProxyFactory.createServerManagementProxy(newServer.getServerIPAddress());
+        ServerManagementProxyInterface newServerProxy = ProxyFactory.createServerManagementProxy(newServer.getServerIPAddress());
         if (oldServerProxy != null && newServerProxy != null) {
             String path = (String) newServer.getVirtualMachinesPath().iterator().next();
             oldServerProxy.moveSourceActions("//HOME-Z5VXXZDRPO/SharedStorage/" + oldServer.getServerName() + task.getTaskName(),
