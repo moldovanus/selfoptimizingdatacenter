@@ -354,32 +354,28 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             }
         }
 
-        //Pus aici cel putin temporary s afaca intai deploy si apoi sa vada de energie k altfel o ia razna
-        // cu move si move si move si nu i iese
-        if (brokenPolicy == null) {
+        Collection<EnergyPolicy> policies = protegeFactory.getAllEnergyPolicyInstances();
+        for (EnergyPolicy policy : policies) {
+            Server server = policy.getReferenced();
+            //System.out.println(server);
+            /*if (server.getIsInLowPowerState()) {
+                continue;
+            }*/
 
-            Collection<EnergyPolicy> policies = protegeFactory.getAllEnergyPolicyInstances();
-            for (EnergyPolicy policy : policies) {
-                Server server = policy.getReferenced();
-                //System.out.println(server);
-                /*if (server.getIsInLowPowerState()) {
-                    continue;
-                }*/
+            // if (getEvaluateProp( datacenterPolicyConversionModel.getIndividual(policy.getURI()) ) ){
+            if (!policy.getRespected(datacenterPolicyConversionModel)) {
 
-                // if (getEvaluateProp( datacenterPolicyConversionModel.getIndividual(policy.getURI()) ) ){
-                if (!policy.getRespected(datacenterPolicyConversionModel)) {
-
-                    //System.out.println("Broken server : " + server);
-                    if (brokenPolicy == null) {
-                        brokenPolicy = policy;
-                    }
-                    if (policy.hasPriority()) {
-                        entropy += policy.getPriority() * energyRespectanceDegree(server);
-                    }
-                    //entropy += policy.getPriority();
+                //System.out.println("Broken server : " + server);
+                if (brokenPolicy == null) {
+                    brokenPolicy = policy;
                 }
+                if (policy.hasPriority()) {
+                    entropy += policy.getPriority() * energyRespectanceDegree(server);
+                }
+                //entropy += policy.getPriority();
             }
         }
+
         return new Pair<Double, Policy>(entropy, brokenPolicy);
     }
 
@@ -627,12 +623,12 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
     @Override
     protected void onTick() {
 
-        System.out.println("BEGIN: " + new java.util.Date());
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }*/
+
         smallestEntropyContext = null;
 
         TaskLifeManager.kill(protegeFactory, datacenterPolicyConversionModel);
@@ -657,9 +653,9 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
             //TODO: activate only after a deploy or delete  to recollect
             //if context broken gather the extra resources allocated to tasks in order to properly evaluate the context
-//            for (Server server : protegeFactory.getAllServerInstances()) {
-//                server.collectPreviouslyDistributedResources(datacenterPolicyConversionModel);
-//            }
+            //            for (Server server : protegeFactory.getAllServerInstances()) {
+            //                server.collectPreviouslyDistributedResources(datacenterPolicyConversionModel);
+            //            }
 
             //Gather data for logging purposes
 
@@ -700,14 +696,14 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             try {
                 X3DMessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.red, "Current state", currentState});
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
             // agent.getSelfOptimizingLogger().log(Color.red, "Current state", currentState);
 
             try {
                 X3DMessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.red, "Current state", currentState});
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
             // End of logging
 
@@ -734,7 +730,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
             }
@@ -757,7 +753,8 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        }*/
+                        }
+                        */
 
                         cs.getActions().add(negotiateResourcesCommand);
                         cs.setContextEntropy(computeEntropy().getFirst());
@@ -771,9 +768,9 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
                 datacenterMemory.memorize(initialDataCenterContext, result.getActions());
                 //  System.out.println("Distributing empty resources : This should not happen anymore");
-//                for (Server server : servers) {
-//                    server.distributeRemainingResources(datacenterPolicyConversionModel);
-//                }
+                //                for (Server server : servers) {
+                //                    server.distributeRemainingResources(datacenterPolicyConversionModel);
+                //                }
             }
 
             datacenterMemory.memorize(initialDataCenterContext, result.getActions());
@@ -782,7 +779,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             try {
                 X3DMessageDispatcher.sendMessage(agent, GlobalVars.GUIAGENT_NAME, new Object[]{"DatacenterLogger", Color.BLUE, "Corrective actions", currentState});
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
             int resultsSize = resultQueue.size();
             if (resultsSize > 0) {
@@ -806,7 +803,8 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }*/
+            }
+            */
 
 
         } else {
@@ -833,8 +831,45 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
             }
         }
-        System.out.println("END : " + new java.util.Date());
+
+//
+//        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+//        Collection<Server> servers = protegeFactory.getAllServerInstances();
+//        Boolean deployed = false;
+//        for (Server server : servers) {
+//            WakeUpServerCommand wakeUpServer = new WakeUpServerCommand(protegeFactory, server.getServerName());
+//            wakeUpServer.execute(datacenterPolicyConversionModel);
+//            //  wakeUpServer.executeOnX3D(agent);
+//            wakeUpServer.executeOnWebService();
+//        }
+//        int undeployed = 0;
+//        for (Task task : tasks) {
+//            if (!task.isRunning()) {
+//                deployed = false;
+//                for (Server server : servers) {
+//                    if (server.hasResourcesFor(task) && (deployed == false)) {
+//                        SelfOptimizingCommand deployTask = new DeployTaskCommand(protegeFactory, server.getName(), task.getName());
+//                        deployTask.execute(datacenterPolicyConversionModel);
+//                        //           deployTask.executeOnX3D(agent);
+//                        deployTask.executeOnWebService();
+//                        deployed = true;
+//                    }
+//                }
+//                if (deployed == false) undeployed++;
+//            }
+//
+//        }
+//        try {
+//            BufferedWriter out = new BufferedWriter(new FileWriter("outputFile.txt"));
+//            out.write("\n Undeployed" + undeployed);
+//            out.write("\n Deployed " + (tasks.size() - undeployed));
+//            out.write("\n---------------------------");
+//            out.close();
+//        }
+//        catch (IOException e) {
+//        }
         agent.sendAllTasksToClient();
+
     }
 
 }
