@@ -170,7 +170,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         this.memory = memory;
         swrlFactory = new SWRLFactory(datacenterOwlModel);
 
-        negotiator = NegotiatorFactory.getNashNegotiator();
+        negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
 
         /*for (SWRLImp imp : swrlFactory.getEnabledImps()) {
             System.out.println(imp.toString());
@@ -626,7 +626,12 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
     @Override
     protected void onTick() {
         System.out.println("BEGIN:" + new java.util.Date());
+        Collection<Server> s = protegeFactory.getAllServerInstances();
 
+
+        for (Server server : s) {
+            System.out.print("" + server.toString());
+        }
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
@@ -739,43 +744,43 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
             }
 
-//            if (result.getContextEntropy() > 0) {
-//                System.out.println("Negotiating....");
-//                Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
-//                for (Task task : allTasks) {
-//                    if (!task.isRunning()) {
-//                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
-//
-//                        Server server = getMinDistanceServer(task);
-//                        if (server == null) {
-//                            continue;
-//                        }
-//                        NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
-//                        negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
-//                        negotiateResourcesCommand.executeOnWebService();
-//                        /*  try {
-//                            Thread.sleep(5000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//                        }
-//                        */
-//
-//                        cs.getActions().add(negotiateResourcesCommand);
-//                        cs.setContextEntropy(computeEntropy().getFirst());
-//
-//                        if (cs.getContextEntropy() < result.getContextEntropy()) {
-//                            result = cs;
-//                        }
-//                        //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
-//                    }
-//                }
-//
-//                datacenterMemory.memorize(initialDataCenterContext, result.getActions());
-//                //  System.out.println("Distributing empty resources : This should not happen anymore");
-//                //                for (Server server : servers) {
-//                //                    server.distributeRemainingResources(datacenterPolicyConversionModel);
-//                //                }
-//            }
+            if (result.getContextEntropy() > 0) {
+                System.out.println("Negotiating....");
+                Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
+                for (Task task : allTasks) {
+                    if (!task.isRunning()) {
+                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
+
+                        Server server = getMinDistanceServer(task);
+                        if (server == null) {
+                            continue;
+                        }
+                        NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
+                        negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
+                        negotiateResourcesCommand.executeOnWebService();
+                        /*  try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                        */
+
+                        cs.getActions().add(negotiateResourcesCommand);
+                        cs.setContextEntropy(computeEntropy().getFirst());
+
+                        if (cs.getContextEntropy() < result.getContextEntropy()) {
+                            result = cs;
+                        }
+                        //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
+                    }
+                }
+
+                datacenterMemory.memorize(initialDataCenterContext, result.getActions());
+                //  System.out.println("Distributing empty resources : This should not happen anymore");
+                //                for (Server server : servers) {
+                //                    server.distributeRemainingResources(datacenterPolicyConversionModel);
+                //                }
+            }
 
             datacenterMemory.memorize(initialDataCenterContext, result.getActions());
 
@@ -871,12 +876,13 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         for (Task task : tasks) {
             if (task.isRunning()) {
                 d++;
+                System.out.println("" + task.toString());
             }
         }
 
         System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
         for (Server server : servers) {
-            System.out.print("" + server.toString());
+            System.out.println("" + server.toString());
         }
 
 

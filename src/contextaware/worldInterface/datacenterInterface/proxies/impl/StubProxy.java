@@ -1,7 +1,6 @@
 package contextaware.worldInterface.datacenterInterface.proxies.impl;
 
 import contextaware.worldInterface.dtos.ServerDto;
-import ontologyRepresentations.greenContextOntology.Task;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,6 +73,6 @@ public class StubProxy extends ServerManagementProxy {
     }
 
     public void sendServerToSleep() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        //new HyperVServerManagementProxy(hostName).sendServerToSleep();
     }
 }

@@ -7,6 +7,8 @@ package actionEnforcement.command.selfOptimizingCommand;
 import com.hp.hpl.jena.ontology.OntModel;
 import contextaware.GlobalVars;
 import contextaware.agents.X3DAgent;
+import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
+import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import jade.core.Agent;
 import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
 import ontologyRepresentations.greenContextOntology.Server;
@@ -28,7 +30,7 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
     public SendServerToLowPowerStateCommand(DatacenterProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 100;
+        cost = 400;
     }
 
     /**
@@ -67,13 +69,13 @@ public class SendServerToLowPowerStateCommand extends SelfOptimizingCommand {
 
     @Override
     public void executeOnWebService() {
-        /*  Server server = protegeFactory.getServer(serverName);
+        Server server = protegeFactory.getServer(serverName);
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy(server.getServerIPAddress());
         if (proxy != null) {
             proxy.sendServerToSleep();
         } else {
             System.err.println("Proxy is null");
-        }*/
+        }
     }
 
     @Override

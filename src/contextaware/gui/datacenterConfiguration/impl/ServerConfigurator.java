@@ -197,6 +197,7 @@ public class ServerConfigurator extends AbstractConfigurator {
                 server.setIsInLowPowerState(true, null);
 
                 CPU cpu = factory.createCPU(serverName + "_CPU");
+                cpu.setWeight(0.5f);
                 int coreCount = Integer.parseInt(data[4].trim());
 
                 for (int i = 0; i < coreCount; i++) {
@@ -213,6 +214,7 @@ public class ServerConfigurator extends AbstractConfigurator {
                 memory.setTotal(Integer.parseInt(data[8].trim()));
                 memory.setMinAcceptableValue(Integer.parseInt(data[9].trim()));
                 memory.setMaxAcceptableValue(Integer.parseInt(data[10].trim()));
+                memory.setWeight(0.25f);
 
                 server.setAssociatedMemory(memory);
 
@@ -220,11 +222,13 @@ public class ServerConfigurator extends AbstractConfigurator {
                 storage.setTotal(Integer.parseInt(data[11].trim()));
                 storage.setMinAcceptableValue(Integer.parseInt(data[12].trim()));
                 storage.setMaxAcceptableValue(Integer.parseInt(data[13].trim()));
+                storage.setWeight(0.25f);
 
                 server.setAssociatedStorage(storage);
 
                 EnergyPolicy policy = factory.createEnergyPolicy(server.getLocalName() + "_EnergyPolicy");
                 policy.setReferenced(server);
+                policy.setPriority(1);
 
             }
         }
