@@ -625,6 +625,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
     @Override
     protected void onTick() {
+        System.out.println("BEGIN:" + new java.util.Date());
 
         /*  try {
             Thread.sleep(1000000000);
@@ -738,43 +739,43 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 
             }
 
-            if (result.getContextEntropy() > 0) {
-                System.out.println("Negotiating....");
-                Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
-                for (Task task : allTasks) {
-                    if (!task.isRunning()) {
-                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
-
-                        Server server = getMinDistanceServer(task);
-                        if (server == null) {
-                            continue;
-                        }
-                        NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
-                        negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
-                        negotiateResourcesCommand.executeOnWebService();
-                        /*  try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        }
-                        */
-
-                        cs.getActions().add(negotiateResourcesCommand);
-                        cs.setContextEntropy(computeEntropy().getFirst());
-
-                        if (cs.getContextEntropy() < result.getContextEntropy()) {
-                            result = cs;
-                        }
-                        //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
-                    }
-                }
-
-                datacenterMemory.memorize(initialDataCenterContext, result.getActions());
-                //  System.out.println("Distributing empty resources : This should not happen anymore");
-                //                for (Server server : servers) {
-                //                    server.distributeRemainingResources(datacenterPolicyConversionModel);
-                //                }
-            }
+//            if (result.getContextEntropy() > 0) {
+//                System.out.println("Negotiating....");
+//                Collection<Task> allTasks = protegeFactory.getAllTaskInstances();
+//                for (Task task : allTasks) {
+//                    if (!task.isRunning()) {
+//                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(result.getActions()));
+//
+//                        Server server = getMinDistanceServer(task);
+//                        if (server == null) {
+//                            continue;
+//                        }
+//                        NegotiateResourcesCommand negotiateResourcesCommand = new NegotiateResourcesCommand(protegeFactory, negotiator, server.getServerName(), task.getName());
+//                        negotiateResourcesCommand.execute(datacenterPolicyConversionModel);
+//                        negotiateResourcesCommand.executeOnWebService();
+//                        /*  try {
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//                        }
+//                        */
+//
+//                        cs.getActions().add(negotiateResourcesCommand);
+//                        cs.setContextEntropy(computeEntropy().getFirst());
+//
+//                        if (cs.getContextEntropy() < result.getContextEntropy()) {
+//                            result = cs;
+//                        }
+//                        //  negotiateResourcesCommand.rewind(datacenterPolicyConversionModel);
+//                    }
+//                }
+//
+//                datacenterMemory.memorize(initialDataCenterContext, result.getActions());
+//                //  System.out.println("Distributing empty resources : This should not happen anymore");
+//                //                for (Server server : servers) {
+//                //                    server.distributeRemainingResources(datacenterPolicyConversionModel);
+//                //                }
+//            }
 
             datacenterMemory.memorize(initialDataCenterContext, result.getActions());
 
@@ -862,21 +863,24 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 //            }
 //
 //        }
-//        try {
-//            BufferedWriter out = new BufferedWriter(new FileWriter("outputFile.txt"));
-//            out.write("\n Undeployed" + undeployed);
-//            out.write("\n Deployed " + (tasks.size() - undeployed));
-//            out.write("\n---------------------------");
-//            out.newLine();
-//            for (Server server : servers) {
-//                out.newLine();
-//                // Core core = (Core)server.getAssociatedCPU().getAssociatedCore().iterator();
-//                //out.write("Server CPU total "+ server.getAssociatedCPU().);
-//            }
-//            out.close();
-//        }
-//        catch (IOException e) {
-//        }
+
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+
+        int d = 0;
+        for (Task task : tasks) {
+            if (task.isRunning()) {
+                d++;
+            }
+        }
+
+        System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
+        for (Server server : servers) {
+            System.out.print("" + server.toString());
+        }
+
+
+        System.out.println("END:" + new java.util.Date());
         agent.sendAllTasksToClient();
 
     }
