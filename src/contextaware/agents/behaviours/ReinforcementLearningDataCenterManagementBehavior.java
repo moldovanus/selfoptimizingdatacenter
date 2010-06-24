@@ -388,7 +388,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             double temp = previous.getRewardFunction() - current.getContextEntropy() - c.getCost() - current.getActions().size() * 100;
             function = ContextSnapshot.gamma * temp;
         } else {
-            function -= current.getContextEntropy();
+            function = -current.getContextEntropy();
         }
 
         return function;
