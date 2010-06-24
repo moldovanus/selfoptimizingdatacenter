@@ -1,1 +1,1 @@
--Djava.library.path="C:\Program Files\Xj3D\bin" -Xmx1024m -Xms512m -Xssn2048k
+-Djava.library.path="C:\Program Files\Xj3D\bin" -Xmx1024m -Xms512m -Xss2048k
