@@ -1,0 +1,5 @@
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\SendToSleepConsoleProject\SendToSleepConsoleProject\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\SendToSleepConsoleProject\SendToSleepConsoleProject\bin\Debug\SendToSleepConsoleProject.exe
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\SendToSleepConsoleProject\SendToSleepConsoleProject\bin\Debug\SendToSleepConsoleProject.pdb
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\SendToSleepConsoleProject\SendToSleepConsoleProject\obj\Debug\SendToSleepConsoleProject.exe
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\SendToSleepConsoleProject\SendToSleepConsoleProject\obj\Debug\SendToSleepConsoleProject.pdb

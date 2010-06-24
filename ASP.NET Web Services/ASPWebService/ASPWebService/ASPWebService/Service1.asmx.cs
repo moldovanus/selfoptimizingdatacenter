@@ -155,7 +155,7 @@ namespace ASPWebService
             key.SetValue("Start", 3);
 
             RegistryKey runOnceKey = Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
-            runOnceKey.SetValue("SendToSleepAutomatically", "C:\\SendToSleep.exe");
+            runOnceKey.SetValue("SendToSleepAutomatically", "C:\\SendToSleep.vbs");
 
             Process.Start("shutdown.exe", " -r -f -t 0");
             //System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, false, false);

@@ -18,3 +18,8 @@ D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin
 D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
 D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
 D:\licentaNew\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
+C:\Users\Administrator\Desktop\FInal InteliJ\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.dll
+C:\Users\Administrator\Desktop\FInal InteliJ\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\bin\ASPWebService.pdb
+C:\Users\Administrator\Desktop\FInal InteliJ\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\FInal InteliJ\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.dll
+C:\Users\Administrator\Desktop\FInal InteliJ\ASP.NET Web Services\ASPWebService\ASPWebService\ASPWebService\obj\Debug\ASPWebService.pdb
