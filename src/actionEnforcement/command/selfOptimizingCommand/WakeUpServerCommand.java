@@ -26,7 +26,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     public WakeUpServerCommand(DatacenterProtegeFactory protegeFactory, String serverName) {
         super(protegeFactory);
         this.serverName = serverName;
-        cost = 12000;
+        cost = 1000;
     }
 
     /**
