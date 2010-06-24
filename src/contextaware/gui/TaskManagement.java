@@ -433,14 +433,14 @@ public class TaskManagement extends javax.swing.JFrame {
 
 
                 requestedCoresField.setText("" + selectedTaskDto.getRequestedCores());
-                requestedCpuField.setText("" + selectedTaskDto.getRequestedCPUMin());
-                requestedStorageField.setText("" + selectedTaskDto.getRequestedStorageMin());
-                requestedMemoryField.setText("" + selectedTaskDto.getRequestedMemoryMin());
+                requestedCpuField.setText("" + selectedTaskDto.getRequestedCPUMax());
+                requestedStorageField.setText("" + selectedTaskDto.getRequestedStorageMax());
+                requestedMemoryField.setText("" + selectedTaskDto.getRequestedMemoryMax());
 
                 receivedCoresField.setText("" + selectedTaskDto.getReceivedCores());
-                receivedCpuField.setText(""+ selectedTaskDto.getReceivedCPU());
-                receivedMemoryField.setText(""+ selectedTaskDto.getReceivedMemory());
-                receivedStorageField.setText(""+ selectedTaskDto.getReceivedStorage());
+                receivedCpuField.setText("" + selectedTaskDto.getReceivedCPU());
+                receivedMemoryField.setText("" + selectedTaskDto.getReceivedMemory());
+                receivedStorageField.setText("" + selectedTaskDto.getReceivedStorage());
             }
         });
 
@@ -514,7 +514,7 @@ public class TaskManagement extends javax.swing.JFrame {
                 dtoTask.setRequestedMemoryMax(Integer.parseInt(addTaskMemoryMaxField.getText().trim()));
                 dtoTask.setRequestedMemoryMin(Integer.parseInt(addTaskMemoryMinField.getText().trim()));
                 dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageMaxField.getText().trim()));
-                dtoTask.setRequestedStorageMax(Integer.parseInt(addTaskStorageMinField.getText().trim()));
+                dtoTask.setRequestedStorageMin(Integer.parseInt(addTaskStorageMinField.getText().trim()));
                 /*
                 Task task = protegeFactory.createTask(taskName);
                 QoSPolicy policy = protegeFactory.createQoSPolicy(taskName + "Policy");

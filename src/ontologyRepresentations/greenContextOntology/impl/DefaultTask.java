@@ -30,6 +30,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#associatedServer
+
     public Server getAssociatedServer() {
         return (Server) getPropertyValueAs(getAssociatedServerProperty(), Server.class);
     }
@@ -52,6 +53,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#cpuWeight
+
     public float getCpuWeight() {
         return getPropertyValueLiteral(getCpuWeightProperty()).getFloat();
     }
@@ -71,6 +73,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#memoryWeight
+
     public float getMemoryWeight() {
         return getPropertyValueLiteral(getMemoryWeightProperty()).getFloat();
     }
@@ -90,6 +93,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#receivedInfo
+
     public ReceivedTaskInfo getReceivedInfo() {
         return (ReceivedTaskInfo) getPropertyValueAs(getReceivedInfoProperty(), ReceivedTaskInfo.class);
     }
@@ -113,6 +117,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#requestedInfo
+
     public RequestedTaskInfo getRequestedInfo() {
         return (RequestedTaskInfo) getPropertyValueAs(getRequestedInfoProperty(), RequestedTaskInfo.class);
     }
@@ -202,6 +207,7 @@ public class DefaultTask extends DefaultContextElement
     }
 
     // Property http://www.owl-ontologies.com/Datacenter.owl#taskName
+
     public String getTaskName() {
         return (String) getPropertyValue(getTaskNameProperty());
     }
@@ -248,5 +254,5 @@ public class DefaultTask extends DefaultContextElement
         return task;
     }
 
-    
+
 }
