@@ -1,2 +1,3 @@
-WScript.Sleep(12000) 
-WScript.echo(44)
+WScript.Sleep(60000) 
+Set WshShell = WScript.CreateObject("WScript.Shell") 
+WshShell.Run "c:\\SendToSleep.exe" 
