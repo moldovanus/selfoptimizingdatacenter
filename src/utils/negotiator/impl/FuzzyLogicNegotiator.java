@@ -136,7 +136,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
                 serverValue.setMembershipFunction(serverCpuMembershipFunction);
                 requestedValue.setMembershipFunction(requestedRangeMembershipFunction);
 
-                //serverAndRequested.setValue();
+                serverAndRequested.setValue(totalCPU - 1);
                 serverAndRequested.setUniverseMin(maxCPU);
                 serverAndRequested.setUniverseMax(totalCPU);
 
@@ -160,7 +160,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
                 finalFuzzyInferenceSystem.evaluate();
 
-                finalFuzzyInferenceSystem.setVariable("server_and_requested", usedCPU + minRequestedCPU - 1);
+                finalFuzzyInferenceSystem.setVariable("server_and_requested", totalCPU - 1);
                 finalFuzzyInferenceSystem.evaluate();
 
                 double negotiatedCPU = finalFuzzyInferenceSystem.getFunctionBlock("negotiator").getVariable("negotiated_range").getValue();
@@ -221,6 +221,8 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             negotiatedRange.setUniverseMin(maxMemory);
             negotiatedRange.setUniverseMax(totalMemory);
+
+            serverAndRequested.setValue(totalMemory - 1);
             serverAndRequested.setUniverseMin(maxMemory);
             serverAndRequested.setUniverseMax(totalMemory);
 
@@ -241,7 +243,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             finalFuzzyInferenceSystem.setVariable("server_range", usedMemory + 1);
             finalFuzzyInferenceSystem.setVariable("requested_range", usedMemory + minRequestedMemory + 1);
-            finalFuzzyInferenceSystem.setVariable("server_and_requested", usedMemory + minRequestedMemory + 1);
+            finalFuzzyInferenceSystem.setVariable("server_and_requested", totalMemory - 1);
 
             finalFuzzyInferenceSystem.evaluate();
 
@@ -296,6 +298,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
             negotiatedRange.setUniverseMin(maxStorage);
             negotiatedRange.setUniverseMax(totalStorage);
 
+            serverAndRequested.setValue(totalStorage - 1);
             serverAndRequested.setUniverseMin(maxStorage);
             serverAndRequested.setUniverseMax(totalStorage);
 
@@ -313,7 +316,7 @@ public class FuzzyLogicNegotiator implements Negotiator {
 
             finalFuzzyInferenceSystem.setVariable("server_range", usedStorage + 1);
             finalFuzzyInferenceSystem.setVariable("requested_range", usedStorage + minRequestedStorage + 1);
-            finalFuzzyInferenceSystem.setVariable("server_and_requested", usedStorage + minRequestedStorage + 1);
+            finalFuzzyInferenceSystem.setVariable("server_and_requested", totalMemory - 1);
 
             finalFuzzyInferenceSystem.evaluate();
 

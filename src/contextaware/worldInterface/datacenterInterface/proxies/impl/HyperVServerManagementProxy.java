@@ -224,8 +224,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
 
+            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             if (DEBUG) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
                 // Response
                 String line;
                 while ((line = rd.readLine()) != null) {
@@ -288,9 +289,9 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                                                         int memory, int processorPercentage, int nrCores) {
         try {
             //TODO: remove the hardcoded vmName when multiple reference vm's can be defined
-            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachine?from="
+            URL url = new URL("http://" + hostName + "/ServerManagement/Service1.asmx/DeployVirtualMachineWithModify?from="
                     + from + "&to=" + to + "&vmName=" + "VM_1" + "&vmCopyName=" + vmCopyName
-                    + "&memory=" + memory + "&procSpeed=" + processorPercentage + "&cores=" + nrCores);
+                    + "&memory=" + memory + "&procSpeed=" + processorPercentage + "&nrCores=" + nrCores);
             URLConnection connection = url.openConnection();
             connection.setDoInput(true);
 
@@ -327,7 +328,7 @@ public class HyperVServerManagementProxy extends ServerManagementProxy {
                 }
             }
             waitUntilTargetIsAlive(ipAddress);
-            Thread.sleep(60000);
+            //Thread.sleep(60000);
 
         } catch (Exception e) {
             e.printStackTrace();

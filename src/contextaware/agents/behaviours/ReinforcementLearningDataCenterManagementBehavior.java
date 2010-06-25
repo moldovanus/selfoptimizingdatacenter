@@ -170,7 +170,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         this.memory = memory;
         swrlFactory = new SWRLFactory(datacenterOwlModel);
 
-        negotiator = NegotiatorFactory.getFuzzyLogicNegotiator();
+        negotiator = NegotiatorFactory.getNashNegotiator();
 
         /*for (SWRLImp imp : swrlFactory.getEnabledImps()) {
             System.out.println(imp.toString());
@@ -626,12 +626,12 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
     @Override
     protected void onTick() {
         System.out.println("BEGIN:" + new java.util.Date());
-        Collection<Server> s = protegeFactory.getAllServerInstances();
-
-
-        for (Server server : s) {
-            System.out.print("" + server.toString());
-        }
+//        Collection<Server> s = protegeFactory.getAllServerInstances();
+//
+//
+//        for (Server server : s) {
+//            System.out.print("" + server.toString());
+//        }
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
@@ -868,25 +868,25 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 //            }
 //
 //        }
-
-        Collection<Server> servers = protegeFactory.getAllServerInstances();
-        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-
-        int d = 0;
-        for (Task task : tasks) {
-            if (task.isRunning()) {
-                d++;
-                System.out.println("" + task.toString());
-            }
-        }
-
-        System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
-        for (Server server : servers) {
-            System.out.println("" + server.toString());
-        }
-
-
-        System.out.println("END:" + new java.util.Date());
+//
+//        Collection<Server> servers = protegeFactory.getAllServerInstances();
+//        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+//
+//        int d = 0;
+//        for (Task task : tasks) {
+//            if (task.isRunning()) {
+//                d++;
+//                System.out.println("" + task.toString());
+//            }
+//        }
+//
+//        System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
+//        for (Server server : servers) {
+//            System.out.println("" + server.toString());
+//        }
+//
+//
+//        System.out.println("END:" + new java.util.Date());
         agent.sendAllTasksToClient();
 
     }

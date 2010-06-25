@@ -6,10 +6,7 @@ import contextaware.agents.X3DAgent;
 import contextaware.worldInterface.datacenterInterface.proxies.ServerManagementProxyInterface;
 import contextaware.worldInterface.datacenterInterface.proxies.impl.ProxyFactory;
 import jade.core.Agent;
-import ontologyRepresentations.greenContextOntology.Core;
-import ontologyRepresentations.greenContextOntology.DatacenterProtegeFactory;
-import ontologyRepresentations.greenContextOntology.Server;
-import ontologyRepresentations.greenContextOntology.Task;
+import ontologyRepresentations.greenContextOntology.*;
 import utils.X3DMessageDispatcher;
 import utils.workLoadGenerator.TaskLifeManager;
 
@@ -34,9 +31,11 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
         super(protegeFactory);
         this.serverName = serverName;
         this.taskName = taskName;
-        this.negotiatedCPU = negotiatedCPU;
-        this.negotiatedMemory = negotiatedMemory;
-        this.negotiatedStorage = negotiatedStorage;
+        Task task = protegeFactory.getTask(taskName);
+        RequestedTaskInfo taskInfo = task.getRequestedInfo();
+        this.negotiatedCPU = (negotiatedCPU != 0) ? negotiatedCPU : taskInfo.getCpuMaxAcceptableValue();
+        this.negotiatedMemory = (negotiatedMemory != 0) ? negotiatedMemory : taskInfo.getMemoryMaxAcceptableValue();
+        this.negotiatedStorage = (negotiatedStorage != 0) ? negotiatedStorage : taskInfo.getStorageMaxAcceptableValue();
         cost = 100;
     }
 
@@ -78,9 +77,9 @@ public class DeployNegotiatedTaskCommand extends SelfOptimizingCommand {
             int procTime = (negotiatedCPU * 100) / ((Core) server.getAssociatedCPU().getAssociatedCore().iterator().next()).getTotal();
             String path = (String) server.getVirtualMachinesPath().iterator().next();
             System.out.println("Deploying ...");
-            proxy.deployVirtualMachineWithCustomResources("\\\\192.168.2.110\\SharedStorage",
-                    "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
-                    task.getTaskName(), task.getLocalName(), negotiatedMemory, procTime, negotiatedStorage);
+            proxy.deployVirtualMachineWithCustomResources("\\\\WINDOWS-L90ZRJH\\SharedStorage",
+                    "\\\\WINDOWS-L90ZRJH\\SharedStorage\\" + server.getServerName(),
+                    task.getTaskName(), task.getLocalName(), negotiatedMemory, procTime, task.getRequestedInfo().getCores());
 
         } else {
             System.err.println("Proxy is null");

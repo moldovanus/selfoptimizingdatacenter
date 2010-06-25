@@ -54,7 +54,7 @@ public class WakeUpServerCommand extends SelfOptimizingCommand {
     @Override
     public void executeOnWebService() {
         Server server = protegeFactory.getServer(serverName);
-        //TODO : move this hardcoded monitor
+        //TODO : placed here because a active server must wake up another
         ServerManagementProxyInterface proxy = ProxyFactory.createServerManagementProxy("192.168.2.101");
 
         if (proxy != null) {

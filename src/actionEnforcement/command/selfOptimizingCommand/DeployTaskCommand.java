@@ -69,8 +69,8 @@ public class DeployTaskCommand extends SelfOptimizingCommand {
             int procTime = (requested.getCpuMaxAcceptableValue() * 100) / ((Core) server.getAssociatedCPU().getAssociatedCore().iterator().next()).getTotal();
             String path = (String) server.getVirtualMachinesPath().iterator().next();
             System.out.println("Deploying ...");
-            proxy.deployVirtualMachineWithCustomResources("\\\\192.168.2.110\\SharedStorage",
-                    "\\\\192.168.2.110\\SharedStorage\\" + server.getServerName(),
+            proxy.deployVirtualMachineWithCustomResources("\\\\WINDOWS-L90ZRJH\\SharedStorage",
+                    "\\\\WINDOWS-L90ZRJH\\SharedStorage\\" + server.getServerName(),
                     task.getTaskName(), task.getLocalName(), requested.getMemoryMaxAcceptableValue(),
                     procTime, requested.getStorageMaxAcceptableValue());
 
