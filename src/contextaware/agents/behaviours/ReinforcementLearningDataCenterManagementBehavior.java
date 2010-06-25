@@ -523,25 +523,25 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                 }
             }
             // wake up
-            if (deployed == false)
-                for (Server serverInstance : servers) {
-                    if (serverInstance.getIsInLowPowerState()) { //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
-                        System.out.println(serverInstance.getLocalName() + " " + serverInstance.getIsInLowPowerState() + " is waking up");
-                        Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
-                        ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
-                        //if action is not already in the actions list
-                        if (!cs.getActions().contains(newAction)) {
-                            cs.getActions().add(newAction);
 
-                            newAction.execute(datacenterPolicyConversionModel);
-                            cs.setContextEntropy(computeEntropy().getFirst());
-                            cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
-                            newAction.rewind(datacenterPolicyConversionModel);
+            for (Server serverInstance : servers) {
+                if (serverInstance.getIsInLowPowerState()) { //&& (task!=null) && serverInstance.hasResourcesFor(task)) {
+                    System.out.println(serverInstance.getLocalName() + " " + serverInstance.getIsInLowPowerState() + " is waking up");
+                    Command newAction = new WakeUpServerCommand(protegeFactory, serverInstance.getName());
+                    ContextSnapshot cs = new ContextSnapshot(new LinkedList(newContext.getActions()));
+                    //if action is not already in the actions list
+                    if (!cs.getActions().contains(newAction)) {
+                        cs.getActions().add(newAction);
 
-                            queue.add(cs);
-                        }
+                        newAction.execute(datacenterPolicyConversionModel);
+                        cs.setContextEntropy(computeEntropy().getFirst());
+                        cs.setRewardFunction(computeRewardFunction(newContext, cs, newAction));
+                        newAction.rewind(datacenterPolicyConversionModel);
+
+                        queue.add(cs);
                     }
                 }
+            }
             // sleep
             for (Server serverInstance : servers) {
                 if (!serverInstance.getIsInLowPowerState() && !serverInstance.hasRunningTasks()) {
@@ -626,12 +626,7 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
     @Override
     protected void onTick() {
         System.out.println("BEGIN:" + new java.util.Date());
-//        Collection<Server> s = protegeFactory.getAllServerInstances();
-//
-//
-//        for (Server server : s) {
-//            System.out.print("" + server.toString());
-//        }
+
         /*  try {
             Thread.sleep(1000000000);
         } catch (InterruptedException e) {
@@ -836,12 +831,12 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-                //agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
+                // agent.getSelfOptimizingLogger().log(Color.GREEN, "Current state", currentState);
 
             }
         }
 
-
+//
 //        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
 //        Collection<Server> servers = protegeFactory.getAllServerInstances();
 //        Boolean deployed = false;
@@ -868,25 +863,24 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
 //            }
 //
 //        }
-//
-//        Collection<Server> servers = protegeFactory.getAllServerInstances();
-//        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
-//
-//        int d = 0;
-//        for (Task task : tasks) {
-//            if (task.isRunning()) {
-//                d++;
-//                System.out.println("" + task.toString());
-//            }
-//        }
-//
-//        System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
-//        for (Server server : servers) {
-//            System.out.println("" + server.toString());
-//        }
-//
-//
-//        System.out.println("END:" + new java.util.Date());
+
+        Collection<Server> servers = protegeFactory.getAllServerInstances();
+        Collection<Task> tasks = protegeFactory.getAllTaskInstances();
+
+        int d = 0;
+        for (Task task : tasks) {
+            if (task.isRunning()) {
+                d++;
+            }
+        }
+
+        //System.out.println("Servers no: " + servers.size() + "Deployed: " + d + "Undeployed: " + (tasks.size() - d));
+        for (Task server : tasks) {
+            System.out.println("" + server.toString());
+        }
+
+
+        System.out.println("END:" + new java.util.Date());
         agent.sendAllTasksToClient();
 
     }
