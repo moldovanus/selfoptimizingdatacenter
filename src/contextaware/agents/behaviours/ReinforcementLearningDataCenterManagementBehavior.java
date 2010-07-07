@@ -427,6 +427,8 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
         if (smallestEntropyContext != null) {
             if (entropyAndPolicy.getFirst() < smallestEntropyContext.getContextEntropy())
                 smallestEntropyContext = newContext;
+            else if (entropyAndPolicy.getFirst() == smallestEntropyContext.getContextEntropy() && newContext.getActions().size() < smallestEntropyContext.getActions().size())
+                smallestEntropyContext = newContext;
         } else {
             smallestEntropyContext = newContext;
         }
@@ -810,7 +812,6 @@ public class ReinforcementLearningDataCenterManagementBehavior extends TickerBeh
             }
             */
 
-            //hfhfhfhfhfh
         } else {
             if (contextBroken) {
                 contextBroken = false;
